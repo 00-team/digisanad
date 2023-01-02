@@ -1,0 +1,19 @@
+name: Deploy to Server 👻
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  deploy:
+    name: Deploy 📦
+    runs-on: ubuntu-latest
+    steps:
+      - name: connect/deploy
+        uses: appleboy/ssh-action@dce9d565de8d876c11d93fa4fe677c0285a66d78
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: bash /site/digisanad/config/deploy.sh

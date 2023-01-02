@@ -1,0 +1,15 @@
+[Unit]
+Description=digisanad uWSGI
+After=syslog.target
+
+[Service]
+ExecStart=/usr/local/bin/uwsgi --ini /site/digisanad/config/uwsgi.ini
+RuntimeDirectory=uwsgi
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

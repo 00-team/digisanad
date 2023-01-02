@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# active the python venv if is not active already.
+if [[ -z $VIRTUAL_ENV ]]; then
+    source .env/bin/activate
+fi
+
+clear
+
+case $1 in
+run)
+    uvicorn main:app --reload --port 7000 --use-colors
+    echo "run Server"
+    ;;
+
+log)
+    cat *.log
+    ;;
+
+tag)
+    if [[ -z $2 ]]; then
+        exit
+    else
+        git push
+        git tag -a "v$2" -m "release $2"
+        git push origin "v$2"
+    fi
+    ;;
+
+delete_all_tags)
+    echo "Not Now"
+    # git tag | grep <pattern> | xargs -n 1 -i% git push origin :refs/tags/%
+    # git tag | xargs -n 1 -i% sh -c 'git push origin :% && git tag -d %'
+    ;;
+esac
