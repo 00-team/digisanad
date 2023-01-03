@@ -1,0 +1,177 @@
+@mixin animation($animation) {
+    -webkit-animation: $animation;
+    -moz-animation: $animation;
+    -ms-animation: $animation;
+    -o-animation: $animation;
+    animation: $animation;
+}
+
+@mixin animation-duration($duration) {
+    -webkit-animation-duration: $duration;
+    -moz-animation-duration: $duration;
+    -ms-animation-duration: $duration;
+    -o-animation-duration: $duration;
+    animation-duration: $duration;
+}
+
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+        @content;
+    }
+    @-moz-keyframes #{$name} {
+        @content;
+    }
+    @-ms-keyframes #{$name} {
+        @content;
+    }
+    @keyframes #{$name} {
+        @content;
+    }
+}
+
+.clouds-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    height: 100%;
+    width: 100%;
+
+    background-color: #87ceeb;
+
+    position: absolute;
+    z-index: -1;
+
+    .cloud {
+        @include animation(clouds 60s infinite linear);
+        border-radius: 10px;
+        position: relative;
+        margin: 33px 0 0 0;
+
+        width: 54px;
+        height: 5px;
+
+        background: #f7e7eb;
+
+        &.tiny {
+            transform: scale(0.5);
+        }
+
+        &.small {
+            transform: scale(1);
+        }
+
+        &.normal {
+            transform: scale(2);
+        }
+
+        &.large {
+            transform: scale(4);
+        }
+
+        &.cloud-1 {
+            @include animation-duration(263s);
+            margin-left: 20%;
+        }
+
+        &.cloud-2 {
+            @include animation-duration(99s);
+            margin-left: 90%;
+        }
+
+        &.cloud-3 {
+            @include animation-duration(142s);
+            margin-left: 50%;
+        }
+
+        &.cloud-4 {
+            @include animation-duration(152s);
+            margin-left: 43%;
+        }
+
+        &.cloud-5 {
+            @include animation-duration(215s);
+            margin-left: 83%;
+        }
+
+        &.cloud-6 {
+            @include animation-duration(139s);
+            margin-left: 73%;
+        }
+
+        &.cloud-7 {
+            @include animation-duration(109s);
+            margin-left: 69%;
+        }
+
+        &.cloud-8 {
+            @include animation-duration(121s);
+            margin-left: 100%;
+        }
+
+        &.cloud-9 {
+            @include animation-duration(101s);
+            margin-left: 10%;
+        }
+
+        &.cloud-10 {
+            @include animation-duration(126s);
+            margin-left: 14%;
+        }
+
+        &.cloud-11 {
+            @include animation-duration(96s);
+            margin-left: 73%;
+        }
+
+        &.cloud-12 {
+            @include animation-duration(83s);
+            margin-left: 51%;
+        }
+
+        div {
+            box-shadow: inset -2px -3px 0 0 #f7e7eb;
+            position: absolute;
+
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+
+            left: -3px;
+            bottom: 0;
+
+            background: #fafbf0;
+            z-index: 10;
+
+            &:first-child {
+                & + div {
+                    transform: scale(1.6);
+                    margin: 0 0 4px 13px;
+                    z-index: 9;
+
+                    & + div {
+                        transform: scale(2.4);
+                        margin: 0 0 9px 32px;
+                        z-index: 8;
+
+                        & + div {
+                            transform: scale(1.3);
+                            margin: 0 0 2px 50px;
+                            z-index: 7;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes clouds {
+        0% {
+            left: -100%;
+        }
+
+        100% {
+            left: 120%;
+        }
+    }
+}
