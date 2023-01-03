@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './style/welcomer.scss'
+
 const Welcomer = () => {
     return (
         <div className='welcomer'>
