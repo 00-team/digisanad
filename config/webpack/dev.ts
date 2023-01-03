@@ -3,6 +3,7 @@ import { Configuration as WConf } from 'webpack'
 import { Configuration as DConf } from 'webpack-dev-server'
 
 import Base from './base'
+import { APP_DIR, resolve } from './config/path'
 import { DevStyle } from './config/style'
 
 interface Configuration extends WConf {
@@ -17,13 +18,7 @@ const DevConfig: Configuration = {
     },
     plugins: [
         ...Base.plugins!,
-        new HtmlPlugin({
-            filename: 'index.html',
-            inject: true,
-            publicPath: '/',
-            minify: false,
-            templateContent: '<div id="root" />',
-        }),
+        new HtmlPlugin({template: resolve(APP_DIR, "template.html")}),
     ],
     devServer: {
         port: 8000,
