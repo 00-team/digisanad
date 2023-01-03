@@ -1,0 +1,8 @@
+{
+    "python.formatting.autopep8Args": ["--exclude", "*config/permissions.py*"],
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "host": "http://localhost:7000"
+        }
+    }
+}
