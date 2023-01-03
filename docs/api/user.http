@@ -1,0 +1,62 @@
+# request a login
+POST {{ host }}/auth/login/
+Content-Type: application/json
+
+{
+    "phone": "09223334444"
+}
+
+###
+
+# verify login
+# @name login
+POST {{ host }}/auth/verify/
+Content-Type: application/json
+
+{
+    "phone": "09223334444",
+    "code": "26644"
+}
+
+###
+
+@token = {{ login.response.body.token }}
+
+# get user info
+GET {{ host }}/user/update/
+Authorization: user {{ token }}
+
+
+### 
+
+# update user info
+POST {{ host }}/user/update/
+Authorization: user {{ token }}
+Content-Type: multipart/form-data; boundary=THIS_STRING_SPRATES_GGEZ
+
+--THIS_STRING_SPRATES_GGEZ
+Content-Disposition: form-data; name="nickname"
+
+Sky
+--THIS_STRING_SPRATES_GGEZ
+Content-Disposition: form-data; name="picture"; filename="sample.jpg"
+Content-Type: image/jpeg
+
+< ./user-picture-sample.jpg
+--THIS_STRING_SPRATES_GGEZ--
+
+###
+
+POST {{ host }}/user/delete/
+Content-Type: application/json
+Authorization: user {{ token }}
+
+###
+
+POST {{ host }}/user/delete_verify/
+Authorization: user {{ token }}
+Content-Type: application/json
+
+{
+    "code": "50496"
+}
