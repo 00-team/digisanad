@@ -7,6 +7,7 @@ import './style/base.scss'
 import './style/font/imports.scss'
 
 const Home = loadable(() => import('./Screens/Home'))
+const Login = loadable(() => import('./Screens/Login'))
 
 const App: FC = () => {
     return (
@@ -20,6 +21,7 @@ const MainContent: FC = () => {
     return (
         <Routes>
             <Route index element={<Home />} />
+            <Route path='/login' element={<Login />} />
         </Routes>
     )
 }
