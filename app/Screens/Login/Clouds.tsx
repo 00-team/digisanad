@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import './style/clouds.scss'
 
-const Clouds = () => {
+const Clouds:FC = () => {
     return (
         <div className='clouds-container'>
             <div className='cloud large cloud-1'>
