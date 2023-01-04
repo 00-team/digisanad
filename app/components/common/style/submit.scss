@@ -54,6 +54,8 @@
 
             z-index: -1;
 
+            will-change: width, height;
+
             transition: width 0.5s cubic-bezier(0.45, 0.02, 0.09, 0.98),
                 height 0.5s cubic-bezier(0.45, 0.02, 0.09, 0.98);
         }
