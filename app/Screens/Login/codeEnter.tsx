@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-const CodeEnter = () => {
+const CodeEnter: FC = () => {
     return (
         <div className='input-wrapper title'>
             <div className='placeholder'>
@@ -10,13 +10,13 @@ const CodeEnter = () => {
                 <div className='holder'>کد تایید</div>
             </div>
             <input
-                autoComplete='new-password'
-                className='input title_smaller'
-                name='phonenumber'
+                autoComplete='one-time-code'
+                className='input title_small'
+                name='code'
+                inputMode='numeric'
                 autoFocus
-                type={'tel'}
-                id='phonenumber'
-                placeholder='09121111111'
+                id='code'
+                placeholder='12345'
             />
         </div>
     )
