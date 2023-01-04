@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
 import { Route, Routes } from 'react-router-dom'
 
@@ -10,6 +11,10 @@ const Home = loadable(() => import('./Screens/Home'))
 const Login = loadable(() => import('./Screens/Login'))
 
 const App: FC = () => {
+    const alert = useAlert()
+
+    global.ReactAlert = alert
+
     return (
         <>
             <MainContent />
