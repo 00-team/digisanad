@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import Welcomer from './Welcomer'
 
 import './style/home.scss'
 
-const Home = () => {
+const Home: FC = () => {
     return (
         <main className='home'>
             <Welcomer />

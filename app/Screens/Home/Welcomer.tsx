@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import './style/welcomer.scss'
 
-const Welcomer = () => {
+const Welcomer: FC = () => {
     return (
         <div className='welcomer'>
             {'Digi  Sanad'.split('').map((word, index) => {
