@@ -4,17 +4,12 @@ import './style/submit.scss'
 
 interface SubmitProps {
     title: string
-    onSubmit: () => void
 }
 
-const Submit: FC<SubmitProps> = ({ title, onSubmit }) => {
+const Submit: FC<SubmitProps> = ({ title }) => {
     const [Transform, setTransform] = useState({ x: 0, y: 0 })
     return (
-        <button
-            onClick={onSubmit}
-            type='submit'
-            className='see-more-btn-wrapper title_small'
-        >
+        <button type='submit' className='see-more-btn-wrapper title_small'>
             <div
                 className='button-wrapper'
                 onMouseEnter={e => {
