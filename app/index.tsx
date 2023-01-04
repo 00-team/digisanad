@@ -10,6 +10,7 @@ import App from './App'
 
 const AlertOptions: Options = {
     position: 'top-right',
+    timeout: 8000,
     wrapper: () => ({ className: 'wrapper' }),
     inner: () => ({ className: 'inner' }),
 }
