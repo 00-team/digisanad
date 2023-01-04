@@ -5,6 +5,20 @@ import { Submit } from 'components'
 import './style/card.scss'
 
 const Card = () => {
+    const onSubmit = () => {
+        const user = document.querySelector(
+            'input#username'
+        ) as HTMLInputElement
+        const password = document.querySelector(
+            'input#password'
+        ) as HTMLInputElement
+
+        console.log(ReactAlert)
+
+        if (user.value === '' || password.value === '')
+            return ReactAlert.error('لطفا همه فیلد ها را پر کنید.')
+        return ReactAlert.success('صدرا تقوی، خوش امدید.')
+    }
     return (
         <div className='card'>
             <div className='card-title  title_hero logo-text'>Digi Sanad</div>
@@ -22,9 +36,10 @@ const Card = () => {
                     <input
                         autoComplete='new-password'
                         className='input title_smaller'
-                        name='usesadasdrname'
+                        name='username'
                         autoFocus
                         type='text'
+                        id='username'
                     />
                 </div>
                 <div className='password input-wrapper title'>
@@ -37,12 +52,13 @@ const Card = () => {
                     <input
                         autoComplete='new-password'
                         className='input title_smaller'
-                        name='passwdaddord'
+                        name='password'
                         type={'password'}
+                        id='password'
                     />
                 </div>
             </div>
-            <Submit title='ورود' />
+            <Submit onSubmit={onSubmit} title='ورود' />
         </div>
     )
 }
@@ -53,7 +69,7 @@ const Person = () => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 512 512'
         height={20}
         width={20}
@@ -67,7 +83,7 @@ const Password = () => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 512 512'
         height={20}
         width={20}
