@@ -1,6 +1,5 @@
-// alert
-import { AlertManager } from 'react-alert'
+import { AlertContextModel } from '@00-team/react-alert'
 
 declare global {
-    var ReactAlert: AlertManager
+    var ReactAlert: AlertContextModel
 }
