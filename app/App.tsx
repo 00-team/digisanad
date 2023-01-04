@@ -11,9 +11,7 @@ const Home = loadable(() => import('./Screens/Home'))
 const Login = loadable(() => import('./Screens/Login'))
 
 const App: FC = () => {
-    const alert = useAlert()
-
-    global.ReactAlert = alert
+    global.ReactAlert = useAlert()
 
     return (
         <>
