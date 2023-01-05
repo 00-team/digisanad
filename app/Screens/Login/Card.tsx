@@ -32,7 +32,7 @@ const Card: FC = () => {
     }
 
     const codeSubmit = () => {
-        return ReactAlert.show('ورود شو بچ')
+        return ReactAlert.success('ورود شو بچ')
     }
 
     return (
