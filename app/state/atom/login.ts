@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 import { LoginType } from 'state/models/Login'
 
 const Login = atom<LoginType>({
+    phone: '',
     stage: 'phone',
     resend: false,
     time: 3,
