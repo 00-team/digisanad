@@ -9,15 +9,17 @@ const CodeEnter: FC = () => {
                 </div>
                 <div className='holder'>کد تایید</div>
             </div>
-            <input
-                autoComplete='one-time-code'
-                className='input title_small'
-                name='code'
-                inputMode='numeric'
-                autoFocus
-                id='code'
-                placeholder='12345'
-            />
+            <div className='input-column'>
+                <input
+                    autoComplete='one-time-code'
+                    className='input title_small'
+                    name='code'
+                    inputMode='numeric'
+                    autoFocus
+                    id='code'
+                    placeholder='12345'
+                />
+            </div>
         </div>
     )
 }
