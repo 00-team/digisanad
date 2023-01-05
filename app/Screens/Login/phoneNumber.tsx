@@ -56,7 +56,7 @@ const Close = () => (
     <svg
         stroke='var(--ten-percent)'
         fill='var(--ten-percent)'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 512 512'
         height={25}
         width={25}

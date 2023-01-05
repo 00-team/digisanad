@@ -1,5 +1,5 @@
 # request a login
-POST {{ host }}/auth/login/
+POST {{ host }}/api/auth/login/
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 # verify login
 # @name login
-POST {{ host }}/auth/verify/
+POST {{ host }}/api/auth/verify/
 Content-Type: application/json
 
 {
@@ -23,14 +23,14 @@ Content-Type: application/json
 @token = {{ login.response.body.token }}
 
 # get user info
-GET {{ host }}/user/update/
+GET {{ host }}/api/user/update/
 Authorization: user {{ token }}
 
 
 ### 
 
 # update user info
-POST {{ host }}/user/update/
+POST {{ host }}/api/user/update/
 Authorization: user {{ token }}
 Content-Type: multipart/form-data; boundary=THIS_STRING_SPRATES_GGEZ
 
@@ -47,13 +47,13 @@ Content-Type: image/jpeg
 
 ###
 
-POST {{ host }}/user/delete/
+POST {{ host }}/api/user/delete/
 Content-Type: application/json
 Authorization: user {{ token }}
 
 ###
 
-POST {{ host }}/user/delete_verify/
+POST {{ host }}/api/user/delete_verify/
 Authorization: user {{ token }}
 Content-Type: application/json
 
