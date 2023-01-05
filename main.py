@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
 
 from database import database, redis
@@ -11,7 +11,11 @@ app = FastAPI(
     # version='0.0.1',
     # description='**DigiSanad api documents**',
 
-    openapi_url=None
+    # openapi_url=None
+)
+
+api = APIRouter(
+    prefix='/api',
 )
 
 
@@ -27,8 +31,10 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(auth.router)
-app.include_router(user.router)
+api.include_router(auth.router)
+api.include_router(user.router)
+
+app.include_router(api)
 
 
 for route in app.routes:

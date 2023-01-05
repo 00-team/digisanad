@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react'
 
+import axios from 'axios'
+
 import { Submit } from 'components'
 
 import CodeEnter from './codeEnter'
@@ -10,20 +12,28 @@ import './style/card.scss'
 const Card: FC = () => {
     const [Stages, setStages] = useState<'phone' | 'code'>('phone')
 
-    const mobileReg = new RegExp(/^09[0|1|2|3][0-9]{8}$/)
+    const mobileReg = new RegExp(/^09[0-9]{9}$/)
 
     const isPhoneValid = (phoneNumber: string) => {
         if (mobileReg.test(phoneNumber)) return true
         return false
     }
 
-    const phoneSubmit = () => {
+    const phoneSubmit = async () => {
         const phonenumber = document.querySelector(
             'input#phonenumber'
         ) as HTMLInputElement
 
         if (isPhoneValid(phonenumber.value)) {
             ReactAlert.success('کد تایید برای شما برای پیامک شد.')
+
+            let response = await axios.post('/api/auth/login/', {
+                phone: phonenumber.value,
+            })
+
+            // a number that indicate how much time you have left
+            console.log(response.data.timer)
+
             setStages('code')
             return
         }
