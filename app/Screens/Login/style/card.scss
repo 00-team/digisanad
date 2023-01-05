@@ -31,16 +31,46 @@
 
         margin-top: -2vh;
 
+        overflow: hidden;
+
         &::before,
         &::after {
             content: '';
-            width: -webkit-fill-available;
+            width: 0;
             height: 2px;
             background-color: black;
+
+            animation: width-slideIn 1s 1.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes width-slideIn {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 30%;
+                }
+            }
         }
 
         span {
             padding: 0 50px;
+
+            display: inline-block;
+
+            transform: translateY(100%);
+
+            animation: header-fadeIn 1s 0.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes header-fadeIn {
+                from {
+                    transform: translateY(100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
         }
     }
 
@@ -103,6 +133,17 @@
                     padding: 0 10px;
 
                     cursor: pointer;
+
+                    &:hover {
+                        svg {
+                            rotate: -360deg;
+                        }
+                    }
+
+                    svg {
+                        transition: rotate 1s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98);
+                    }
                 }
             }
         }
