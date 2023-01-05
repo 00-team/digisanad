@@ -49,7 +49,11 @@ const Card: FC = () => {
             </div>
 
             <div className='card-inps '>
-                {Stages === 'phone' ? <PhoneNumber /> : <CodeEnter />}
+                {Stages === 'phone' ? (
+                    <PhoneNumber />
+                ) : (
+                    <CodeEnter setStages={setStages} />
+                )}
             </div>
 
             {Stages === 'phone' ? (
