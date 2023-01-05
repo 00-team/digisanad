@@ -1,6 +1,7 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
-import axios from 'axios'
+import { useAtom } from 'jotai'
+import { LoginStageAtom } from 'state'
 
 import { Submit } from 'components'
 
@@ -10,7 +11,7 @@ import PhoneNumber from './phoneNumber'
 import './style/card.scss'
 
 const Card: FC = () => {
-    const [Stages, setStages] = useState<'phone' | 'code'>('phone')
+    const [Stages, setStages] = useAtom(LoginStageAtom)
 
     const mobileReg = new RegExp(/^09[0-9]{9}$/)
 
@@ -27,12 +28,12 @@ const Card: FC = () => {
         if (isPhoneValid(phonenumber.value)) {
             ReactAlert.success('کد تایید برای شما برای پیامک شد.')
 
-            let response = await axios.post('/api/auth/login/', {
-                phone: phonenumber.value,
-            })
+            // let response = await axios.post('/api/auth/login/', {
+            //     phone: phonenumber.value,
+            // })
 
             // a number that indicate how much time you have left
-            console.log(response.data.timer)
+            // console.log(response.data.timer)
 
             setStages('code')
             return
@@ -59,11 +60,7 @@ const Card: FC = () => {
             </div>
 
             <div className='card-inps '>
-                {Stages === 'phone' ? (
-                    <PhoneNumber />
-                ) : (
-                    <CodeEnter setStages={setStages} />
-                )}
+                {Stages === 'phone' ? <PhoneNumber /> : <CodeEnter />}
             </div>
 
             {Stages === 'phone' ? (
