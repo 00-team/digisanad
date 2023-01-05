@@ -1,15 +1,16 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
+
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { CanResendAtom, LoginStageAtom, ResendRemainingAtom } from 'state'
 
 import { Timer } from 'components/common/Timer'
 
 const NUMBER_DEBUG = '09120974956'
 
-interface CodeEnterProps {
-    setStages: (stage: 'phone' | 'code') => void
-}
-
-const CodeEnter: FC<CodeEnterProps> = ({ setStages }) => {
-    const [CanResend, setCanResend] = useState(false)
+const CodeEnter: FC = () => {
+    const [CanResend, setCanResend] = useAtom(CanResendAtom)
+    const timeRemaining = useAtomValue(ResendRemainingAtom)
+    const setStages = useSetAtom(LoginStageAtom)
 
     const SendAgain = () => {
         ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
@@ -50,12 +51,7 @@ const CodeEnter: FC<CodeEnterProps> = ({ setStages }) => {
                         </div>
                     ) : (
                         <div className='title_small timer-container cant-resend'>
-                            <Timer
-                                start={3}
-                                cb={() => {
-                                    setCanResend(true)
-                                }}
-                            />
+                            <Timer start={timeRemaining} />
                             <div>ثانیه تا ارسال مجدد</div>
                         </div>
                     )}
