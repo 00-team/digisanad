@@ -163,4 +163,52 @@
 
         border-radius: 7.5px;
     }
+
+    .card-options {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1vh;
+        margin: 2vh 0 -2vh 0;
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1vmin;
+        }
+
+        .can-resend {
+            color: #3366cc;
+            cursor: pointer;
+
+            width: 100%;
+            text-align: center;
+        }
+        .cant-resend {
+            opacity: 0.6;
+
+            width: 100%;
+
+            cursor: not-allowed;
+        }
+    }
+
+    .go-back-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(50%, 50%);
+
+        background-color: var(--ten-percent);
+
+        border-radius: 100vmax;
+
+        cursor: pointer;
+
+        svg {
+            padding: 5px;
+        }
+    }
 }
