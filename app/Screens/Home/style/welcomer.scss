@@ -13,6 +13,8 @@
     animation: welcomer-slideOut 0.7s 3.6s cubic-bezier(0.45, 0.02, 0.09, 0.98)
         forwards;
 
+    z-index: 1;
+
     @keyframes welcomer-slideOut {
         from {
             transform: translateY(0);
