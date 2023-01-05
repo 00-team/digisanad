@@ -1,20 +1,18 @@
 import React, { FC } from 'react'
 
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { CanResendAtom, LoginStageAtom, ResendRemainingAtom } from 'state'
+import { useAtom } from 'jotai'
+import { LoginAtom } from 'state'
 
 import { Timer } from 'components/common/Timer'
 
 const NUMBER_DEBUG = '09120974956'
 
 const CodeEnter: FC = () => {
-    const [CanResend, setCanResend] = useAtom(CanResendAtom)
-    const timeRemaining = useAtomValue(ResendRemainingAtom)
-    const setStages = useSetAtom(LoginStageAtom)
+    const [Login, setLogin] = useAtom(LoginAtom)
 
     const SendAgain = () => {
         ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
-        setCanResend(false)
+        setLogin({ resend: false })
         return
     }
 
@@ -42,7 +40,7 @@ const CodeEnter: FC = () => {
                     <div className='phone-number-holder title_smaller'>
                         کد تایید به شماره {NUMBER_DEBUG} پیامک شد.
                     </div>
-                    {CanResend ? (
+                    {Login.resend ? (
                         <div
                             className='title_small can-resend'
                             onClick={() => SendAgain()}
@@ -51,7 +49,7 @@ const CodeEnter: FC = () => {
                         </div>
                     ) : (
                         <div className='title_small timer-container cant-resend'>
-                            <Timer start={timeRemaining} />
+                            <Timer start={Login.time} />
                             <div>ثانیه تا ارسال مجدد</div>
                         </div>
                     )}
@@ -59,7 +57,7 @@ const CodeEnter: FC = () => {
             </div>
             <div
                 className='go-back-wrapper icon'
-                onClick={() => setStages('phone')}
+                onClick={() => setLogin({ stage: 'phone' })}
             >
                 <GoBack />
             </div>

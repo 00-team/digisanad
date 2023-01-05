@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 import { useAtom } from 'jotai'
-import { LoginStageAtom } from 'state'
+import { LoginAtom } from 'state'
 
 import { Submit } from 'components'
 
@@ -11,7 +11,7 @@ import PhoneNumber from './phoneNumber'
 import './style/card.scss'
 
 const Card: FC = () => {
-    const [Stages, setStages] = useAtom(LoginStageAtom)
+    const [Login, setLogin] = useAtom(LoginAtom)
 
     const mobileReg = new RegExp(/^09[0-9]{9}$/)
 
@@ -35,7 +35,7 @@ const Card: FC = () => {
             // a number that indicate how much time you have left
             // console.log(response.data.timer)
 
-            setStages('code')
+            setLogin({ stage: 'code' })
             return
         }
 
@@ -50,7 +50,7 @@ const Card: FC = () => {
         <form
             onSubmit={e => {
                 e.preventDefault()
-                Stages === 'code' ? codeSubmit() : phoneSubmit()
+                Login.stage === 'code' ? codeSubmit() : phoneSubmit()
             }}
             className='card'
         >
@@ -60,10 +60,10 @@ const Card: FC = () => {
             </div>
 
             <div className='card-inps '>
-                {Stages === 'phone' ? <PhoneNumber /> : <CodeEnter />}
+                {Login.stage === 'phone' ? <PhoneNumber /> : <CodeEnter />}
             </div>
 
-            {Stages === 'phone' ? (
+            {Login.stage === 'phone' ? (
                 <Submit title='تایید' />
             ) : (
                 <Submit title='ورود' />
