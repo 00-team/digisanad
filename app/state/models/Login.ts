@@ -1,6 +1,7 @@
-type LoginStageType = 'phone' | 'code'
+interface LoginType {
+    stage: 'phone' | 'code'
+    resend: boolean
+    time: number
+}
 
-type CanResendType = boolean
-type ResendRemainingType = number
-
-export { LoginStageType, CanResendType, ResendRemainingType }
+export { LoginType }
