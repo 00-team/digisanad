@@ -9,6 +9,9 @@ import './style/login.scss'
 
 const Login: FC = () => {
     useEffect(() => {
+        // TODO:
+        // this will basicly checks if the user is loged in or not
+        // if user is loged in redirect them to the dashboard page ...
         if (localStorage.token) {
             ;(async () => {
                 const response = await axios.get('/api/user/update/', {
