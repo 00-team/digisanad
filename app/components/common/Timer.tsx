@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import { useSetAtom } from 'jotai'
-import { CanResendAtom } from 'state'
+import { LoginAtom } from 'state'
 
 interface TimerProps {
     start: number
 }
 
 const Timer: FC<TimerProps> = ({ start }) => {
-    const setCanResend = useSetAtom(CanResendAtom)
+    const setLogin = useSetAtom(LoginAtom)
+
     const [timer, setTimer] = useState(start)
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const Timer: FC<TimerProps> = ({ start }) => {
     }, [])
 
     useEffect(() => {
-        timer <= 0 && setCanResend(true)
+        timer <= 0 && setLogin({ resend: true })
     }, [timer])
 
     return <div>{timer}</div>
