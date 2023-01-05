@@ -32,6 +32,7 @@
         transform: translateY(50%);
 
         animation: fadein 4s ease-in-out forwards;
+
         @keyframes fadein {
             0% {
                 opacity: 0;
@@ -55,6 +56,13 @@
                 transform: translateY(-70%);
                 opacity: 0;
             }
+        }
+
+        @media screen and (max-width: 1024px) {
+            font-size: clamp(2.7rem, 3.9vw + 2.7rem, 3.9rem);
+        }
+        @media screen and (max-width: 400px) {
+            font-size: clamp(2.3rem, 3.5vw + 2.3rem, 3.5rem);
         }
     }
 }
