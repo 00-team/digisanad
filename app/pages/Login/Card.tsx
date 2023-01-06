@@ -97,9 +97,9 @@ const Card: FC = () => {
             </div>
 
             {Login.stage === 'phone' ? (
-                <Submit title='تایید' />
+                <Submit title='تایید' className='title_smaller' />
             ) : (
-                <Submit title='ورود' />
+                <Submit title='ورود' className='title_smaller' />
             )}
         </form>
     )
