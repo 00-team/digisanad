@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { Options, Provider as AlertProvider } from '@00-team/react-alert'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import { Alert } from 'components/Alert'
+import { Alert } from 'components'
 
 import App from './App'
 

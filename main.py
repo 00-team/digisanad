@@ -1,6 +1,7 @@
 
 from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
+from fastapi.staticfiles import StaticFiles
 
 from database import database, redis
 from modules import auth, user
@@ -13,6 +14,8 @@ app = FastAPI(
 
     # openapi_url=None
 )
+
+app.mount('/media', StaticFiles(directory='media'), name='media')
 
 api = APIRouter(
     prefix='/api',

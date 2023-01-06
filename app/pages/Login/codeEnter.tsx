@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
 
+import axios from 'axios'
+
 import { useAtom } from 'jotai'
 import { LoginAtom } from 'state'
 
@@ -10,10 +12,21 @@ const NUMBER_DEBUG = '09120974956'
 const CodeEnter: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
 
-    const SendAgain = () => {
-        ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
-        setLogin({ resend: false })
-        return
+    const SendAgain = async () => {
+        const response = await axios.post('/api/auth/login/', {
+            phone: Login.phone,
+        })
+
+        if (typeof response.data.timer === 'number') {
+            ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
+            setLogin({
+                stage: 'code',
+                time: response.data.timer,
+                resend: !response.data.timer,
+            })
+        } else {
+            ReactAlert.error('Error while authenticating!')
+        }
     }
 
     return (

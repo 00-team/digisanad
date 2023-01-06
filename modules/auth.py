@@ -41,5 +41,5 @@ async def verify(request: Request, body: VerifyBody):
             'user_id': user.user_id,
             'nickname': user.nickname,
             'picture': user.picture_url(request.base_url),
-            'token': f'{user_id}:{token}',
+            'token': f'{user.user_id}:{token}',
         }
