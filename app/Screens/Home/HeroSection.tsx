@@ -10,7 +10,15 @@ const HeroSection = () => {
             className='hero-container'
             style={{ backgroundImage: `url(${HERO_IMG})` }}
         >
-            HeroSection
+            <div className='hero-wrapper'>
+                <div className='title logo-text'>Digi Sanad</div>
+                <div className='title_smaller'>
+                    راه حلی برای تنظیم قرار داد های فیزیکی
+                </div>
+                <div className='input-container'>
+                    <input type='text' />
+                </div>
+            </div>
         </section>
     )
 }
