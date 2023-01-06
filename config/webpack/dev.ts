@@ -18,7 +18,7 @@ const DevConfig: Configuration = {
     },
     plugins: [
         ...Base.plugins!,
-        new HtmlPlugin({template: resolve(APP_DIR, "template.html")}),
+        new HtmlPlugin({ template: resolve(APP_DIR, 'template.html') }),
     ],
     devServer: {
         port: 8000,
@@ -31,7 +31,7 @@ const DevConfig: Configuration = {
         },
         proxy: [
             {
-                context: ['/api', '/static'],
+                context: ['/api', '/static', '/media'],
                 target: 'http://127.0.0.1:7000/',
             },
 

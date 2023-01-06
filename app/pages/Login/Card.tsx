@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 
 import axios from 'axios'
 
-import { useAtom } from 'jotai'
-import { LoginAtom } from 'state'
+import { useAtom, useSetAtom } from 'jotai'
+import { LoginAtom, UserAtom } from 'state'
 
 import { Submit } from 'components'
 
@@ -16,6 +16,7 @@ const PHONE_VALIDATOR = new RegExp(/^09[0-9]{9}$/)
 
 const Card: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
+    const setUser = useSetAtom(UserAtom)
 
     const phoneSubmit = async () => {
         const phonenumber = document.querySelector(
@@ -54,9 +55,17 @@ const Card: FC = () => {
                 code: code_input.value,
             })
 
-            if (response.data.token) {
+            const data = response.data
+
+            if (data.token) {
                 ReactAlert.success('Successful login!')
-                localStorage.token = response.data.token
+                setUser({
+                    user_id: data.user_id,
+                    token: data.token,
+                    picture: data.picture,
+                    nickname: data.nickname,
+                    phone: Login.phone,
+                })
             } else {
                 ReactAlert.success('Invalid login!')
             }
