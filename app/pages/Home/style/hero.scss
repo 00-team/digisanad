@@ -4,4 +4,119 @@ section.hero-container {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+
+    display: grid;
+    place-items: center;
+
+    .hero-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4vh;
+
+        width: 100%;
+
+        .hero-header {
+            position: relative;
+            isolation: isolate;
+
+            width: clamp(200px, 100%, 500px);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+            span {
+                padding: 0 50px;
+                display: inline-block;
+                transform: translateY(100%);
+                white-space: nowrap;
+                animation: header-fadeIn 1s 4.1s
+                    cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                @keyframes header-fadeIn {
+                    from {
+                        transform: translateY(100%);
+                    }
+                    to {
+                        transform: translateY(0);
+                    }
+                }
+            }
+
+            &::before,
+            &::after {
+                content: '';
+                width: 0;
+                height: 2px;
+                background-color: white;
+                animation: width-slideIn 1s 5s
+                    cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                @keyframes width-slideIn {
+                    from {
+                        width: 0;
+                    }
+                    to {
+                        width: 30%;
+                    }
+                }
+            }
+        }
+
+        .words-wrapper {
+            overflow: hidden;
+            .hero-word {
+                display: inline-block;
+                margin: 0 0.3vmin;
+
+                transform: translateY(100%);
+
+                animation: 1s hero-word-fadein forwards;
+
+                @keyframes hero-word-fadein {
+                    0% {
+                        transform: translateY(100%);
+                    }
+
+                    100% {
+                        transform: translateY(0);
+                    }
+                }
+            }
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: clamp(200px, 100%, 500px);
+            gap: 1vw;
+
+            input {
+                height: 100%;
+                padding: 10px 15px;
+                background: var(--sixty-percent);
+                border: none;
+                border-radius: 10px;
+
+                flex: 1 0;
+
+                color: black;
+            }
+            button {
+                padding: 10px 15px;
+
+                cursor: pointer;
+
+                border-radius: 10px;
+                border: none;
+
+                background-color: var(--ten-percent);
+            }
+        }
+    }
 }
