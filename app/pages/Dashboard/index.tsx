@@ -1,5 +1,10 @@
 import React from 'react'
 
+import { EditSvg } from 'Icons'
+import { SendSvg } from 'Icons/Actions/Send'
+
+import { LogoutButton } from './LogoutButton'
+
 import './style/dashboard.scss'
 
 const DEFAULT_IMG = require('../../static/avatar.png')
@@ -16,8 +21,41 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className='options default'>
-                <div className='column-wrapper'></div>
+            <div className='options default title'>
+                <div className='column-wrapper'>
+                    <div className='column'>
+                        <div className='holder-icon icon'>
+                            <DefaultSvg />
+                        </div>
+                        <div className='holder-text '>لورم ایپسوم</div>
+                    </div>
+                    <div className='send-icon icon'>
+                        <SendSvg />
+                    </div>
+                </div>
+                <div className='column-wrapper'>
+                    <div className='column'>
+                        <div className='holder-icon icon'>
+                            <DefaultSvg />
+                        </div>
+                        <div className='holder-text '>لورم ایپسوم</div>
+                    </div>
+                    <div className='send-icon icon'>
+                        <SendSvg />
+                    </div>
+                </div>
+                <div className='column-wrapper'>
+                    <div className='column'>
+                        <div className='holder-icon icon'>
+                            <DefaultSvg />
+                        </div>
+                        <div className='holder-text '>لورم ایپسوم</div>
+                    </div>
+                    <div className='send-icon icon'>
+                        <SendSvg />
+                    </div>
+                </div>
+                <LogoutButton />
             </div>
             <div className='div3 default'></div>
             <div className='div4 default'></div>
@@ -29,16 +67,19 @@ const Dashboard = () => {
 
 export default Dashboard
 
-const EditSvg = () => (
+const DefaultSvg = () => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        strokeWidth='0'
-        viewBox='0 0 512 512'
+        stroke-width='0'
+        viewBox='0 0 24 24'
         height='1em'
         width='1em'
         xmlns='http://www.w3.org/2000/svg'
     >
-        <path d='M103 464H48v-55L358.14 98.09l55.77 55.78L103 464zm322.72-322L370 86.28l31.66-30.66C406.55 50.7 414.05 48 421 48a25.91 25.91 0 0118.42 7.62l17 17A25.87 25.87 0 01464 91c0 7-2.71 14.45-7.62 19.36zm-7.52-70.83z'></path>
+        <g>
+            <path fill='none' d='M0 0h24v24H0z'></path>
+            <circle cx='12' cy='12' r='10'></circle>
+        </g>
     </svg>
 )
