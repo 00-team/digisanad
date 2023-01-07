@@ -10,6 +10,7 @@ import './style/font/imports.scss'
 
 const Home = loadable(() => import('pages/Home'))
 const Login = loadable(() => import('pages/Login'))
+const Dashboard = loadable(() => import('pages/Dashboard'))
 
 const App: FC = () => {
     global.ReactAlert = useAlert()
@@ -27,6 +28,7 @@ const MainContent: FC = () => {
             <Route index element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/me' element={<UserTemp />} />
+            <Route path='/dashboard' element={<Dashboard />} />
         </Routes>
     )
 }
