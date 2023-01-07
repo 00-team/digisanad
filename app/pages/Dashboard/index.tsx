@@ -1,11 +1,17 @@
 import React from 'react'
 
+import { CountAnim } from '@00-team/utils'
+
 import { EditSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
+
+import { Submit } from 'components'
 
 import { LogoutButton } from './LogoutButton'
 
 import './style/dashboard.scss'
+
+const walletSvg = require('../../static/Dashboard/wallet.svg')
 
 const DEFAULT_IMG = require('../../static/avatar.png')
 
@@ -14,7 +20,7 @@ const Dashboard = () => {
         <section className='dashboard-container'>
             <Profile />
             <Options />
-            <div className='div3 default'></div>
+            <Wallet />
             <div className='div4 default'></div>
             <div className='div5 default'></div>
             <div className='div6 default'></div>
@@ -79,11 +85,38 @@ const Options = () => {
     )
 }
 
+const Wallet = () => {
+    return (
+        <div className='wallet default'>
+            <div className='wallet-wrapper'>
+                <div className='wallet-content'>
+                    <div className='title money-balance'>
+                        <div className='holder'>موجودی شما:</div>{' '}
+                        <div className='data'>
+                            <CountAnim end={530500} />
+                        </div>
+                    </div>
+                    <div className='title_smaller charge'>
+                        تنها در چند ثانیه موجودی خود را افزایش دهید.
+                    </div>
+                    <div className='charge-btn'></div>
+                </div>
+                <object
+                    className='svg-container'
+                    data={walletSvg}
+                    type=''
+                ></object>
+            </div>
+            <Submit title='افزایش موجودی' className='title_smaller' />
+        </div>
+    )
+}
+
 const DefaultSvg = () => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 24 24'
         height='1em'
         width='1em'

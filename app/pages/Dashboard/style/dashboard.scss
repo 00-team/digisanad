@@ -139,8 +139,51 @@
             }
         }
     }
-    .div3 {
+    .wallet {
         grid-area: 1 / 2 / 2 / 3;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+
+        padding: 2rem;
+
+        .wallet-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .svg-container {
+                width: 50%;
+                aspect-ratio: 1/1;
+            }
+            .wallet-content {
+                display: flex;
+                flex-direction: column;
+                gap: 2vh;
+
+                margin-top: 100px;
+
+                .money-balance {
+                    display: flex;
+                    align-items: center;
+                    gap: 1vw;
+
+                    margin-top: -50px;
+
+                    .data {
+                        font-family: 'number';
+                    }
+                }
+                .charge {
+                    opacity: 0.7;
+                }
+                .charge-btn {
+                    margin-top: 2vh;
+                    width: 80%;
+                }
+            }
+        }
     }
     .div4 {
         grid-area: 2 / 2 / 3 / 3;
