@@ -1,4 +1,5 @@
 from pydantic import BaseModel, validator
+
 from utils import code_validator, isallnum
 
 
@@ -39,6 +40,7 @@ class VerifyResponse(BaseModel):
     created: bool
     user_id: int
     token: str
+    wallet: int
     nickname: str | None
     picture: str | None
 

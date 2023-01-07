@@ -5,6 +5,7 @@ from utils import code_validator
 
 class UpdateResponse(BaseModel):
     user_id: int
+    wallet: int
     nickname: str | None
     picture: str | None
 

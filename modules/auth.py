@@ -32,6 +32,7 @@ async def verify(request: Request, body: VerifyBody):
         return {
             'created': True,
             'user_id': user_id,
+            'wallet': user.wallet,
             'token': f'{user_id}:{token}',
         }
     else:
@@ -40,6 +41,7 @@ async def verify(request: Request, body: VerifyBody):
             'created': False,
             'user_id': user.user_id,
             'nickname': user.nickname,
+            'wallet': user.wallet,
             'picture': user.picture_url(request.base_url),
             'token': f'{user.user_id}:{token}',
         }

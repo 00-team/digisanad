@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { CountAnim } from '@00-team/utils'
 
 import { EditSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
+
+import { useAtomValue, useSetAtom } from 'jotai'
+import { UserAtom } from 'state'
+
+import walletSvg from 'static/Dashboard/wallet.svg'
 
 import { Submit } from 'components'
 
@@ -11,11 +16,20 @@ import { LogoutButton } from './LogoutButton'
 
 import './style/dashboard.scss'
 
-const walletSvg = require('../../static/Dashboard/wallet.svg')
+import DEFAULT_IMG from 'static/avatar.png'
 
-const DEFAULT_IMG = require('../../static/avatar.png')
+const Dashboard: FC = () => {
+    const UpdateUser = useSetAtom(UserAtom)
 
-const Dashboard = () => {
+    useEffect(() => {
+        // TODO: update this
+        UpdateUser({
+            token: '1:Tfz3)5JgDiJn3*w%T*NH7[LrmKASiLKW)6jeR#liYYZ1$ghvJjH%y*@I^EgQvo$oJ(Tal',
+        })
+
+        UpdateUser('fetch')
+    }, [])
+
     return (
         <section className='dashboard-container'>
             <Profile />
@@ -30,12 +44,17 @@ const Dashboard = () => {
 
 export default Dashboard
 
-const Profile = () => {
+const Profile: FC = () => {
+    const User = useAtomValue(UserAtom)
+
     return (
         <div className='profile default'>
-            <img className='profile-img' src={DEFAULT_IMG}></img>
+            <img
+                className='profile-img'
+                src={User.picture || DEFAULT_IMG}
+            ></img>
             <div className='profile-content title'>
-                <div className='holder'>سید صدرا تقوی</div>
+                <div className='holder'>{User.nickname || '---'}</div>
                 <div className='update-profile icon'>
                     <EditSvg />
                 </div>
@@ -85,7 +104,9 @@ const Options = () => {
     )
 }
 
-const Wallet = () => {
+const Wallet: FC = () => {
+    const User = useAtomValue(UserAtom)
+
     return (
         <div className='wallet default'>
             <div className='wallet-wrapper'>
@@ -93,7 +114,7 @@ const Wallet = () => {
                     <div className='title money-balance'>
                         <div className='holder'>موجودی شما:</div>{' '}
                         <div className='data'>
-                            <CountAnim end={530500} />
+                            <CountAnim end={User.wallet} />
                         </div>
                     </div>
                     <div className='title_smaller charge'>
@@ -112,7 +133,7 @@ const Wallet = () => {
     )
 }
 
-const DefaultSvg = () => (
+const DefaultSvg: FC = () => (
     <svg
         stroke='currentColor'
         fill='currentColor'

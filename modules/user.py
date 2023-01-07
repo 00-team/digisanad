@@ -32,6 +32,7 @@ async def update(
     user: UserModel = request.state.user
     data = {
         'user_id': user.user_id,
+        'wallet': user.wallet,
         'nickname': user.nickname,
         'picture': user.picture_url(request.base_url),
     }

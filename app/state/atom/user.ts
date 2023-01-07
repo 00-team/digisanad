@@ -7,6 +7,7 @@ import { UserModel } from 'state'
 const User = atomWithStorage<UserModel>('user', {
     user_id: 0,
     nickname: null,
+    wallet: 0,
     picture: null,
     token: null,
     phone: null,

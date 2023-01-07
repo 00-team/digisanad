@@ -6,6 +6,7 @@ from settings import DEF_USER_PIC_DIR
 class UserModel(BaseModel):
     user_id: int
     phone: str
+    wallet: int
     nickname: str | None
     picture: str | None
     token: str | None
