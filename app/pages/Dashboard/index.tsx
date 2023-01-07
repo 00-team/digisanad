@@ -12,51 +12,8 @@ const DEFAULT_IMG = require('../../static/avatar.png')
 const Dashboard = () => {
     return (
         <section className='dashboard-container'>
-            <div className='profile'>
-                <img className='profile-img' src={DEFAULT_IMG}></img>
-                <div className='profile-content title'>
-                    <div className='holder'>سید صدرا تقوی</div>
-                    <div className='update-profile icon'>
-                        <EditSvg />
-                    </div>
-                </div>
-            </div>
-            <div className='options default title'>
-                <div className='column-wrapper'>
-                    <div className='column'>
-                        <div className='holder-icon icon'>
-                            <DefaultSvg />
-                        </div>
-                        <div className='holder-text '>لورم ایپسوم</div>
-                    </div>
-                    <div className='send-icon icon'>
-                        <SendSvg />
-                    </div>
-                </div>
-                <div className='column-wrapper'>
-                    <div className='column'>
-                        <div className='holder-icon icon'>
-                            <DefaultSvg />
-                        </div>
-                        <div className='holder-text '>لورم ایپسوم</div>
-                    </div>
-                    <div className='send-icon icon'>
-                        <SendSvg />
-                    </div>
-                </div>
-                <div className='column-wrapper'>
-                    <div className='column'>
-                        <div className='holder-icon icon'>
-                            <DefaultSvg />
-                        </div>
-                        <div className='holder-text '>لورم ایپسوم</div>
-                    </div>
-                    <div className='send-icon icon'>
-                        <SendSvg />
-                    </div>
-                </div>
-                <LogoutButton />
-            </div>
+            <Profile />
+            <Options />
             <div className='div3 default'></div>
             <div className='div4 default'></div>
             <div className='div5 default'></div>
@@ -66,6 +23,61 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
+const Profile = () => {
+    return (
+        <div className='profile default'>
+            <img className='profile-img' src={DEFAULT_IMG}></img>
+            <div className='profile-content title'>
+                <div className='holder'>سید صدرا تقوی</div>
+                <div className='update-profile icon'>
+                    <EditSvg />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const Options = () => {
+    return (
+        <div className='options default title'>
+            <div className='column-wrapper'>
+                <div className='column'>
+                    <div className='holder-icon icon'>
+                        <DefaultSvg />
+                    </div>
+                    <div className='holder-text '>لورم ایپسوم</div>
+                </div>
+                <div className='send-icon icon'>
+                    <SendSvg />
+                </div>
+            </div>
+            <div className='column-wrapper'>
+                <div className='column'>
+                    <div className='holder-icon icon'>
+                        <DefaultSvg />
+                    </div>
+                    <div className='holder-text '>لورم ایپسوم</div>
+                </div>
+                <div className='send-icon icon'>
+                    <SendSvg />
+                </div>
+            </div>
+            <div className='column-wrapper'>
+                <div className='column'>
+                    <div className='holder-icon icon'>
+                        <DefaultSvg />
+                    </div>
+                    <div className='holder-text '>لورم ایپسوم</div>
+                </div>
+                <div className='send-icon icon'>
+                    <SendSvg />
+                </div>
+            </div>
+            <LogoutButton />
+        </div>
+    )
+}
 
 const DefaultSvg = () => (
     <svg
