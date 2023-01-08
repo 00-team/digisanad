@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
@@ -14,27 +14,22 @@ const Login = loadable(() => import('pages/Login'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 
 const App: FC = () => {
-    const alert = useAlert()
+    global.ReactAlert = useAlert()
+    global.HandleError = error => {
+        let msg = 'Error'
 
-    useEffect(() => {
-        global.HandleError = error => {
-            let msg = 'Error'
-
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    msg = error.response.data.detail
-                } else {
-                    msg = error.message
-                }
-            } else if (error instanceof Error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                msg = error.response.data.detail
+            } else {
                 msg = error.message
             }
-
-            alert.error(msg)
+        } else if (error instanceof Error) {
+            msg = error.message
         }
 
-        global.ReactAlert = alert
-    }, [])
+        ReactAlert.error(msg)
+    }
 
     return (
         <>
