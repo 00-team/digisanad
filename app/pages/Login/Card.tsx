@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 import { useAtom, useSetAtom } from 'jotai'
 import { LoginAtom, UserAtom } from 'state'
@@ -17,6 +18,7 @@ const PHONE_VALIDATOR = new RegExp(/^09[0-9]{9}$/)
 const Card: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
     const setUser = useSetAtom(UserAtom)
+    const navigate = useNavigate()
 
     const phoneSubmit = async () => {
         const phonenumber = document.querySelector(
@@ -66,16 +68,12 @@ const Card: FC = () => {
                     nickname: data.nickname,
                     phone: Login.phone,
                 })
+                navigate('/dashboard/')
             } else {
-                ReactAlert.success('Invalid login!')
+                ReactAlert.error('Invalid login!')
             }
-
-            // user
-            console.log(response.data)
         } catch (error) {
-            // handle this error
-            console.log(error)
-            console.log(axios.isAxiosError(error))
+            HandleError(error)
         }
     }
 
