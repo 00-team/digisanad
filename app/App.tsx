@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
+import axios from 'axios'
 import { UserTemp } from 'pages/UserTemp'
 import { Route, Routes } from 'react-router-dom'
 
@@ -13,7 +14,27 @@ const Login = loadable(() => import('pages/Login'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 
 const App: FC = () => {
-    global.ReactAlert = useAlert()
+    const alert = useAlert()
+
+    useEffect(() => {
+        global.HandleError = error => {
+            let msg = 'Error'
+
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    msg = error.response.data.detail
+                } else {
+                    msg = error.message
+                }
+            } else if (error instanceof Error) {
+                msg = error.message
+            }
+
+            alert.error(msg)
+        }
+
+        global.ReactAlert = alert
+    }, [])
 
     return (
         <>
