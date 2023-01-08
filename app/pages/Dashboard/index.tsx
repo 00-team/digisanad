@@ -4,8 +4,9 @@ import { CountAnim } from '@00-team/utils'
 
 import { EditSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
+import { Navigate } from 'react-router-dom'
 
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
 import walletSvg from 'static/Dashboard/wallet.svg'
@@ -19,16 +20,17 @@ import './style/dashboard.scss'
 import DEFAULT_IMG from 'static/avatar.png'
 
 const Dashboard: FC = () => {
-    const UpdateUser = useSetAtom(UserAtom)
+    const [User, setUser] = useAtom(UserAtom)
 
     useEffect(() => {
-        // TODO: update this
-        UpdateUser({
-            token: '1:Tfz3)5JgDiJn3*w%T*NH7[LrmKASiLKW)6jeR#liYYZ1$ghvJjH%y*@I^EgQvo$oJ(Tal',
-        })
-
-        UpdateUser('fetch')
+        if (User.user_id) {
+            setUser('fetch')
+        }
     }, [])
+
+    if (User.user_id === 0) {
+        return <Navigate to='/login' />
+    }
 
     return (
         <section className='dashboard-container'>
