@@ -13,7 +13,7 @@ DEF_USER_NICKNAME_SIZE = 52
 
 DEF_USER_PIC_ABC = digits + 'abcdefABCDEF'  # hex abc
 DEF_USER_PIC_DIR = BASE_DIR / 'media/users/'
-DEF_USER_PIC_RES = 128
+DEF_USER_PIC_RES = 512
 
 if not DEF_USER_PIC_DIR.exists():
     DEF_USER_PIC_DIR.mkdir(parents=True)
