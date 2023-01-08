@@ -3,9 +3,20 @@ import React, { FC, useEffect, useRef } from 'react'
 import { useAtom } from 'jotai'
 import { UserAtom } from 'state'
 
-interface UserTempProps {}
+function get_nickname() {
+    let result = ''
+    let characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let charactersLength = characters.length
+    for (let i = 0; i < Math.floor(Math.random() * 50); i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        )
+    }
+    return result
+}
 
-const UserTemp: FC<UserTempProps> = () => {
+const UserTemp: FC = () => {
     const [User, setUser] = useAtom(UserAtom)
     const picture = useRef<HTMLInputElement>(null)
 
@@ -22,6 +33,7 @@ const UserTemp: FC<UserTempProps> = () => {
             'update',
             {
                 picture: pic,
+                nickname: get_nickname(),
             },
         ])
     }
