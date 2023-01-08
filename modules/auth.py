@@ -32,7 +32,7 @@ async def verify(request: Request, body: VerifyBody):
         return {
             'created': True,
             'user_id': user_id,
-            'wallet': user.wallet,
+            'wallet': 0,
             'token': f'{user_id}:{token}',
         }
     else:
