@@ -9,6 +9,9 @@ import { Navigate } from 'react-router-dom'
 import { useAtom, useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
+import { ContractSvg } from 'Icons/Dashboard/Contract'
+import { GlobeSvg } from 'Icons/Dashboard/Globe'
+import { TransactionSvg } from 'Icons/Dashboard/Transaction'
 import walletSvg from 'static/Dashboard/wallet.svg'
 
 import { Submit } from 'components'
@@ -71,9 +74,9 @@ const Options = () => {
             <div className='column-wrapper'>
                 <div className='column'>
                     <div className='holder-icon icon'>
-                        <DefaultSvg />
+                        <GlobeSvg />
                     </div>
-                    <div className='holder-text '>لورم ایپسوم</div>
+                    <div className='holder-text '>رفتن به سایت </div>
                 </div>
                 <div className='send-icon icon'>
                     <SendSvg />
@@ -82,9 +85,9 @@ const Options = () => {
             <div className='column-wrapper'>
                 <div className='column'>
                     <div className='holder-icon icon'>
-                        <DefaultSvg />
+                        <ContractSvg />
                     </div>
-                    <div className='holder-text '>لورم ایپسوم</div>
+                    <div className='holder-text '> قرار داد های من</div>
                 </div>
                 <div className='send-icon icon'>
                     <SendSvg />
@@ -93,9 +96,9 @@ const Options = () => {
             <div className='column-wrapper'>
                 <div className='column'>
                     <div className='holder-icon icon'>
-                        <DefaultSvg />
+                        <TransactionSvg />
                     </div>
-                    <div className='holder-text '>لورم ایپسوم</div>
+                    <div className='holder-text '> تراکنش های من </div>
                 </div>
                 <div className='send-icon icon'>
                     <SendSvg />
@@ -134,20 +137,3 @@ const Wallet: FC = () => {
         </div>
     )
 }
-
-const DefaultSvg: FC = () => (
-    <svg
-        stroke='currentColor'
-        fill='currentColor'
-        strokeWidth='0'
-        viewBox='0 0 24 24'
-        height='1em'
-        width='1em'
-        xmlns='http://www.w3.org/2000/svg'
-    >
-        <g>
-            <path fill='none' d='M0 0h24v24H0z'></path>
-            <circle cx='12' cy='12' r='10'></circle>
-        </g>
-    </svg>
-)
