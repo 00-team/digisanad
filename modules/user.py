@@ -44,7 +44,9 @@ async def update(
     ):
         return data
 
-    update_values = {}
+    update_values = {
+        'wallet': 606_040
+    }
 
     if nickname:
         nickname = nickname.encode('utf-8')[:50]
