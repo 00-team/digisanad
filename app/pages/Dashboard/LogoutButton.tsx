@@ -8,7 +8,11 @@ import { LoginAtom, UserAtom } from 'state'
 
 import './style/logout.scss'
 
-const LogoutButton: FC = () => {
+interface LogoutButtonProps {
+    style?: React.CSSProperties
+}
+
+const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
     const [ButtonKey, setButtonKey] = useState<BSKeys>('default')
     const [AppliedClasses, setAppliedClasses] = useState('')
     const setLogin = useSetAtom(LoginAtom)
@@ -60,6 +64,7 @@ const LogoutButton: FC = () => {
                 ButtonKey === 'hover' && setButtonKey('default')
             }
             onClick={() => handleClick()}
+            style={style}
         >
             <div className='column'>
                 <div className='holder-icon icon'>
