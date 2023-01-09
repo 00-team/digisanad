@@ -11,7 +11,7 @@ import './style/font/imports.scss'
 
 const Home = loadable(() => import('pages/Home'))
 const Login = loadable(() => import('pages/Login'))
-const Dashboard = loadable(() => import('pages/Dashboard'))
+const Dashboard = loadable(() => import('pages/Dashboard2'))
 
 const App: FC = () => {
     global.ReactAlert = useAlert()
