@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { CountAnim } from '@00-team/utils'
+
 import './style/myinfo.scss'
 
 const contractSvg = require('../../static/Dashboard/myInfo/contract.svg')
@@ -20,7 +22,9 @@ const MyInfo = () => {
                     ></object>
                     <div className='content title_hero'>
                         <div className='holder'> تراکنش های من </div>
-                        <div className='data'>123</div>
+                        <div className='data'>
+                            <CountAnim end={123} />
+                        </div>
                     </div>
                 </div>
                 <div className='myinfo-column'>
@@ -30,7 +34,9 @@ const MyInfo = () => {
                     ></object>
                     <div className='content title_hero'>
                         <div className='holder'>قرارداد های من</div>
-                        <div className='data'>123</div>
+                        <div className='data'>
+                            <CountAnim end={123} />
+                        </div>
                     </div>
                 </div>
 
@@ -41,7 +47,9 @@ const MyInfo = () => {
                     ></object>
                     <div className='content title_hero'>
                         <div className='holder'> تراکنش های من </div>
-                        <div className='data'>123</div>
+                        <div className='data'>
+                            <CountAnim end={123} />
+                        </div>
                     </div>
                 </div>
             </div>
