@@ -168,5 +168,9 @@
     .dashboard-wrapper {
         flex: 1 0;
         background-color: var(--sixty-percent);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
