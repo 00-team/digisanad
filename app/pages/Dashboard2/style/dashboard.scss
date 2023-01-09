@@ -1,0 +1,172 @@
+.dashboard-container {
+    width: 100%;
+    height: 100vh;
+
+    direction: rtl;
+
+    display: flex;
+
+    .sidebar {
+        height: 100%;
+        width: clamp(280px, 20%, 300px);
+
+        background-color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 5vh;
+
+        padding: 3vh 0;
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4vh;
+
+            width: 100%;
+
+            padding-bottom: 40px;
+
+            position: relative;
+
+            .profile-avatar {
+                width: 100px;
+                aspect-ratio: 1/1;
+                border-radius: 100vmax;
+            }
+            .name-avatar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 100%;
+
+                padding: 0 10px;
+
+                overflow: hidden;
+
+                span {
+                    padding: 0 20px;
+
+                    display: inline-block;
+                    transform: translateY(100%);
+                    white-space: nowrap;
+                    animation: header-fadeIn 1s
+                        cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                    @keyframes header-fadeIn {
+                        from {
+                            transform: translateY(100%);
+                        }
+                        to {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                &::after {
+                    content: '';
+
+                    position: absolute;
+                    bottom: 0;
+
+                    width: 0;
+                    height: 1px;
+                    background-color: var(--ten-percent);
+                    animation: width-slideIn 1s 1s
+                        cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                    @keyframes width-slideIn {
+                        from {
+                            width: 0;
+                        }
+                        to {
+                            width: 80%;
+                        }
+                    }
+                }
+            }
+        }
+        .sidebar-wrapper {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+
+            width: 100%;
+            height: 100%;
+
+            font-size: clamp(0.8rem, 0.4rem + 1.8vw, 1.1rem);
+
+            .column-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+
+                padding: 1rem 1rem;
+
+                cursor: pointer;
+
+                translate: 100%;
+
+                transition: color 0.2s ease-in-out;
+                animation: column-slide-in 0.8s
+                    cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                &.active {
+                    color: var(--ten-percent);
+                }
+
+                .column {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1vw;
+
+                    .holder-text {
+                        transition: transform 0.3s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98);
+                    }
+                }
+
+                &.exit {
+                    margin-top: auto;
+
+                    color: var(--alert-error);
+
+                    animation-duration: 1s;
+
+                    .column {
+                        margin-right: -10px;
+                        gap: 1.5vw;
+                    }
+                }
+
+                &:hover:not(.exit) {
+                    .column .holder-text {
+                        transform: translateX(-10%);
+                    }
+                }
+
+                @keyframes column-slide-in {
+                    from {
+                        translate: 100%;
+                    }
+                    to {
+                        translate: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .dashboard-wrapper {
+        flex: 1 0;
+        background-color: var(--sixty-percent);
+    }
+}
