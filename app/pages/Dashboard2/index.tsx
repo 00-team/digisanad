@@ -53,7 +53,8 @@ const Dashboard: FC = () => {
                 {SIDEBAR_OPTIONS.map(({ Component }, index) => {
                     if (!Component) return null
 
-                    if (index === SectionActive) return <Component />
+                    if (index === SectionActive)
+                        return <Component key={index} />
                     else return null
                 })}
             </div>
