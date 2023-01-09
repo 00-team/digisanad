@@ -60,7 +60,7 @@ const Card: FC = () => {
             const data = response.data
 
             if (data.token) {
-                ReactAlert.success('Successful login!')
+                ReactAlert.success(`${data.nickname}، خوش امدید.`)
                 setUser({
                     user_id: data.user_id,
                     token: data.token,
@@ -68,7 +68,7 @@ const Card: FC = () => {
                     nickname: data.nickname,
                     phone: Login.phone,
                 })
-                navigate('/dashboard/')
+                navigate('/dashboard')
             } else {
                 ReactAlert.error('Invalid login!')
             }
