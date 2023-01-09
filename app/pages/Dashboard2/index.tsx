@@ -10,6 +10,9 @@ import { GlobeSvg } from 'Icons/Dashboard/Globe'
 import { TransactionSvg } from 'Icons/Dashboard/Transaction'
 import { LogoutButton } from 'pages/Dashboard/LogoutButton'
 
+import Contracts from './Contracts'
+import MyInfo from './MyInfo'
+
 import './style/dashboard.scss'
 
 import DEFAULT_IMG from 'static/avatar.png'
@@ -20,29 +23,48 @@ const ADDED_DELAY = 0.1
 interface OptionsProps extends React.HTMLAttributes<HTMLDivElement> {
     title: string
     Icon: FC<{}>
-    style?: React.CSSProperties
-    active?: boolean
+    Component: FC
+    style: React.CSSProperties
+    active: boolean
 }
 
-const SIDEBAR_OPTIONS: OptionsProps[] = [
-    { title: 'اطلاعات من', Icon: PersonSvg },
-    { title: 'قرارداد های من', Icon: ContractSvg },
-    { title: 'تراکنش های من', Icon: TransactionSvg },
-    { title: 'رفتن به سایت', Icon: GlobeSvg },
+const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
+    { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
+    { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
+    { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
+    { title: 'رفتن به سایت', Icon: GlobeSvg, Component: MyInfo },
 ]
 
-const Dashboard = () => {
+interface DashboardChildProps {
+    SectionActive: number
+    SectionsetActive: (index: number) => void
+}
+
+const Dashboard: FC = () => {
+    const [SectionActive, SectionsetActive] = useState(0)
+
     return (
         <section className='dashboard-container'>
-            <Sidebar />
-            <div className='dashboard-wrapper'></div>
+            <Sidebar
+                SectionActive={SectionActive}
+                SectionsetActive={SectionsetActive}
+            />
+            <div className='dashboard-wrapper'>
+                {SIDEBAR_OPTIONS.map(({ Component }, index) => {
+                    if (!Component) return null
+
+                    if (index === SectionActive) return <Component />
+                    else return null
+                })}
+            </div>
         </section>
     )
 }
 
-const Sidebar = () => {
-    const [Active, setActive] = useState(0)
-    setActive
+const Sidebar: FC<DashboardChildProps> = ({
+    SectionActive,
+    SectionsetActive,
+}) => {
     return (
         <div className='sidebar'>
             <div className='avatar'>
@@ -58,13 +80,13 @@ const Sidebar = () => {
                             key={index}
                             title={title}
                             Icon={Icon}
-                            active={Active === index}
+                            active={SectionActive === index}
                             style={{
                                 animationDelay: `${
                                     OPTIONS_BASE_DELAY + ADDED_DELAY * index
                                 }s`,
                             }}
-                            onClick={() => setActive(index)}
+                            onClick={() => SectionsetActive(index)}
                         />
                     )
                 })}
@@ -81,7 +103,7 @@ const Sidebar = () => {
     )
 }
 
-const SidebarColumn: FC<OptionsProps> = ({
+const SidebarColumn: FC<Partial<OptionsProps>> = ({
     title,
     Icon,
     style,
@@ -91,9 +113,7 @@ const SidebarColumn: FC<OptionsProps> = ({
     return (
         <div className={`column-wrapper ${C(active)}`} style={style} {...attr}>
             <div className='column'>
-                <div className='holder-icon icon'>
-                    <Icon />
-                </div>
+                <div className='holder-icon icon'>{Icon && <Icon />}</div>
                 <div className='holder-text '>{title}</div>
             </div>
             <div className='send-icon icon'>
