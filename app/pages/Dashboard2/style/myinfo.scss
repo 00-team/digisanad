@@ -1,0 +1,42 @@
+.myinfo-container {
+    gap: 10vh;
+    .myinfo-columns {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        column-gap: 5vw;
+        row-gap: 5vh;
+
+        .myinfo-column {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: column;
+
+            width: clamp(200px, 100%, 350px);
+            height: auto;
+
+            background-color: white;
+
+            border-radius: 15px;
+            overflow: hidden;
+
+            direction: rtl;
+
+            .content {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 2vh;
+                padding: 1rem 2rem;
+
+                width: 100%;
+
+                margin-top: auto;
+            }
+        }
+    }
+}
