@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { CountAnim } from '@00-team/utils'
+import { C } from '@00-team/utils'
+
+import { EditSvg, PersonSvg } from 'Icons'
 
 import './style/myinfo.scss'
-
-const contractSvg = require('../../static/Dashboard/myInfo/contract.svg')
-const transactionSvg = require('../../static/Dashboard/myInfo/transaction.svg')
 
 const MyInfo = () => {
     return (
@@ -14,46 +13,36 @@ const MyInfo = () => {
                 <span>اطلاعات من</span>
             </div>
 
-            <div className='myinfo-columns'>
-                <div className='myinfo-column'>
-                    <object
-                        className='svg-container'
-                        data={transactionSvg}
-                    ></object>
-                    <div className='content title_hero'>
-                        <div className='holder'> تراکنش های من </div>
-                        <div className='data'>
-                            <CountAnim end={123} />
-                        </div>
-                    </div>
-                </div>
-                <div className='myinfo-column'>
-                    <object
-                        className='svg-container'
-                        data={contractSvg}
-                    ></object>
-                    <div className='content title_hero'>
-                        <div className='holder'>قرارداد های من</div>
-                        <div className='data'>
-                            <CountAnim end={123} />
-                        </div>
-                    </div>
-                </div>
-
-                <div className='myinfo-column'>
-                    <object
-                        className='svg-container'
-                        data={transactionSvg}
-                    ></object>
-                    <div className='content title_hero'>
-                        <div className='holder'> تراکنش های من </div>
-                        <div className='data'>
-                            <CountAnim end={123} />
-                        </div>
-                    </div>
+            <div className='myinfo-wrapper'>
+                <div className='rows'>
+                    <Nickname />
                 </div>
             </div>
         </section>
+    )
+}
+
+const Nickname = () => {
+    const [Editable, setEditable] = useState(false)
+    return (
+        <div className={`nickname row ${C(Editable)}`}>
+            <div className='nickname-title title row-title'>
+                <div className='icon'>
+                    <PersonSvg />
+                </div>
+                نام کاربری
+            </div>
+            <div className='input-wrapper '>
+                <input
+                    type='text'
+                    className='title_smaller'
+                    defaultValue={'سید صدرا تقوی'}
+                />
+                <div className='edit icon' onClick={() => setEditable(true)}>
+                    <EditSvg />
+                </div>
+            </div>
+        </div>
     )
 }
 
