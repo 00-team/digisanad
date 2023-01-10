@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
-import { C } from '@00-team/utils'
+import { PersonSvg } from 'Icons'
+import { Close } from 'Icons/Actions/Close'
 
-import { EditSvg, PersonSvg } from 'Icons'
+import { Profile } from 'Icons/Dashboard/Profile'
 
 import { Submit } from 'components'
 
 import './style/myinfo.scss'
+
+import DEFAULT_IMG from 'static/avatar.png'
 
 const MyInfo = () => {
     return (
@@ -18,6 +21,7 @@ const MyInfo = () => {
             <div className='myinfo-wrapper'>
                 <div className='rows'>
                     <Nickname />
+                    <Avatar />
                 </div>
                 <div className='submit-wrapper'>
                     <Submit className='title_smaller' title='تایید' />
@@ -28,9 +32,8 @@ const MyInfo = () => {
 }
 
 const Nickname = () => {
-    const [Editable, setEditable] = useState(false)
     return (
-        <div className={`nickname row ${C(Editable)}`}>
+        <div className='nickname row '>
             <div className='nickname-title title row-title'>
                 <div className='icon'>
                     <PersonSvg />
@@ -42,19 +45,53 @@ const Nickname = () => {
                     type='text'
                     className='title_smaller'
                     defaultValue={'سید صدرا تقوی'}
-                    style={{
-                        cursor: Editable ? 'text' : 'default',
-                        opacity: Editable ? '1' : '0.6  ',
-                        pointerEvents: Editable ? 'all' : 'none',
-                    }}
                 />
-                <div
-                    className='edit icon'
-                    onClick={() => setEditable(true)}
-                    style={{ opacity: Editable ? '0' : '1' }}
-                >
-                    <EditSvg />
+            </div>
+        </div>
+    )
+}
+const Avatar = () => {
+    const [Image, setImage] = useState(DEFAULT_IMG)
+    const picture = useRef<HTMLInputElement>(null)
+
+    const ChangeImg = () => {
+        if (!picture.current || !picture.current.files) return
+
+        const pic = picture.current.files[0]
+
+        setImage(URL.createObjectURL(pic!))
+    }
+    return (
+        <div className='avatar row'>
+            <div className='avatar-title title row-title'>
+                <div className='icon'>
+                    <Profile />
                 </div>
+                عکس پروفایل
+            </div>
+            <div className='input-wrapper '>
+                <div className='label-wrapper'>
+                    <label
+                        className='avatar-img'
+                        htmlFor='avatar-img'
+                        style={{
+                            backgroundImage: `url(${Image})`,
+                        }}
+                    ></label>
+                    {Image !== DEFAULT_IMG && (
+                        <label className='can-clear' htmlFor='avatar-img'>
+                            <Close />
+                        </label>
+                    )}
+                </div>
+                <input
+                    ref={picture}
+                    id='avatar-img'
+                    type='file'
+                    accept='image/x-png,image/jpeg'
+                    multiple={false}
+                    onChange={ChangeImg}
+                />
             </div>
         </div>
     )

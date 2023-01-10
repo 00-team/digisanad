@@ -1,5 +1,5 @@
 .myinfo-container {
-    gap: 10vh;
+    gap: 5vh;
 
     .myinfo-wrapper {
         width: clamp(0px, 100%, 1000px);
@@ -11,7 +11,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        gap: 4vh;
+        gap: 3vh;
 
         border-radius: 5px;
 
@@ -46,6 +46,8 @@
 
                 .input-wrapper {
                     position: relative;
+
+                    border-bottom: 1px solid var(--ten-percent);
 
                     .edit {
                         position: absolute;
@@ -121,11 +123,69 @@
                             color: black;
 
                             border: none;
-                            border-bottom: 1px solid var(--ten-percent);
 
                             padding: 10px 0;
 
                             width: 100%;
+                        }
+                    }
+                }
+                &.avatar {
+                    .input-wrapper {
+                        padding: 1rem 0;
+
+                        input {
+                            display: none;
+                        }
+                        .label-wrapper {
+                            position: relative;
+                            width: fit-content;
+
+                            border-radius: 10px;
+
+                            overflow: hidden;
+
+                            .avatar-img {
+                                display: inline-block;
+                                width: 200px;
+                                aspect-ratio: 1/1;
+                                border-radius: 10px;
+
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                background-position: 50% 50%;
+
+                                cursor: pointer;
+                            }
+
+                            .can-clear {
+                                width: 100%;
+                                height: 200px;
+
+                                position: absolute;
+                                top: 0;
+                                z-index: 1;
+
+                                display: grid;
+                                place-items: center;
+
+                                opacity: 0;
+                                cursor: pointer;
+
+                                color: var(--alert-error);
+                                background-color: rgb(226, 3, 56, 0.2);
+
+                                svg {
+                                    width: 30px;
+                                    height: 30px;
+                                }
+                            }
+                            &:hover {
+                                .can-clear {
+                                    opacity: 1;
+                                    transition: opacity 0.3s ease-in-out;
+                                }
+                            }
                         }
                     }
                 }
