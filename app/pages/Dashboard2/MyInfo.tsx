@@ -4,6 +4,8 @@ import { C } from '@00-team/utils'
 
 import { EditSvg, PersonSvg } from 'Icons'
 
+import { Submit } from 'components'
+
 import './style/myinfo.scss'
 
 const MyInfo = () => {
@@ -16,6 +18,9 @@ const MyInfo = () => {
             <div className='myinfo-wrapper'>
                 <div className='rows'>
                     <Nickname />
+                </div>
+                <div className='submit-wrapper'>
+                    <Submit className='title_smaller' title='تایید' />
                 </div>
             </div>
         </section>
@@ -37,8 +42,17 @@ const Nickname = () => {
                     type='text'
                     className='title_smaller'
                     defaultValue={'سید صدرا تقوی'}
+                    style={{
+                        cursor: Editable ? 'text' : 'default',
+                        opacity: Editable ? '1' : '0.6  ',
+                        pointerEvents: Editable ? 'all' : 'none',
+                    }}
                 />
-                <div className='edit icon' onClick={() => setEditable(true)}>
+                <div
+                    className='edit icon'
+                    onClick={() => setEditable(true)}
+                    style={{ opacity: Editable ? '0' : '1' }}
+                >
                     <EditSvg />
                 </div>
             </div>
