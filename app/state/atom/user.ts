@@ -16,8 +16,8 @@ const DEFUALT_USER: UserModel = {
 const User = atomWithStorage<UserModel>('user', DEFUALT_USER)
 
 interface UpdateArgs {
-    picture?: File | 'delete'
-    nickname?: string
+    picture?: File | 'delete' | null
+    nickname?: string | null
 }
 type Args = 'clear' | 'fetch' | ['update', UpdateArgs] | Partial<UserModel>
 

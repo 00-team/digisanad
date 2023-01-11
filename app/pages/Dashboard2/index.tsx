@@ -1,9 +1,13 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
 import { PersonSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
+import { Navigate } from 'react-router-dom'
+
+import { useAtom, useAtomValue } from 'jotai'
+import { UserAtom } from 'state'
 
 import { ContractSvg } from 'Icons/Dashboard/Contract'
 import { GlobeSvg } from 'Icons/Dashboard/Globe'
@@ -42,6 +46,17 @@ interface DashboardChildProps {
 
 const Dashboard: FC = () => {
     const [SectionActive, SectionsetActive] = useState(0)
+    const [User, setUser] = useAtom(UserAtom)
+
+    useEffect(() => {
+        if (User.user_id) {
+            setUser('fetch')
+        }
+    }, [])
+
+    if (User.user_id === 0) {
+        return <Navigate to='/login' />
+    }
 
     return (
         <section className='dashboard-container'>
@@ -66,12 +81,17 @@ const Sidebar: FC<DashboardChildProps> = ({
     SectionActive,
     SectionsetActive,
 }) => {
+    const User = useAtomValue(UserAtom)
+
     return (
         <div className='sidebar'>
             <div className='avatar'>
-                <img className='profile-avatar' src={DEFAULT_IMG} />
+                <img
+                    className='profile-avatar'
+                    src={User.picture || DEFAULT_IMG}
+                />
                 <div className='title_small name-avatar'>
-                    <span>سید صدرا تقوی</span>
+                    <span>{User.nickname || '---'}</span>
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>

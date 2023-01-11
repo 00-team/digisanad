@@ -21,6 +21,9 @@ const App: FC = () => {
         if (axios.isAxiosError(error)) {
             if (error.response) {
                 msg = error.response.data.detail
+                if (Array.isArray(msg)) {
+                    msg = msg[0].msg
+                }
             } else {
                 msg = error.message
             }
