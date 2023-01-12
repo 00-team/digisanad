@@ -1,14 +1,11 @@
 
 from fastapi import APIRouter, Form, HTTPException, Request, UploadFile
-from PIL import Image, UnidentifiedImageError
-from starlette.datastructures import UploadFile as StarletteUploadFile
 
 from database import UserModel
 from database.api import user_delete, user_get_by_id, user_update
 from models.user import DeleteResponse, DeleteVerifyBody, DeleteVerifyResponse
 from models.user import UpdateResponse
-from settings import DEF_USER_PIC_DIR, DEF_USER_PIC_RES
-from shared.tools import get_picture_name, now
+from shared.tools import now
 from utils import rate_limit, send_verification, user_required
 from utils import verify_verification
 
@@ -18,7 +15,7 @@ router = APIRouter(
     dependencies=[user_required()]
 )
 
-
+''' user update
 @router.api_route(
     '/update/', methods=['POST', 'GET'],
     response_model=UpdateResponse,
@@ -89,6 +86,12 @@ async def update(
         'nickname': new_user.nickname,
         'picture': new_user.picture_url(request.base_url),
     }
+'''
+
+
+@router.get('/get/', response_model=UserModel)
+async def get(request: Request):
+    return request.state.user
 
 
 @router.post(

@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-from settings import DEF_USER_PIC_DIR
-
 
 class UserModel(BaseModel):
     user_id: int
@@ -17,9 +15,10 @@ class UserModel(BaseModel):
 
     token: str | None
 
-    def __init__(self, **data) -> None:
-        print('user model init')
-        super().__init__(**data)
+    def __init__(self, birth_date, **data) -> None:
+        if isinstance(birth_date, str):
+            birth_date = tuple(map(lambda d: int(d), birth_date.split('-')))
+        super().__init__(birth_date=birth_date, **data)
 
 
 class VerificationModel(BaseModel):

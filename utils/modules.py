@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from database.api import verification_add, verification_add_tries
 from database.api import verification_delete, verification_get
-from settings import DEF_VERIFICATION_EXPIRE
+from shared.settings import DEF_VERIFICATION_EXPIRE
 from shared.tools import get_random_code
 
 from .tools import send_sms

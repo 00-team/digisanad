@@ -8,8 +8,6 @@ async def _user_get(query):
     if user_row is None:
         return None
 
-    print(f'{user_row=}')
-
     return UserModel(**user_row)
 
 

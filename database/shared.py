@@ -6,7 +6,7 @@ from databases import Database
 from sqlalchemy import Column as _Column
 from sqlalchemy import MetaData
 
-from settings import DATABASE_URL
+from shared.settings import DATABASE_URL
 
 
 class Connection(sqlite3.Connection):

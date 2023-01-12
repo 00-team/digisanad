@@ -1,9 +1,25 @@
+
+# get a verification code for login or register
+# provide a phone number and an action: login | register 
+# upon successful response shall be { timer: int }
+POST {{ host }}/api/auth/verify/
+Content-Type: application/json
+
+{
+    "phone": "09223334444",
+    "action": "login"
+}
+
+###
+
 # register
+# @name auth
 POST {{ host }}/api/auth/register/
 Content-Type: application/json
 
 {
     "phone": "09223334444",
+    "code": "72648",
     "first_name": "first name test",
     "last_name": "last name test",
     "birth_date": [1370, 12, 12],
@@ -15,32 +31,22 @@ Content-Type: application/json
 
 ###
 
-# request a login
+# login
+# @name auth
 POST {{ host }}/api/auth/login/
 Content-Type: application/json
 
 {
-    "phone": "09223334444"
-}
-
-###
-
-# verify login
-# @name login
-POST {{ host }}/api/auth/verify/
-Content-Type: application/json
-
-{
     "phone": "09223334444",
-    "code": "93239"
+    "code": "72648"
 }
 
 ###
 
-@token = {{ login.response.body.token }}
+@token = {{ auth.response.body.token }}
 
 # get user info
-GET {{ host }}/api/user/update/
+GET {{ host }}/api/user/get/
 Authorization: user {{ token }}
 
 
