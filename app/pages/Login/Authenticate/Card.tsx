@@ -83,7 +83,7 @@ const Card: FC = () => {
                 e.preventDefault()
                 Login.stage === 'code' ? codeSubmit() : phoneSubmit()
             }}
-            className='card'
+            className='login-card'
         >
             <div className='card-title  title_hero logo-text'>Digi Sanad</div>
             <div className='card-header title'>
