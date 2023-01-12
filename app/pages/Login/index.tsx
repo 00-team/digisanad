@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
-import Card from './Authenticate/Card'
+import LoginCard from './Authenticate/LoginCard'
+
 import Clouds from './Clouds'
+import RegisterCard from './Register/RegisterCard'
 
 import './style/login.scss'
 
@@ -48,6 +50,7 @@ const Register: FC = () => {
     return (
         <div className='register'>
             <Clouds />
+            <RegisterCard />
         </div>
     )
 }
@@ -56,7 +59,7 @@ const Authenticate: FC = () => {
     return (
         <div className='login'>
             <Clouds />
-            <Card />
+            <LoginCard />
         </div>
     )
 }
