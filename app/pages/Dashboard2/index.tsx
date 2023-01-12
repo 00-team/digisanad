@@ -1,14 +1,18 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
 import { PersonSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+
+import { useAtom, useAtomValue } from 'jotai'
+import { UserAtom } from 'state'
 
 import { ContractSvg } from 'Icons/Dashboard/Contract'
 import { GlobeSvg } from 'Icons/Dashboard/Globe'
 import { TransactionSvg } from 'Icons/Dashboard/Transaction'
+import { WalletSvg } from 'Icons/Dashboard/Wallet'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
@@ -34,6 +38,7 @@ const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
     { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
     { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
     { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
+    { title: 'کیف پول', Icon: WalletSvg, Component: MyInfo },
 ]
 
 interface DashboardChildProps {
@@ -43,6 +48,17 @@ interface DashboardChildProps {
 
 const Dashboard: FC = () => {
     const [SectionActive, SectionsetActive] = useState(0)
+    const [User, setUser] = useAtom(UserAtom)
+
+    useEffect(() => {
+        if (User.user_id) {
+            setUser('fetch')
+        }
+    }, [])
+
+    if (User.user_id === 0) {
+        return <Navigate to='/login' />
+    }
 
     return (
         <section className='dashboard-container'>
@@ -67,12 +83,17 @@ const Sidebar: FC<DashboardChildProps> = ({
     SectionActive,
     SectionsetActive,
 }) => {
+    const User = useAtomValue(UserAtom)
+
     return (
         <div className='sidebar'>
             <div className='avatar'>
-                <img className='profile-avatar' src={DEFAULT_IMG} />
+                <img
+                    className='profile-avatar'
+                    src={User.picture || DEFAULT_IMG}
+                />
                 <div className='title_small name-avatar'>
-                    <span>سید صدرا تقوی</span>
+                    <span>{User.nickname || '---'}</span>
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>

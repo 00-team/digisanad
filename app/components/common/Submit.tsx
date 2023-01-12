@@ -5,14 +5,17 @@ import './style/submit.scss'
 interface SubmitProps {
     title: string
     className?: string
+    onClick?: () => void
 }
 
-const Submit: FC<SubmitProps> = ({ title, className }) => {
+const Submit: FC<SubmitProps> = ({ title, className, onClick }) => {
     const [Transform, setTransform] = useState({ x: 0, y: 0 })
+
     return (
         <button
             type='submit'
             className={`see-more-btn-wrapper ${className && className}`}
+            onClick={onClick}
         >
             <div
                 className='button-wrapper'

@@ -34,6 +34,7 @@
             position: relative;
 
             .profile-avatar {
+                object-fit: cover;
                 width: 100px;
                 aspect-ratio: 1/1;
                 border-radius: 100vmax;

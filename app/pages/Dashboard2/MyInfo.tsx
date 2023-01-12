@@ -1,7 +1,16 @@
-import React, { useRef, useState } from 'react'
+import React, {
+    ChangeEvent,
+    FC,
+    MutableRefObject,
+    useRef,
+    useState,
+} from 'react'
 
 import { PersonSvg } from 'Icons'
 import { Close } from 'Icons/Actions/Close'
+
+import { useAtom } from 'jotai'
+import { UserAtom } from 'state'
 
 import { Profile } from 'Icons/Dashboard/Profile'
 
@@ -11,7 +20,11 @@ import './style/myinfo.scss'
 
 import DEFAULT_IMG from 'static/avatar.png'
 
-const MyInfo = () => {
+const MyInfo: FC = () => {
+    const [User, setUser] = useAtom(UserAtom)
+    const picture = useRef<File | 'delete' | null>(null)
+    const [nickname, setNickname] = useState(User.nickname || '')
+
     return (
         <section className='myinfo-container'>
             <div className='section-header section_title'>
@@ -20,47 +33,66 @@ const MyInfo = () => {
 
             <div className='myinfo-wrapper'>
                 <div className='rows'>
-                    <Nickname />
-                    <Avatar />
+                    <div className='nickname row '>
+                        <div className='nickname-title title row-title'>
+                            <div className='icon'>
+                                <PersonSvg />
+                            </div>
+                            نام کاربری
+                        </div>
+                        <div className='input-wrapper '>
+                            <input
+                                type='text'
+                                className='title_smaller'
+                                defaultValue={User.nickname || ''}
+                                onChange={e =>
+                                    setNickname(e.currentTarget.value)
+                                }
+                            />
+                        </div>
+                    </div>
+                    <Avatar value={picture} picture={User.picture} />
                 </div>
                 <div className='submit-wrapper'>
-                    <Submit className='title_smaller' title='تایید' />
+                    <Submit
+                        className='title_smaller'
+                        title='تایید'
+                        onClick={() =>
+                            setUser([
+                                'update',
+                                {
+                                    picture: picture.current,
+                                    nickname:
+                                        User.nickname !== nickname
+                                            ? nickname
+                                            : null,
+                                },
+                            ])
+                        }
+                    />
                 </div>
             </div>
         </section>
     )
 }
 
-const Nickname = () => {
-    return (
-        <div className='nickname row '>
-            <div className='nickname-title title row-title'>
-                <div className='icon'>
-                    <PersonSvg />
-                </div>
-                نام کاربری
-            </div>
-            <div className='input-wrapper '>
-                <input
-                    type='text'
-                    className='title_smaller'
-                    defaultValue={'سید صدرا تقوی'}
-                />
-            </div>
-        </div>
-    )
+interface AvatarProps {
+    picture: string | null
+    value: MutableRefObject<File | 'delete' | null>
 }
-const Avatar = () => {
-    const [Image, setImage] = useState(DEFAULT_IMG)
-    const picture = useRef<HTMLInputElement>(null)
 
-    const ChangeImg = () => {
-        if (!picture.current || !picture.current.files) return
+const Avatar: FC<AvatarProps> = ({ value, picture }) => {
+    const [Image, setImage] = useState(picture || DEFAULT_IMG)
 
-        const pic = picture.current.files[0]
+    const ChangeImg = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.currentTarget.files || !e.currentTarget.files[0]) return
+
+        const pic = e.currentTarget.files[0]
+        value.current = pic
 
         setImage(URL.createObjectURL(pic!))
     }
+
     return (
         <div className='avatar row'>
             <div className='avatar-title title row-title'>
@@ -79,13 +111,19 @@ const Avatar = () => {
                         }}
                     ></label>
                     {Image !== DEFAULT_IMG && (
-                        <label className='can-clear' htmlFor='avatar-img'>
+                        <label
+                            className='can-clear'
+                            // htmlFor='avatar-img'
+                            onClick={() => {
+                                value.current = 'delete'
+                                setImage(DEFAULT_IMG)
+                            }}
+                        >
                             <Close />
                         </label>
                     )}
                 </div>
                 <input
-                    ref={picture}
                     id='avatar-img'
                     type='file'
                     accept='image/x-png,image/jpeg'
