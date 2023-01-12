@@ -6,20 +6,20 @@ from settings import DEF_USER_PIC_DIR
 class UserModel(BaseModel):
     user_id: int
     phone: str
+    first_name: str
+    last_name: str
+    birth_date: tuple[int, int, int]
+    national_id: str
+    postal_code: str
+    address: str
+    email: str
     wallet: int
-    nickname: str | None
-    picture: str | None
+
     token: str | None
 
-    def picture_url(self, base_url: str) -> str | None:
-        if not self.picture:
-            return None
-
-        return f'{base_url}media/users/{self.picture}'
-
-    def clean_picture(self, new_picture):
-        if self.picture and self.picture != new_picture:
-            (DEF_USER_PIC_DIR / self.picture).unlink(True)
+    def __init__(self, **data) -> None:
+        print('user model init')
+        super().__init__(**data)
 
 
 class VerificationModel(BaseModel):

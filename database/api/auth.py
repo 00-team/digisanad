@@ -26,7 +26,7 @@ async def verification_get(phone: str) -> VerificationModel | None:
         phone=phone,
         code=value['code'],
         action=value['action'],
-        expires=value['expires'],
+        expires=value['expires'] - now(),
         tries=value['tries'],
     )
 
@@ -55,8 +55,6 @@ async def verification_get(phone: str) -> VerificationModel | None:
 
 
 async def verification_add(phone, code, expires, action):
-    print(f'{expires=}')
-
     VERIF[phone] = {
         'code': code,
         'expires': now() + expires,
@@ -76,6 +74,7 @@ async def verification_add_tries(row: VerificationModel):
         return
 
     value = VERIF.get(row.phone)
+
     if value is None or value['expires'] < now():
         await verification_delete(row.phone)
         return

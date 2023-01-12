@@ -9,8 +9,7 @@ clear
 
 case $1 in
 run)
-    uvicorn main:app --reload --port 7000 --use-colors
-    echo "run Server"
+    python main.py
     ;;
 
 log)

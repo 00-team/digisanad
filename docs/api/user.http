@@ -1,3 +1,20 @@
+# register
+POST {{ host }}/api/auth/register/
+Content-Type: application/json
+
+{
+    "phone": "09223334444",
+    "first_name": "first name test",
+    "last_name": "last name test",
+    "birth_date": [1370, 12, 12],
+    "national_id": "1212121212",
+    "postal_code": "1111111111",
+    "address": "strkad;kal;sdk",
+    "email": "gg@ez.org"
+}
+
+###
+
 # request a login
 POST {{ host }}/api/auth/login/
 Content-Type: application/json
@@ -15,7 +32,7 @@ Content-Type: application/json
 
 {
     "phone": "09223334444",
-    "code": "51810"
+    "code": "93239"
 }
 
 ###
@@ -28,24 +45,6 @@ Authorization: user {{ token }}
 
 
 ### 
-
-# update user info
-POST {{ host }}/api/user/update/
-Authorization: user {{ token }}
-Content-Type: multipart/form-data; boundary=THIS_STRING_SPRATES_GGEZ
-
---THIS_STRING_SPRATES_GGEZ
-Content-Disposition: form-data; name="nickname"
-
-Sky
---THIS_STRING_SPRATES_GGEZ
-Content-Disposition: form-data; name="picture"; filename="sample.jpg"
-Content-Type: image/jpeg
-
-< ./user-picture-sample.jpg
---THIS_STRING_SPRATES_GGEZ--
-
-###
 
 POST {{ host }}/api/user/delete/
 Content-Type: application/json

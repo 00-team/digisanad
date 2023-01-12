@@ -8,12 +8,9 @@ async def _user_get(query):
     if user_row is None:
         return None
 
+    print(f'{user_row=}')
+
     return UserModel(**user_row)
-
-
-async def user_get_by_token_id(token: str) -> UserModel | None:
-    query = table.select().where(table.c.token == token)
-    return await _user_get(query)
 
 
 async def user_get_by_id(user_id: int, token: str = None) -> UserModel | None:

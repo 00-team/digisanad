@@ -1,4 +1,5 @@
 
+import uvicorn
 from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
@@ -43,3 +44,7 @@ app.include_router(api)
 for route in app.routes:
     if isinstance(route, APIRoute):
         route.operation_id = route.name
+
+
+if __name__ == '__main__':
+    uvicorn.run('main:app', port=7000, reload=True)
