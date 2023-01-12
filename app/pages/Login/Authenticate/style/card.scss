@@ -1,0 +1,218 @@
+.card {
+    width: clamp(100px, 80%, 400px);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    background-color: rgb(255, 255, 255, 0.3);
+    backdrop-filter: blur(3px);
+    border-radius: 15px;
+    box-shadow: 0px 30px 40px -40px #000;
+
+    padding: 1rem 2rem;
+
+    gap: 4vh;
+
+    .card-title {
+        text-align: center;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+        isolation: isolate;
+
+        width: 100%;
+
+        margin-top: -2vh;
+
+        overflow: hidden;
+
+        &::before,
+        &::after {
+            content: '';
+            width: 0;
+            height: 2px;
+            background-color: black;
+
+            animation: width-slideIn 1s 1.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes width-slideIn {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 30%;
+                }
+            }
+        }
+
+        span {
+            padding: 0 50px;
+
+            display: inline-block;
+
+            transform: translateY(100%);
+
+            animation: header-fadeIn 1s 0.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes header-fadeIn {
+                from {
+                    transform: translateY(100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+
+    .card-inps {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2vh;
+
+        width: 100%;
+
+        direction: rtl;
+
+        .input-wrapper {
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+            .placeholder {
+                display: flex;
+                gap: 1vw;
+
+                font-family: 'iranBold';
+
+                padding-right: 5px;
+
+                opacity: 0.7;
+            }
+            .input-column {
+                position: relative;
+
+                .input {
+                    width: 100%;
+
+                    font-family: 'number';
+                    letter-spacing: 0.2vmin;
+
+                    border: none;
+                    outline: none;
+                    background-color: var(--sixty-percent);
+
+                    padding: 10px 15px;
+                    border-radius: 7.5px;
+
+                    color: black;
+
+                    &:-webkit-autofill {
+                        background-clip: text;
+                    }
+                }
+
+                .icon {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+
+                    height: 100%;
+                    padding: 0 10px;
+
+                    cursor: pointer;
+
+                    &:hover {
+                        svg {
+                            rotate: -360deg;
+                        }
+                    }
+
+                    svg {
+                        transition: rotate 1s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98);
+                    }
+                }
+            }
+        }
+    }
+
+    .submit {
+        // reset
+        border: none;
+        //
+
+        margin-top: 5vh;
+
+        background-color: var(--ten-percent);
+        width: 100%;
+
+        padding: 1rem 2rem;
+
+        border-radius: 7.5px;
+    }
+
+    .card-options {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1vh;
+        margin: 2vh 0 -2vh 0;
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1vmin;
+        }
+
+        .can-resend {
+            color: #3366cc;
+            cursor: pointer;
+
+            width: 100%;
+            text-align: center;
+        }
+        .cant-resend {
+            opacity: 0.6;
+
+            width: 100%;
+
+            cursor: not-allowed;
+        }
+    }
+
+    .go-back-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(50%, 50%);
+
+        background-color: var(--ten-percent);
+
+        border-radius: 100vmax;
+
+        cursor: pointer;
+
+        svg {
+            padding: 5px;
+        }
+    }
+
+    .see-more-btn-wrapper {
+        margin-top: 5vh;
+    }
+}
