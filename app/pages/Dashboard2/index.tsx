@@ -4,11 +4,13 @@ import { C } from '@00-team/utils'
 
 import { PersonSvg } from 'Icons'
 import { SendSvg } from 'Icons/Actions/Send'
+import { Link } from 'react-router-dom'
 
 import { ContractSvg } from 'Icons/Dashboard/Contract'
 import { GlobeSvg } from 'Icons/Dashboard/Globe'
 import { TransactionSvg } from 'Icons/Dashboard/Transaction'
-import { LogoutButton } from 'pages/Dashboard/LogoutButton'
+
+import { LogoutButton } from 'components/common/LogoutButton'
 
 import Contracts from './Contracts'
 import MyInfo from './MyInfo'
@@ -32,7 +34,6 @@ const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
     { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
     { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
     { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
-    { title: 'رفتن به سایت', Icon: GlobeSvg, Component: MyInfo },
 ]
 
 interface DashboardChildProps {
@@ -91,6 +92,14 @@ const Sidebar: FC<DashboardChildProps> = ({
                         />
                     )
                 })}
+                <GotoSiteColumn
+                    style={{
+                        animationDelay: `${
+                            OPTIONS_BASE_DELAY +
+                            ADDED_DELAY * (SIDEBAR_OPTIONS.length + 1)
+                        }s`,
+                    }}
+                />
                 <LogoutButton
                     style={{
                         animationDelay: `${
@@ -104,6 +113,22 @@ const Sidebar: FC<DashboardChildProps> = ({
     )
 }
 
+const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
+    return (
+        <Link to={'/'} className='column-wrapper goto ' style={style}>
+            <div className='column'>
+                <div className='holder-icon icon'>
+                    {' '}
+                    <GlobeSvg />{' '}
+                </div>
+                <div className='holder-text '>رفتن به سایت</div>
+            </div>
+            <div className='send-icon icon'>
+                <SendSvg />
+            </div>
+        </Link>
+    )
+}
 const SidebarColumn: FC<Partial<OptionsProps>> = ({
     title,
     Icon,
