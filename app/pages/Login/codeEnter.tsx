@@ -7,8 +7,6 @@ import { LoginAtom } from 'state'
 
 import { Timer } from 'components/common/Timer'
 
-const NUMBER_DEBUG = '09120974956'
-
 const CodeEnter: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
 
@@ -51,7 +49,7 @@ const CodeEnter: FC = () => {
                 </div>
                 <div className='card-options'>
                     <div className='phone-number-holder title_smaller'>
-                        کد تایید به شماره {NUMBER_DEBUG} پیامک شد.
+                        کد تایید به شماره {Login.phone} پیامک شد.
                     </div>
                     {Login.resend ? (
                         <div

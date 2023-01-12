@@ -4,8 +4,8 @@ from hashlib import sha3_512
 from random import choices
 from secrets import choice as secret_choice
 
-from settings import DEF_TOKEN_ABC, DEF_TOKEN_LEN, DEF_USER_PIC_ABC
-from settings import DEF_VERIFICATION_CODE_LEN
+from shared.settings import DEF_TOKEN_ABC, DEF_TOKEN_LEN
+from shared.settings import DEF_VERIFICATION_CODE_LEN
 
 
 def now(dt: bool = False) -> int | datetime:
@@ -21,8 +21,8 @@ def get_random_code() -> str:
     return ''.join(choices('0123456789', k=DEF_VERIFICATION_CODE_LEN))
 
 
-def get_picture_name(user_id: int) -> str:
-    return f'{user_id}-' + ''.join(choices(DEF_USER_PIC_ABC, k=8))
+# def get_picture_name(user_id: int) -> str:
+#     return f'{user_id}-' + ''.join(choices(DEF_USER_PIC_ABC, k=8))
 
 
 def new_token() -> tuple[str, str]:

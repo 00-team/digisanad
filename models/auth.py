@@ -14,8 +14,42 @@ def phone_validator(value: str):
     return value
 
 
-class RegisterBody(BaseModel):
+class VerifyBody(BaseModel):
     phone: str
+    action: str
+
+    @validator('phone')
+    def v_phone(cls, value):
+        return phone_validator(value)
+
+    @validator('action')
+    def v_action(cls, value: str):
+        value = value.upper()
+
+        if not value in ['LOGIN', 'REGISTER']:
+            raise ValueError('invalid action')
+
+        return value
+
+
+class VerifyResponse(BaseModel):
+    timer: int
+
+
+class LoginBody(BaseModel):
+    phone: str
+    code: str
+
+    @validator('code')
+    def v_code(cls, value):
+        return code_validator(value)
+
+    @validator('phone')
+    def v_phone(cls, value):
+        return phone_validator(value)
+
+
+class RegisterBody(LoginBody):
     first_name: str
     last_name: str
     birth_date: tuple[int, int, int]
@@ -23,10 +57,6 @@ class RegisterBody(BaseModel):
     postal_code: str
     address: str
     email: EmailStr
-
-    @validator('phone')
-    def v_phone(cls, value):
-        return phone_validator(value)
 
     @validator('national_id')
     def v_national_id(cls, value):
@@ -67,34 +97,6 @@ class RegisterBody(BaseModel):
         return value
 
 
-class RegisterResponse(BaseModel):
-    timer: int
-
-
-class LoginBody(BaseModel):
-    phone: str
-
-    @validator('phone')
-    def v_phone(cls, value):
-        return phone_validator(value)
-
-
-class LoginResponse(BaseModel):
-    timer: int
-
-
-class VerifyBody(LoginBody):
-    code: str
-
-    @validator('code')
-    def code_validator(cls, value: str):
-        return code_validator(value)
-
-
-class VerifyResponse(BaseModel):
-    created: bool
+class AuthResponse(BaseModel):
     user_id: int
     token: str
-    wallet: int
-    nickname: str | None
-    picture: str | None
