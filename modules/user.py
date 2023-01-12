@@ -8,8 +8,9 @@ from database.api import user_delete, user_get_by_id, user_update
 from models.user import DeleteResponse, DeleteVerifyBody, DeleteVerifyResponse
 from models.user import UpdateResponse
 from settings import DEF_USER_PIC_DIR, DEF_USER_PIC_RES
-from utils import get_picture_name, now, rate_limit, send_verification
-from utils import user_required, verify_verification
+from shared.tools import get_picture_name, now
+from utils import rate_limit, send_verification, user_required
+from utils import verify_verification
 
 router = APIRouter(
     prefix='/user',

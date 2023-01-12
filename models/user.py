@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-from utils import code_validator
+from shared.tools import code_validator
 
 
 class UpdateResponse(BaseModel):

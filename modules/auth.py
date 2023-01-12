@@ -3,7 +3,8 @@ from fastapi import APIRouter, Request
 
 from database.api import user_add, user_get_by_phone, user_update
 from models.auth import LoginBody, LoginResponse, VerifyBody, VerifyResponse
-from utils import new_token, rate_limit, send_verification, verify_verification
+from shared.tools import new_token
+from utils import rate_limit, send_verification, verify_verification
 
 AUTH_RATE_LIMIT = rate_limit('auth', 30 * 60, 20, False)
 

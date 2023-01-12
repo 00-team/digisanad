@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-from utils import code_validator, isallnum
+from shared.tools import code_validator, isallnum
 
 
 class LoginBody(BaseModel):

@@ -1,10 +1,12 @@
-from database.api import verification_add, verification_add_tries
-from database.api import verification_delete, verification_get
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
-from settings import DEF_VERIFICATION_EXPIRE
 
-from .tools import get_random_code, send_sms
+from database.api import verification_add, verification_add_tries
+from database.api import verification_delete, verification_get
+from settings import DEF_VERIFICATION_EXPIRE
+from shared.tools import get_random_code
+
+from .tools import send_sms
 
 VERIFY_ERROR = HTTPException(400, 'invalid verification')
 
