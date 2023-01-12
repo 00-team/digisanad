@@ -119,6 +119,11 @@
                 animation: column-slide-in 0.8s
                     cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
 
+                &.goto {
+                    color: unset;
+                    text-decoration: none;
+                }
+
                 &.active {
                     color: var(--ten-percent);
                 }

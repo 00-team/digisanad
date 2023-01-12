@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import { LoginAtom, UserAtom } from 'state'
 
-import './style/logout.scss'
+import './style/logoutbutton.scss'
 
 interface LogoutButtonProps {
     style?: React.CSSProperties
