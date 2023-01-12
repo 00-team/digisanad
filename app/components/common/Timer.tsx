@@ -28,7 +28,21 @@ const Timer: FC<TimerProps> = ({ start }) => {
         timer <= 0 && setLogin({ resend: true })
     }, [timer])
 
-    return <div>{timer}</div>
+    const convertHMS = (time: number) => {
+        let seconds = ''
+        let minutes = ''
+
+        seconds = (time % 60).toString()
+        if (parseInt(seconds) < 10) seconds = '0' + seconds
+
+        minutes = Math.floor(time / 60).toString()
+
+        let result = minutes + ':' + seconds
+
+        return result
+    }
+
+    return <div>{convertHMS(timer)}</div>
 }
 
 export { Timer }
