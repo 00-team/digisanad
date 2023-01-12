@@ -1,11 +1,12 @@
 
 # importing the table is necessary for creating the tables
-import database.table
-from settings import DATABASE_URL
 from sqlalchemy import create_engine
 
+import database.table
+from settings import DATABASE_URL
+
 from .models import UserModel, VerificationModel
-from .shared import database, metadata, redis
+from .shared import database, metadata
 
 engine = create_engine(
     DATABASE_URL,
@@ -16,7 +17,7 @@ metadata.create_all(engine)
 
 __all__ = [
     'database',
-    'redis',
+    # 'redis',
 
     'VerificationModel',
     'UserModel',

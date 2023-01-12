@@ -3,7 +3,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
-from database import database, redis
+from database import database
 from modules import auth, user
 
 # TODO: make the doc
@@ -24,13 +24,13 @@ api = APIRouter(
 
 @app.on_event('startup')
 async def startup():
-    await redis.ping()
+    # await redis.ping()
     await database.connect()
 
 
 @app.on_event('shutdown')
 async def shutdown():
-    await redis.connection_pool.disconnect()
+    # await redis.connection_pool.disconnect()
     await database.disconnect()
 
 
