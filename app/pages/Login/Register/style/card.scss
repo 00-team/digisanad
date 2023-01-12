@@ -1,6 +1,5 @@
 .register-card {
-    width: clamp(100px, 80%, 400px);
-    height: 500px;
+    width: clamp(100px, 80%, 600px);
 
     display: flex;
     align-items: center;
@@ -18,5 +17,109 @@
 
     .card-title {
         text-align: center;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        position: relative;
+        isolation: isolate;
+
+        width: 100%;
+
+        margin-top: -2vh;
+
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            width: 0;
+            height: 2px;
+            background-color: black;
+
+            animation: width-slideIn 1s 1.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes width-slideIn {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 100%;
+                }
+            }
+        }
+
+        span {
+            padding-left: 40px;
+
+            display: inline-block;
+
+            transform: translateY(100%);
+
+            white-space: nowrap;
+
+            animation: header-fadeIn 1s 0.3s
+                cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+            @keyframes header-fadeIn {
+                from {
+                    transform: translateY(100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+
+    .inps {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 2vh;
+
+        width: 100%;
+
+        direction: rtl;
+
+        padding-bottom: 1rem;
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 1vh;
+
+            .holder {
+                display: flex;
+                gap: calc(0.5vw + 5px);
+            }
+            textarea {
+                // reset
+                background-color: white;
+                color: black;
+                border-radius: 7.5px;
+                border: none;
+                //
+
+                padding: 10px 15px;
+                resize: none;
+            }
+            input {
+                // reset
+                background-color: white;
+                color: black;
+                border-radius: 7.5px;
+                border: none;
+                //
+
+                padding: 10px 15px;
+                width: 100%;
+            }
+        }
     }
 }
