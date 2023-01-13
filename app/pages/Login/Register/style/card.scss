@@ -144,6 +144,36 @@
                     text-align: center;
                 }
             }
+            .card-options {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 1vh;
+                margin: 2vh 0 -2vh 0;
+
+                .timer-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1vmin;
+                }
+
+                .can-resend {
+                    color: #3366cc;
+                    cursor: pointer;
+
+                    width: 100%;
+                    text-align: center;
+                }
+                .cant-resend {
+                    opacity: 0.6;
+
+                    width: 100%;
+
+                    cursor: not-allowed;
+                }
+            }
         }
     }
     .go-back-wrapper {
