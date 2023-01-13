@@ -29,7 +29,6 @@ const RegisterCard = () => {
     const SubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        // const isSectionEmpty = () => {
         const onlyPersian = /^[\u0600-\u06FF\s]+$/
         const isNotEmpty = (string: string) => string.trim()
         const isOnlyDigits = (string: string) =>
@@ -67,7 +66,6 @@ const RegisterCard = () => {
             return
         }
         const checkAddress = () => {
-            // persian address
             if (isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)) {
                 if (onlyPersian.test(Data.address)) {
                     ReactAlert.show('send req')
@@ -81,13 +79,6 @@ const RegisterCard = () => {
             }
         }
 
-        // isSectionEmpty()
-        //     ? Stages === 'info'
-        //         ? checkPersonalInfo()
-        //         : ReactAlert.success('send req') //send request
-        //     : ReactAlert.error('لطفا فورم را به درستی پر کنید.')
-        // isSectionEmpty() && Stages === "contact" && setStages("info")
-        // isSectionEmpty() && Stages === "contact" && setStages("info")
         Stages === 'contact' && checkContact()
         Stages === 'info' && checkInfo()
         Stages === 'address' && checkAddress()
