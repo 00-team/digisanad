@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { GoBack } from 'Icons/Models/GoBack'
 import axios from 'axios'
 
 import { useAtom } from 'jotai'
@@ -91,20 +92,5 @@ const SubmitCode = () => (
         xmlns='http://www.w3.org/2000/svg'
     >
         <path d='M249.2 224c-14.2-40.2-55.1-72-100.2-72-57.2 0-101 46.8-101 104s45.8 104 103 104c45.1 0 84.1-31.8 98.2-72H352v64h69.1v-64H464v-64H249.2zm-97.6 66.5c-19 0-34.5-15.5-34.5-34.5s15.5-34.5 34.5-34.5 34.5 15.5 34.5 34.5-15.5 34.5-34.5 34.5z'></path>
-    </svg>
-)
-
-const GoBack = () => (
-    <svg
-        stroke='white'
-        fill='white'
-        strokeWidth='0'
-        viewBox='0 0 24 24'
-        height={30}
-        width={30}
-        xmlns='http://www.w3.org/2000/svg'
-    >
-        <path fill='none' d='M0 0h24v24H0V0z' opacity='.87'></path>
-        <path d='M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z'></path>
     </svg>
 )
