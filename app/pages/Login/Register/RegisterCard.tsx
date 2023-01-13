@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { PersonSvg } from 'Icons'
 
 import { AddressSvg } from 'Icons/Dashboard/Address'
+import { CallenderSvg } from 'Icons/Dashboard/Callender'
 import { NationalIdSvg } from 'Icons/Dashboard/NationalId'
 import PostalCodeSvg from 'Icons/Dashboard/PostalCode'
 
@@ -16,7 +17,7 @@ const RegisterCard = () => {
         fname: '',
         lname: '',
         nationalId: '',
-        birthDay: '',
+        birthDay: { year: 0, month: 0, day: 0 },
         address: '',
         postalCode: '',
     })
@@ -25,21 +26,43 @@ const RegisterCard = () => {
         e.preventDefault()
 
         const isSectionEmpty = () => {
-            const firstSectionEmpty =
-                Data.fname !== '' && Data.lname !== '' && Data.nationalId !== ''
-            const secondSectionEmpty =
-                // Data.birthDay !== '' &&
-                Data.address !== '' && Data.postalCode !== ''
+            const isNotEmpty = (string: string) => string.trim()
+            const isOnlyDigits = (string: string) =>
+                string.trim() && /^\d+$/.test(string)
+            const validBirthday = () =>
+                Data.birthDay.day !== 0 &&
+                Data.birthDay.month !== 0 &&
+                Data.birthDay.year !== 0
 
-            return Stages === 'info' ? firstSectionEmpty : secondSectionEmpty
+            const firstSectionEmpty = () =>
+                isNotEmpty(Data.fname) &&
+                isNotEmpty(Data.lname) &&
+                isOnlyDigits(Data.nationalId) &&
+                validBirthday()
+
+            const secondSectionEmpty = () =>
+                isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)
+
+            return Stages === 'info'
+                ? firstSectionEmpty()
+                : secondSectionEmpty()
+        }
+
+        const checkPersonalInfo = () => {
+            const onlyPersian = /^[\u0600-\u06FF\s]+$/
+
+            if (onlyPersian.test(Data.fname) && onlyPersian.test(Data.lname))
+                return setStages('address')
+            else return ReactAlert.error('لطفا مشخصات خود را به فارسی بنویسید.')
         }
 
         isSectionEmpty()
             ? Stages === 'info'
-                ? setStages('address')
+                ? checkPersonalInfo()
                 : ReactAlert.success('send req') //send request
-            : ReactAlert.error('لطفا فورم را به طور کامل پر کنید.')
+            : ReactAlert.error('لطفا فورم را به درستی پر کنید.')
     }
+
     return (
         <form onSubmit={SubmitForm} className='register-card'>
             <div className='card-title  title_hero logo-text'>Digi Sanad</div>
@@ -97,14 +120,91 @@ const RegisterCard = () => {
                             }
                         />
                     </div>
-                    {/* <div className="birthday">
-                    <div className="holder">
-                        <div className="holder-icon icon">
-                            <CallenderSvg />
+                    <div className='input-wrapper birthday'>
+                        <div className='holder title_small'>
+                            <div className='holder-icon icon'>
+                                <CallenderSvg />
+                            </div>
+                            <div className='holder-data'>تاریخ تولد</div>
                         </div>
-                        <div className="holder-data"></div>
+                        <div className='birthday-inp'>
+                            <select
+                                name='birthdayYear'
+                                onChange={e =>
+                                    setData({
+                                        ...Data,
+                                        birthDay: {
+                                            ...Data.birthDay,
+                                            year: parseInt(e.target.value),
+                                        },
+                                    })
+                                }
+                                defaultValue={'سال'}
+                            >
+                                <option className='default' disabled hidden>
+                                    سال
+                                </option>
+                                {Array.from(Array(100).keys()).map(
+                                    (_, index) => (
+                                        <option
+                                            key={index}
+                                            value={index + 1300}
+                                        >
+                                            {index + 1300}
+                                        </option>
+                                    )
+                                )}
+                            </select>
+                            <select
+                                name='birthdayMonth'
+                                onChange={e =>
+                                    setData({
+                                        ...Data,
+                                        birthDay: {
+                                            ...Data.birthDay,
+                                            month: parseInt(e.target.value),
+                                        },
+                                    })
+                                }
+                                defaultValue={'ماه'}
+                            >
+                                <option className='default' disabled hidden>
+                                    ماه
+                                </option>
+                                {Array.from(Array(12).keys()).map(
+                                    (_, index) => (
+                                        <option key={index} value={index + 1}>
+                                            {index + 1}
+                                        </option>
+                                    )
+                                )}
+                            </select>
+                            <select
+                                name='birthdayDay'
+                                onChange={e =>
+                                    setData({
+                                        ...Data,
+                                        birthDay: {
+                                            ...Data.birthDay,
+                                            day: parseInt(e.target.value),
+                                        },
+                                    })
+                                }
+                                defaultValue={'روز'}
+                            >
+                                <option className='default' disabled hidden>
+                                    روز
+                                </option>
+                                {Array.from(Array(31).keys()).map(
+                                    (_, index) => (
+                                        <option key={index} value={index + 1}>
+                                            {index + 1}
+                                        </option>
+                                    )
+                                )}
+                            </select>
+                        </div>
                     </div>
-                </div> */}
                 </div>
             )}
             {Stages === 'address' && (
