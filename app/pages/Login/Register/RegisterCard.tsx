@@ -12,11 +12,33 @@ import './style/card.scss'
 
 const RegisterCard = () => {
     const [Stages, setStages] = useState<'info' | 'address'>('info')
+    const [Data, setData] = useState({
+        fname: '',
+        lname: '',
+        nationalId: '',
+        birthDay: '',
+        address: '',
+        postalCode: '',
+    })
 
     const SubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        Stages === 'info' && setStages('address')
-        Stages === 'address' && ReactAlert.success('send req') //send request
+
+        const isSectionEmpty = () => {
+            const firstSectionEmpty =
+                Data.fname !== '' && Data.lname !== '' && Data.nationalId !== ''
+            const secondSectionEmpty =
+                // Data.birthDay !== '' &&
+                Data.address !== '' && Data.postalCode !== ''
+
+            return Stages === 'info' ? firstSectionEmpty : secondSectionEmpty
+        }
+
+        isSectionEmpty()
+            ? Stages === 'info'
+                ? setStages('address')
+                : ReactAlert.success('send req') //send request
+            : ReactAlert.error('لطفا فورم را به طور کامل پر کنید.')
     }
     return (
         <form onSubmit={SubmitForm} className='register-card'>
@@ -38,6 +60,9 @@ const RegisterCard = () => {
                             className='fname title_smaller'
                             name='userFirstName'
                             autoFocus
+                            onChange={e =>
+                                setData({ ...Data, fname: e.target.value })
+                            }
                         />
                     </div>
                     <div className='input-wrapper'>
@@ -51,6 +76,9 @@ const RegisterCard = () => {
                             type='text'
                             className='lname title_smaller'
                             name='userLastName'
+                            onChange={e =>
+                                setData({ ...Data, lname: e.target.value })
+                            }
                         />
                     </div>
                     <div className='input-wrapper'>
@@ -64,6 +92,9 @@ const RegisterCard = () => {
                             inputMode='numeric'
                             className='userNationalId title_smaller'
                             name='national-id'
+                            onChange={e =>
+                                setData({ ...Data, nationalId: e.target.value })
+                            }
                         />
                     </div>
                     {/* <div className="birthday">
@@ -90,6 +121,10 @@ const RegisterCard = () => {
                             rows={5}
                             className='address title_smaller'
                             name='address'
+                            maxLength={1000}
+                            onChange={e =>
+                                setData({ ...Data, address: e.target.value })
+                            }
                         />
                     </div>
 
@@ -104,6 +139,9 @@ const RegisterCard = () => {
                             type='text'
                             className='postal-code title_smaller'
                             name='postalCode'
+                            onChange={e =>
+                                setData({ ...Data, postalCode: e.target.value })
+                            }
                         />
                     </div>
                 </div>
