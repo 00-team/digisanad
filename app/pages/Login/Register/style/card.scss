@@ -120,6 +120,28 @@
                 padding: 10px 15px;
                 width: 100%;
             }
+
+            .birthday-inp {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 3vw;
+                flex-wrap: wrap;
+
+                select {
+                    width: clamp(0px, 100%, 100px);
+
+                    background-color: white;
+                    color: black;
+                    border-radius: 7.5px;
+                    border: none;
+                    padding: 10px 15px;
+
+                    font-family: 'iranBold';
+
+                    text-align: center;
+                }
+            }
         }
     }
 }
