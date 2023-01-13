@@ -16,7 +16,7 @@ const CodeEnter: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
 
     const SendAgain = async () => {
-        const response = await axios.post('/api/auth/login/', {
+        const response = await axios.post('/api/auth/verify/', {
             phone: Login.phone,
         })
 
