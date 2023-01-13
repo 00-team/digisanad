@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { PersonSvg } from 'Icons'
+import { GoBack } from 'Icons/Models/GoBack'
 
 import { AddressSvg } from 'Icons/Dashboard/Address'
 import { CallenderSvg } from 'Icons/Dashboard/Callender'
@@ -12,10 +13,13 @@ import { Submit } from 'components'
 import './style/card.scss'
 
 const RegisterCard = () => {
-    const [Stages, setStages] = useState<'info' | 'address'>('info')
+    const [Stages, setStages] = useState<'contact' | 'info' | 'address'>(
+        'contact'
+    )
     const [Data, setData] = useState({
         fname: '',
         lname: '',
+        phone: '',
         nationalId: '',
         birthDay: { year: 0, month: 0, day: 0 },
         address: '',
@@ -25,42 +29,68 @@ const RegisterCard = () => {
     const SubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const isSectionEmpty = () => {
-            const isNotEmpty = (string: string) => string.trim()
-            const isOnlyDigits = (string: string) =>
-                string.trim() && /^\d+$/.test(string)
-            const validBirthday = () =>
-                Data.birthDay.day !== 0 &&
-                Data.birthDay.month !== 0 &&
-                Data.birthDay.year !== 0
+        // const isSectionEmpty = () => {
+        const onlyPersian = /^[\u0600-\u06FF\s]+$/
+        const isNotEmpty = (string: string) => string.trim()
+        const isOnlyDigits = (string: string) =>
+            string.trim() && /^\d+$/.test(string)
+        const validBirthday = () =>
+            Data.birthDay.day !== 0 &&
+            Data.birthDay.month !== 0 &&
+            Data.birthDay.year !== 0
 
-            const firstSectionEmpty = () =>
+        const checkContact = () => {
+            if (
                 isNotEmpty(Data.fname) &&
                 isNotEmpty(Data.lname) &&
-                isOnlyDigits(Data.nationalId) &&
-                validBirthday()
-
-            const secondSectionEmpty = () =>
-                isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)
-
-            return Stages === 'info'
-                ? firstSectionEmpty()
-                : secondSectionEmpty()
+                isOnlyDigits(Data.phone)
+            ) {
+                if (
+                    onlyPersian.test(Data.fname) &&
+                    onlyPersian.test(Data.lname)
+                ) {
+                    setStages('info')
+                } else {
+                    ReactAlert.error('لطفا مشخصات خود را به فارسی بنویسید.')
+                }
+            } else {
+                ReactAlert.error('لطفا فرم را به صورت کامل پر کنید.')
+            }
+            return
+        }
+        const checkInfo = () => {
+            if (isOnlyDigits(Data.nationalId) && validBirthday()) {
+                setStages('address')
+            } else {
+                ReactAlert.error('لطفا فرم را به صورت کامل پر کنید.')
+            }
+            return
+        }
+        const checkAddress = () => {
+            // persian address
+            if (isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)) {
+                if (onlyPersian.test(Data.address)) {
+                    ReactAlert.show('send req')
+                } else {
+                    ReactAlert.error(
+                        'لطفا آدرس خود را فقط با حروف فارسی پر کنید.'
+                    )
+                }
+            } else {
+                ReactAlert.error('لطفا فرم را به صورت کامل پر کنید.')
+            }
         }
 
-        const checkPersonalInfo = () => {
-            const onlyPersian = /^[\u0600-\u06FF\s]+$/
-
-            if (onlyPersian.test(Data.fname) && onlyPersian.test(Data.lname))
-                return setStages('address')
-            else return ReactAlert.error('لطفا مشخصات خود را به فارسی بنویسید.')
-        }
-
-        isSectionEmpty()
-            ? Stages === 'info'
-                ? checkPersonalInfo()
-                : ReactAlert.success('send req') //send request
-            : ReactAlert.error('لطفا فورم را به درستی پر کنید.')
+        // isSectionEmpty()
+        //     ? Stages === 'info'
+        //         ? checkPersonalInfo()
+        //         : ReactAlert.success('send req') //send request
+        //     : ReactAlert.error('لطفا فورم را به درستی پر کنید.')
+        // isSectionEmpty() && Stages === "contact" && setStages("info")
+        // isSectionEmpty() && Stages === "contact" && setStages("info")
+        Stages === 'contact' && checkContact()
+        Stages === 'info' && checkInfo()
+        Stages === 'address' && checkAddress()
     }
 
     return (
@@ -69,7 +99,7 @@ const RegisterCard = () => {
             <div className='card-header title'>
                 <span>ثبت نام</span>
             </div>
-            {Stages === 'info' && (
+            {Stages === 'contact' && (
                 <div className='inps'>
                     <div className='input-wrapper'>
                         <div className='holder title_small'>
@@ -83,6 +113,7 @@ const RegisterCard = () => {
                             className='fname title_smaller'
                             name='userFirstName'
                             autoFocus
+                            value={Data.fname}
                             onChange={e =>
                                 setData({ ...Data, fname: e.target.value })
                             }
@@ -99,11 +130,33 @@ const RegisterCard = () => {
                             type='text'
                             className='lname title_smaller'
                             name='userLastName'
+                            value={Data.lname}
                             onChange={e =>
                                 setData({ ...Data, lname: e.target.value })
                             }
                         />
                     </div>
+                    <div className='input-wrapper'>
+                        <div className='holder title_small'>
+                            <div className='holder-icon icon'>
+                                <PersonSvg />
+                            </div>
+                            <div className='holder-data'>تلفن همراه </div>
+                        </div>
+                        <input
+                            inputMode='numeric'
+                            className='lname title_smaller'
+                            name='userPhone'
+                            value={Data.phone}
+                            onChange={e =>
+                                setData({ ...Data, phone: e.target.value })
+                            }
+                        />
+                    </div>
+                </div>
+            )}
+            {Stages === 'info' && (
+                <div className='inps'>
                     <div className='input-wrapper'>
                         <div className='holder title_small'>
                             <div className='holder-icon icon'>
@@ -115,6 +168,7 @@ const RegisterCard = () => {
                             inputMode='numeric'
                             className='userNationalId title_smaller'
                             name='national-id'
+                            value={Data.nationalId}
                             onChange={e =>
                                 setData({ ...Data, nationalId: e.target.value })
                             }
@@ -139,7 +193,11 @@ const RegisterCard = () => {
                                         },
                                     })
                                 }
-                                defaultValue={'سال'}
+                                defaultValue={
+                                    Data.birthDay.year === 0
+                                        ? 'سال'
+                                        : Data.birthDay.year
+                                }
                             >
                                 <option className='default' disabled hidden>
                                     سال
@@ -166,7 +224,11 @@ const RegisterCard = () => {
                                         },
                                     })
                                 }
-                                defaultValue={'ماه'}
+                                defaultValue={
+                                    Data.birthDay.month === 0
+                                        ? 'ماه'
+                                        : Data.birthDay.month
+                                }
                             >
                                 <option className='default' disabled hidden>
                                     ماه
@@ -190,7 +252,11 @@ const RegisterCard = () => {
                                         },
                                     })
                                 }
-                                defaultValue={'روز'}
+                                defaultValue={
+                                    Data.birthDay.day === 0
+                                        ? 'روز'
+                                        : Data.birthDay.day
+                                }
                             >
                                 <option className='default' disabled hidden>
                                     روز
@@ -244,6 +310,18 @@ const RegisterCard = () => {
                             }
                         />
                     </div>
+                </div>
+            )}
+
+            {Stages !== 'contact' && (
+                <div
+                    className='go-back-wrapper icon'
+                    onClick={() => {
+                        Stages === 'info' && setStages('contact')
+                        Stages === 'address' && setStages('info')
+                    }}
+                >
+                    <GoBack />
                 </div>
             )}
 
