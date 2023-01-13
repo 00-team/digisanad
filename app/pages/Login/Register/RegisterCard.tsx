@@ -1,31 +1,70 @@
 import React, { useState } from 'react'
 
 import { PersonSvg } from 'Icons'
+import { EmailSvg } from 'Icons/Models/Email'
 import { GoBack } from 'Icons/Models/GoBack'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
+import { useAtom, useSetAtom } from 'jotai'
+import { LoginAtom, UserAtom } from 'state'
 
 import { AddressSvg } from 'Icons/Dashboard/Address'
 import { CallenderSvg } from 'Icons/Dashboard/Callender'
+import { CodeSvg } from 'Icons/Dashboard/Code'
 import { NationalIdSvg } from 'Icons/Dashboard/NationalId'
 import PostalCodeSvg from 'Icons/Dashboard/PostalCode'
 
 import { Submit } from 'components'
+import { Timer } from 'components/common/Timer'
 
 import './style/card.scss'
 
 const RegisterCard = () => {
-    const [Stages, setStages] = useState<'contact' | 'info' | 'address'>(
-        'contact'
-    )
+    const [Login, setLogin] = useAtom(LoginAtom)
+    const setUser = useSetAtom(UserAtom)
+
+    const [Stages, setStages] = useState<
+        'contact' | 'info' | 'address' | 'code'
+    >('contact')
     const [Data, setData] = useState({
         fname: '',
         lname: '',
         phone: '',
+        email: '',
         nationalId: '',
         birthDay: { year: 0, month: 0, day: 0 },
         address: '',
         postalCode: '',
+        code: '',
     })
 
+    const navigate = useNavigate()
+
+    const SendAgain = async () => {
+        try {
+            const response = await axios.post('/api/auth/verify/', {
+                phone: Data.phone,
+                action: 'register',
+            })
+
+            console.log(response)
+
+            if (typeof response.data.timer === 'number') {
+                ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
+                setLogin({
+                    stage: 'code',
+                    time: response.data.timer,
+                    resend: !response.data.timer,
+                })
+            } else {
+                ReactAlert.error('خطا! لطفا دوباره تلاش کنید.')
+            }
+        } catch (error) {
+            console.log(error)
+            HandleError(error)
+        }
+    }
     const SubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -38,10 +77,12 @@ const RegisterCard = () => {
             Data.birthDay.month !== 0 &&
             Data.birthDay.year !== 0
 
+        // sections checks
         const checkContact = () => {
             if (
                 isNotEmpty(Data.fname) &&
                 isNotEmpty(Data.lname) &&
+                isNotEmpty(Data.email) &&
                 isOnlyDigits(Data.phone)
             ) {
                 if (
@@ -68,7 +109,7 @@ const RegisterCard = () => {
         const checkAddress = () => {
             if (isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)) {
                 if (onlyPersian.test(Data.address)) {
-                    ReactAlert.show('send req')
+                    setStages('code')
                 } else {
                     ReactAlert.error(
                         'لطفا آدرس خود را فقط با حروف فارسی پر کنید.'
@@ -78,10 +119,44 @@ const RegisterCard = () => {
                 ReactAlert.error('لطفا فرم را به صورت کامل پر کنید.')
             }
         }
+        const checkCode = () => {
+            isOnlyDigits(Data.code)
+                ? sendRequest()
+                : ReactAlert.error('لطفا کد تایید را وارد کنید.')
+        }
+        //
+
+        const sendRequest = async () => {
+            try {
+                const response = await axios.post('/api/auth/register/', {
+                    phone: Data.phone,
+                    code: Data.code,
+                    first_name: Data.fname,
+                    last_name: Data.lname,
+                    birth_date: [
+                        Data.birthDay.year,
+                        Data.birthDay.month,
+                        Data.birthDay.day,
+                    ],
+                    national_id: Data.nationalId,
+                    postal_code: Data.postalCode,
+                    address: Data.address,
+                    email: Data.email,
+                })
+                setUser({
+                    token: response.data.token,
+                    user_id: response.data.user_id,
+                })
+                navigate('/dashboard')
+            } catch (error) {
+                HandleError(error)
+            }
+        }
 
         Stages === 'contact' && checkContact()
         Stages === 'info' && checkInfo()
         Stages === 'address' && checkAddress()
+        Stages === 'code' && checkCode()
     }
 
     return (
@@ -127,6 +202,7 @@ const RegisterCard = () => {
                             }
                         />
                     </div>
+
                     <div className='input-wrapper'>
                         <div className='holder title_small'>
                             <div className='holder-icon icon'>
@@ -141,6 +217,23 @@ const RegisterCard = () => {
                             value={Data.phone}
                             onChange={e =>
                                 setData({ ...Data, phone: e.target.value })
+                            }
+                        />
+                    </div>
+                    <div className='input-wrapper'>
+                        <div className='holder title_small'>
+                            <div className='holder-icon icon'>
+                                <EmailSvg />
+                            </div>
+                            <div className='holder-data'>پست الکترونیکی </div>
+                        </div>
+                        <input
+                            type='text'
+                            className='lname title_smaller'
+                            name='userEmail'
+                            value={Data.email}
+                            onChange={e =>
+                                setData({ ...Data, email: e.target.value })
                             }
                         />
                     </div>
@@ -278,7 +371,8 @@ const RegisterCard = () => {
                             rows={5}
                             className='address title_smaller'
                             name='address'
-                            maxLength={1000}
+                            maxLength={1024}
+                            value={Data.address}
                             onChange={e =>
                                 setData({ ...Data, address: e.target.value })
                             }
@@ -296,10 +390,55 @@ const RegisterCard = () => {
                             type='text'
                             className='postal-code title_smaller'
                             name='postalCode'
+                            value={Data.postalCode}
                             onChange={e =>
                                 setData({ ...Data, postalCode: e.target.value })
                             }
                         />
+                    </div>
+                </div>
+            )}
+            {Stages === 'code' && (
+                <div className='inps'>
+                    <div className='input-wrapper'>
+                        <div className='holder title_small'>
+                            <div className='holder-icon icon'>
+                                <CodeSvg />
+                            </div>
+                            <div className='holder-data'>کد تایید</div>
+                        </div>
+                        <div className='sms-wrapper'>
+                            <input
+                                autoComplete='one-time-code'
+                                className='sms-code title_small'
+                                name='code'
+                                inputMode='numeric'
+                                autoFocus
+                                id='code'
+                                placeholder='12345'
+                                onChange={e =>
+                                    setData({ ...Data, code: e.target.value })
+                                }
+                            />
+                            <div className='card-options'>
+                                <div className='phone-number-holder title_smaller'>
+                                    کد تایید به شماره {Data.phone} پیامک شد.
+                                </div>
+                                {Login.resend ? (
+                                    <div
+                                        className='title_small can-resend'
+                                        onClick={() => SendAgain()}
+                                    >
+                                        ارسال مجدد
+                                    </div>
+                                ) : (
+                                    <div className='title_small timer-container cant-resend'>
+                                        <Timer start={Login.time} />
+                                        <div>ثانیه تا ارسال مجدد</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
@@ -310,6 +449,7 @@ const RegisterCard = () => {
                     onClick={() => {
                         Stages === 'info' && setStages('contact')
                         Stages === 'address' && setStages('info')
+                        Stages === 'code' && setStages('address')
                     }}
                 >
                     <GoBack />
