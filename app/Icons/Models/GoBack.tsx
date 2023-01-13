@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-export const GoBack = () => {
+export const GoBack: FC = () => {
     return (
         <svg
             stroke='white'
