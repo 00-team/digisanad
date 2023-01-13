@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -16,34 +16,22 @@ const Login: FC = () => {
     const User = useAtomValue(UserAtom)
     const navigate = useNavigate()
 
-    // debug
-    let isLogged = false
-    //
+    // TODO:
+    // link stages
+    const [Stage, setStage] = useState<'login' | 'register'>()
 
     useEffect(() => {
-        // TODO:
-        // this will basicly checks if the user is loged in or not
-        // if user is loged in redirect them to the dashboard page ...
         if (User.token || User.user_id !== 0) {
             navigate('/dashboard')
         }
-
-        // if (localStorage.token) {
-        //     ;(async () => {
-        //         const response = await axios.get('/api/user/update/', {
-        //             headers: {
-        //                 Authorization: `user ${localStorage.token}`,
-        //             },
-        //         })
-
-        //         // user
-        //         console.log(response.data)
-        //         // redirect to ....
-        //     })()
-        // }
     }, [])
 
-    return <>{isLogged ? <Authenticate /> : <Register />}</>
+    return (
+        <>
+            {Stage === 'login' && <Authenticate />}
+            {Stage === 'register' && <Register />}
+        </>
+    )
 }
 
 const Register: FC = () => {
