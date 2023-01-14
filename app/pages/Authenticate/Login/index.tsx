@@ -116,4 +116,4 @@ const Login: FC = () => {
     )
 }
 
-export { Login }
+export default Login
