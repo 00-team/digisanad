@@ -3,17 +3,17 @@ import React, { FC } from 'react'
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
 import axios from 'axios'
-import { Register } from 'pages/Authenticate/Register'
 import { UserTemp } from 'pages/UserTemp'
 import { Route, Routes } from 'react-router-dom'
 
-import { Login } from 'pages/Authenticate/Login'
-
+// import { Login } from 'pages/Authenticate/Login'
 import './style/base.scss'
 import './style/font/imports.scss'
 
 const Home = loadable(() => import('pages/Home'))
-const Dashboard = loadable(() => import('pages/Dashboard2'))
+const Login = loadable(() => import('pages/Authenticate/Login'))
+const Register = loadable(() => import('pages/Authenticate/Register'))
+const Dashboard = loadable(() => import('pages/Dashboard'))
 
 const App: FC = () => {
     global.ReactAlert = useAlert()
