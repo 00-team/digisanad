@@ -33,7 +33,7 @@ const UserAtom = atom(
             if (args[1].nickname) fd.set('nickname', args[1].nickname)
             if (args[1].picture) fd.set('picture', args[1].picture)
 
-            let response = await axios.post('/api/user/update/', fd, {
+            let response = await axios.post('/api/user/get/', fd, {
                 headers: { Authorization: `user ${user.token}` },
             })
 
@@ -41,7 +41,7 @@ const UserAtom = atom(
             set(User, { ...user, ...response.data })
         } else if (args === 'fetch') {
             if (!user.token) return
-            let response = await axios.get('/api/user/update/', {
+            let response = await axios.get('/api/user/get/', {
                 headers: { Authorization: `user ${user.token}` },
             })
             console.log('fetch', response.data)
