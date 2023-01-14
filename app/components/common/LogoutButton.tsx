@@ -32,21 +32,21 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
         }, timeout1)
 
         setTimeout(() => {
-            setAppliedClasses('clicked door-slammed falling')
-            setButtonKey('falling1')
+            setAppliedClasses('clicked door-slammed ')
+            setButtonKey('walking3')
         }, timeout2)
 
         setTimeout(() => {
-            setButtonKey('falling2')
+            setButtonKey('walking4')
             // clear the login info and user then go to Home page
             setLogin('clear')
             setUser('clear')
             navigate('/')
         }, timeout3)
 
-        setTimeout(() => {
-            setButtonKey('falling3')
-        }, timeout4)
+        // setTimeout(() => {
+        //     setButtonKey('falling3')
+        // }, timeout4)
 
         setTimeout(() => {
             setAppliedClasses('')
@@ -179,42 +179,38 @@ const ButtonStates = {
         '--transform-leg2': 'rotate(10deg)',
         '--transform-calf2': 'rotate(-20deg)',
     },
-    falling1: {
-        '--figure-duration': 1600,
-        '--walking-duration': 1500, // falling dur
-        '--transform-arm1': 'rotate(-60deg)',
-        '--transform-wrist1': 'none',
-        '--transform-arm2': 'rotate(30deg)',
-        '--transform-wrist2': 'rotate(120deg)',
-        '--transform-leg1': 'rotate(-30deg)',
-        '--transform-calf1': 'rotate(-20deg)',
-        '--transform-leg2': 'rotate(20deg)',
-    },
-    falling2: {
-        '--walking-duration': 300,
-        '--transform-arm1': 'rotate(-100deg)',
-        '--transform-arm2': 'rotate(-60deg)',
-        '--transform-wrist2': 'rotate(60deg)',
-        '--transform-leg1': 'rotate(80deg)',
-        '--transform-calf1': 'rotate(20deg)',
-        '--transform-leg2': 'rotate(-60deg)',
-    },
-    falling3: {
+    walking3: {
+        '--figure-duration': 500,
+        '--transform-figure': 'translateX(33px)',
         '--walking-duration': 500,
-        '--transform-arm1': 'rotate(-30deg)',
-        '--transform-wrist1': 'rotate(40deg)',
-        '--transform-arm2': 'rotate(50deg)',
-        '--transform-wrist2': 'none',
-        '--transform-leg1': 'rotate(-30deg)',
-        '--transform-leg2': 'rotate(20deg)',
-        '--transform-calf2': 'none',
+        '--transform-arm1': 'translateX(-4px) translateY(-2px) rotate(120deg)',
+        '--transform-wrist1': 'rotate(-5deg)',
+        '--transform-arm2': 'translateX(4px) rotate(-110deg)',
+        '--transform-wrist2': 'rotate(-5deg)',
+        '--transform-leg1': 'translateX(-3px) rotate(80deg)',
+        '--transform-calf1': 'rotate(-30deg)',
+        '--transform-leg2': 'translateX(4px) rotate(-60deg)',
+        '--transform-calf2': 'rotate(20deg)',
+    },
+    walking4: {
+        '--figure-duration': 500,
+        '--transform-figure': 'translateX(50px)',
+        '--walking-duration': 500,
+        '--transform-arm1': 'rotate(60deg)',
+        '--transform-wrist1': 'rotate(-15deg)',
+        '--transform-arm2': 'rotate(-45deg)',
+        '--transform-wrist2': 'rotate(6deg)',
+        '--transform-leg1': 'rotate(-5deg)',
+        '--transform-calf1': 'rotate(10deg)',
+        '--transform-leg2': 'rotate(10deg)',
+        '--transform-calf2': 'rotate(-20deg)',
     },
 }
 
 const timeout1 = ButtonStates['walking1']['--figure-duration']
 const timeout2 = timeout1 + ButtonStates['walking2']['--figure-duration']
-const timeout3 = timeout2 + ButtonStates['falling1']['--walking-duration']
-const timeout4 = timeout3 + ButtonStates['falling2']['--walking-duration']
+const timeout3 = timeout2 + ButtonStates['walking3']['--figure-duration']
+const timeout4 = timeout3 + ButtonStates['walking4']['--figure-duration']
 const timeout5 = timeout4 + 1000
 
 type BSKeys = keyof typeof ButtonStates
