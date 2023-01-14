@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -20,6 +20,8 @@ const Login: FC = () => {
     const [User, setUser] = useAtom(UserAtom)
     const [Login, setLogin] = useAtom(LoginAtom)
 
+    const [phoneNumber, setphoneNumber] = useState('')
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -29,25 +31,26 @@ const Login: FC = () => {
     }, [])
 
     const phoneSubmit = async () => {
-        const phonenumber = document.querySelector(
-            'input#phonenumber'
-        ) as HTMLInputElement
-
-        if (PHONE_VALIDATOR.test(phonenumber.value)) {
-            const response = await axios.post('/api/auth/login/', {
-                phone: phonenumber.value,
-            })
-
-            if (typeof response.data.timer === 'number') {
-                ReactAlert.success('کد تایید برای شما برای پیامک شد.')
-                setLogin({
-                    phone: phonenumber.value,
-                    stage: 'code',
-                    time: response.data.timer,
-                    resend: !response.data.timer,
+        if (PHONE_VALIDATOR.test(phoneNumber)) {
+            try {
+                const response = await axios.post('/api/auth/verify/', {
+                    phone: phoneNumber,
+                    action: 'login',
                 })
-            } else {
-                ReactAlert.error('Error while authenticating!')
+
+                if (typeof response.data.timer === 'number') {
+                    ReactAlert.success('کد تایید برای شما برای پیامک شد.')
+                    setLogin({
+                        phone: phoneNumber,
+                        stage: 'code',
+                        time: response.data.timer,
+                        resend: !response.data.timer,
+                    })
+                } else {
+                    ReactAlert.error('Error while authenticating!')
+                }
+            } catch (error) {
+                console.log(error)
             }
         } else {
             ReactAlert.error('شماره تلفن خود را به درستی وارد کنید.')
@@ -60,7 +63,7 @@ const Login: FC = () => {
         ) as HTMLInputElement
 
         try {
-            const response = await axios.post('/api/auth/verify/', {
+            const response = await axios.post('/api/auth/login/', {
                 phone: Login.phone,
                 code: code_input.value,
             })
@@ -81,6 +84,7 @@ const Login: FC = () => {
                 ReactAlert.error('Invalid login!')
             }
         } catch (error) {
+            console.log(error)
             HandleError(error)
         }
     }
@@ -102,7 +106,14 @@ const Login: FC = () => {
                 </div>
 
                 <div className='card-inps '>
-                    {Login.stage === 'phone' ? <PhoneNumber /> : <CodeEnter />}
+                    {Login.stage === 'phone' ? (
+                        <PhoneNumber
+                            phoneNumber={phoneNumber}
+                            setphoneNumber={setphoneNumber}
+                        />
+                    ) : (
+                        <CodeEnter />
+                    )}
                 </div>
 
                 {Login.stage === 'phone' ? (
