@@ -4,7 +4,12 @@ import { CloseFillSvg } from 'Icons/Models/CloseFill'
 import { PhoneSvg } from 'Icons/Models/Phone'
 import { Link } from 'react-router-dom'
 
-const PhoneNumber: FC = () => {
+interface PhoneNumberProps {
+    phoneNumber: string
+    setphoneNumber: (phoneNumber: string) => void
+}
+
+const PhoneNumber: FC<PhoneNumberProps> = ({ phoneNumber, setphoneNumber }) => {
     return (
         <div className='input-wrapper title'>
             <div className='placeholder'>
@@ -22,17 +27,10 @@ const PhoneNumber: FC = () => {
                     inputMode='numeric'
                     id='phonenumber'
                     placeholder='09121111111'
+                    value={phoneNumber}
+                    onChange={e => setphoneNumber(e.target.value)}
                 />
-                <div
-                    className='icon'
-                    onClick={() => {
-                        const input = document.querySelector(
-                            'input#phonenumber'
-                        ) as HTMLInputElement
-
-                        return (input.value = '')
-                    }}
-                >
+                <div className='icon' onClick={() => setphoneNumber('')}>
                     <CloseFillSvg />
                 </div>
             </div>
