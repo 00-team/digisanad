@@ -18,6 +18,7 @@ const CodeEnter: FC = () => {
     const SendAgain = async () => {
         const response = await axios.post('/api/auth/verify/', {
             phone: Login.phone,
+            action: 'login',
         })
 
         if (typeof response.data.timer === 'number') {
