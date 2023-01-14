@@ -117,6 +117,7 @@ const Register: FC = () => {
             if (isNotEmpty(Data.address) && isOnlyDigits(Data.postalCode)) {
                 if (onlyPersian.test(Data.address)) {
                     setStages('code')
+                    getCode()
                 } else {
                     ReactAlert.error(
                         'لطفا آدرس خود را فقط با حروف فارسی پر کنید.'
@@ -130,6 +131,18 @@ const Register: FC = () => {
             isOnlyDigits(Data.code)
                 ? sendRequest()
                 : ReactAlert.error('لطفا کد تایید را وارد کنید.')
+        }
+        const getCode = async () => {
+            try {
+                await axios.post('/api/auth/verify/', {
+                    phone: Data.phone,
+                    action: 'register',
+                })
+                ReactAlert.info('کد تایید برای شما ارسال شد.')
+            } catch (error) {
+                console.log(error)
+                HandleError(error)
+            }
         }
         //
 
@@ -156,6 +169,7 @@ const Register: FC = () => {
                 })
                 navigate('/dashboard')
             } catch (error) {
+                console.log(error)
                 HandleError(error)
             }
         }
