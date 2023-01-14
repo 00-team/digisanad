@@ -3,14 +3,16 @@ import React, { FC } from 'react'
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
 import axios from 'axios'
+import { Register } from 'pages/Authenticate/Register'
 import { UserTemp } from 'pages/UserTemp'
 import { Route, Routes } from 'react-router-dom'
+
+import { Login } from 'pages/Authenticate/Login'
 
 import './style/base.scss'
 import './style/font/imports.scss'
 
 const Home = loadable(() => import('pages/Home'))
-const Login = loadable(() => import('pages/Login'))
 const Dashboard = loadable(() => import('pages/Dashboard2'))
 
 const App: FC = () => {
@@ -45,6 +47,7 @@ const MainContent: FC = () => {
     return (
         <Routes>
             <Route index element={<Home />} />
+            <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/me' element={<UserTemp />} />
             <Route path='/dashboard' element={<Dashboard />} />
