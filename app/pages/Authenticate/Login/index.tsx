@@ -69,13 +69,18 @@ const Login: FC = () => {
             const data = response.data
 
             if (data.token) {
-                ReactAlert.success(`${data.nickname}، خوش امدید.`)
                 setUser({
-                    user_id: data.user_id,
+                    address: data.address,
+                    birth_date: data.birth_date,
+                    email: data.email,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    national_id: data.national_id,
+                    phone: data.phone,
+                    postal_code: data.postal_code,
                     token: data.token,
-                    picture: data.picture,
-                    nickname: data.nickname,
-                    phone: Login.phone,
+                    user_id: data.user_id,
+                    wallet: data.wallet,
                 })
                 navigate('/dashboard')
             } else {
