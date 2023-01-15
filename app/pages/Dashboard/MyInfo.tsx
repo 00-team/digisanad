@@ -1,18 +1,14 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC } from 'react'
 
 import { PersonSvg } from 'Icons'
 
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
-
-import { Submit } from 'components'
 
 import './style/myinfo.scss'
 
 const MyInfo: FC = () => {
-    const [User, setUser] = useAtom(UserAtom)
-    const picture = useRef<File | 'delete' | null>(null)
-    const [nickname, setNickname] = useState(User.nickname || '')
+    const User = useAtomValue(UserAtom)
 
     return (
         <section className='myinfo-container'>
@@ -29,35 +25,10 @@ const MyInfo: FC = () => {
                             </div>
                             نام کاربری
                         </div>
-                        <div className='input-wrapper '>
-                            <input
-                                type='text'
-                                className='title_smaller'
-                                defaultValue={User.nickname || ''}
-                                onChange={e =>
-                                    setNickname(e.currentTarget.value)
-                                }
-                            />
+                        <div className='row-data title'>
+                            {User.first_name} {User.last_name}
                         </div>
                     </div>
-                </div>
-                <div className='submit-wrapper'>
-                    <Submit
-                        className='title_smaller'
-                        title='تایید'
-                        onClick={() =>
-                            setUser([
-                                'update',
-                                {
-                                    picture: picture.current,
-                                    nickname:
-                                        User.nickname !== nickname
-                                            ? nickname
-                                            : null,
-                                },
-                            ])
-                        }
-                    />
                 </div>
             </div>
         </section>
