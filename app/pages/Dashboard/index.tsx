@@ -87,7 +87,9 @@ const Sidebar: FC<DashboardChildProps> = ({
         <div className='sidebar'>
             <div className='avatar'>
                 <div className='title_small name-avatar'>
-                    <span>{User.nickname || '---'}</span>
+                    <span>
+                        {User.first_name + ' ' + User.last_name || '---'}
+                    </span>
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>
