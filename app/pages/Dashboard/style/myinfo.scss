@@ -19,7 +19,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 4vh;
+            gap: 1vh;
 
             width: 100%;
 
@@ -36,6 +36,7 @@
                 overflow: hidden;
 
                 position: relative;
+                padding: 2vh 0;
 
                 .row-title {
                     display: flex;
@@ -61,106 +62,45 @@
                     content: '';
                     position: absolute;
                     bottom: 0;
+                    right: 0;
 
-                    width: 100%;
-                    height: 2px;
+                    width: 0;
+                    height: 1px;
                     background-color: var(--ten-percent);
 
-                    translate: 100%;
+                    animation: row-line-open 0.5s ease-in-out forwards;
 
-                    transition: translate 0.3s ease-in-out;
-                }
-                &.active::after {
-                    translate: 0;
-                }
-
-                &:hover {
-                    .input-wrapper .edit {
-                        translate: 0;
-                    }
-                }
-
-                &.nickname {
-                    .input-wrapper {
-                        input {
-                            background-color: transparent;
-                            color: black;
-
-                            border: none;
-
-                            padding: 10px 0;
-
-                            width: 100%;
+                    @keyframes row-line-open {
+                        from {
+                            width: 0;
+                        }
+                        to {
+                            width: 90%;
                         }
                     }
                 }
-                &.avatar {
-                    .input-wrapper {
-                        padding: 1rem 0;
-
-                        input {
-                            display: none;
-                        }
-                        .label-wrapper {
-                            position: relative;
-                            width: fit-content;
-
-                            border-radius: 10px;
-
-                            overflow: hidden;
-
-                            .avatar-img {
-                                display: inline-block;
-                                width: 200px;
-                                aspect-ratio: 1/1;
-                                border-radius: 10px;
-
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background-position: 50% 50%;
-
-                                cursor: pointer;
-                            }
-
-                            .can-clear {
-                                width: 100%;
-                                height: 200px;
-
-                                position: absolute;
-                                top: 0;
-                                z-index: 1;
-
-                                display: grid;
-                                place-items: center;
-
-                                opacity: 0;
-                                cursor: pointer;
-
-                                color: var(--alert-error);
-                                background-color: rgb(226, 3, 56, 0.2);
-
-                                svg {
-                                    width: 30px;
-                                    height: 30px;
-                                }
-                            }
-                            &:hover {
-                                .can-clear {
-                                    opacity: 1;
-                                    transition: opacity 0.3s ease-in-out;
-                                }
-                            }
-                        }
-                    }
+                &:nth-child(1)::after {
+                    animation-delay: 100ms;
+                }
+                &:nth-child(2)::after {
+                    animation-delay: 200ms;
+                }
+                &:nth-child(3)::after {
+                    animation-delay: 300ms;
+                }
+                &:nth-child(4)::after {
+                    animation-delay: 400ms;
+                }
+                &:nth-child(5)::after {
+                    animation-delay: 500ms;
+                }
+                &:nth-child(6)::after {
+                    animation-delay: 600ms;
+                }
+                &:nth-child(7)::after {
+                    animation-delay: 700ms;
                 }
             }
-        }
-
-        .submit-wrapper {
-            margin: 1rem 2rem;
-            margin-top: auto;
-
-            width: clamp(0px, 100%, 400px);
         }
     }
 }
