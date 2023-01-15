@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-export const PhoneSvg = () => {
+export const PhoneSvg: FC = () => {
     return (
         <svg
             stroke='currentColor'
