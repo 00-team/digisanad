@@ -80,26 +80,11 @@
                         }
                     }
                 }
-                &:nth-child(1)::after {
-                    animation-delay: 100ms;
-                }
-                &:nth-child(2)::after {
-                    animation-delay: 200ms;
-                }
-                &:nth-child(3)::after {
-                    animation-delay: 300ms;
-                }
-                &:nth-child(4)::after {
-                    animation-delay: 400ms;
-                }
-                &:nth-child(5)::after {
-                    animation-delay: 500ms;
-                }
-                &:nth-child(6)::after {
-                    animation-delay: 600ms;
-                }
-                &:nth-child(7)::after {
-                    animation-delay: 700ms;
+
+                @for $i from 1 to 8 {
+                    &:nth-child(#{$i})::after {
+                        animation-delay: $i * 100ms;
+                    }
                 }
             }
         }
