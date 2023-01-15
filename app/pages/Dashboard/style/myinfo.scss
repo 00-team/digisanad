@@ -29,9 +29,8 @@
 
             .row {
                 display: flex;
-                flex-direction: column;
-                gap: 1vh;
-                justify-content: flex-start;
+                align-items: center;
+                justify-content: space-between;
 
                 direction: rtl;
                 overflow: hidden;
@@ -42,6 +41,8 @@
                     display: flex;
                     align-items: center;
                     gap: 1vw;
+
+                    opacity: 0.7;
                 }
 
                 .input-wrapper {
