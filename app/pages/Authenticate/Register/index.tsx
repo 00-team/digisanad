@@ -399,7 +399,7 @@ const Register: FC = () => {
                                 <div className='holder-icon icon'>
                                     <AddressSvg />
                                 </div>
-                                <div className='holder-data'>آدرس </div>
+                                <div className='holder-data'>نشانی محل سکونت </div>
                             </div>
                             <textarea
                                 cols={20}
