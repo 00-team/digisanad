@@ -4,12 +4,11 @@ import { CloseFillSvg } from 'Icons/Models/CloseFill'
 import { PhoneSvg } from 'Icons/Models/Phone'
 import { Link } from 'react-router-dom'
 
-interface PhoneNumberProps {
-    phoneNumber: string
-    setphoneNumber: (phoneNumber: string) => void
-}
+import { useAtom } from 'jotai'
+import { LoginAtom } from 'state'
 
-const PhoneNumber: FC<PhoneNumberProps> = ({ phoneNumber, setphoneNumber }) => {
+const PhoneNumber: FC = () => {
+    const [Login, setLogin] = useAtom(LoginAtom)
     return (
         <div className='input-wrapper title'>
             <div className='placeholder'>
@@ -27,10 +26,15 @@ const PhoneNumber: FC<PhoneNumberProps> = ({ phoneNumber, setphoneNumber }) => {
                     inputMode='numeric'
                     id='phonenumber'
                     placeholder='09121111111'
-                    value={phoneNumber}
-                    onChange={e => setphoneNumber(e.target.value)}
+                    value={Login.phone}
+                    onChange={e =>
+                        setLogin({ ...Login, phone: e.target.value })
+                    }
                 />
-                <div className='icon' onClick={() => setphoneNumber('')}>
+                <div
+                    className='icon'
+                    onClick={() => setLogin({ ...Login, phone: '' })}
+                >
                     <CloseFillSvg />
                 </div>
             </div>
