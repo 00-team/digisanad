@@ -21,8 +21,6 @@ import MyInfo from './MyInfo'
 
 import './style/dashboard.scss'
 
-import DEFAULT_IMG from 'static/avatar.png'
-
 const OPTIONS_BASE_DELAY = 1.75
 const ADDED_DELAY = 0.1
 
@@ -88,10 +86,6 @@ const Sidebar: FC<DashboardChildProps> = ({
     return (
         <div className='sidebar'>
             <div className='avatar'>
-                <img
-                    className='profile-avatar'
-                    src={User.picture || DEFAULT_IMG}
-                />
                 <div className='title_small name-avatar'>
                     <span>{User.nickname || '---'}</span>
                 </div>
