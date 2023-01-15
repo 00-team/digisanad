@@ -1,10 +1,15 @@
 interface User {
-    user_id: number
-    token: string | null
-    wallet: number
-    picture: string | null
-    nickname: string | null
+    address: string
+    birth_date: string[]
+    email: string
+    first_name: string
+    last_name: string
+    national_id: string
     phone: string | null
+    postal_code: string
+    token: string | null
+    user_id: number | null
+    wallet: number
 }
 
 export { User as UserModel }
