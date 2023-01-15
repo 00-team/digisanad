@@ -68,7 +68,8 @@
                     height: 1px;
                     background-color: var(--ten-percent);
 
-                    animation: row-line-open 0.5s ease-in-out forwards;
+                    animation: row-line-open 0.7s
+                        cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
 
                     @keyframes row-line-open {
                         from {
