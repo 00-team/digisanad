@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -20,8 +20,6 @@ const Login: FC = () => {
     const [User, setUser] = useAtom(UserAtom)
     const [Login, setLogin] = useAtom(LoginAtom)
 
-    const [phoneNumber, setphoneNumber] = useState('')
-
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -31,17 +29,17 @@ const Login: FC = () => {
     }, [])
 
     const phoneSubmit = async () => {
-        if (PHONE_VALIDATOR.test(phoneNumber)) {
+        if (PHONE_VALIDATOR.test(Login.phone)) {
             try {
                 const response = await axios.post('/api/auth/verify/', {
-                    phone: phoneNumber,
+                    phone: Login.phone,
                     action: 'login',
                 })
 
                 if (typeof response.data.timer === 'number') {
                     ReactAlert.success('کد تایید برای شما برای پیامک شد.')
                     setLogin({
-                        phone: phoneNumber,
+                        phone: Login.phone,
                         stage: 'code',
                         time: response.data.timer,
                         resend: !response.data.timer,
@@ -106,14 +104,7 @@ const Login: FC = () => {
                 </div>
 
                 <div className='card-inps '>
-                    {Login.stage === 'phone' ? (
-                        <PhoneNumber
-                            phoneNumber={phoneNumber}
-                            setphoneNumber={setphoneNumber}
-                        />
-                    ) : (
-                        <CodeEnter />
-                    )}
+                    {Login.stage === 'phone' ? <PhoneNumber /> : <CodeEnter />}
                 </div>
 
                 {Login.stage === 'phone' ? (
