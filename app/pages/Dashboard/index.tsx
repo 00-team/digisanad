@@ -16,6 +16,7 @@ import { WalletSvg } from 'Icons/Dashboard/Wallet'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
+import ChargeWallet from './ChargeWallet'
 import Contracts from './Contracts'
 import MyInfo from './MyInfo'
 
@@ -36,7 +37,7 @@ const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
     { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
     { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
     { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
-    { title: 'کیف پول', Icon: WalletSvg, Component: MyInfo },
+    { title: 'شارژ کیف پول', Icon: WalletSvg, Component: ChargeWallet },
 ]
 
 interface DashboardChildProps {
@@ -45,7 +46,7 @@ interface DashboardChildProps {
 }
 
 const Dashboard: FC = () => {
-    const [SectionActive, SectionsetActive] = useState(0)
+    const [SectionActive, SectionsetActive] = useState(3)
     const [User, setUser] = useAtom(UserAtom)
 
     useEffect(() => {
