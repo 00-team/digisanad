@@ -1,0 +1,57 @@
+section.changewallet-container {
+    gap: 5vh;
+
+    .changewallet-wrapper {
+        width: clamp(0px, 100%, 1300px);
+        // debug
+        height: 70vh;
+        //
+
+        padding: 2rem;
+
+        background-color: white;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 3vh;
+
+        border-radius: 15px;
+
+        .supported-banks-wrapper {
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+            gap: calc(2.5vh + 5px);
+            .banks-header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 100%;
+
+                gap: calc(2vw + 5px);
+
+                span {
+                    white-space: nowrap;
+                }
+
+                &::before,
+                &::after {
+                    content: '';
+                    width: clamp(0px, 100%, 150px);
+                    height: 1px;
+
+                    background-image: linear-gradient(
+                        90deg,
+                        rgba(0, 0, 0, 0),
+                        black,
+                        rgba(0, 0, 0, 0)
+                    );
+                }
+            }
+        }
+    }
+}
