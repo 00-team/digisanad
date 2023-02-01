@@ -30,9 +30,9 @@
         width: 100%;
         -webkit-tap-highlight-color: transparent;
 
-        &:hover {
+        &.hover {
             .door {
-                transform: rotateY(55deg);
+                transform: rotateY(70deg);
             }
         }
 
