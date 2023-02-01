@@ -19,9 +19,7 @@ const MyInfo: FC = () => {
 
     return (
         <section className='myinfo-container'>
-            <div className='section-header section_title'>
-                <span>اطلاعات من</span>
-            </div>
+            <div className='section-header section_title'>اطلاعات من</div>
 
             <div className='myinfo-wrapper'>
                 <div className='rows'>
