@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-const Contracts = () => {
+const Contracts: FC = () => {
     return <div>Contracts</div>
 }
 
