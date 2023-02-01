@@ -32,7 +32,7 @@
 
         &:hover {
             .door {
-                transform: rotateY(20deg);
+                transform: rotateY(55deg);
             }
         }
 
@@ -42,7 +42,7 @@
             }
 
             .door {
-                transform: rotateY(28deg);
+                transform: rotateY(55deg);
             }
         }
 
@@ -53,7 +53,7 @@
             }
 
             .door {
-                transform: rotateY(35deg);
+                transform: rotateY(55deg);
             }
         }
 
@@ -112,7 +112,7 @@
         }
 
         .door {
-            transform: rotateY(20deg);
+            transform: rotateY(55deg);
             transform-origin: 100% 50%;
             transform-style: preserve-3d;
             transition: transform 200ms ease;
