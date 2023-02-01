@@ -7,6 +7,7 @@ import { useSetAtom } from 'jotai'
 import { LoginAtom, UserAtom } from 'state'
 
 import './style/logoutbutton.scss'
+import { C } from '@00-team/utils'
 
 interface LogoutButtonProps {
     style?: React.CSSProperties
@@ -69,7 +70,7 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
             <div className='column'>
                 <div className='holder-icon icon'>
                     <button
-                        className={`logoutButton ${AppliedClasses}`}
+                        className={`logoutButton ${AppliedClasses} ${C(ButtonKey === "hover",'hover')}`}
                         style={StyleByState(ButtonKey)}
                     >
                         <svg className='doorway' viewBox='0 0 100 100'>
