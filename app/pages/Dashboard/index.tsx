@@ -37,7 +37,7 @@ const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
     { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
     { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
     { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
-    { title: 'شارژ کیف پول', Icon: WalletSvg, Component: ChargeWallet },
+    { title: 'افزایش موجودی', Icon: WalletSvg, Component: ChargeWallet },
 ]
 
 interface DashboardChildProps {
