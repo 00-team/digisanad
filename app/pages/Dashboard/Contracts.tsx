@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 const Contracts: FC = () => {
-    return <div>Contracts</div>
+    return <section id='contracts'>Contracts</section>
 }
 
 export default Contracts
