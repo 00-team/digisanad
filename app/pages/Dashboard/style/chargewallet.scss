@@ -15,16 +15,19 @@ section.changewallet-container {
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        gap: 3vh;
+        gap: 10vh;
 
-        border-radius: 15px;
+        border-radius: 30px;
+
+        direction: rtl;
 
         .supported-banks-wrapper {
             width: 100%;
 
             display: flex;
             flex-direction: column;
-            gap: calc(2.5vh + 5px);
+            gap: 5vh;
+
             .banks-header {
                 display: flex;
                 align-items: center;
@@ -51,6 +54,101 @@ section.changewallet-container {
                         rgba(0, 0, 0, 0)
                     );
                 }
+            }
+            .banks-slider {
+                width: 100%;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                position: relative;
+                isolation: isolate;
+                overflow: hidden;
+
+                height: 100%;
+
+                .bank-card {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 2.5vh;
+
+                    aspect-ratio: 2/1;
+                    width: clamp(0px, 70%, 400px);
+
+                    background-color: #212121;
+                    color: white;
+
+                    border-radius: 15px;
+
+                    .bank-img {
+                        margin-top: 1vh;
+
+                        aspect-ratio: 1/1;
+                        width: 20%;
+                    }
+                }
+            }
+        }
+        .charge-amount {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2vh;
+
+            width: clamp(0px, 100%, 400px);
+
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+            .amount-holder {
+                display: flex;
+                gap: 1vw;
+
+                opacity: 0.7;
+
+                width: 100%;
+            }
+            .amount-inp {
+                display: flex;
+                gap: 1vw;
+                width: 100%;
+
+                input {
+                    width: -webkit-fill-available;
+                    background-color: transparent;
+
+                    font: inherit;
+                    font-family: 'number';
+
+                    border: none;
+                    border-bottom: 1px solid black;
+                    color: black;
+                }
+
+                .option {
+                    aspect-ratio: 1/1;
+                    width: 60px;
+                    border-radius: 5px;
+
+                    cursor: pointer;
+
+                    background-color: var(--sixty-percent);
+                }
+            }
+        }
+        .submit-charge {
+            width: clamp(0px, 100%, 400px);
+            button {
+                width: 100%;
             }
         }
     }
