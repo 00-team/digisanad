@@ -174,7 +174,7 @@ const SidebarColumn: FC<Partial<OptionsProps>> = ({
 }) => {
     return (
         <a
-            href={`#${id}`}
+            href={innerWidth <= 1024 ? `#${id}` : ''}
             className={`column-wrapper ${C(active)}`}
             style={style}
             {...attr}
