@@ -25,19 +25,35 @@ import './style/dashboard.scss'
 const OPTIONS_BASE_DELAY = 1.75
 const ADDED_DELAY = 0.1
 
-interface OptionsProps extends React.HTMLAttributes<HTMLDivElement> {
+interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
     title: string
     Icon: FC<{}>
     Component: FC
     style: React.CSSProperties
     active: boolean
+    id: string
 }
 
 const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
-    { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo },
-    { title: 'قرارداد های من', Icon: ContractSvg, Component: Contracts },
-    { title: 'تراکنش های من', Icon: TransactionSvg, Component: MyInfo },
-    { title: 'افزایش موجودی', Icon: WalletSvg, Component: ChargeWallet },
+    { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo, id: 'info' },
+    {
+        title: 'قرارداد های من',
+        Icon: ContractSvg,
+        Component: Contracts,
+        id: 'contracts',
+    },
+    {
+        title: 'تراکنش های من',
+        Icon: TransactionSvg,
+        Component: MyInfo,
+        id: 'transactins',
+    },
+    {
+        title: 'افزایش موجودی',
+        Icon: WalletSvg,
+        Component: ChargeWallet,
+        id: 'chargewallet',
+    },
 ]
 
 interface DashboardChildProps {
@@ -94,13 +110,14 @@ const Sidebar: FC<DashboardChildProps> = ({
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>
-                {SIDEBAR_OPTIONS.map(({ title, Icon }, index) => {
+                {SIDEBAR_OPTIONS.map(({ title, Icon, id }, index) => {
                     return (
                         <SidebarColumn
                             key={index}
                             title={title}
                             Icon={Icon}
                             active={SectionActive === index}
+                            id={id}
                             style={{
                                 animationDelay: `${
                                     OPTIONS_BASE_DELAY + ADDED_DELAY * index
@@ -152,10 +169,16 @@ const SidebarColumn: FC<Partial<OptionsProps>> = ({
     Icon,
     style,
     active,
+    id,
     ...attr
 }) => {
     return (
-        <div className={`column-wrapper ${C(active)}`} style={style} {...attr}>
+        <a
+            href={`#${id}`}
+            className={`column-wrapper ${C(active)}`}
+            style={style}
+            {...attr}
+        >
             <div className='column'>
                 <div className='holder-icon icon'>{Icon && <Icon />}</div>
                 <div className='holder-text '>{title}</div>
@@ -163,7 +186,7 @@ const SidebarColumn: FC<Partial<OptionsProps>> = ({
             <div className='send-icon icon'>
                 <SendSvg />
             </div>
-        </div>
+        </a>
     )
 }
 
