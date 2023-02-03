@@ -4,7 +4,7 @@ section.chargewallet-container {
     .chargewallet-wrapper {
         width: clamp(0px, 100%, 1300px);
 
-        padding: 1rem;
+        padding: 2rem;
 
         background-color: white;
 
@@ -17,6 +17,10 @@ section.chargewallet-container {
         border-radius: 30px;
 
         direction: rtl;
+
+        @media screen and (max-width: 1024px) {
+            padding: 1rem;
+        }
 
         .supported-banks-wrapper {
             width: 100%;
