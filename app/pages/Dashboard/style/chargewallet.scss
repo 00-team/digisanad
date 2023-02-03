@@ -1,13 +1,10 @@
-section.changewallet-container {
+section.chargewallet-container {
     gap: 5vh;
 
-    .changewallet-wrapper {
+    .chargewallet-wrapper {
         width: clamp(0px, 100%, 1300px);
-        // debug
-        height: 70vh;
-        //
 
-        padding: 2rem;
+        padding: 1rem;
 
         background-color: white;
 
@@ -57,14 +54,16 @@ section.changewallet-container {
             }
             .banks-slider {
                 width: 100%;
+                overflow: hidden;
 
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
+                perspective: 1000px;
+
                 position: relative;
                 isolation: isolate;
-                overflow: hidden;
 
                 height: 100%;
 
@@ -75,6 +74,8 @@ section.changewallet-container {
                     justify-content: center;
                     gap: 2.5vh;
 
+                    flex-shrink: 0;
+
                     aspect-ratio: 2/1;
                     width: clamp(0px, 70%, 400px);
 
@@ -83,8 +84,95 @@ section.changewallet-container {
 
                     border-radius: 15px;
 
+                    &:not(.prev, .active, .next) {
+                        display: none;
+                    }
+
+                    &.next,
+                    &.prev {
+                        position: absolute;
+                    }
+
+                    &.next {
+                        animation: bank-next 1s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                        @keyframes bank-next {
+                            0% {
+                                display: none;
+                                z-index: -1;
+                            }
+                            80% {
+                                position: absolute;
+                                translate: 100%;
+                                transform: rotateY(30deg);
+                                z-index: 1;
+                            }
+                            100% {
+                                position: absolute;
+                                translate: 100%;
+                                transform: rotateY(30deg);
+                                scale: 0.8;
+                                z-index: 1;
+                            }
+                        }
+                    }
+                    &.active {
+                        animation: bank-active 1s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+                        @keyframes bank-active {
+                            0% {
+                                position: absolute;
+                                translate: 100%;
+                                transform: rotateY(30deg);
+                                scale: 0.8;
+                                z-index: 1;
+                            }
+                            80% {
+                                position: relative;
+
+                                translate: 0%;
+                                z-index: 3;
+                            }
+                            100% {
+                                position: relative;
+                                scale: 1;
+                                translate: 0%;
+                                z-index: 3;
+                            }
+                        }
+                    }
+                    &.prev {
+                        animation: bank-prev 1s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                        @keyframes bank-prev {
+                            0% {
+                                position: relative;
+                                scale: 1;
+                                translate: 0%;
+                                z-index: 3;
+                            }
+                            80% {
+                                position: absolute;
+                                translate: -100%;
+                                transform: rotateY(-30deg);
+                                z-index: 3;
+                            }
+                            100% {
+                                position: absolute;
+                                translate: -100%;
+                                transform: rotateY(-30deg);
+                                scale: 0.8;
+                                z-index: 1;
+                            }
+                        }
+                    }
+
                     .bank-img {
                         margin-top: 1vh;
+
+                        object-fit: contain;
 
                         aspect-ratio: 1/1;
                         width: 20%;
@@ -122,6 +210,10 @@ section.changewallet-container {
                 gap: 1vw;
                 width: 100%;
 
+                @media screen and (max-width: 1024px) {
+                    gap: calc(2vw + 10px);
+                }
+
                 input {
                     width: -webkit-fill-available;
                     background-color: transparent;
@@ -131,6 +223,7 @@ section.changewallet-container {
 
                     border: none;
                     border-bottom: 1px solid black;
+                    border-radius: 0;
                     color: black;
                 }
 
