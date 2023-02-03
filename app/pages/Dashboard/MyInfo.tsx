@@ -18,7 +18,7 @@ const MyInfo: FC = () => {
     const User = useAtomValue(UserAtom)
 
     return (
-        <section className='myinfo-container'>
+        <section id='info' className='myinfo-container'>
             <div className='section-header section_title'>اطلاعات من</div>
 
             <div className='myinfo-wrapper'>
