@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, String, Table, text
+from sqlalchemy import ForeignKey, Integer, String, Table, UniqueConstraint
+from sqlalchemy import text
 
 from database.shared import Column, metadata
 
@@ -15,6 +16,19 @@ user_table = Table(
     Column('address', String),
     Column('email', String),
     Column('wallet', Integer, server_default=text('0')),
+    Column('token', String, nullable=True, unique=True),  # hashed token
+)
 
-    Column('token', String(128), nullable=True, unique=True),  # hashed token
+
+transaction_table = Table(
+    'transaction', metadata,
+    Column('transaction_id', Integer, primary_key=True, autoincrement=True),
+    Column(
+        'user_id', Integer,
+        ForeignKey(user_table.c.user_id, ondelete='CASCADE'),
+    ),
+    Column('amount', Integer),
+    Column('authority', String),
+    Column('ref_id', Integer),
+    UniqueConstraint('user_id', 'authority'),
 )

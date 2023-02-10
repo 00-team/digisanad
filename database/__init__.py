@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 import database.table
 from shared.settings import DATABASE_URL
 
-from .models import UserModel, VerificationModel
+from .models import TransactionModel, UserModel, VerificationModel
 from .shared import database, metadata
 
 engine = create_engine(
@@ -21,4 +21,5 @@ __all__ = [
 
     'VerificationModel',
     'UserModel',
+    'TransactionModel',
 ]

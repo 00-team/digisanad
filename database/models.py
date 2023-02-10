@@ -21,6 +21,14 @@ class UserModel(BaseModel):
         super().__init__(birth_date=birth_date, **data)
 
 
+class TransactionModel(BaseModel):
+    transaction_id: int
+    user_id: int
+    amount: int
+    authority: str
+    ref_id: int
+
+
 class VerificationModel(BaseModel):
     phone: str
     code: str
