@@ -1,13 +1,19 @@
 
-from fastapi import APIRouter, Form, HTTPException, Request, UploadFile
+import httpx
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import RedirectResponse
 
 from database import UserModel
-from database.api import user_delete, user_get_by_id, user_update
+from database.api.transaction import transaction_add, transaction_get
+from database.api.transaction import transaction_update
+from database.api.user import user_delete
 from models.user import DeleteResponse, DeleteVerifyBody, DeleteVerifyResponse
-from models.user import UpdateResponse
+from shared.settings import SECRETS
 from shared.tools import now
 from utils import rate_limit, send_verification, user_required
 from utils import verify_verification
+
+PAYMENT_ERROR = HTTPException(500, 'payment error')
 
 router = APIRouter(
     prefix='/user',
@@ -100,9 +106,6 @@ async def get(request: Request):
     dependencies=[rate_limit('user_delete', 3660, 20)]
 )
 async def delete(request: Request):
-    # TODO: dont delete the user if they have money in there account
-    # write a function for checking the user
-
     user: UserModel = request.state.user
 
     return await send_verification(user.phone, 'DELETE')
@@ -124,3 +127,70 @@ async def delete_verify(request: Request, body: DeleteVerifyBody):
         'ok': True,
         'datetime': now()
     }
+
+
+@router.get(
+    '/charge_wallet/',
+    dependencies=[rate_limit('user_charge_wallet', 60, 30)]
+)
+async def charge_wallet(request: Request, amount: int):
+    user: UserModel = request.state.user
+
+    response = httpx.post(
+        'https://api.zarinpal.com/pg/v4/payment/request.json',
+        json={
+            'merchant_id': SECRETS.merchant_id,
+            'amount': amount,
+            'description': 'test payment for charging the users wallet',
+            'callback_url': request.base_url._url + 'api/user/payment_cb/'
+        }
+    )
+
+    if response.status_code != 200:
+        raise PAYMENT_ERROR
+
+    data = response.json().get('data', {})
+    authority = data.get('authority')
+
+    if not authority:
+        raise PAYMENT_ERROR
+
+    await transaction_add(user.user_id, amount, authority)
+
+    return {
+        'url': f'https://www.zarinpal.com/pg/StartPay/{authority}'
+    }
+
+
+@router.get(
+    '/payment_cb/',
+    # response_class=RedirectResponse,
+    # dependencies=[rate_limit('user_charge_wallet', 60, 30)]
+)
+async def payment_cb(request: Request, Authority: str, Status: str):
+    user: UserModel = request.state.user
+
+    Status = Status.lower()
+    if Status == 'nok':
+        return '/dashboard/'
+
+    transaction = await transaction_get(user.user_id, Authority)
+    if transaction is None:
+        return '/dashboard/'
+
+    response = httpx.post(
+        'https://api.zarinpal.com/pg/v4/payment/verify.json',
+        json={
+            'merchant_id': SECRETS.merchant_id,
+            'amount': transaction.amount,
+            'authority': Authority
+        }
+    )
+
+    if response.status_code != 200:
+        return '/dashboard/'
+
+    data = response.json()
+    print(data)
+
+    return '/dashboard/'

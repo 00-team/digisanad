@@ -5,7 +5,8 @@ from fastapi import Depends, HTTPException, Request
 
 # from database.plutus import User, admin_check_token
 from database import UserModel
-from database.api import rate_limit_get, rate_limit_set, user_get_by_id
+from database.api.redis import rate_limit_get, rate_limit_set
+from database.api.user import user_get_by_id
 
 INVALID_AUTH = HTTPException(403, 'Invalid authentication credentials')
 
@@ -42,7 +43,10 @@ rate_limit = rate_limit_check(3600, 10)
 
 
 def get_token(request: Request, schema: str) -> str:
-    authorization = request.headers.get('Authorization')
+    authorization = request.headers.get(
+        'Authorization',
+        request.cookies.get('Authorization')
+    )
 
     if not authorization:
         raise HTTPException(403, 'Not authenticated')

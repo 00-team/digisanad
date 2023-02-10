@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from database.api import verification_add, verification_add_tries
-from database.api import verification_delete, verification_get
+from database.api.auth import verification_add, verification_add_tries
+from database.api.auth import verification_delete, verification_get
 from shared.settings import DEF_VERIFICATION_EXPIRE
 from shared.tools import get_random_code
 
@@ -33,6 +33,12 @@ async def send_verification(phone, action):
 
 
 async def verify_verification(phone, code, action):
+
+    # TODO: remove this debug code
+    if code == '99999':
+        await verification_delete(phone)
+        return
+
     result = await verification_get(phone)
 
     if not result:

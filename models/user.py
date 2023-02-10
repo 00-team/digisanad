@@ -3,13 +3,6 @@ from pydantic import BaseModel, validator
 from shared.tools import code_validator
 
 
-class UpdateResponse(BaseModel):
-    user_id: int
-    wallet: int
-    nickname: str | None
-    picture: str | None
-
-
 class DeleteResponse(BaseModel):
     timer: int
 

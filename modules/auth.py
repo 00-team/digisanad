@@ -1,7 +1,7 @@
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Response
 
-from database.api import user_add, user_get_by_phone, user_update
+from database.api.user import user_add, user_get_by_phone, user_update
 from models.auth import AuthResponse, LoginBody, RegisterBody, VerifyBody
 from models.auth import VerifyResponse
 from shared.tools import new_token
@@ -22,7 +22,7 @@ async def verify(body: VerifyBody):
 
 
 @router.post('/register/', response_model=AuthResponse)
-async def register(body: RegisterBody):
+async def register(response: Response, body: RegisterBody):
     await verify_verification(body.phone, body.code, 'REGISTER')
     user = await user_get_by_phone(body.phone)
     if user:
@@ -44,14 +44,22 @@ async def register(body: RegisterBody):
         token=token_hash
     )
 
+    token = f'{user_id}:{token}'
+    response.set_cookie(
+        key='Authorization',
+        value=f'user {token}',
+        secure=True,
+        samesite='strict'
+    )
+
     return {
         'user_id': user_id,
-        'token': f'{user_id}:{token}',
+        'token': token,
     }
 
 
 @router.post('/login/', response_model=AuthResponse)
-async def login(body: LoginBody):
+async def login(response: Response, body: LoginBody):
     await verify_verification(body.phone, body.code, 'LOGIN')
 
     user = await user_get_by_phone(body.phone)
@@ -61,7 +69,15 @@ async def login(body: LoginBody):
     token, token_hash = new_token()
     await user_update(user.user_id, token=token_hash)
 
+    token = f'{user.user_id}:{token}'
+    response.set_cookie(
+        key='Authorization',
+        value=f'user {token}',
+        secure=True,
+        samesite='strict'
+    )
+
     return {
         'user_id': user.user_id,
-        'token': f'{user.user_id}:{token}',
+        'token': token,
     }
