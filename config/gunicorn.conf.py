@@ -1,8 +1,9 @@
 
 import multiprocessing
 
+chdir = '/digisanad/'
 workers = multiprocessing.cpu_count() * 2 + 1
-wsgi_app = '/digisanad/main:app'
+wsgi_app = 'main:app'
 proc_name = 'digisanad gun'
 worker_class = 'uvicorn.workers.UvicornWorker'
 venv = '/digisanad/.env/bin/activate'
