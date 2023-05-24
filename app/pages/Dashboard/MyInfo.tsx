@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
 
-import { PersonSvg } from 'Icons'
-import { EmailSvg } from 'Icons/Models/Email'
-import { PhoneSvg2 } from 'Icons/Models/Phone2'
+import { PersonSvg } from 'icons'
+import { EmailSvg } from 'icons/Models/Email'
+import { PhoneSvg2 } from 'icons/Models/Phone2'
 
 import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
-import { AddressSvg } from 'Icons/Dashboard/Address'
-import { CallenderSvg } from 'Icons/Dashboard/Callender'
-import { NationalIdSvg } from 'Icons/Dashboard/NationalId'
-import PostalCodeSvg from 'Icons/Dashboard/PostalCode'
+import { AddressSvg } from 'icons/Dashboard/Address'
+import { CallenderSvg } from 'icons/Dashboard/Callender'
+import { NationalIdSvg } from 'icons/Dashboard/NationalId'
+import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import './style/myinfo.scss'
 

@@ -9,7 +9,7 @@ clear
 
 case $1 in
 run)
-    python main.py
+    DEVELOPMENT=1 python main.py
     ;;
 
 log)

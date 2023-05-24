@@ -1,44 +1,44 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { CoinSvg, MinusSvg, PlusSvg } from 'Icons'
+import { CoinSvg, MinusSvg, PlusSvg } from 'icons'
 
 import { Submit } from 'components'
 
 import './style/chargewallet.scss'
 
-const mellatImg = require('../../static/Dashboard/chrageWallet/mellat.png')
-const ansarImg = require('../../static/Dashboard/chrageWallet/ansar.png')
-const keshavarziImg = require('../../static/Dashboard/chrageWallet/keshavarzi.png')
-const maskanImg = require('../../static/Dashboard/chrageWallet/maskan.png')
-const meliImg = require('../../static/Dashboard/chrageWallet/meli.png')
-const refahImg = require('../../static/Dashboard/chrageWallet/refah.png')
-
-const SUPPORTED_BANKS = [
-    {
-        img: mellatImg,
-        name: 'بانک ملت',
-    },
-    {
-        img: ansarImg,
-        name: 'بانک انصار',
-    },
-    {
-        img: keshavarziImg,
-        name: 'بانک کشاورزی',
-    },
-    {
-        img: maskanImg,
-        name: 'بانک مسکن',
-    },
-    {
-        img: meliImg,
-        name: 'بانک ملی',
-    },
-    {
-        img: refahImg,
-        name: 'بانک رفاه',
-    },
-]
+// const mellatImg = require('../../static/Dashboard/chrageWallet/mellat.png')
+// const ansarImg = require('../../static/Dashboard/chrageWallet/ansar.png')
+// const keshavarziImg = require('../../static/Dashboard/chrageWallet/keshavarzi.png')
+// const maskanImg = require('../../static/Dashboard/chrageWallet/maskan.png')
+// const meliImg = require('../../static/Dashboard/chrageWallet/meli.png')
+// const refahImg = require('../../static/Dashboard/chrageWallet/refah.png')
+//
+// const SUPPORTED_BANKS = [
+//     {
+//         img: mellatImg,
+//         name: 'بانک ملت',
+//     },
+//     {
+//         img: ansarImg,
+//         name: 'بانک انصار',
+//     },
+//     {
+//         img: keshavarziImg,
+//         name: 'بانک کشاورزی',
+//     },
+//     {
+//         img: maskanImg,
+//         name: 'بانک مسکن',
+//     },
+//     {
+//         img: meliImg,
+//         name: 'بانک ملی',
+//     },
+//     {
+//         img: refahImg,
+//         name: 'بانک رفاه',
+//     },
+// ]
 
 const ChargeWallet: FC = () => {
     const [ChargeAmount, setChargeAmount] = useState<number>(0)
@@ -99,23 +99,24 @@ const ChargeWallet: FC = () => {
 }
 
 const BanksSlider: FC = () => {
-    const [ActiveBank, setActiveBank] = useState(1)
+    // const [ActiveBank, setActiveBank] = useState(1)
 
-    useEffect(() => {
-        const inverval = setInterval(() => {
-            setActiveBank(value => {
-                if (value + 1 >= SUPPORTED_BANKS.length) {
-                    return 1
-                }
-                return value + 1
-            })
-        }, 3000)
+    // useEffect(() => {
+    //     const inverval = setInterval(() => {
+    //         setActiveBank(value => {
+    //             if (value + 1 >= SUPPORTED_BANKS.length) {
+    //                 return 1
+    //             }
+    //             return value + 1
+    //         })
+    //     }, 3000)
+    //
+    //     return () => clearInterval(inverval)
+    // }, [])
 
-        return () => clearInterval(inverval)
-    }, [])
     return (
         <div className='banks-slider'>
-            {SUPPORTED_BANKS.map(({ name, img }, index) => {
+            {/* SUPPORTED_BANKS.map(({ name, img }, index) => {
                 const returnClass = (): string => {
                     if (ActiveBank === index) return 'active'
                     if (ActiveBank - 1 === index) return 'prev'
@@ -135,7 +136,7 @@ const BanksSlider: FC = () => {
                         className={returnClass()}
                     />
                 )
-            })}
+            }) */}
         </div>
     )
 }
@@ -154,5 +155,6 @@ const BankCard: FC<BankCardProps> = ({ cardTitle, cardImg, className }) => {
         </div>
     )
 }
+BankCard
 
 export default ChargeWallet

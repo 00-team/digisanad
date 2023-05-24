@@ -1,4 +1,6 @@
 
+from os import environ
+
 import uvicorn
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import HTMLResponse
@@ -7,6 +9,10 @@ from fastapi.staticfiles import StaticFiles
 
 from database import database
 from modules import auth, user
+from shared.settings import BASE_DIR
+
+with open(BASE_DIR / 'templates/base.html', 'r') as f:
+    INDEX_HTML = f.read()
 
 app = FastAPI(
     title='DigiSanad',
@@ -14,7 +20,10 @@ app = FastAPI(
     description='**DigiSanad api documents**',
 )
 
-app.mount('/media', StaticFiles(directory='media'), name='media')
+
+if environ.get('DEVELOPMENT'):
+    app.mount('/media', StaticFiles(directory='media'), name='media')
+    app.mount('/static', StaticFiles(directory='static'), name='static')
 
 api = APIRouter(
     prefix='/api',
@@ -31,6 +40,11 @@ async def startup():
 async def shutdown():
     # await redis.connection_pool.disconnect()
     await database.disconnect()
+
+
+@app.get('/', include_in_schema=False)
+async def index():
+    return HTMLResponse(INDEX_HTML)
 
 
 api.include_router(auth.router)

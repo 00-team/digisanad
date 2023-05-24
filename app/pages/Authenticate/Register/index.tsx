@@ -1,19 +1,19 @@
 import React, { FC, useEffect, useState } from 'react'
 
-import { PersonSvg } from 'Icons'
-import { EmailSvg } from 'Icons/Models/Email'
-import { GoBack } from 'Icons/Models/GoBack'
 import axios from 'axios'
+import { PersonSvg } from 'icons'
+import { EmailSvg } from 'icons/Models/Email'
+import { GoBack } from 'icons/Models/GoBack'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
 import { LoginAtom, UserAtom } from 'state'
 
-import { AddressSvg } from 'Icons/Dashboard/Address'
-import { CallenderSvg } from 'Icons/Dashboard/Callender'
-import { CodeSvg } from 'Icons/Dashboard/Code'
-import { NationalIdSvg } from 'Icons/Dashboard/NationalId'
-import PostalCodeSvg from 'Icons/Dashboard/PostalCode'
+import { AddressSvg } from 'icons/Dashboard/Address'
+import { CallenderSvg } from 'icons/Dashboard/Callender'
+import { CodeSvg } from 'icons/Dashboard/Code'
+import { NationalIdSvg } from 'icons/Dashboard/NationalId'
+import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import Clouds from '../../../components/Clouds'
 import { Submit } from 'components'
@@ -399,7 +399,9 @@ const Register: FC = () => {
                                 <div className='holder-icon icon'>
                                     <AddressSvg />
                                 </div>
-                                <div className='holder-data'>نشانی محل سکونت </div>
+                                <div className='holder-data'>
+                                    نشانی محل سکونت{' '}
+                                </div>
                             </div>
                             <textarea
                                 cols={20}

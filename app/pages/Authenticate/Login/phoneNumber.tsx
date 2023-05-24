@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
-import { CloseFillSvg } from 'Icons/Models/CloseFill'
-import { PhoneSvg } from 'Icons/Models/Phone'
+import { CloseFillSvg } from 'icons/Models/CloseFill'
+import { PhoneSvg } from 'icons/Models/Phone'
 import { Link } from 'react-router-dom'
 
 import { useAtom } from 'jotai'

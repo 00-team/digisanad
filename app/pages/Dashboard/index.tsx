@@ -2,17 +2,17 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { PersonSvg } from 'Icons'
-import { SendSvg } from 'Icons/Actions/Send'
+import { PersonSvg } from 'icons'
+import { SendSvg } from 'icons/Actions/Send'
 import { Link, Navigate } from 'react-router-dom'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
-import { ContractSvg } from 'Icons/Dashboard/Contract'
-import { GlobeSvg } from 'Icons/Dashboard/Globe'
-import { TransactionSvg } from 'Icons/Dashboard/Transaction'
-import { WalletSvg } from 'Icons/Dashboard/Wallet'
+import { ContractSvg } from 'icons/Dashboard/Contract'
+import { GlobeSvg } from 'icons/Dashboard/Globe'
+import { TransactionSvg } from 'icons/Dashboard/Transaction'
+import { WalletSvg } from 'icons/Dashboard/Wallet'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 

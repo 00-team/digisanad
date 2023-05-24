@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC, useState } from 'react'
 
-import { SendSvg } from 'Icons/Actions/Send'
+import { SendSvg } from 'icons/Actions/Send'
 import { useNavigate } from 'react-router-dom'
 
 import { useSetAtom } from 'jotai'

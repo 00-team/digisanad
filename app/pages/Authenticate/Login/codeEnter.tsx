@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 
-import { GoBack } from 'Icons/Models/GoBack'
 import axios from 'axios'
+import { GoBack } from 'icons/Models/GoBack'
 
 import { useAtom } from 'jotai'
 import { LoginAtom } from 'state'
 
-import { CodeSvg } from 'Icons/Dashboard/Code'
+import { CodeSvg } from 'icons/Dashboard/Code'
 
 import { Timer } from 'components/common/Timer'
 
