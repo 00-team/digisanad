@@ -166,3 +166,4 @@ database/secrets.json
 # database
 *.db
 secrets.json
+.secrets
