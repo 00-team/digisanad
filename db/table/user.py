@@ -1,7 +1,7 @@
 from sqlalchemy import ForeignKey, Integer, String, Table, UniqueConstraint
 from sqlalchemy import text
 
-from database.shared import Column, metadata
+from db.shared import Column, metadata
 
 user_table = Table(
     'user', metadata,

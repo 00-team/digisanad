@@ -1,5 +1,5 @@
 
-from database import VerificationModel
+from db import VerificationModel
 from shared.tools import now
 
 NS = 'verification'

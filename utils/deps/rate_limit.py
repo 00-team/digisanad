@@ -2,7 +2,7 @@ from hashlib import sha256
 
 from fastapi import Depends, HTTPException, Request
 
-from database.api.redis import rate_limit_get, rate_limit_set
+from db.api.redis import rate_limit_get, rate_limit_set
 
 from .auth import user_required
 

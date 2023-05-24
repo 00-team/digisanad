@@ -4,9 +4,9 @@ from hashlib import sha3_512, sha256
 from fastapi import Depends, HTTPException, Request
 
 # from database.plutus import User, admin_check_token
-from database import UserModel
-from database.api.redis import rate_limit_get, rate_limit_set
-from database.api.user import user_get_by_id
+from db import UserModel
+from db.api.redis import rate_limit_get, rate_limit_set
+from db.api.user import user_get_by_id
 
 INVALID_AUTH = HTTPException(403, 'Invalid authentication credentials')
 

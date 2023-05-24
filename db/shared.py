@@ -33,5 +33,5 @@ __all__ = [
     'database',
     'metadata',
     'Column',
-    'redis',
+    # 'redis',
 ]

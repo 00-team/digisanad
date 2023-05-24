@@ -2,7 +2,7 @@
 # importing the table is necessary for creating the tables
 from sqlalchemy import create_engine
 
-import database.table
+import db.table
 from shared.settings import DATABASE_URL
 
 from .models import TransactionModel, UserModel, VerificationModel

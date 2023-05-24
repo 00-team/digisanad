@@ -1,9 +1,9 @@
 
 from fastapi import APIRouter, HTTPException, Response
 
-from database.api.user import user_add, user_get_by_phone, user_update
-from models.auth import AuthResponse, LoginBody, RegisterBody, VerifyBody
-from models.auth import VerifyResponse
+from api.models.auth import AuthResponse, LoginBody, RegisterBody, VerifyBody
+from api.models.auth import VerifyResponse
+from db.api.user import user_add, user_get_by_phone, user_update
 from shared.tools import new_token
 from utils import rate_limit, send_verification, verify_verification
 

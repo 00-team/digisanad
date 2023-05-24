@@ -8,7 +8,7 @@ import { APP_DIR, BASE_DIR, resolve } from './config/path'
 import { BuildStyle, CssExtract } from './config/style'
 
 const Html = new HtmlPlugin({
-    filename: resolve(BASE_DIR, 'templates/base.html'),
+    filename: resolve(BASE_DIR, 'static/index.html'),
     template: resolve(APP_DIR, 'template.html'),
     inject: true,
     publicPath: '/static/dist/',

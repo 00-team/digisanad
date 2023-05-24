@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from database.api.auth import verification_add, verification_add_tries
-from database.api.auth import verification_delete, verification_get
+from db.api.auth import verification_add, verification_add_tries
+from db.api.auth import verification_delete, verification_get
 from shared.settings import DEF_VERIFICATION_EXPIRE
 from shared.tools import get_random_code
 

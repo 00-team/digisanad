@@ -1,5 +1,5 @@
-from database import TransactionModel, database
-from database.table import transaction_table as table
+from db import TransactionModel, database
+from db.table import transaction_table as table
 
 
 async def transaction_get(user_id, authority):

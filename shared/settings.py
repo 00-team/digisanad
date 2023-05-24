@@ -4,7 +4,7 @@ from pathlib import Path
 from string import ascii_letters, digits
 
 BASE_DIR = Path(__file__).parent.parent
-DATABASE_URL = 'sqlite:///' + str(BASE_DIR / 'database/main.db')
+DATABASE_URL = 'sqlite:///' + str(BASE_DIR / 'db/main.db')
 
 REDIS_PASSWORD = 'k#gYGOA&o@R2Q9NFu#@MD$)aClu5PDPm2^7(&*@KZG{cPNrwCI52zrc]PJuRW60C'
 

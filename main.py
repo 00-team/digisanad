@@ -2,16 +2,16 @@
 from os import environ
 
 import uvicorn
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
-from database import database
-from modules import auth, user
+import api
+from db import database
 from shared.settings import BASE_DIR
 
-with open(BASE_DIR / 'templates/base.html', 'r') as f:
+with open(BASE_DIR / 'static/index.html', 'r') as f:
     INDEX_HTML = f.read()
 
 app = FastAPI(
@@ -24,10 +24,6 @@ app = FastAPI(
 if environ.get('DEVELOPMENT'):
     app.mount('/media', StaticFiles(directory='media'), name='media')
     app.mount('/static', StaticFiles(directory='static'), name='static')
-
-api = APIRouter(
-    prefix='/api',
-)
 
 
 @app.on_event('startup')
@@ -42,17 +38,6 @@ async def shutdown():
     await database.disconnect()
 
 
-@app.get('/', include_in_schema=False)
-async def index():
-    return HTMLResponse(INDEX_HTML)
-
-
-api.include_router(auth.router)
-api.include_router(user.router)
-
-app.include_router(api)
-
-
 @app.get('/rapidoc/', include_in_schema=False)
 async def rapidoc():
     return HTMLResponse('''<!doctype html>
@@ -64,6 +49,15 @@ async def rapidoc():
     allow-spec-url-load="false" allow-spec-file-load="false"
     show-method-in-nav-bar="as-colored-block" response-area-height="500px"
     show-header="false" /></body> </html>''')
+
+
+async def index():
+    return HTMLResponse(INDEX_HTML)
+
+for p in ['/', '/register/', '/login/', '/me/', '/dashboard/']:
+    app.add_api_route(p, index, include_in_schema=False)
+
+app.include_router(api.router)
 
 for route in app.routes:
     if isinstance(route, APIRoute):

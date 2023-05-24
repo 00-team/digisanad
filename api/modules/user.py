@@ -3,11 +3,12 @@ import httpx
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
 
-from database import UserModel
-from database.api.transaction import transaction_add, transaction_get
-from database.api.transaction import transaction_update
-from database.api.user import user_delete
-from models.user import DeleteResponse, DeleteVerifyBody, DeleteVerifyResponse
+from api.models.user import DeleteResponse, DeleteVerifyBody
+from api.models.user import DeleteVerifyResponse
+from db import UserModel
+from db.api.transaction import transaction_add, transaction_get
+from db.api.transaction import transaction_update
+from db.api.user import user_delete
 from shared.settings import SECRETS
 from shared.tools import now
 from utils import rate_limit, send_verification, user_required

@@ -1,5 +1,5 @@
-from database import UserModel, database
-from database.table import user_table as table
+from db import UserModel, database
+from db.table import user_table as table
 
 
 async def _user_get(query):
