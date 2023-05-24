@@ -1,19 +1,17 @@
 
 import uvicorn
 from fastapi import APIRouter, FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 from database import database
 from modules import auth, user
 
-# TODO: make the doc
 app = FastAPI(
-    # title='DigiSanad',
-    # version='0.0.1',
-    # description='**DigiSanad api documents**',
-
-    # openapi_url=None
+    title='DigiSanad',
+    version='0.0.1',
+    description='**DigiSanad api documents**',
 )
 
 app.mount('/media', StaticFiles(directory='media'), name='media')
@@ -40,6 +38,18 @@ api.include_router(user.router)
 
 app.include_router(api)
 
+
+@app.get('/rapidoc/', include_in_schema=False)
+async def rapidoc():
+    return HTMLResponse('''<!doctype html>
+    <html><head><meta charset="utf-8">
+    <script type="module" src="/media/rapidoc.js"></script></head><body>
+    <rapi-doc spec-url="/openapi.json" persist-auth="true"
+    bg-color="#040404" text-color="#f2f2f2" header-color="#040404"
+    primary-color="#ff8800" nav-text-color="#eee" font-size="largest"
+    allow-spec-url-load="false" allow-spec-file-load="false"
+    show-method-in-nav-bar="as-colored-block" response-area-height="500px"
+    show-header="false" /></body> </html>''')
 
 for route in app.routes:
     if isinstance(route, APIRoute):
