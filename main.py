@@ -43,7 +43,7 @@ app.include_router(api)
 async def rapidoc():
     return HTMLResponse('''<!doctype html>
     <html><head><meta charset="utf-8">
-    <script type="module" src="/media/rapidoc.js"></script></head><body>
+    <script type="module" src="/static/rapidoc.js"></script></head><body>
     <rapi-doc spec-url="/openapi.json" persist-auth="true"
     bg-color="#040404" text-color="#f2f2f2" header-color="#040404"
     primary-color="#ff8800" nav-text-color="#eee" font-size="largest"
