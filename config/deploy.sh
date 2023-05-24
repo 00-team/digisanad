@@ -1,7 +1,7 @@
 SPACER="============================================================================================"
 EG="🔷"
 
-cd /site/digisanad/
+cd /digisanad/
 source .env/bin/activate
 
 OLD_COMMIT=$(git rev-parse HEAD)
@@ -39,15 +39,15 @@ if check_diff "app/* config/webpack/*"; then
     echo $SPACER
 fi
 
-if check_diff "config/digisanad.uwsgi.service"; then
-    echo "$EG update uwsgi service"
-    cp config/digisanad.uwsgi.service /etc/systemd/system/ --force
+if check_diff "config/digisanad.service"; then
+    echo "$EG update digisanad service"
+    cp config/digisanad.service /etc/systemd/system/ --force
     systemctl daemon-reload
     echo $SPACER
 fi
 
-echo "$EG restart uwsgi service"
-systemctl restart digisanad.uwsgi
+echo "$EG restart digisanad service"
+systemctl restart digisanad
 echo $SPACER
 
 if check_diff "config/nginx.conf"; then
