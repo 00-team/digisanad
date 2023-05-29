@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from sqlalchemy import Column as _Column
 from sqlalchemy import MetaData
 
-from shared.settings import DATABASE_URL
+from shared import settings
 
 
 class Connection(sqlite3.Connection):
@@ -20,12 +20,11 @@ def Column(*args, **kwargs):
     return _Column(*args, **kwargs)
 
 
-database = Database(DATABASE_URL, factory=Connection)
+database = Database(settings.sql_url, factory=Connection)
 metadata = MetaData()
 
 redis = Redis(
-    # host='localhost', port=6979,
-    password=REDIS_PASSWORD
+    password=settings.redis_pass,
     unix_socket_path='/run/redis/digisanad.sock'
 )
 
@@ -34,5 +33,5 @@ __all__ = [
     'database',
     'metadata',
     'Column',
-    # 'redis',
+    'redis',
 ]

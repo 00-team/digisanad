@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from db.api.auth import verification_add, verification_add_tries
 from db.api.auth import verification_delete, verification_get
-from shared.settings import DEF_VERIFICATION_EXPIRE
+from shared import settings
 from shared.tools import get_random_code
 
 from .tools import send_sms
@@ -19,14 +19,13 @@ async def send_verification(phone, action):
         await verification_add(
             phone=phone,
             code=code,
-            expires=DEF_VERIFICATION_EXPIRE,
+            expires=settings.verification_expire,
             action=action
         )
         send_sms(phone, f'verification code is: {code}')
-        return JSONResponse({'timer': DEF_VERIFICATION_EXPIRE})
+        return JSONResponse({'timer': settings.verification_expire})
 
     if result.action != action:
-        print(result.action, action)
         raise VERIFY_ERROR
 
     return {'timer': result.expires}

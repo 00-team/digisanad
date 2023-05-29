@@ -9,9 +9,9 @@ from fastapi.staticfiles import StaticFiles
 
 import api
 from db import database, redis
-from shared.settings import BASE_DIR
+from shared import settings
 
-with open(BASE_DIR / 'static/index.html', 'r') as f:
+with open(settings.base_dir / 'static/index.html', 'r') as f:
     INDEX_HTML = f.read()
 
 app = FastAPI(

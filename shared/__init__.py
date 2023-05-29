@@ -2,6 +2,7 @@ from pathlib import Path
 from string import ascii_letters, digits
 
 from pydantic import BaseSettings
+from web3 import AsyncWeb3, HTTPProvider
 
 
 class Settings(BaseSettings):
@@ -23,5 +24,10 @@ class Settings(BaseSettings):
 
 
 settings = Settings(_env_file='.secrets')
+
+W3 = AsyncWeb3(HTTPProvider(
+    'https://mainnet.infura.io/v3/' + settings.infura_token
+))
+
 
 # settings.user_pic_dir.mkdir(parents=True, exist_ok=True)

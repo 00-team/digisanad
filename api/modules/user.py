@@ -30,10 +30,6 @@ async def test(request: Request):
     pass
     # user = request.state.user
     # ac = web3.Account()
-    # w = web3.AsyncWeb3(web3.HTTPProvider(
-    #     'https://mainnet.infura.io/v3/' + SECRETS.infura
-    # ))
-    #
     # w.eth.send_transaction({
     #     'from': '---',
     #     'to': '',

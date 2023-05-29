@@ -4,8 +4,7 @@ from hashlib import sha3_512
 from random import choices
 from secrets import choice as secret_choice
 
-from shared.settings import DEF_TOKEN_ABC, DEF_TOKEN_LEN
-from shared.settings import DEF_VERIFICATION_CODE_LEN
+from shared import settings
 
 
 def now(dt: bool = False) -> int | datetime:
@@ -18,17 +17,13 @@ def now(dt: bool = False) -> int | datetime:
 
 
 def get_random_code() -> str:
-    return ''.join(choices('0123456789', k=DEF_VERIFICATION_CODE_LEN))
-
-
-# def get_picture_name(user_id: int) -> str:
-#     return f'{user_id}-' + ''.join(choices(DEF_USER_PIC_ABC, k=8))
+    return ''.join(choices('0123456789', k=settings.verification_code_len))
 
 
 def new_token() -> tuple[str, str]:
     token = ''.join(
-        secret_choice(DEF_TOKEN_ABC)
-        for _ in range(DEF_TOKEN_LEN)
+        secret_choice(settings.token_abc)
+        for _ in range(settings.token_len)
     )
     return token, sha3_512(token.encode()).hexdigest()
 
@@ -45,7 +40,7 @@ def code_validator(code: str):
     if not isinstance(code, str):
         raise ValueError('invalid verification code')
 
-    if len(code) != DEF_VERIFICATION_CODE_LEN:
+    if len(code) != settings.verification_code_len:
         raise ValueError('invalid verification code')
 
     if not isallnum(code):
