@@ -8,7 +8,7 @@ from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
-from db import database
+from db import database, redis
 from shared.settings import BASE_DIR
 
 with open(BASE_DIR / 'static/index.html', 'r') as f:
@@ -28,13 +28,13 @@ if environ.get('DEVELOPMENT'):
 
 @app.on_event('startup')
 async def startup():
-    # await redis.ping()
+    await redis.ping()
     await database.connect()
 
 
 @app.on_event('shutdown')
 async def shutdown():
-    # await redis.connection_pool.disconnect()
+    await redis.connection_pool.disconnect()
     await database.disconnect()
 
 

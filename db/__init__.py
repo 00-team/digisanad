@@ -6,7 +6,7 @@ import db.table
 from shared.settings import DATABASE_URL
 
 from .models import TransactionModel, UserModel, VerificationModel
-from .shared import database, metadata
+from .shared import database, metadata, redis
 
 engine = create_engine(
     DATABASE_URL,
@@ -17,7 +17,7 @@ metadata.create_all(engine)
 
 __all__ = [
     'database',
-    # 'redis',
+    'redis',
 
     'VerificationModel',
     'UserModel',

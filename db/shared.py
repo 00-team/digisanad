@@ -2,7 +2,7 @@
 import sqlite3
 
 from databases import Database
-# from redis.asyncio import Redis
+from redis.asyncio import Redis
 from sqlalchemy import Column as _Column
 from sqlalchemy import MetaData
 
@@ -23,10 +23,11 @@ def Column(*args, **kwargs):
 database = Database(DATABASE_URL, factory=Connection)
 metadata = MetaData()
 
-# redis = Redis(
-#     host='localhost', port=6979,
-#     password=REDIS_PASSWORD
-# )
+redis = Redis(
+    # host='localhost', port=6979,
+    password=REDIS_PASSWORD
+    unix_socket_path='/run/redis/digisanad.sock'
+)
 
 
 __all__ = [

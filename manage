@@ -12,9 +12,10 @@ run)
     DEVELOPMENT=1 python main.py
     ;;
 
-log)
-    cat *.log
+red)
+    redis-server config/redis.conf
     ;;
+
 
 tag)
     if [[ -z $2 ]]; then

@@ -1,10 +1,12 @@
 
+import web3
 from fastapi import APIRouter, HTTPException, Request
 
 from api.models.user import DeleteResponse, DeleteVerifyBody
 from api.models.user import DeleteVerifyResponse
 from db import UserModel
 from db.api.user import user_delete
+from shared import settings
 from shared.tools import now
 from utils import rate_limit, send_verification, user_required
 from utils import verify_verification
@@ -21,6 +23,22 @@ router = APIRouter(
 @router.get('/get/', response_model=UserModel)
 async def get(request: Request):
     return request.state.user
+
+
+@router.get('/test/')
+async def test(request: Request):
+    pass
+    # user = request.state.user
+    # ac = web3.Account()
+    # w = web3.AsyncWeb3(web3.HTTPProvider(
+    #     'https://mainnet.infura.io/v3/' + SECRETS.infura
+    # ))
+    #
+    # w.eth.send_transaction({
+    #     'from': '---',
+    #     'to': '',
+    #     'value': 1
+    # })
 
 
 @router.post(
