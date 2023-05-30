@@ -118,7 +118,7 @@ async def verify_verification(phone, code, action) -> Value:
         if value.tries > 2:
             await redis.delete(key)
         else:
-            await redis.set(key, value._pack_(), xx=True, keepttl=True)
+            await redis.set(key, value.to_bytes(), xx=True, keepttl=True)
 
         raise bad_verification
 
