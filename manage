@@ -16,6 +16,10 @@ red)
     redis-server config/redis.conf
     ;;
 
+update_db)
+    alembic -c config/alembic.ini revision --autogenerate
+    alembic -c config/alembic.ini upgrade head
+    ;;
 
 tag)
     if [[ -z $2 ]]; then
