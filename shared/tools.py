@@ -34,16 +34,3 @@ def isallnum(text: str) -> bool:
             return False
 
     return True
-
-
-def code_validator(code: str):
-    if not isinstance(code, str):
-        raise ValueError('invalid verification code')
-
-    if len(code) != settings.verification_code_len:
-        raise ValueError('invalid verification code')
-
-    if not isallnum(code):
-        raise ValueError('invalid phone number')
-
-    return code
