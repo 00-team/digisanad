@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { atom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
+// import { atomWithStorage } from 'jotai/utils'
 import { UserModel } from 'state'
 
 const DEFUALT_USER: UserModel = {
@@ -18,7 +18,7 @@ const DEFUALT_USER: UserModel = {
     wallet: 0,
 }
 
-const User = atomWithStorage<UserModel>('user', DEFUALT_USER)
+const User = atom<UserModel>(DEFUALT_USER)
 
 type Args = 'clear' | 'fetch' | Partial<UserModel>
 
@@ -32,7 +32,7 @@ const UserAtom = atom(
                 if (!user.token) return
 
                 let response = await axios.get('/api/user/get/', {
-                    headers: { Authorization: `user ${user.token}` },
+                    headers: { Authorization: `Bearer ${user.token}` },
                 })
 
                 set(User, { ...user, ...response.data, token: user.token })
