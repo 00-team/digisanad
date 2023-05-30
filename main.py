@@ -1,15 +1,15 @@
 
 from os import environ
 
-import uvicorn
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
-from db import database, redis
-from shared import settings
+from shared import redis, settings, sqlx
+from shared.errors import Error, all_errors
 
 with open(settings.base_dir / 'static/index.html', 'r') as f:
     INDEX_HTML = f.read()
@@ -26,16 +26,21 @@ if environ.get('DEVELOPMENT'):
     app.mount('/static', StaticFiles(directory='static'), name='static')
 
 
+@app.exception_handler(Error)
+async def error_exception_handler(request, exc: Error):
+    return exc.json()
+
+
 @app.on_event('startup')
 async def startup():
     await redis.ping()
-    await database.connect()
+    await sqlx.connect()
 
 
 @app.on_event('shutdown')
 async def shutdown():
     await redis.connection_pool.disconnect()
-    await database.disconnect()
+    await sqlx.disconnect()
 
 
 @app.get('/rapidoc/', include_in_schema=False)
@@ -64,5 +69,52 @@ for route in app.routes:
         route.operation_id = route.name
 
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', port=7000, reload=True)
+for route in app.routes:
+    if not isinstance(route, APIRoute):
+        continue
+
+    errors = []
+
+    for d in route.dependencies:
+        errors.extend(getattr(d, 'errors', []))
+
+    oid = route.path.replace('/', '_').strip('_')
+    oid += '_' + '_'.join(route.methods)
+    route.operation_id = oid
+
+    errors.extend((route.openapi_extra or {}).pop('errors', []))
+
+    for e in errors:
+        route.responses[e.code] = {
+            'description': f'{e.title} - {e.status}',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        '$ref': f'#/errors/{e.code}',
+                    }
+                }
+            }
+        }
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+
+    schema['errors'] = {}
+
+    for e in all_errors:
+        schema['errors'][e.code] = e.schema
+
+    app.openapi_schema = schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
