@@ -29,12 +29,12 @@ interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
     title: string
     Icon: FC<{}>
     Component: FC
-    style: React.CSSProperties
-    active: boolean
+    style?: React.CSSProperties
+    active?: boolean
     id: string
 }
 
-const SIDEBAR_OPTIONS: Partial<OptionsProps>[] = [
+const SIDEBAR_OPTIONS: OptionsProps[] = [
     { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo, id: 'info' },
     {
         title: 'قرارداد های من',
@@ -62,7 +62,7 @@ interface DashboardChildProps {
 }
 
 const Dashboard: FC = () => {
-    const [SectionActive, SectionsetActive] = useState(3)
+    const [SectionActive, SectionsetActive] = useState(0)
     const [User, setUser] = useAtom(UserAtom)
 
     useEffect(() => {
@@ -72,6 +72,7 @@ const Dashboard: FC = () => {
     }, [])
 
     if (User.user_id === 0) {
+        console.log(User)
         return <Navigate to='/login' />
     }
 
@@ -82,13 +83,11 @@ const Dashboard: FC = () => {
                 SectionsetActive={SectionsetActive}
             />
             <div className='dashboard-wrapper'>
-                {SIDEBAR_OPTIONS.map(({ Component }, index) => {
-                    if (!Component) return null
-
-                    if (index === SectionActive)
-                        return <Component key={index} />
-                    else return null
-                })}
+                {(() => {
+                    let so = SIDEBAR_OPTIONS[SectionActive]
+                    if (!so) return <></>
+                    return <so.Component />
+                })()}
             </div>
         </section>
     )
@@ -110,23 +109,21 @@ const Sidebar: FC<DashboardChildProps> = ({
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>
-                {SIDEBAR_OPTIONS.map(({ title, Icon, id }, index) => {
-                    return (
-                        <SidebarColumn
-                            key={index}
-                            title={title}
-                            Icon={Icon}
-                            active={SectionActive === index}
-                            id={id}
-                            style={{
-                                animationDelay: `${
-                                    OPTIONS_BASE_DELAY + ADDED_DELAY * index
-                                }s`,
-                            }}
-                            onClick={() => SectionsetActive(index)}
-                        />
-                    )
-                })}
+                {SIDEBAR_OPTIONS.map(({ title, Icon, id }, index) => (
+                    <SidebarColumn
+                        key={index}
+                        title={title}
+                        Icon={Icon}
+                        active={SectionActive === index}
+                        id={id}
+                        style={{
+                            animationDelay: `${
+                                OPTIONS_BASE_DELAY + ADDED_DELAY * index
+                            }s`,
+                        }}
+                        onClick={() => SectionsetActive(index)}
+                    />
+                ))}
                 <GotoSiteColumn
                     style={{
                         animationDelay: `${
@@ -150,7 +147,7 @@ const Sidebar: FC<DashboardChildProps> = ({
 
 const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
     return (
-        <Link to={'/'} className='column-wrapper goto ' style={style}>
+        <Link to='/' className='column-wrapper goto ' style={style}>
             <div className='column'>
                 <div className='holder-icon icon'>
                     {' '}
@@ -164,7 +161,7 @@ const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
         </Link>
     )
 }
-const SidebarColumn: FC<Partial<OptionsProps>> = ({
+const SidebarColumn: FC<Omit<OptionsProps, 'Component'>> = ({
     title,
     Icon,
     style,
@@ -174,13 +171,15 @@ const SidebarColumn: FC<Partial<OptionsProps>> = ({
 }) => {
     return (
         <a
-            href={innerWidth <= 1024 ? `#${id}` : ''}
+            // href={innerWidth <= 1024 ? `#${id}` : ''}
             className={`column-wrapper ${C(active)}`}
             style={style}
             {...attr}
         >
             <div className='column'>
-                <div className='holder-icon icon'>{Icon && <Icon />}</div>
+                <div className='holder-icon icon'>
+                    <Icon />
+                </div>
                 <div className='holder-text '>{title}</div>
             </div>
             <div className='send-icon icon'>
