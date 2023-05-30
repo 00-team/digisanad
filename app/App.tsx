@@ -46,9 +46,9 @@ const MainContent: FC = () => {
     return (
         <Routes>
             <Route index element={<Home />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/register/' element={<Register />} />
+            <Route path='/login/' element={<Login />} />
+            <Route path='/dashboard/' element={<Dashboard />} />
         </Routes>
     )
 }
