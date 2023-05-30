@@ -1,20 +1,29 @@
+import sqlite3
 from pathlib import Path
 from string import ascii_letters, digits
 
+from databases import Database
 from pydantic import BaseSettings
+from redis.asyncio import Redis
 from web3 import AsyncWeb3, HTTPProvider
 
 
+class Connection(sqlite3.Connection):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.execute('pragma foreign_keys=1')
+
+
 class Settings(BaseSettings):
-    base_dir: Path = Path(__file__).parent.parent
     version: str = '0.0.1-beta'
 
-    sql_url: str = 'sqlite:///' + str(base_dir / 'db/main.db')
+    base_dir: Path = Path(__file__).parent.parent
+
+    sql_dir: Path = base_dir / 'db/files/'
+    sql_url: str = 'sqlite:///' + str(sql_dir / 'main.db')
 
     redis_pass: str
     infura_token: str
-
-    # user_pic_dir = base_dir / 'media/users/'
 
     verification_expire = 2 * 60
     verification_code_len = 5
@@ -24,10 +33,17 @@ class Settings(BaseSettings):
 
 
 settings = Settings(_env_file='.secrets')
+settings.sql_dir.mkdir(parents=True, exist_ok=True)
+
+(settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
 W3 = AsyncWeb3(HTTPProvider(
     'https://mainnet.infura.io/v3/' + settings.infura_token
 ))
 
+redis = Redis(
+    password=settings.redis_pass,
+    unix_socket_path='/run/redis/digisanad.sock'
+)
 
-# settings.user_pic_dir.mkdir(parents=True, exist_ok=True)
+sqlx = Database(settings.sql_url, factory=Connection)
