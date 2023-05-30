@@ -1,5 +1,9 @@
 # Digi Sanad
 
+## Todos
+
+-   [ ] sql migratio support
+
 ## User
 
 name:
