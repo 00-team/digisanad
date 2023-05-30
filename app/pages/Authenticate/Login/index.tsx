@@ -1,10 +1,11 @@
 import React, { FC, useEffect } from 'react'
 
+import { user_get_me } from 'api'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
-import { LoginAtom, UserAtom } from 'state'
+import { LoginAtom, TokenAtom, UserAtom } from 'state'
 
 import { Submit } from 'components'
 import Clouds from 'components/Clouds'
@@ -17,26 +18,39 @@ import './style/login.scss'
 const PHONE_VALIDATOR = new RegExp(/^09[0-9]{9}$/)
 
 const Login: FC = () => {
-    const [User, setUser] = useAtom(UserAtom)
+    const [user, setUser] = useAtom(UserAtom)
     const [Login, setLogin] = useAtom(LoginAtom)
+    const [token, setToken] = useAtom(TokenAtom)
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (User.token || User.user_id !== 0) {
-            navigate('/dashboard')
+        if (user.user_id) {
+            navigate('/dashboard/')
+            return
+        }
+
+        if (token) {
+            user_get_me(token).then(data => {
+                if (data === null) {
+                    setToken('')
+                } else {
+                    setUser(data)
+                    navigate('/dashboard/')
+                }
+            })
         }
     }, [])
 
     const phoneSubmit = async () => {
         if (PHONE_VALIDATOR.test(Login.phone)) {
             try {
-                const response = await axios.post('/api/auth/verify/', {
+                const response = await axios.post('/api/verification/', {
                     phone: Login.phone,
                     action: 'login',
                 })
 
-                if (typeof response.data.timer === 'number') {
+                if (typeof response.data.expires === 'number') {
                     ReactAlert.success('کد تایید برای شما برای پیامک شد.')
                     setLogin({
                         phone: Login.phone,
@@ -78,10 +92,9 @@ const Login: FC = () => {
                     national_id: data.national_id,
                     phone: data.phone,
                     postal_code: data.postal_code,
-                    token: data.token,
                     user_id: data.user_id,
-                    wallet: data.wallet,
                 })
+                setToken(data.token)
                 navigate('/dashboard')
             } else {
                 ReactAlert.error('Invalid login!')

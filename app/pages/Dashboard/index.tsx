@@ -2,12 +2,13 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
+import { user_get_me } from 'api'
 import { PersonSvg } from 'icons'
 import { SendSvg } from 'icons/Actions/Send'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom, useAtomValue } from 'jotai'
-import { UserAtom } from 'state'
+import { TokenAtom, UserAtom } from 'state'
 
 import { ContractSvg } from 'icons/Dashboard/Contract'
 import { GlobeSvg } from 'icons/Dashboard/Globe'
@@ -63,18 +64,23 @@ interface DashboardChildProps {
 
 const Dashboard: FC = () => {
     const [SectionActive, SectionsetActive] = useState(0)
-    const [User, setUser] = useAtom(UserAtom)
+    const [_, setUser] = useAtom(UserAtom)
+    const [token, setToken] = useAtom(TokenAtom)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
-        if (User.user_id) {
-            setUser('fetch')
-        }
-    }, [])
+        if (!token) return navigate('/login/')
 
-    if (User.user_id === 0) {
-        console.log(User)
-        return <Navigate to='/login' />
-    }
+        user_get_me(token).then(data => {
+            if (data === null) {
+                setToken('')
+                navigate('/login/')
+            } else {
+                setUser(data)
+            }
+        })
+    }, [])
 
     return (
         <section className='dashboard-container'>

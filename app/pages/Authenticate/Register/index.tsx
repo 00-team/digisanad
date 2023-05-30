@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 
+import { user_get_me } from 'api'
 import axios from 'axios'
 import { PersonSvg } from 'icons'
 import { EmailSvg } from 'icons/Models/Email'
@@ -7,7 +8,7 @@ import { GoBack } from 'icons/Models/GoBack'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
-import { LoginAtom, UserAtom } from 'state'
+import { LoginAtom, TokenAtom, UserAtom } from 'state'
 
 import { AddressSvg } from 'icons/Dashboard/Address'
 import { CallenderSvg } from 'icons/Dashboard/Callender'
@@ -23,7 +24,8 @@ import './style/register.scss'
 
 const Register: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
-    const [User, setUser] = useAtom(UserAtom)
+    const [user, setUser] = useAtom(UserAtom)
+    const [token, setToken] = useAtom(TokenAtom)
 
     const [Stages, setStages] = useState<
         'contact' | 'info' | 'address' | 'code'
@@ -43,21 +45,33 @@ const Register: FC = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (User.token || User.user_id !== 0) {
-            navigate('/dashboard')
+        if (user.user_id) {
+            navigate('/dashboard/')
+            return
+        }
+
+        if (token) {
+            user_get_me(token).then(data => {
+                if (data === null) {
+                    setToken('')
+                } else {
+                    setUser(data)
+                    navigate('/dashboard/')
+                }
+            })
         }
     }, [])
 
     const SendAgain = async () => {
         try {
-            const response = await axios.post('/api/auth/verify/', {
+            const response = await axios.post('/api/verification/', {
                 phone: Data.phone,
                 action: 'register',
             })
 
             console.log(response)
 
-            if (typeof response.data.timer === 'number') {
+            if (typeof response.data.expires === 'number') {
                 ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
                 setLogin({
                     stage: 'code',
@@ -134,7 +148,7 @@ const Register: FC = () => {
         }
         const getCode = async () => {
             try {
-                await axios.post('/api/auth/verify/', {
+                await axios.post('/api/verification/', {
                     phone: Data.phone,
                     action: 'register',
                 })
@@ -148,25 +162,37 @@ const Register: FC = () => {
 
         const sendRequest = async () => {
             try {
-                const response = await axios.post('/api/auth/register/', {
+                let send_data = {
                     phone: Data.phone,
-                    code: Data.code,
+                    // code: Data.code,
                     first_name: Data.fname,
                     last_name: Data.lname,
+                    // birth_date: [
+                    //     Data.birthDay.year,
+                    //     Data.birthDay.month,
+                    //     Data.birthDay.day,
+                    // ],
+                    national_id: Data.nationalId,
+                    postal_code: Data.postalCode,
+                    address: Data.address,
+                    email: Data.email,
+                }
+                const response = await axios.post('/api/auth/register/', {
+                    ...send_data,
                     birth_date: [
                         Data.birthDay.year,
                         Data.birthDay.month,
                         Data.birthDay.day,
                     ],
-                    national_id: Data.nationalId,
-                    postal_code: Data.postalCode,
-                    address: Data.address,
-                    email: Data.email,
+                    code: Data.code,
                 })
+                console.log(response.data.token)
+                // delete send_data.code
                 setUser({
-                    token: response.data.token,
                     user_id: response.data.user_id,
+                    ...send_data,
                 })
+                setToken(response.data.token)
                 navigate('/dashboard')
             } catch (error) {
                 console.log(error)
