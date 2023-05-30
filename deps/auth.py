@@ -4,9 +4,10 @@ from hashlib import sha3_512, sha256
 from fastapi import Depends, HTTPException, Request
 
 # from database.plutus import User, admin_check_token
-from db import UserModel
-from db.api.redis import rate_limit_get, rate_limit_set
-from db.api.user import user_get_by_id
+from db.models import UserModel
+from db.rate_limit import rate_limit_get, rate_limit_set
+
+# from db.api.user import user_get_by_id
 
 INVALID_AUTH = HTTPException(403, 'Invalid authentication credentials')
 
@@ -21,7 +22,7 @@ def rate_limit_check(period: int, amount: int):
 
         identifier = sha256(f'{path_id}:{ip}'.encode('utf-8')).hexdigest()
 
-        key = f'rate_limit_token:{identifier}'
+        key = f'token:{identifier}'
         value, expire = await rate_limit_get(key)
 
         if value >= amount:
@@ -70,7 +71,7 @@ def token_id(token_raw: str):
         raise INVALID_AUTH
 
 
-def user_required():
+def login_required():
     '''user token is required'''
 
     async def decorator(request: Request):
