@@ -6,36 +6,18 @@ from shared import sqlx
 from .models import UserModel, UsersTable
 
 
-async def user_get(where) -> UserModel | None:
-    row = await sqlx.fetch_one(select(UsersTable).where(where))
+async def user_get(*where) -> UserModel | None:
+    row = await sqlx.fetch_one(select(UsersTable).where(*where))
     if row is None:
         return None
 
     return UserModel(**row)
 
-# async def user_get(user_id=None, phone=None) -> UserModel | None:
-#     query = select(UsersTable)
-#
-#     if user_id:
-#         query = query.where(UsersTable.user_id == user_id)
-#     elif phone:
-#         query = query.where(UsersTable.phone == phone)
-#     else:
-#         return None
-#
-#     row = await sqlx.fetch_one(query)
-#
-#     if row is None:
-#         return None
-#
-#     return UserModel(**row)
 
-
-async def user_update(user_id: int, **values: dict):
+async def user_update(*where, **values: dict):
     await sqlx.execute(
-        update(UsersTable)
-        .where(UsersTable.user_id == user_id)
-        .values(**values)
+        update(UsersTable).where(*where),
+        values
     )
 
 
