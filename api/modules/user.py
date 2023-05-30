@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get('/get/', response_model=UserModel)
+@router.get('/', response_model=UserModel)
 async def get(request: Request):
     return request.state.user
 
