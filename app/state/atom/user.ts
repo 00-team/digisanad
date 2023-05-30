@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { atom } from 'jotai'
-// import { atomWithStorage } from 'jotai/utils'
+import { atomWithStorage } from 'jotai/utils'
 import { UserModel } from 'state'
 
 const DEFUALT_USER: UserModel = {
@@ -13,12 +13,12 @@ const DEFUALT_USER: UserModel = {
     national_id: '',
     phone: null,
     postal_code: '',
-    token: null,
     user_id: 0,
-    wallet: 0,
 }
 
 const User = atom<UserModel>(DEFUALT_USER)
+
+const TokenAtom = atomWithStorage<string>('user_token', '')
 
 type Args = 'clear' | 'fetch' | Partial<UserModel>
 
@@ -29,13 +29,14 @@ const UserAtom = atom(
 
         if (args === 'fetch') {
             try {
-                if (!user.token) return
+                // if (!user.token) return
 
-                let response = await axios.get('/api/user/get/', {
-                    headers: { Authorization: `Bearer ${user.token}` },
-                })
+                // let response = await axios.get('/api/user/get/', {
+                //     headers: { Authorization: `Bearer ${user.token}` },
+                // })
+                let response = await axios.get('/api/user/get/')
 
-                set(User, { ...user, ...response.data, token: user.token })
+                set(User, { ...user, ...response.data })
             } catch (error) {
                 console.log(error)
             }
@@ -47,4 +48,4 @@ const UserAtom = atom(
     }
 )
 
-export { UserAtom }
+export { UserAtom, TokenAtom }
