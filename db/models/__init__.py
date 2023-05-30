@@ -1,8 +1,8 @@
 from .common import BaseTable, metadata
-from .user import UsersTable
+from .user import UserModel, UsersTable
 
 __all__ = [
     'BaseTable', 'metadata',
 
-    'UsersTable',
+    'UsersTable', 'UserModel'
 ]
