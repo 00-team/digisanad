@@ -6,6 +6,10 @@ After=syslog.target
 ExecStart=/usr/local/bin/redis-server /digisanad/config/redis.conf
 RestartSec=5s
 Restart=on-success
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
 
 [Install]
 WantedBy=multi-user.target
