@@ -1,29 +1,25 @@
 
 from fastapi import APIRouter, HTTPException, Response
 
-from api.models.auth import AuthResponse, LoginBody, RegisterBody, VerifyBody
-from api.models.auth import VerifyResponse
-from db.api.user import user_add, user_get_by_phone, user_update
+from api.models.auth import AuthResponse, LoginBody, RegisterBody
+from api.verification import Action, verify_verification
+from db.user import user_get
+from deps import rate_limit
 from shared.tools import new_token
-from utils import rate_limit, send_verification, verify_verification
-
-AUTH_RATE_LIMIT = rate_limit('auth', 30 * 60, 20, False)
 
 router = APIRouter(
     prefix='/auth',
     tags=['auth'],
-    dependencies=[AUTH_RATE_LIMIT]
+    dependencies=[rate_limit('auth', 30 * 60, 20, False)]
 )
-
-
-@router.post('/verify/', response_model=VerifyResponse)
-async def verify(body: VerifyBody):
-    return await send_verification(body.phone, body.action)
 
 
 @router.post('/register/', response_model=AuthResponse)
 async def register(response: Response, body: RegisterBody):
-    await verify_verification(body.phone, body.code, 'REGISTER')
+    await verify_verification(
+        body.phone, body.code, Action.register
+    )
+
     user = await user_get_by_phone(body.phone)
     if user:
         raise HTTPException(400, 'Login.')
@@ -60,9 +56,12 @@ async def register(response: Response, body: RegisterBody):
 
 @router.post('/login/', response_model=AuthResponse)
 async def login(response: Response, body: LoginBody):
-    await verify_verification(body.phone, body.code, 'LOGIN')
+    await verify_verification(
+        body.phone, body.code, Action.login
+    )
 
-    user = await user_get_by_phone(body.phone)
+    user = await user_get(phone=body.phone)
+
     if not user:
         raise HTTPException(400, 'Register First.')
 
