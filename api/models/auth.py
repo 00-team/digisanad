@@ -1,83 +1,37 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, conlist, constr, validator
 
+from api.verification import Action
 from shared.jdate import jdate, jdatetime
-from shared.tools import code_validator, isallnum
-
-
-def phone_validator(value: str):
-    if not value or len(value) != 11:
-        raise ValueError('invalid phone number')
-
-    if value[:2] != '09' or not isallnum(value):
-        raise ValueError('invalid phone number')
-
-    return value
-
-
-class VerifyBody(BaseModel):
-    phone: str
-    action: str
-
-    @validator('phone')
-    def v_phone(cls, value):
-        return phone_validator(value)
-
-    @validator('action')
-    def v_action(cls, value: str):
-        value = value.upper()
-
-        if not value in ['LOGIN', 'REGISTER']:
-            raise ValueError('invalid action')
-
-        return value
-
-
-class VerifyResponse(BaseModel):
-    timer: int
+from shared.validators import NationalID, PhoneNumber, PostalCode
+from shared.validators import VerificationCode
 
 
 class LoginBody(BaseModel):
-    phone: str
-    code: str
-
-    @validator('code')
-    def v_code(cls, value):
-        return code_validator(value)
-
-    @validator('phone')
-    def v_phone(cls, value):
-        return phone_validator(value)
+    phone: PhoneNumber
+    code: VerificationCode
 
 
 class RegisterBody(LoginBody):
     first_name: str
     last_name: str
-    birth_date: tuple[int, int, int]
-    national_id: str
-    postal_code: str
-    address: str
+    birth_date: conlist(int, max_items=3, min_items=3)
+    national_id: NationalID
+    postal_code: PostalCode
+    address: constr(strip_whitespace=True, max_length=2048)
     email: EmailStr
 
-    @validator('national_id')
-    def v_national_id(cls, value):
-        if not value or len(value) != 10 or not isallnum(value):
-            raise ValueError('invalid national id')
-
-        return value
-
-    @validator('postal_code')
-    def v_postal_code(cls, value):
-        if not value or len(value) != 10 or not isallnum(value):
-            raise ValueError('invalid postal code')
-
-        return value
-
-    @validator('address')
-    def v_address(cls, value):
-        if len(value) > 1024:
-            raise ValueError('address is too long')
-
-        return value
+    class Config:
+        schema_extra = {'example': {
+            'action': Action.register,
+            'code': '99999',
+            'first_name': 'Harold',
+            'last_name': 'Krabs',
+            'birth_data': [1369, 7, 7],
+            'national_id': '1234567890',
+            'postal_code': '1234567890',
+            'address': 'krusty krabs',
+            'email': 'mr.krabs@gmail.com'
+        }}
 
     @validator('birth_date')
     def v_birth_date(cls, value):
