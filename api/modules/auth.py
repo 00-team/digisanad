@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException, Response
 from api.models.auth import AuthResponse, LoginBody, RegisterBody
 from api.verification import Action, verify_verification
 from db.models import UsersTable
-from db.user import user_get
+from db.user import user_add, user_get
 from deps import rate_limit
-from shared.errors import bad_verification, register_required
+from shared.errors import account_exists, bad_verification, register_required
 from shared.tools import new_token
 
 router = APIRouter(
@@ -22,9 +22,9 @@ async def register(response: Response, body: RegisterBody):
         body.phone, body.code, Action.register
     )
 
-    user = await user_get_by_phone(body.phone)
+    user = await user_get(UsersTable.phone == body.phone)
     if user:
-        raise HTTPException(400, 'Login.')
+        raise account_exists
 
     token, token_hash = new_token()
     bd = body.birth_date
@@ -38,7 +38,6 @@ async def register(response: Response, body: RegisterBody):
         postal_code=body.postal_code,
         address=body.address,
         email=body.email,
-        wallet=0,
         token=token_hash
     )
 
