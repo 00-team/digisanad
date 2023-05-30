@@ -109,6 +109,11 @@ register_required = Error(
     40010, 'Register Required',
     'you need to register first in order to login!', 403
 )
+account_exists = Error(
+    40011, 'Account Exists',
+    'an account has been registered with this phone number already!',
+    400
+)
 
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
@@ -116,7 +121,7 @@ database_error = Error(50001, 'Database Error', 'Database Error', 500)
 all_errors = [
     forbidden, bad_verification,
     no_change, bad_id, bad_auth, rate_limited,
-    bad_args, register_required,
+    bad_args, register_required, account_exists,
 
     database_error
 ]
