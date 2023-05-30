@@ -27,6 +27,13 @@ if check_diff "requirements.txt"; then
     echo $SPACER
 fi
 
+if check_diff "db/models/*"; then
+    echo "$EG migrating the database"
+    alembic -c config/alembic.ini revision --autogenerate
+    alembic -c config/alembic.ini upgrade head
+    echo $SPACER
+fi
+
 if check_diff "package.json package-lock.json"; then
     echo "$EG install npm packages"
     npm ci
