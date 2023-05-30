@@ -105,6 +105,10 @@ bad_auth = Error(40005, 'invalid authentication credentials', 403)
 forbidden = Error(40006, 'Forbidden', 'Not Enough Permissions', 403)
 rate_limited = Error(40007, 'Rate Limited', 'Too Many Requests', 429)
 bad_args = Error(40009, 'Bad Args', 'invalid args', 400)
+register_required = Error(
+    40010, 'Register Required',
+    'you need to register first in order to login!', 403
+)
 
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
@@ -112,7 +116,7 @@ database_error = Error(50001, 'Database Error', 'Database Error', 500)
 all_errors = [
     forbidden, bad_verification,
     no_change, bad_id, bad_auth, rate_limited,
-    bad_args,
+    bad_args, register_required,
 
     database_error
 ]

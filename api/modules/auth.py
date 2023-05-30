@@ -3,8 +3,10 @@ from fastapi import APIRouter, HTTPException, Response
 
 from api.models.auth import AuthResponse, LoginBody, RegisterBody
 from api.verification import Action, verify_verification
+from db.models import UsersTable
 from db.user import user_get
 from deps import rate_limit
+from shared.errors import bad_verification, register_required
 from shared.tools import new_token
 
 router = APIRouter(
@@ -54,16 +56,18 @@ async def register(response: Response, body: RegisterBody):
     }
 
 
-@router.post('/login/', response_model=AuthResponse)
+@router.post(
+    '/login/', response_model=AuthResponse,
+    openapi_extra={'errors': [register_required, bad_verification]}
+)
 async def login(response: Response, body: LoginBody):
     await verify_verification(
         body.phone, body.code, Action.login
     )
 
-    user = await user_get(phone=body.phone)
-
-    if not user:
-        raise HTTPException(400, 'Register First.')
+    user = await user_get(UsersTable.phone == body.phone)
+    if user is None:
+        raise register_required
 
     token, token_hash = new_token()
     await user_update(user.user_id, token=token_hash)
