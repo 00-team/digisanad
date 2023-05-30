@@ -8,6 +8,7 @@ from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
+from deps import get_ip
 from shared import redis, settings, sqlx
 from shared.errors import Error, all_errors
 
@@ -18,6 +19,7 @@ app = FastAPI(
     title='DigiSanad',
     version='0.0.1',
     description='**DigiSanad api documents**',
+    dependencies=[get_ip()]
 )
 
 
