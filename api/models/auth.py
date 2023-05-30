@@ -22,11 +22,11 @@ class RegisterBody(LoginBody):
 
     class Config:
         schema_extra = {'example': {
-            'action': Action.register,
+            'phone': '09223334444',
             'code': '99999',
             'first_name': 'Harold',
             'last_name': 'Krabs',
-            'birth_data': [1369, 7, 7],
+            'birth_date': [1369, 7, 7],
             'national_id': '1234567890',
             'postal_code': '1234567890',
             'address': 'krusty krabs',
