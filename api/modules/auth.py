@@ -1,10 +1,10 @@
 
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, Response
 
 from api.models.auth import AuthResponse, LoginBody, RegisterBody
 from api.verification import Action, verify_verification
 from db.models import UsersTable
-from db.user import user_add, user_get
+from db.user import user_add, user_get, user_update
 from deps import rate_limit
 from shared.errors import account_exists, bad_verification, register_required
 from shared.tools import new_token
@@ -16,7 +16,10 @@ router = APIRouter(
 )
 
 
-@router.post('/register/', response_model=AuthResponse)
+@router.post(
+    '/register/', response_model=AuthResponse,
+    openapi_extra={'errors': [account_exists, bad_verification]}
+)
 async def register(response: Response, body: RegisterBody):
     await verify_verification(
         body.phone, body.code, Action.register
@@ -44,7 +47,7 @@ async def register(response: Response, body: RegisterBody):
     token = f'{user_id}:{token}'
     response.set_cookie(
         key='Authorization',
-        value=f'user {token}',
+        value=f'Bearer {token}',
         secure=True,
         samesite='strict'
     )
@@ -69,12 +72,12 @@ async def login(response: Response, body: LoginBody):
         raise register_required
 
     token, token_hash = new_token()
-    await user_update(user.user_id, token=token_hash)
+    await user_update(UsersTable.user_id == user.user_id, token=token_hash)
 
     token = f'{user.user_id}:{token}'
     response.set_cookie(
         key='Authorization',
-        value=f'user {token}',
+        value=f'Bearer {token}',
         secure=True,
         samesite='strict'
     )
