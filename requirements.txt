@@ -1,6 +1,7 @@
 aiohttp==3.8.4
 aiosignal==1.3.1
 aiosqlite==0.17.0
+alembic==1.11.1
 anyio==3.6.2
 async-timeout==4.0.2
 attrs==23.1.0
@@ -35,6 +36,8 @@ httpx==0.23.1
 idna==3.4
 jsonschema==4.17.3
 lru-dict==1.1.8
+Mako==1.2.4
+MarkupSafe==2.1.2
 multidict==6.0.4
 packaging==21.3
 parsimonious==0.9.0
