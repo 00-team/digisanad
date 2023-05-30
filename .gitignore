@@ -163,7 +163,8 @@ templates/base.html
 database/doom.json
 database/secrets.json
 
-# database
-*.db
 secrets.json
 .secrets
+
+db/files/
+db/versions/
