@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { UserModel } from 'state'
+import { UserModel, WalletModel } from 'state'
 
 const user_get_me = async (token: string): Promise<UserModel | null> => {
     try {
@@ -16,4 +16,20 @@ const user_get_me = async (token: string): Promise<UserModel | null> => {
 
     return null
 }
-export { user_get_me }
+
+const get_wallet = async (token: string): Promise<WalletModel | null> => {
+    try {
+        const response = await axios.get('/api/user/wallet/', {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        })
+        return response.data
+    } catch (error) {
+        console.log('error in [get_wallet] -- ' + error)
+    }
+
+    return null
+}
+
+export { user_get_me, get_wallet }
