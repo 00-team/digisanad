@@ -1,4 +1,6 @@
 export * from './atom/login'
 export * from './atom/user'
+export * from './atom/wallet'
 export * from './models/Login'
 export * from './models/User'
+export * from './models/Wallet'
