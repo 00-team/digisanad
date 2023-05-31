@@ -5,7 +5,7 @@ from string import ascii_letters, digits
 from databases import Database
 from pydantic import BaseSettings
 from redis.asyncio import Redis
-from web3 import AsyncWeb3, HTTPProvider
+from web3 import AsyncHTTPProvider, AsyncWeb3
 
 
 class Connection(sqlite3.Connection):
@@ -39,7 +39,7 @@ settings.sql_dir.mkdir(parents=True, exist_ok=True)
 
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
-W3 = AsyncWeb3(HTTPProvider(
+W3 = AsyncWeb3(AsyncHTTPProvider(
     'https://mainnet.infura.io/v3/' + settings.infura_token
 ))
 
