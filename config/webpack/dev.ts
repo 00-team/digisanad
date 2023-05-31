@@ -24,7 +24,7 @@ const DevConfig: Configuration = {
         }),
     ],
     devServer: {
-        port: 8000,
+        port: 8100,
         hot: true, // true = full reload
         historyApiFallback: true,
         compress: true,
@@ -35,13 +35,13 @@ const DevConfig: Configuration = {
         proxy: [
             {
                 context: ['/api', '/static', '/media'],
-                target: 'http://127.0.0.1:7000/',
+                target: 'http://127.0.0.1:7100/',
             },
 
             // static
             {
                 context: ['/favicon.ico'],
-                target: 'http://127.0.0.1:7000/static/',
+                target: 'http://127.0.0.1:7100/static/',
             },
         ],
     },
