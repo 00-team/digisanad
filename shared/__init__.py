@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     token_len = 69
     token_abc = ascii_letters + digits + ('!@#$%^&*_+' * 2)
 
+    update_wallet_timeout = 5 * 60
+
 
 settings = Settings(_env_file='.secrets')
 settings.sql_dir.mkdir(parents=True, exist_ok=True)
