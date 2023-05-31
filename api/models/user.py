@@ -1,8 +1,6 @@
 
 from pydantic import BaseModel
 
-from db.models import WalletModel
-
 
 class WalletResponse(BaseModel):
     wallet_id: int
