@@ -31,6 +31,7 @@ async def wallet(request: Request):
 
         if wallet is None:
             new_wallet.user_id = user.user_id
+            del new_wallet.wallet_id
             wallet_id = await wallet_add(**new_wallet.dict())
             new_wallet.wallet_id = wallet_id
         else:
