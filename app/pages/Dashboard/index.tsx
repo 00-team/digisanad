@@ -20,6 +20,7 @@ import { LogoutButton } from 'components/common/LogoutButton'
 import ChargeWallet from './ChargeWallet'
 import Contracts from './Contracts'
 import MyInfo from './MyInfo'
+import Wallet from './Wallet'
 
 import './style/dashboard.scss'
 
@@ -48,6 +49,12 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
         Icon: TransactionSvg,
         Component: MyInfo,
         id: 'transactins',
+    },
+    {
+        title: 'کیف پول',
+        Icon: WalletSvg,
+        Component: Wallet,
+        id: 'wallet',
     },
     {
         title: 'افزایش موجودی',
