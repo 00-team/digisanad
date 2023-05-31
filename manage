@@ -9,7 +9,7 @@ clear
 
 case $1 in
 run)
-    DEVELOPMENT=1 uvicorn main:app --reload --port 7000 --use-colors
+    DEVELOPMENT=1 uvicorn main:app --reload --port 7100 --use-colors
     ;;
 
 red)
