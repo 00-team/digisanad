@@ -1,7 +1,8 @@
 
 from fastapi import APIRouter, Response
 
-from api.models.auth import AuthResponse, LoginBody, RegisterBody
+from api.models.auth import LoginBody, LoginResponse, RegisterBody
+from api.models.auth import RegisterResponse
 from api.verification import Action, verify_verification
 from db.models import UserTable
 from db.user import user_add, user_get, user_update
@@ -17,7 +18,7 @@ router = APIRouter(
 
 
 @router.post(
-    '/register/', response_model=AuthResponse,
+    '/register/', response_model=RegisterResponse,
     openapi_extra={'errors': [account_exists, bad_verification]}
 )
 async def register(response: Response, body: RegisterBody):
@@ -59,7 +60,7 @@ async def register(response: Response, body: RegisterBody):
 
 
 @router.post(
-    '/login/', response_model=AuthResponse,
+    '/login/', response_model=LoginResponse,
     openapi_extra={'errors': [register_required, bad_verification]}
 )
 async def login(response: Response, body: LoginBody):
@@ -73,6 +74,7 @@ async def login(response: Response, body: LoginBody):
 
     token, token_hash = new_token()
     await user_update(UserTable.user_id == user.user_id, token=token_hash)
+    user.token = token_hash[:32]
 
     token = f'{user.user_id}:{token}'
     response.set_cookie(
@@ -83,6 +85,6 @@ async def login(response: Response, body: LoginBody):
     )
 
     return {
-        'user_id': user.user_id,
+        'user': user,
         'token': token,
     }

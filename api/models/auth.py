@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, conlist, constr, validator
 
-from api.verification import Action
+from db.models import UserModel
 from shared.jdate import jdate, jdatetime
 from shared.validators import NationalID, PhoneNumber, PostalCode
 from shared.validators import VerificationCode
@@ -9,6 +9,11 @@ from shared.validators import VerificationCode
 class LoginBody(BaseModel):
     phone: PhoneNumber
     code: VerificationCode
+
+
+class LoginResponse(BaseModel):
+    user: UserModel
+    token: str
 
 
 class RegisterBody(LoginBody):
@@ -51,6 +56,6 @@ class RegisterBody(LoginBody):
         return value
 
 
-class AuthResponse(BaseModel):
+class RegisterResponse(BaseModel):
     user_id: int
     token: str
