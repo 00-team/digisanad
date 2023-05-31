@@ -6,6 +6,7 @@ from db.models import UserModel, WalletTable
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared.crypto import update_wallet
+from shared.tools import now
 
 router = APIRouter(
     prefix='/user',
@@ -43,5 +44,5 @@ async def wallet(request: Request):
         wallet = new_wallet
 
     response = wallet.dict()
-    response['next_update'] = wallet.next_update
+    response['next_update'] = now() + wallet.next_update
     return response
