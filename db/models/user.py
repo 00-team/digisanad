@@ -6,7 +6,7 @@ from sqlalchemy import JSON, Column, Integer, String, text
 from .common import BaseTable
 
 
-class UsersTable(BaseTable):
+class UserTable(BaseTable):
     __tablename__ = 'users'
 
     user_id = Column(Integer, primary_key=True, index=True, autoincrement=True)

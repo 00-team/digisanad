@@ -4,7 +4,7 @@ from hashlib import sha3_512, sha256
 from fastapi import Depends, Request, Response
 from fastapi.security import HTTPBearer
 
-from db.models import UserModel, UsersTable
+from db.models import UserModel, UserTable
 from db.rate_limit import rate_limit_get, rate_limit_set
 from db.user import user_get
 from shared.errors import bad_auth, forbidden, rate_limited
@@ -74,7 +74,7 @@ def user_required():
             return state
 
         user_id, token = id_token(token.credentials)
-        user = await user_get(UsersTable.user_id == user_id)
+        user = await user_get(UserTable.user_id == user_id)
 
         if user is None:
             await rate_limit(request, 'user_token_check')

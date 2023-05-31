@@ -3,11 +3,11 @@ from sqlalchemy import insert, select, update
 
 from shared import sqlx
 
-from .models import UserModel, UsersTable
+from .models import UserModel, UserTable
 
 
 async def user_get(*where) -> UserModel | None:
-    row = await sqlx.fetch_one(select(UsersTable).where(*where))
+    row = await sqlx.fetch_one(select(UserTable).where(*where))
     if row is None:
         return None
 
@@ -16,13 +16,13 @@ async def user_get(*where) -> UserModel | None:
 
 async def user_update(*where, **values: dict):
     await sqlx.execute(
-        update(UsersTable).where(*where),
+        update(UserTable).where(*where),
         values
     )
 
 
 async def user_add(**values: dict) -> int:
-    return await sqlx.execute(insert(UsersTable), values)
+    return await sqlx.execute(insert(UserTable), values)
 
 
 async def user_count() -> int:
@@ -31,4 +31,4 @@ async def user_count() -> int:
 
 
 async def user_get_all(limit: int, offset: int):
-    return await sqlx.fetch_all(select(UsersTable).limit(limit).offset(offset))
+    return await sqlx.fetch_all(select(UserTable).limit(limit).offset(offset))
