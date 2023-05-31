@@ -34,7 +34,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_balance = await W3.eth.get_balance(acc.address)
     tokens = {}
 
-    for k, t in ETH_TOKENS:
+    for k, t in ETH_TOKENS.items():
         tokens[k] = await t['contract'].functions.balanceOf(acc.address).call()
 
     if wallet is None:
