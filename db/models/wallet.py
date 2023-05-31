@@ -24,6 +24,7 @@ class WalletTable(BaseTable):
     last_update = Column(Integer, nullable=False, server_default=text('0'))
     eth_pk = Column(String, nullable=False)
     eth_addr = Column(String, nullable=False)
+    eth_balance = Column(Integer, nullable=False, server_default=text('0'))
     eth_tokens = Column(JSON, nullable=False, server_default='{}')
 
 
@@ -33,6 +34,7 @@ class WalletModel(BaseModel):
     last_update: int
     eth_pk: str
     eth_addr: str
+    eth_balance: int
     eth_tokens: dict
 
     @property
