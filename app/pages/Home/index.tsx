@@ -9,7 +9,6 @@ const Home: FC = () => {
     return (
         <main className='home'>
             <Welcomer />
-
             <HeroSection />
         </main>
     )

@@ -1,5 +1,6 @@
 section.hero-container {
     height: 90vh;
+    position: relative;
 
     background-repeat: no-repeat;
     background-size: cover;
@@ -109,14 +110,24 @@ section.hero-container {
             }
             button {
                 padding: 10px 15px;
-
                 cursor: pointer;
-
                 border-radius: 10px;
                 border: none;
-
                 background-color: var(--ten-percent);
             }
         }
+    }
+
+    .dash-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background-color: var(--ten-percent);
+        color: inherit;
+        text-decoration: none;
     }
 }
