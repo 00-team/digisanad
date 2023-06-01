@@ -12,7 +12,7 @@ type EthTokens = {
 
 const ETH_TOKENS: EthTokens = {
     usdt: {
-        name: 'Tether USD (USDT)',
+        name: 'تتر',
         logo: TetherSvg,
     },
 } as const
