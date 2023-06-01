@@ -30,6 +30,9 @@
 }
 
 .clouds-container {
+    position: absolute;
+    top: 0;
+
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -39,8 +42,7 @@
 
     background-color: #87ceeb;
 
-    position: absolute;
-    top: 0;
+    overflow: hidden;
     z-index: -1;
 
     .cloud {
