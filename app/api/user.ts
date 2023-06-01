@@ -24,7 +24,9 @@ const get_wallet = async (token: string): Promise<WalletModel | null> => {
                 Authorization: 'Bearer ' + token,
             },
         })
-        return response.data
+        const wallet: WalletModel = response.data
+        wallet.next_update = Date.now() + wallet.next_update * 1000
+        return wallet
     } catch (error) {
         console.log('error in [get_wallet] -- ' + error)
     }
