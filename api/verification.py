@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from shared import redis, settings
 from shared.errors import bad_verification
-from shared.sms import send_sms
+from shared.sms import send_code_sms
 from shared.validators import PhoneNumber
 
 NS = 'verification'
@@ -89,10 +89,7 @@ async def verification(data: VerificationData):
         settings.verification_expire, nx=True
     )
 
-    await send_sms(
-        data.phone,
-        f'verification code is: {code}'
-    )
+    await send_code_sms(data.phone, code)
 
     return VerificationResponse(
         expires=settings.verification_expire,

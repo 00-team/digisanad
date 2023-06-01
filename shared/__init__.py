@@ -24,6 +24,7 @@ class Settings(BaseSettings):
 
     redis_pass: str
     infura_token: str
+    meilisms_tokne: str
 
     verification_expire = 2 * 60
     verification_code_len = 5
