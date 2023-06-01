@@ -1,17 +1,19 @@
-import TetherLogo from 'static/token/tether.svg'
+import { FC } from 'react'
+
+import { TetherSvg } from 'icons'
 
 type EthTokesKeys = 'usdt'
 type EthTokens = {
     [k in EthTokesKeys]: {
         name: string
-        logo: string
+        logo: FC
     }
 }
 
 const ETH_TOKENS: EthTokens = {
     usdt: {
         name: 'Tether USD (USDT)',
-        logo: TetherLogo,
+        logo: TetherSvg,
     },
 } as const
 
