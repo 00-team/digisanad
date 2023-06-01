@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { TetherSvg } from 'icons'
 
-type EthTokesKeys = 'usdt'
+type EthTokesKeys = 'usdt' | 'shib'
 type EthTokens = {
     [k in EthTokesKeys]: {
         name: string
@@ -13,6 +13,10 @@ type EthTokens = {
 const ETH_TOKENS: EthTokens = {
     usdt: {
         name: 'تتر',
+        logo: TetherSvg,
+    },
+    shib: {
+        name: 'شیبا',
         logo: TetherSvg,
     },
 } as const

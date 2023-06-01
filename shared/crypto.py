@@ -21,6 +21,13 @@ ETH_TOKENS = {
             '0xdAC17F958D2ee523a2206206994597C13D831ec7',
             abi=get_abi('usdt')
         )
+    },
+    'shib': {
+        'name': 'Shiba INU',
+        'contract': W3.eth.contract(
+            '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+            abi=get_abi('shib')
+        )
     }
 }
 
