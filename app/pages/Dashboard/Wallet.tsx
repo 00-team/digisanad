@@ -1,77 +1,91 @@
 import React, { FC, useEffect } from 'react'
 
+import { get_wallet } from 'api'
 import { CoinSvg } from 'icons'
 
-import { useAtom } from 'jotai'
-import { WalletAtom } from 'state'
+import { useAtom, useAtomValue } from 'jotai'
+import { EthTokesKeys, ETH_TOKENS, TokenAtom, WalletAtom } from 'state'
 
-import { Submit } from 'components'
+import { NationalIdSvg } from 'icons/Dashboard/NationalId'
 
 import './style/wallet.scss'
 
 const Wallet: FC = () => {
     const [wallet, setWallet] = useAtom(WalletAtom)
-    // const [ChargeAmount, setChargeAmount] = useState<number>(0)
-    //
+    const token = useAtomValue(TokenAtom)
+
     useEffect(() => {
-        console.log('in wallet', wallet)
-        setWallet
+        // this should never be reached
+        // but anyway
+        if (!token) return
+
+        if (wallet == null || wallet.next_update < Date.now()) {
+            get_wallet(token).then(data => setWallet(data))
+            return
+        }
     }, [])
 
+    if (wallet == null) {
+        return <section id='wallet'>No Wallet</section>
+    }
+
     return (
-        <section id='chargewallet' className='chargewallet-container'>
-            <div className='section-header section_title'>افزایش موجودی</div>
-            <div className='chargewallet-wrapper'>
-                <div className='supported-banks-wrapper title'>
-                    <div className='banks-header'>
-                        <span>بانک های قابل برداشت</span>
-                    </div>
-                </div>
-                <div className='charge-amount'>
-                    <div className='amount-holder title'>
-                        <div className='icon'>
-                            <CoinSvg />
-                        </div>
-                        <div className='holder'>مقدار واریزی</div>
-                    </div>
-                    {/*
-                    <div className='amount-inp title_small'>
-                        <div
-                            className='option icon'
-                            onClick={() =>
-                                setChargeAmount(ChargeAmount + 10000)
-                            }
-                        >
-                            <PlusSvg />
-                        </div>
-                        <input
-                            inputMode={'numeric'}
-                            placeholder='مقدار واریزی به تومان...'
-                            value={Intl.NumberFormat().format(ChargeAmount)}
-                            onChange={e => {
-                                const value = e.target.value
-                                if (/^\d+$/.test(value)) {
-                                    setChargeAmount(parseInt(value))
-                                }
-                            }}
-                        />
-                        <div
-                            className='option icon'
-                            onClick={() =>
-                                ChargeAmount - 10000 >= 0 &&
-                                setChargeAmount(ChargeAmount - 10000)
-                            }
-                        >
-                            <MinusSvg />
-                        </div>
-                    </div>
-                */}
-                </div>
-                <div className='submit-charge'>
-                    <Submit className='title_small' title='پرداخت' />
+        <section id='wallet' className='wallet-container'>
+            <div className='section-header section_title'>کیف پول</div>
+            <div className='wallet-wrapper'>
+                <div className='rows'>
+                    <Row
+                        Svg={CoinSvg}
+                        data={wallet.eth_balance.toLocaleString()}
+                        holder={'مقدار اتریوم'}
+                    />
+                    <Row
+                        Svg={NationalIdSvg}
+                        data={
+                            <input
+                                className='addr'
+                                value={wallet.eth_addr}
+                                onChange={() => {}}
+                            />
+                        }
+                        holder={'آدرس اتریوم'}
+                    />
+                    {Object.entries(wallet.eth_tokens).map(
+                        ([token_key, token_balance]) => {
+                            let D = ETH_TOKENS[token_key as EthTokesKeys]
+                            return (
+                                <Row
+                                    holder={D.name}
+                                    Svg={D.logo}
+                                    data={token_balance}
+                                />
+                            )
+                        }
+                    )}
                 </div>
             </div>
         </section>
+    )
+}
+
+interface RowProps {
+    Svg: FC
+    holder: string
+    data: React.ReactNode
+    className?: string
+}
+
+const Row: FC<RowProps> = ({ data, holder, Svg, className }) => {
+    return (
+        <div className={`row title ${className && className}`}>
+            <div className='nickname-title title  row-title'>
+                <div className='icon'>
+                    <Svg />
+                </div>
+                {holder}
+            </div>
+            <div className='row-data '>{data}</div>
+        </div>
     )
 }
 
