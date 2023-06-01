@@ -1,13 +1,14 @@
 import React, { CSSProperties, FC, useState } from 'react'
 
+import { C } from '@00-team/utils'
+
 import { SendSvg } from 'icons/Actions/Send'
 import { useNavigate } from 'react-router-dom'
 
 import { useSetAtom } from 'jotai'
-import { LoginAtom, UserAtom } from 'state'
+import { LoginAtom, TokenAtom, UserAtom } from 'state'
 
 import './style/logoutbutton.scss'
-import { C } from '@00-team/utils'
 
 interface LogoutButtonProps {
     style?: React.CSSProperties
@@ -18,6 +19,7 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
     const [AppliedClasses, setAppliedClasses] = useState('')
     const setLogin = useSetAtom(LoginAtom)
     const setUser = useSetAtom(UserAtom)
+    const setToken = useSetAtom(TokenAtom)
     const navigate = useNavigate()
 
     const handleClick = () => {
@@ -41,6 +43,7 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
             setButtonKey('walking4')
             // clear the login info and user then go to Home page
             setLogin('clear')
+            setToken('')
             setUser('clear')
             navigate('/')
         }, timeout3)
@@ -70,7 +73,10 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
             <div className='column'>
                 <div className='holder-icon icon'>
                     <button
-                        className={`logoutButton ${AppliedClasses} ${C(ButtonKey === "hover",'hover')}`}
+                        className={`logoutButton ${AppliedClasses} ${C(
+                            ButtonKey === 'hover',
+                            'hover'
+                        )}`}
                         style={StyleByState(ButtonKey)}
                     >
                         <svg className='doorway' viewBox='0 0 100 100'>
