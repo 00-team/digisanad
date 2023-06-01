@@ -3,7 +3,7 @@ import json
 
 from db.models import WalletModel
 from shared import W3, settings
-from shared.tools import now
+from shared.tools import utc_now
 
 
 def get_abi(name: str) -> list:
@@ -41,14 +41,14 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
         return WalletModel(
             wallet_id=0,
             user_id=0,
-            last_update=now(),
+            last_update=utc_now(),
             eth_pk=acc.key.hex(),
             eth_addr=acc.address,
             eth_balance=eth_balance,
             eth_tokens=tokens
         )
 
-    wallet.last_update = now()
+    wallet.last_update = utc_now()
     wallet.eth_balance = eth_balance
     wallet.eth_tokens = tokens
     wallet.eth_pk = acc.key.hex()

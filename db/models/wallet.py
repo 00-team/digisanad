@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
 
 from shared import settings
-from shared.tools import now
+from shared.tools import utc_now
 
 from .common import BaseTable
 from .user import UserTable
@@ -39,4 +39,4 @@ class WalletModel(BaseModel):
 
     @property
     def next_update(self) -> int:
-        return (self.last_update + settings.update_wallet_timeout) - now()
+        return (self.last_update + settings.update_wallet_timeout) - utc_now()

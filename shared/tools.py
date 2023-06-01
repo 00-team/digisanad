@@ -7,13 +7,13 @@ from secrets import choice as secret_choice
 from shared import settings
 
 
-def now(dt: bool = False) -> int | datetime:
-    _now = datetime.utcnow()
+def utc_now(as_datetime: bool = False) -> int | datetime:
+    now = datetime.utcnow()
 
-    if dt:
-        return _now
+    if as_datetime:
+        return now
 
-    return int(_now.timestamp())
+    return int(now.timestamp())
 
 
 def get_random_code() -> str:
