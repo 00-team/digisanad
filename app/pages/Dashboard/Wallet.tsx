@@ -26,7 +26,14 @@ const Wallet: FC = () => {
     }, [])
 
     if (wallet == null) {
-        return <section id='wallet'>No Wallet</section>
+        return (
+            <section id='wallet' className='wallet-container'>
+                <div className='section-header section_title'>کیف پول</div>
+                <div className='wallet-wrapper'>
+                    <span className='title'>درحال بارگذاری</span>
+                </div>
+            </section>
+        )
     }
 
     return (
