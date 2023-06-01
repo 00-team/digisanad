@@ -46,8 +46,6 @@ async def wallet(request: Request):
         wallet = new_wallet
 
     response = wallet.dict()
-    response['next_update'] = (
-        utc_now(True) + timedelta(seconds=wallet.next_update)
-    ).isoformat()
+    response['next_update'] = wallet.next_update
 
     return response
