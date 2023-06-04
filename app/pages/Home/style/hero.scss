@@ -30,6 +30,15 @@ section.hero-container {
 
             overflow: hidden;
 
+            &.cms {
+                width: auto;
+
+                &::before,
+                &::after {
+                    content: none;
+                }
+            }
+
             span {
                 padding: 0 50px;
                 display: inline-block;
