@@ -20,8 +20,11 @@ const HeroSection: FC = () => {
                 <div className='title_hero logo-text hero-header'>
                     <span>Digi Sanad</span>
                 </div>
+                <div className='title logo-text hero-header cms'>
+                    <span>Contract Management System (CMS)</span>
+                </div>
                 <div className='title words-wrapper'>
-                    {'راه حلی برای تنظیم قرار داد های فیزیکی'
+                    {'سیستم مدیریت قرارداد های هوشمند'
                         .split(' ')
                         .map((word, index) => {
                             return (
