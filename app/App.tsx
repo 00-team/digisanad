@@ -6,6 +6,8 @@ import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
 
 // import { Login } from 'pages/Authenticate/Login'
+import Footer from 'components/layout/Footer'
+
 import './style/base.scss'
 import './style/font/imports.scss'
 
@@ -38,6 +40,7 @@ const App: FC = () => {
     return (
         <>
             <MainContent />
+            <Footer />
         </>
     )
 }
