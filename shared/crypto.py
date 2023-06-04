@@ -20,14 +20,16 @@ ETH_TOKENS = {
         'contract': W3.eth.contract(
             '0xdAC17F958D2ee523a2206206994597C13D831ec7',
             abi=get_abi('usdt')
-        )
+        ),
+        'div_by': 10 ** 6  # decimals function in the contract
     },
     'shib': {
         'name': 'Shiba INU',
         'contract': W3.eth.contract(
             '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
             abi=get_abi('shib')
-        )
+        ),
+        'div_by': 10 ** 18
     }
 }
 
@@ -42,7 +44,8 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     tokens = {}
 
     for k, t in ETH_TOKENS.items():
-        tokens[k] = await t['contract'].functions.balanceOf(acc.address).call()
+        amount = await t['contract'].functions.balanceOf(acc.address).call()
+        tokens[k] = amount / t['div_by']
 
     if wallet is None:
         return WalletModel(
