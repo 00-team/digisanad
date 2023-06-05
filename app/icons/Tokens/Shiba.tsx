@@ -6,7 +6,7 @@ export const ShibaSvg: FC = () => {
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 641.7 649'
             width={25}
-            height={5}
+            height={25}
         >
             <g transform='translate(-953.348 -232.003)'>
                 <g>
