@@ -14,7 +14,11 @@ const HeroSection: FC = () => {
     return (
         <section
             className='hero-container'
-            style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+            style={{
+                backgroundImage: `
+            linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+            url(${HERO_IMAGE})`,
+            }}
         >
             <div className='hero-wrapper'>
                 <div className='title_hero logo-text hero-header'>
