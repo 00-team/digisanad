@@ -2,7 +2,8 @@
 
 ## Todos
 
--   [ ] sql migratio support
+-   [x] sql migratio support
+-   [ ] logging
 
 ## User
 
