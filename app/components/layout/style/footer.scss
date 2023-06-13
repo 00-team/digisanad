@@ -20,67 +20,6 @@ footer.footer-container {
         flex-direction: column;
         gap: calc(5vh + 10px);
 
-        .footer-header {
-            width: 100%;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-            flex-wrap: wrap;
-            row-gap: calc(2.5vh + 5px);
-
-            padding-bottom: calc(3vh + 5px);
-            padding-top: calc(3vh + 5px);
-
-            border-block-end: 1px solid;
-            border-image-source: linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0),
-                black,
-                rgba(0, 0, 0, 0)
-            );
-            border-image-slice: 1;
-
-            .footer-header-row {
-                display: flex;
-                width: clamp(0px, 100%, 300px);
-                column-gap: calc(1vw + 5px);
-
-                cursor: pointer;
-
-                .header-icon {
-                    .icon-wrapper {
-                        background: var(--sixty-percent);
-                        border-radius: 10px;
-                        display: grid;
-                        place-items: center;
-                        padding: 7px;
-                        color: black;
-
-                        aspect-ratio: 1/1;
-                        width: 50px;
-                    }
-                }
-
-                .header-wrapper {
-                    display: flex;
-                    flex-direction: column;
-                    row-gap: calc(1.5vh + 3px);
-
-                    .holder {
-                        opacity: 0.5;
-                        font-weight: bold;
-                    }
-                    .data {
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-                }
-            }
-        }
         .footer-content-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -130,113 +69,13 @@ footer.footer-container {
             }
             .footer-content {
                 display: flex;
+                justify-content: center;
                 flex-direction: column;
                 row-gap: calc(5vh + 10px);
 
+                height: 100%;
                 width: clamp(0px, 100%, 700px);
 
-                .content-socials {
-                    width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    column-gap: calc(5vw + 10px);
-                    row-gap: calc(2.5vh + 5px);
-
-                    @media screen and (max-width: 1024px) {
-                        justify-content: center;
-                    }
-
-                    .social {
-                        border-radius: 100vmax;
-                        color: white;
-
-                        cursor: pointer;
-
-                        position: relative;
-                        isolation: isolate;
-                        overflow: hidden;
-
-                        &::before {
-                            content: '';
-                            position: absolute;
-
-                            width: 0;
-                            height: 0;
-                            border-radius: 100vmax;
-                            background-color: white;
-
-                            z-index: -1;
-
-                            transition: all 0.5s
-                                cubic-bezier(0.45, 0.02, 0.09, 0.98);
-                        }
-                        &:hover {
-                            &.telegram {
-                                svg {
-                                    color: #08a0e9;
-                                }
-                            }
-                            &.whatsapp {
-                                svg {
-                                    color: #1dee40;
-                                }
-                            }
-                            &.instagram {
-                                svg {
-                                    color: #bb2d93;
-                                }
-                            }
-                            &::before {
-                                width: 90%;
-                                height: 90%;
-                            }
-                        }
-
-                        svg {
-                            transition: color 0.5s
-                                cubic-bezier(0.45, 0.02, 0.09, 0.98);
-                        }
-
-                        &.telegram {
-                            background: linear-gradient(
-                                    to bottom,
-                                    rgba(255, 255, 255, 0.2),
-                                    rgba(0, 0, 0, 0.15)
-                                ),
-                                #08a0e9;
-                        }
-                        &.whatsapp {
-                            background: linear-gradient(
-                                    to bottom,
-                                    rgba(255, 255, 255, 0.2),
-                                    rgba(0, 0, 0, 0.2)
-                                ),
-                                linear-gradient(
-                                    -35deg,
-                                    #69c9d0 30%,
-                                    #1dee40 75%
-                                );
-                        }
-                        &.instagram {
-                            background: linear-gradient(
-                                    to bottom,
-                                    rgba(255, 255, 255, 0.1),
-                                    rgba(0, 0, 0, 0.1)
-                                ),
-                                linear-gradient(
-                                    180deg,
-                                    #f99257 0%,
-                                    #e42d59 25%,
-                                    #bb2d93 65%,
-                                    #7738c5 100%
-                                );
-                        }
-
-                        svg {
-                            margin: 15px;
-                        }
-                    }
-                }
                 .content-row-wrapper {
                     display: flex;
                     flex-wrap: wrap;
