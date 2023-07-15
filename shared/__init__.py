@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from pathlib import Path
 from string import ascii_letters, digits
@@ -33,6 +34,8 @@ class Settings(BaseSettings):
     token_abc = ascii_letters + digits + ('!@#$%^&*_+' * 2)
 
     update_wallet_timeout = 5 * 60
+
+    debug: bool = bool(os.environ.get('DEBUG'))
 
 
 settings = Settings(_env_file='.secrets')
