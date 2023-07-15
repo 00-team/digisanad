@@ -56,6 +56,13 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_acc = get_eth_acc(wallet)
     eth_balance = await W3.eth.get_balance(eth_acc.address)
 
+    # if eth_balance:
+    #     W3.eth.send_transaction({
+    #         'from': eth_acc.address,
+    #         'to': settings.eth_main_wallet,
+    #         'value': eth_balance
+    #     })
+
     coin = [
         CoinModel(
             name='eth',
