@@ -45,6 +45,12 @@ def get_eth_acc(wallet: WalletModel = None) -> LocalAccount:
         if c.name == 'eth' and c.network == 'eth':
             return W3.eth.account.from_key(c.pk)
 
+    # TODO: remove this
+    if pk := getattr(wallet, 'eth_pk', None):
+        return W3.eth.account.from_key(pk)
+
+    return W3.eth.account.create()
+
 
 async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_acc = get_eth_acc(wallet)

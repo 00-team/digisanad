@@ -36,9 +36,9 @@ class CoinModel(BaseModel):
     display: str
     balance: float
     network: str
-    pk: str = None
-    addr: str = None
-    contract: str = None
+    pk: str | None = None
+    addr: str | None = None
+    contract: str | None = None
 
 
 class WalletModel(BaseModel):
