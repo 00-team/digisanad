@@ -1,4 +1,6 @@
 
+from pydantic_core import core_schema
+
 from shared import settings
 from shared.tools import isallnum
 
@@ -10,12 +12,21 @@ class VerificationCode(str):
         yield cls.validate
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['99999', '12345'],
-            maxLength=settings.verification_code_len,
-            minLength=settings.verification_code_len
+    def __get_pydantic_core_schema__(cls, source, handler):
+        return core_schema.str_schema(
+            max_length=settings.verification_code_len,
+            min_length=settings.verification_code_len,
+            strict=True,
+            metadata={'example': '99999'}
         )
+
+    # @classmethod
+    # def __modify_schema__(cls, field_schema):
+    #     field_schema.update(
+    #         examples=['99999', '12345'],
+    #         maxLength=settings.verification_code_len,
+    #         minLength=settings.verification_code_len
+    #     )
 
     @classmethod
     def validate(cls, value):
@@ -37,16 +48,25 @@ class VerificationCode(str):
 class PhoneNumber(str):
 
     @classmethod
+    def __get_pydantic_core_schema__(cls, source, handler):
+        return core_schema.str_schema(
+            max_length=11,
+            min_length=11,
+            strict=True,
+            metadata={'example': '09223334444'}
+        )
+
+    @classmethod
     def __get_validators__(cls):
         yield cls.validate
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['09223334444', '09123456789'],
-            maxLength=11,
-            minLength=11
-        )
+    # @classmethod
+    # def __modify_schema__(cls, field_schema):
+    #     field_schema.update(
+    #         examples=['09223334444', '09123456789'],
+    #         maxLength=11,
+    #         minLength=11
+    #     )
 
     @classmethod
     def validate(cls, value):
@@ -72,11 +92,12 @@ class NationalID(str):
         yield cls.validate
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['0625557777'],
-            maxLength=10,
-            minLength=10
+    def __get_pydantic_core_schema__(cls, source, handler):
+        return core_schema.str_schema(
+            max_length=10,
+            min_length=10,
+            strict=True,
+            metadata={'examples': '0625557777'}
         )
 
     @classmethod
@@ -103,11 +124,12 @@ class PostalCode(str):
         yield cls.validate
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['1234567890'],
-            maxLength=10,
-            minLength=10
+    def __get_pydantic_core_schema__(cls, source, handler):
+        return core_schema.str_schema(
+            max_length=10,
+            min_length=10,
+            strict=True,
+            metadata={'examples': '1234567890'}
         )
 
     @classmethod
