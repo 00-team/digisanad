@@ -51,7 +51,7 @@ class VerificationResponse(BaseModel):
     action: Action
 
     class Config:
-        schema_extra = {'example': {
+        json_schema_extra = {'example': {
             'expires': 102,
             'action': Action.login
         }}
