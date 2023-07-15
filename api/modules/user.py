@@ -1,5 +1,4 @@
 
-from datetime import timedelta
 
 from fastapi import APIRouter, Request
 
@@ -8,7 +7,6 @@ from db.models import UserModel, WalletTable
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared.crypto import update_wallet
-from shared.tools import utc_now
 
 router = APIRouter(
     prefix='/user',
@@ -52,3 +50,8 @@ async def wallet(request: Request):
         response['eth_tokens'][k] = str(response['eth_tokens'][k])
 
     return response
+
+
+@router.post('/transfer/')
+async def transfer(request: Request):
+    return {'hi': 0}
