@@ -35,6 +35,8 @@ class Settings(BaseSettings):
 
     update_wallet_timeout: int = 5 * 60
 
+    eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
+
     debug: bool = False
 
 

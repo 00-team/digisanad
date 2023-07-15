@@ -22,16 +22,31 @@ class WalletTable(BaseTable):
         nullable=False, index=True
     )
     last_update = Column(Integer, nullable=False, server_default=text('0'))
+    coin = Column(JSON, nullable=False, server_default='[]')
+
+    # deprecated
     eth_pk = Column(String, nullable=False)
     eth_addr = Column(String, nullable=False)
     eth_balance = Column(Integer, nullable=False, server_default=text('0'))
     eth_tokens = Column(JSON, nullable=False, server_default='{}')
 
 
+class CoinModel(BaseModel):
+    name: str
+    display: str
+    balance: float
+    network: str
+    pk: str = None
+    addr: str = None
+    contract: str = None
+
+
 class WalletModel(BaseModel):
     wallet_id: int
     user_id: int
     last_update: int
+    coin: list[CoinModel]
+    # deprecated
     eth_pk: str
     eth_addr: str
     eth_balance: int

@@ -1,7 +1,9 @@
 
 import json
 
-from db.models import WalletModel
+from eth_account.signers.local import LocalAccount
+
+from db.models import CoinModel, WalletModel
 from shared import W3, settings
 from shared.tools import utc_now
 
@@ -12,6 +14,7 @@ def get_abi(name: str) -> list:
         return json.load(f)
 
 
+ERC20_ABI = get_abi('erc20')
 ETH_WEI = 1e18
 ETH_GWEI = 1e9
 ETH_TOKENS = {
@@ -19,50 +22,68 @@ ETH_TOKENS = {
         'name': 'Tether USD',
         'contract': W3.eth.contract(
             '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-            abi=get_abi('usdt')
+            abi=ERC20_ABI
         ),
-        'div_by': 10 ** 6  # decimals function in the contract
+        'decimals': 10 ** 6  # decimals function in the contract
     },
     'shib': {
         'name': 'Shiba INU',
         'contract': W3.eth.contract(
             '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
-            abi=get_abi('shib')
+            abi=ERC20_ABI
         ),
-        'div_by': 10 ** 18
+        'decimals': 10 ** 18
     }
 }
 
 
-async def update_wallet(wallet: WalletModel = None) -> WalletModel:
+def get_eth_acc(wallet: WalletModel = None) -> LocalAccount:
     if wallet is None:
-        acc = W3.eth.account.create()
-    else:
-        acc = W3.eth.account.from_key(wallet.eth_pk)
+        return W3.eth.account.create()
 
-    eth_balance = await W3.eth.get_balance(acc.address)
-    tokens = {}
+    for c in wallet.coin:
+        if c.name == 'eth' and c.network == 'eth':
+            return W3.eth.account.from_key(c.pk)
+
+
+async def update_wallet(wallet: WalletModel = None) -> WalletModel:
+    eth_acc = get_eth_acc(wallet)
+    eth_balance = await W3.eth.get_balance(eth_acc.address)
+
+    coin = [
+        CoinModel(
+            name='eth',
+            display='Ether',
+            network='eth',
+            balance=eth_balance,
+            pk=eth_acc.key.hex(),
+            addr=eth_acc.address
+        )
+    ]
 
     for k, t in ETH_TOKENS.items():
-        amount = await t['contract'].functions.balanceOf(acc.address).call()
-        tokens[k] = amount / t['div_by']
+        amount = await t['contract'].functions.balanceOf(
+            eth_acc.address
+        ).call()
+        if amount:
+            coin.append(CoinModel(
+                name=k,
+                display=t['name'],
+                balance=amount / t['decimals'],
+                network='eth',
+                contract=t['contract'].address,
+            ))
 
     if wallet is None:
         return WalletModel(
             wallet_id=0,
             user_id=0,
             last_update=utc_now(),
-            eth_pk=acc.key.hex(),
-            eth_addr=acc.address,
-            eth_balance=eth_balance,
-            eth_tokens=tokens
+            coin=coin,
         )
 
     wallet.last_update = utc_now()
-    wallet.eth_balance = eth_balance
-    wallet.eth_tokens = tokens
-    wallet.eth_pk = acc.key.hex()
-    wallet.eth_addr = acc.address
+    wallet.coin = coin
 
     return wallet
 

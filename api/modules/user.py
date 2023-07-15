@@ -47,14 +47,16 @@ async def wallet(request: Request):
     response = wallet.dict()
     response['next_update'] = wallet.next_update
 
-    for k, t in response['eth_tokens'].items():
-        response['eth_tokens'][k] = str(response['eth_tokens'][k])
+    # for k, t in response['eth_tokens'].items():
+    #     response['eth_tokens'][k] = str(response['eth_tokens'][k])
 
     return response
 
 
 class TransferBody(BaseModel):
     addr: constr(min_length=16, max_length=1024)
+    coin_name: str
+    coin_network: str
 
 
 @router.post('/transfer/')
