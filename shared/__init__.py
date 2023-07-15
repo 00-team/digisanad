@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     update_wallet_timeout: int = 5 * 60
 
-    debug: bool = False  # = bool(os.environ.get('DEBUG'))
+    debug: bool = False
 
 
 settings = Settings(_env_file='.secrets')

@@ -1,6 +1,7 @@
 
 
 from fastapi import APIRouter, Request
+from pydantic import BaseModel, constr
 
 from api.models.user import WalletResponse
 from db.models import UserModel, WalletTable
@@ -52,6 +53,10 @@ async def wallet(request: Request):
     return response
 
 
+class TransferBody(BaseModel):
+    addr: constr(min_length=16, max_length=1024)
+
+
 @router.post('/transfer/')
-async def transfer(request: Request):
+async def transfer(request: Request, body: TransferBody):
     return {'hi': 0}
