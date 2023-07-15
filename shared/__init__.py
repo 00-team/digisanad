@@ -4,7 +4,7 @@ from pathlib import Path
 from string import ascii_letters, digits
 
 from databases import Database
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
 from web3 import AsyncHTTPProvider, AsyncWeb3
 
@@ -27,15 +27,15 @@ class Settings(BaseSettings):
     infura_token: str
     meilisms_tokne: str
 
-    verification_expire = 2 * 60
-    verification_code_len = 5
+    verification_expire: int = 2 * 60
+    verification_code_len: int = 5
 
-    token_len = 69
-    token_abc = ascii_letters + digits + ('!@#$%^&*_+' * 2)
+    token_len: int = 69
+    token_abc: str = ascii_letters + digits + ('!@#$%^&*_+' * 2)
 
-    update_wallet_timeout = 5 * 60
+    update_wallet_timeout: int = 5 * 60
 
-    debug: bool = bool(os.environ.get('DEBUG'))
+    debug: bool = False  # = bool(os.environ.get('DEBUG'))
 
 
 settings = Settings(_env_file='.secrets')
