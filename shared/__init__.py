@@ -1,4 +1,3 @@
-import os
 import sqlite3
 from pathlib import Path
 from string import ascii_letters, digits
@@ -6,7 +5,7 @@ from string import ascii_letters, digits
 from databases import Database
 from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
-from web3 import AsyncHTTPProvider, AsyncWeb3
+from web3 import AsyncHTTPProvider, AsyncWeb3, EthereumTesterProvider
 
 
 class Connection(sqlite3.Connection):
@@ -45,9 +44,12 @@ settings.sql_dir.mkdir(parents=True, exist_ok=True)
 
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
-W3 = AsyncWeb3(AsyncHTTPProvider(
-    'https://mainnet.infura.io/v3/' + settings.infura_token
-))
+if settings.debug:
+    w3 = AsyncWeb3(EthereumTesterProvider())
+else:
+    w3 = AsyncWeb3(AsyncHTTPProvider(
+        'https://mainnet.infura.io/v3/' + settings.infura_token
+    ))
 
 redis = Redis(
     password=settings.redis_pass,

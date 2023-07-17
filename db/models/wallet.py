@@ -33,9 +33,10 @@ class WalletTable(BaseTable):
 
 class CoinModel(BaseModel):
     name: str
-    display: str
-    balance: float
     network: str
+    display: str
+    balance: int
+    in_wallet: int
     pk: str | None = None
     addr: str | None = None
     contract: str | None = None

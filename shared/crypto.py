@@ -4,7 +4,7 @@ import json
 from eth_account.signers.local import LocalAccount
 
 from db.models import CoinModel, WalletModel
-from shared import W3, settings
+from shared import settings, w3
 from shared.tools import utc_now
 
 
@@ -20,7 +20,7 @@ ETH_GWEI = 1e9
 ETH_TOKENS = {
     'usdt': {
         'name': 'Tether USD',
-        'contract': W3.eth.contract(
+        'contract': w3.eth.contract(
             '0xdAC17F958D2ee523a2206206994597C13D831ec7',
             abi=ERC20_ABI
         ),
@@ -28,7 +28,7 @@ ETH_TOKENS = {
     },
     'shib': {
         'name': 'Shiba INU',
-        'contract': W3.eth.contract(
+        'contract': w3.eth.contract(
             '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
             abi=ERC20_ABI
         ),
@@ -39,22 +39,22 @@ ETH_TOKENS = {
 
 def get_eth_acc(wallet: WalletModel = None) -> LocalAccount:
     if wallet is None:
-        return W3.eth.account.create()
+        return w3.eth.account.create()
 
     for c in wallet.coin:
         if c.name == 'eth' and c.network == 'eth':
-            return W3.eth.account.from_key(c.pk)
+            return w3.eth.account.from_key(c.pk)
 
     # TODO: remove this
     if pk := getattr(wallet, 'eth_pk', None):
-        return W3.eth.account.from_key(pk)
+        return w3.eth.account.from_key(pk)
 
-    return W3.eth.account.create()
+    return w3.eth.account.create()
 
 
 async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_acc = get_eth_acc(wallet)
-    eth_balance = await W3.eth.get_balance(eth_acc.address)
+    eth_balance = await w3.eth.get_balance(eth_acc.address)
 
     # if eth_balance:
     #     W3.eth.send_transaction({
