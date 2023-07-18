@@ -55,13 +55,19 @@ def get_eth_acc(wallet: WalletModel = None) -> LocalAccount:
 async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_acc = get_eth_acc(wallet)
     eth_balance = await w3.eth.get_balance(eth_acc.address)
+    nonce = await w3.eth.get_transaction_count(eth_acc.address)
 
-    # if eth_balance:
-    #     W3.eth.send_transaction({
-    #         'from': eth_acc.address,
-    #         'to': settings.eth_main_wallet,
-    #         'value': eth_balance
-    #     })
+    if eth_balance:
+        st = eth_acc.sign_transaction({
+            'from': eth_acc.address,
+            'to': settings.eth_main_wallet,
+            'value': eth_balance,
+            'nonce': nonce,
+            'maxFeePerGas': 2 * ETH_GWEI,
+            'maxPriorityFeePerGas': 1 * ETH_GWEI
+        })
+        nonce += 1
+        tx = w3.eth.send_raw_transaction(st.rawTransaction)
 
     coin = [
         CoinModel(

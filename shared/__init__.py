@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     redis_pass: str
     infura_token: str
     meilisms_tokne: str
+    alchemy_test_token: str
+    alchemy_main_token: str
 
     verification_expire: int = 2 * 60
     verification_code_len: int = 5
@@ -45,7 +47,9 @@ settings.sql_dir.mkdir(parents=True, exist_ok=True)
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
 if settings.debug:
-    w3 = AsyncWeb3(EthereumTesterProvider())
+    w3 = AsyncWeb3(AsyncHTTPProvider(
+        'https://eth-sepolia.g.alchemy.com/v2/' + settings.alchemy_test_token
+    ))
 else:
     w3 = AsyncWeb3(AsyncHTTPProvider(
         'https://mainnet.infura.io/v3/' + settings.infura_token
