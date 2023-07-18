@@ -15,8 +15,8 @@ def get_abi(name: str) -> list:
 
 
 ERC20_ABI = get_abi('erc20')
-ETH_WEI = 1e18
-ETH_GWEI = 1e9
+ETH_WEI = 1_000_000_000_000_000_000
+ETH_GWEI = 1_000_000_000
 ETH_TOKENS = {
     'usdt': {
         'name': 'Tether USD',
@@ -57,14 +57,17 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eth_balance = await w3.eth.get_balance(eth_acc.address)
     nonce = await w3.eth.get_transaction_count(eth_acc.address)
 
-    if eth_balance:
+    gas = 21000
+    gas_price = w3.eth.gas_price
+
+    if eth_balance - 1e5 > gas * gas_price:
         st = eth_acc.sign_transaction({
             'from': eth_acc.address,
             'to': settings.eth_main_wallet,
-            'value': eth_balance,
+            'value': eth_balance - (gas * gas_price),
             'nonce': nonce,
-            'maxFeePerGas': 2 * ETH_GWEI,
-            'maxPriorityFeePerGas': 1 * ETH_GWEI
+            'gas': gas,
+            'gasPrice': gas_price,
         })
         nonce += 1
         tx = w3.eth.send_raw_transaction(st.rawTransaction)
