@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     token_abc: str = ascii_letters + digits + ('!@#$%^&*_+' * 2)
 
     update_wallet_timeout: int = 5 * 60
+    update_transaction_timeout: int = 1 * 60
 
     eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
 

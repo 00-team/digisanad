@@ -5,7 +5,7 @@ from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
 from shared import settings
 from shared.tools import utc_now
 
-from .common import BaseTable
+from .common import BaseTable, NetworkType
 from .user import UserTable
 
 
@@ -33,10 +33,10 @@ class WalletTable(BaseTable):
 
 class CoinModel(BaseModel):
     name: str
-    network: str
     display: str
-    balance: int
+    network: NetworkType
     in_wallet: int
+    in_system: int
     pk: str | None = None
     addr: str | None = None
     contract: str | None = None
@@ -47,6 +47,7 @@ class WalletModel(BaseModel):
     user_id: int
     last_update: int
     coin: list[CoinModel]
+
     # deprecated
     eth_pk: str
     eth_addr: str
