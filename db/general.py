@@ -6,7 +6,7 @@ from shared import sqlx
 from .models import GeneralModel, GeneralTable
 
 
-async def general_get() -> GeneralModel | None:
+async def general_get() -> GeneralModel:
     row = await sqlx.fetch_one(select(GeneralTable).limit(1))
     if row is None:
         gid = await sqlx.execute(insert(GeneralTable))
