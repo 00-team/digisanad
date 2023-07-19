@@ -9,7 +9,7 @@ class GeneralTable(BaseTable):
     __tablename__ = 'general'
 
     general_id = Column(Integer, primary_key=True, autoincrement=True)
-    coin = Column(JSON, nullable=False, server_default='[]')
+    coins = Column(JSON, nullable=False, server_default='{}')
 
 
 class GeneralCoin(BaseCoin):
@@ -19,4 +19,4 @@ class GeneralCoin(BaseCoin):
 
 class GeneralModel(BaseModel):
     general_id: int
-    coin: list[GeneralCoin]
+    coins: dict[str, GeneralCoin]

@@ -39,6 +39,18 @@ ETH_TOKENS = {
     }
 }
 
+ETHEREUM_COINS = [
+    WalletCoin(
+        name=k,
+        display=v['display'],
+        network=NetworkType.ethereum,
+        in_wallet=0,
+        in_system=0,
+        contract=v['contract'].address,
+    )
+    for k, v in ETH_TOKENS.items()
+]
+
 
 def get_eth_acc(wallet: WalletModel) -> LocalAccount:
     for c in wallet.coin:
@@ -71,14 +83,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             in_system=0,
             pk=eth_acc.key.hex(),
             addr=eth_acc.address
-        )] + [WalletCoin(
-            name=k,
-            display=v['display'],
-            network=NetworkType.ethereum,
-            in_wallet=0,
-            in_system=0,
-            contract=v['contract'].address,
-        ) for k, v in ETH_TOKENS.items()]
+        )] + ETHEREUM_COINS
 
         return WalletModel(
             wallet_id=0,
@@ -95,18 +100,23 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     gas_price = w3.eth.gas_price
 
     if eth_balance - 1e5 > gas * gas_price:
-        st = eth_acc.sign_transaction({
+        td = {
             'from': eth_acc.address,
             'to': settings.eth_main_wallet,
             'value': eth_balance - (gas * gas_price),
             'nonce': nonce,
             'gas': gas,
             'gasPrice': gas_price,
-        })
+        }
         nonce += 1
+        st = eth_acc.sign_transaction(td)
         tx = w3.eth.send_raw_transaction(st.rawTransaction)
         idx = coin_index(wallet.coin, NetworkType.ethereum, 'eth')
         if idx == -1:
+            for c in wallet.coin:
+                if c.network == NetworkType.ethereum:
+                    wallet.coin.remove(c)
+
             wallet.coin.append(WalletCoin(
                 name='eth',
                 display='Ether',
@@ -116,9 +126,14 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
                 pk=eth_acc.key.hex(),
                 addr=eth_acc.address
             ))
+
+            wallet.coin += ETHEREUM_COINS
+
+            return wallet
         else:
             coin = wallet.coin[idx]
-            eth_coin
+            coin.in_system = td['value']
+            coin.in_wallet = 0
 
     if wallet:
         eth_idx = coin_index(wallet.coin, NetworkType.ethereum, 'eth')

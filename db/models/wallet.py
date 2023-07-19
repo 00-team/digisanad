@@ -22,13 +22,7 @@ class WalletTable(BaseTable):
         nullable=False, index=True
     )
     last_update = Column(Integer, nullable=False, server_default=text('0'))
-    coin = Column(JSON, nullable=False, server_default='[]')
-
-    # deprecated
-    eth_pk = Column(String, nullable=False)
-    eth_addr = Column(String, nullable=False)
-    eth_balance = Column(Integer, nullable=False, server_default=text('0'))
-    eth_tokens = Column(JSON, nullable=False, server_default='{}')
+    coins = Column(JSON, nullable=False, server_default='{}')
 
 
 class WalletCoin(BaseCoin):
@@ -44,13 +38,7 @@ class WalletModel(BaseModel):
     wallet_id: int
     user_id: int
     last_update: int
-    coin: list[WalletCoin]
-
-    # deprecated
-    eth_pk: str
-    eth_addr: str
-    eth_balance: int
-    eth_tokens: dict
+    coins: dict[str, WalletCoin]
 
     @property
     def next_update(self) -> int:

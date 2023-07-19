@@ -39,10 +39,10 @@ class TransactionTable(BaseTable):
 
 
 class TransactionStatus(int, Enum):
-    unknown = 0
-    pending = auto()
-    success = auto()
-    failure = auto()
+    UNKNOWN = 0
+    PENDING = auto()
+    SUCCESS = auto()
+    FAILURE = auto()
 
 
 class TransactionModel(BaseModel):
