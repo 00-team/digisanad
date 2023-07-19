@@ -41,3 +41,9 @@ duration
 price - coin
 sign
 vakil - loyer
+
+## Meeting Notes
+
+-   we cant use tokens like tether and shiba because token transfer
+    cost ether gas
+-   using stable diffusion and other open source AI models for sites content
