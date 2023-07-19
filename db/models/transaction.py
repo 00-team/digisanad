@@ -40,7 +40,6 @@ class TransactionTable(BaseTable):
 
 class TransactionStatus(int, Enum):
     UNKNOWN = 0
-    PENDING = auto()
     SUCCESS = auto()
     FAILURE = auto()
 
