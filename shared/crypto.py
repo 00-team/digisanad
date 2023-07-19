@@ -1,11 +1,14 @@
 
 import json
+import logging
 
 from eth_account.signers.local import LocalAccount
+from web3.exceptions import TransactionNotFound
+from web3.types import HexBytes
 
 from db.general import general_get, general_update
-from db.models import BaseCoin, GeneralCoin, NetworkType, WalletCoin
-from db.models import WalletModel
+from db.models import BaseCoin, GeneralCoin, NetworkType, TransactionStatus
+from db.models import WalletCoin, WalletModel
 from db.transaction import transaction_add, transaction_get, transaction_update
 from shared import settings, w3
 from shared.tools import utc_now
@@ -39,8 +42,8 @@ ETH_TOKENS = {
     }
 }
 
-ETHEREUM_COINS = [
-    WalletCoin(
+ETH_WALLET_COINS = {
+    f'{NetworkType.ethereum.value}_{k}': WalletCoin(
         name=k,
         display=v['display'],
         network=NetworkType.ethereum,
@@ -49,33 +52,51 @@ ETHEREUM_COINS = [
         contract=v['contract'].address,
     )
     for k, v in ETH_TOKENS.items()
-]
+}
+
+ETH_GENERAL_COINS = {
+    f'{NetworkType.ethereum.value}_{k}': GeneralCoin(
+        name=k,
+        display=v['display'],
+        network=NetworkType.ethereum,
+        available=0,
+        total=0,
+    )
+    for k, v in ETH_TOKENS.items()
+}
 
 
-def get_eth_acc(wallet: WalletModel) -> LocalAccount:
-    for c in wallet.coin:
-        if c.name == 'eth' and c.network == NetworkType.ethereum:
-            return w3.eth.account.from_key(c.pk)
+async def transaction_status(tx: str | HexBytes) -> TransactionStatus:
+    try:
+        receipt = await w3.eth.get_transaction_receipt(tx)
 
-    # TODO: remove this
-    if pk := getattr(wallet, 'eth_pk', None):
-        return w3.eth.account.from_key(pk)
+        if receipt.status:
+            return TransactionStatus.SUCCESS
+        else:
+            return TransactionStatus.FAILURE
 
-    return w3.eth.account.create()
-
-
-def coin_index(array: list[BaseCoin], network: NetworkType, name: str) -> int:
-    for index, coin in enumerate(array):
-        if coin.network == network and coin.name == name:
-            return index
-
-    return -1
+    except TransactionNotFound:
+        return TransactionStatus.UNKNOWN
 
 
 async def update_wallet(wallet: WalletModel = None) -> WalletModel:
+    eck = f'{NetworkType.ethereum.value}_eth'
+
+    general = await general_get()
+    if eck not in general.coins:
+        general.coins[eck] = GeneralCoin(
+            name='eth',
+            display='Ether',
+            network=NetworkType.ethereum,
+            available=0,
+            total=0
+        )
+        general.coins.update(ETH_GENERAL_COINS)
+        await general_update(general.general_id, coins=general.coins)
+
     if wallet is None:
         eth_acc = w3.eth.account.create()
-        coin = [WalletCoin(
+        coins = {eck: WalletCoin(
             name='eth',
             display='Ether',
             network=NetworkType.ethereum,
@@ -83,16 +104,32 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             in_system=0,
             pk=eth_acc.key.hex(),
             addr=eth_acc.address
-        )] + ETHEREUM_COINS
+        )}
+        coins.update(ETH_WALLET_COINS)
 
         return WalletModel(
             wallet_id=0,
             user_id=0,
             last_update=utc_now(),
-            coin=coin,
+            coins=coins,
         )
 
-    eth_acc = get_eth_acc(wallet)
+    eth_coin = wallet.coins.get(eck)
+    if eth_coin is None:
+        eth_acc = w3.eth.account.create()
+        wallet.coins[eck] = WalletCoin(
+            name='eth',
+            display='Ether',
+            network=NetworkType.ethereum,
+            in_wallet=0,
+            in_system=0,
+            pk=eth_acc.key.hex(),
+            addr=eth_acc.address
+        )
+        wallet.coins.update(ETH_WALLET_COINS)
+        return wallet
+
+    eth_acc = w3.eth.account.from_key(eth_coin.pk)
     eth_balance = await w3.eth.get_balance(eth_acc.address)
     nonce = await w3.eth.get_transaction_count(eth_acc.address)
 
@@ -103,7 +140,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
         td = {
             'from': eth_acc.address,
             'to': settings.eth_main_wallet,
-            'value': eth_balance - (gas * gas_price),
+            'value': eth_balance - (gas * gas_price) - settings.eth_main_fee,
             'nonce': nonce,
             'gas': gas,
             'gasPrice': gas_price,
@@ -111,59 +148,38 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
         nonce += 1
         st = eth_acc.sign_transaction(td)
         tx = w3.eth.send_raw_transaction(st.rawTransaction)
-        idx = coin_index(wallet.coin, NetworkType.ethereum, 'eth')
-        if idx == -1:
-            for c in wallet.coin:
-                if c.network == NetworkType.ethereum:
-                    wallet.coin.remove(c)
+        wallet.coins[eck].in_system = td['value']
+        wallet.coins[eck].in_wallet = 0
 
-            wallet.coin.append(WalletCoin(
-                name='eth',
-                display='Ether',
-                network=NetworkType.ethereum,
-                in_wallet=0,
-                in_system=0,
-                pk=eth_acc.key.hex(),
-                addr=eth_acc.address
-            ))
+        general.coins[eck].total += td['value'] + settings.eth_main_fee
+        general.coins[eck].available += settings.eth_main_fee
 
-            wallet.coin += ETHEREUM_COINS
+        await transaction_add(
+            transaction_hash=tx.hex(),
+            network=NetworkType.ethereum.value,
+            sender=wallet.user_id,
+            receiver=-1,
+            status=TransactionStatus.UNKNOWN,
+            amount=td['value'],
+            last_update=utc_now(),
+            timestamp=utc_now(),
+        )
 
-            return wallet
-        else:
-            coin = wallet.coin[idx]
-            coin.in_system = td['value']
-            coin.in_wallet = 0
-
-    if wallet:
-        eth_idx = coin_index(wallet.coin, NetworkType.ethereum, 'eth')
-        if eth_idx == -1:
-            wallet.coin.append(WalletCoin(
-                name='eth',
-                display='Ether',
-                network=NetworkType.ethereum,
-                in_wallet=1,
-                in_system=1,
-                pk=eth_acc.key.hex(),
-                addr=eth_acc.address
-
-            ))
-
-    for k, t in ETH_TOKENS.items():
-        amount = await t['contract'].functions.balanceOf(
-            eth_acc.address
-        ).call()
-        if amount:
-            coin.append(CoinModel(
-                name=k,
-                display=t['name'],
-                balance=amount / t['decimals'],
-                network='eth',
-                contract=t['contract'].address,
-            ))
-
-    wallet.last_update = utc_now()
-    wallet.coin = coin
+    # for k, t in ETH_TOKENS.items():
+    #     c = t['contract']
+    #     token_balance = await c.functions.balanceOf(eth_acc.address).call()
+    #
+    #     if token_balance:
+    #         coin.append(CoinModel(
+    #             name=k,
+    #             display=t['name'],
+    #             balance=amount / t['decimals'],
+    #             network='eth',
+    #             contract=t['contract'].address,
+    #         ))
+    #
+    # wallet.last_update = utc_now()
+    # wallet.coin = coin
 
     return wallet
 
