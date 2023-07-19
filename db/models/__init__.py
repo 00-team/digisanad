@@ -1,14 +1,13 @@
-from .common import BaseTable, NetworkType, metadata
-from .general import GeneralCoinModel, GeneralModel, GeneralTable
+from .common import BaseCoin, BaseTable, NetworkType, metadata
+from .general import GeneralCoin, GeneralModel, GeneralTable
 from .transaction import TransactionModel, TransactionStatus, TransactionTable
 from .user import UserModel, UserTable
-from .wallet import CoinModel, WalletModel, WalletTable
+from .wallet import WalletCoin, WalletModel, WalletTable
 
 __all__ = [
-    'BaseTable', 'metadata', 'NetworkType',
+    'BaseTable', 'metadata', 'NetworkType', 'BaseCoin',
     'UserTable', 'UserModel',
-    'WalletTable', 'WalletModel',
-    'CoinModel',
-    'GeneralTable', 'GeneralCoinModel', 'GeneralModel',
+    'WalletTable', 'WalletModel', 'WalletCoin',
+    'GeneralTable', 'GeneralCoin', 'GeneralModel',
     'TransactionStatus', 'TransactionModel', 'TransactionTable',
 ]

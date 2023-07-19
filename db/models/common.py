@@ -2,6 +2,7 @@
 
 from enum import Enum, auto
 
+from pydantic import BaseModel
 from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -13,3 +14,9 @@ class NetworkType(int, Enum):
     ethereum = 0
     bitcoin = auto()
     tezos = auto()
+
+
+class BaseCoin(BaseModel):
+    name: str
+    display: str
+    network: NetworkType

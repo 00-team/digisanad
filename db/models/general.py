@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 from sqlalchemy import JSON, Column, Integer
 
-from .common import BaseTable, NetworkType
+from .common import BaseCoin, BaseTable
 
 
 class GeneralTable(BaseTable):
@@ -12,14 +12,11 @@ class GeneralTable(BaseTable):
     coin = Column(JSON, nullable=False, server_default='[]')
 
 
-class GeneralCoinModel(BaseModel):
-    name: str
-    display: str
-    network: NetworkType
+class GeneralCoin(BaseCoin):
     available: int
     total: int
 
 
 class GeneralModel(BaseModel):
     general_id: int
-    coin: list[GeneralCoinModel]
+    coin: list[GeneralCoin]
