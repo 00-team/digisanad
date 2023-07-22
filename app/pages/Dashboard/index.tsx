@@ -3,17 +3,20 @@ import React, { FC, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { user_get_me } from 'api'
-import { ArrowDownSvg, ArrowUpSvg, PersonSvg } from 'icons'
-import { SendSvg } from 'icons/Actions/Send'
+import {
+    ArrowDownSvg,
+    ArrowUpSvg,
+    ContractSvg,
+    GlobeSvg,
+    PersonSvg,
+    SendSvg,
+    TransactionSvg,
+    WalletSvg,
+} from 'icons'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
-
-import { ContractSvg } from 'icons/Dashboard/Contract'
-import { GlobeSvg } from 'icons/Dashboard/Globe'
-import { TransactionSvg } from 'icons/Dashboard/Transaction'
-import { WalletSvg } from 'icons/Dashboard/Wallet'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
@@ -169,12 +172,12 @@ const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
             <div className='column'>
                 <div className='holder-icon icon'>
                     {' '}
-                    <GlobeSvg />{' '}
+                    <GlobeSvg size={25} />{' '}
                 </div>
                 <div className='holder-text '>رفتن به سایت</div>
             </div>
             <div className='send-icon icon'>
-                <SendSvg />
+                <SendSvg size={25} />
             </div>
         </Link>
     )
@@ -196,12 +199,12 @@ const SidebarColumn: FC<Omit<OptionsProps, 'Component'>> = ({
         >
             <div className='column'>
                 <div className='holder-icon icon'>
-                    <Icon size={2} />
+                    <Icon size={23} />
                 </div>
                 <div className='holder-text '>{title}</div>
             </div>
             <div className='send-icon icon'>
-                <SendSvg />
+                <SendSvg size={25} />
             </div>
         </a>
     )
