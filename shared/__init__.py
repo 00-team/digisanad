@@ -3,9 +3,9 @@ from pathlib import Path
 from string import ascii_letters, digits
 
 from databases import Database
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
-from web3 import AsyncHTTPProvider, AsyncWeb3
+from web3 import AsyncHTTPProvider, AsyncWeb3, EthereumTesterProvider
 
 
 class Connection(sqlite3.Connection):
@@ -25,14 +25,22 @@ class Settings(BaseSettings):
     redis_pass: str
     infura_token: str
     meilisms_tokne: str
+    alchemy_test_token: str
+    alchemy_main_token: str
 
-    verification_expire = 2 * 60
-    verification_code_len = 5
+    verification_expire: int = 2 * 60
+    verification_code_len: int = 5
 
-    token_len = 69
-    token_abc = ascii_letters + digits + ('!@#$%^&*_+' * 2)
+    token_len: int = 69
+    token_abc: str = ascii_letters + digits + ('!@#$%^&*_+' * 2)
 
-    update_wallet_timeout = 5 * 60
+    update_wallet_timeout: int = 5 * 60
+    update_transaction_timeout: int = 1 * 60
+
+    eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
+    eth_main_fee: int = 4000
+
+    debug: bool = False
 
 
 settings = Settings(_env_file='.secrets')
@@ -40,9 +48,14 @@ settings.sql_dir.mkdir(parents=True, exist_ok=True)
 
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
-W3 = AsyncWeb3(AsyncHTTPProvider(
-    'https://mainnet.infura.io/v3/' + settings.infura_token
-))
+if settings.debug:
+    w3 = AsyncWeb3(AsyncHTTPProvider(
+        'https://eth-sepolia.g.alchemy.com/v2/' + settings.alchemy_test_token
+    ))
+else:
+    w3 = AsyncWeb3(AsyncHTTPProvider(
+        'https://mainnet.infura.io/v3/' + settings.infura_token
+    ))
 
 redis = Redis(
     password=settings.redis_pass,

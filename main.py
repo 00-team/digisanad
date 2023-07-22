@@ -23,7 +23,7 @@ app = FastAPI(
 )
 
 
-if environ.get('DEVELOPMENT'):
+if settings.debug:
     app.mount('/media', StaticFiles(directory='media'), name='media')
     app.mount('/static', StaticFiles(directory='static'), name='static')
 

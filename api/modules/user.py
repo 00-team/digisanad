@@ -1,14 +1,12 @@
 
-from datetime import timedelta
 
 from fastapi import APIRouter, Request
+from pydantic import BaseModel, constr
 
-from api.models.user import WalletResponse
 from db.models import UserModel, WalletTable
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared.crypto import update_wallet
-from shared.tools import utc_now
 
 router = APIRouter(
     prefix='/user',
@@ -22,6 +20,22 @@ async def get(request: Request):
     user: UserModel = request.state.user
     user.token = user.token[:32]
     return user
+
+
+class CoinModel(BaseModel):
+    name: str
+    display: str
+    balance: float
+    network: str
+    addr: str | None = None
+    contract: str | None = None
+
+
+class WalletResponse(BaseModel):
+    wallet_id: int
+    user_id: int
+    next_update: int
+    coin: list[CoinModel]
 
 
 @router.get('/wallet/', response_model=WalletResponse)
@@ -48,7 +62,15 @@ async def wallet(request: Request):
     response = wallet.dict()
     response['next_update'] = wallet.next_update
 
-    for k, t in response['eth_tokens'].items():
-        response['eth_tokens'][k] = str(response['eth_tokens'][k])
-
     return response
+
+
+class TransferBody(BaseModel):
+    addr: constr(min_length=16, max_length=1024)
+    coin_name: str
+    coin_network: str
+
+
+@router.post('/transfer/')
+async def transfer(request: Request, body: TransferBody):
+    return {'hi': 0}

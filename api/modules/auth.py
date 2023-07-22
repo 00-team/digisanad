@@ -1,20 +1,26 @@
 
 from fastapi import APIRouter, Response
+from pydantic import BaseModel
 
-from api.models.auth import LoginBody, LoginResponse, RegisterBody
-from api.models.auth import RegisterResponse
+from api.models.auth import RegisterBody
 from api.verification import Action, verify_verification
-from db.models import UserTable
+from db.models import UserModel, UserTable
 from db.user import user_add, user_get, user_update
 from deps import rate_limit
 from shared.errors import account_exists, bad_verification, register_required
 from shared.tools import new_token
+from shared.validators import PhoneNumber, VerificationCode
 
 router = APIRouter(
     prefix='/auth',
     tags=['auth'],
     dependencies=[rate_limit('auth', 30 * 60, 20, False)]
 )
+
+
+class RegisterResponse(BaseModel):
+    user_id: int
+    token: str
 
 
 @router.post(
@@ -57,6 +63,16 @@ async def register(response: Response, body: RegisterBody):
         'user_id': user_id,
         'token': token,
     }
+
+
+class LoginBody(BaseModel):
+    phone: PhoneNumber
+    code: VerificationCode
+
+
+class LoginResponse(BaseModel):
+    user: UserModel
+    token: str
 
 
 @router.post(

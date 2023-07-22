@@ -1,7 +1,7 @@
 
 
 from pydantic import BaseModel
-from sqlalchemy import JSON, Column, Integer, String, text
+from sqlalchemy import Column, Integer, String
 
 from .common import BaseTable
 
@@ -46,21 +46,3 @@ class UserModel(BaseModel):
     #     if isinstance(birth_date, str):
     #         birth_date = tuple(map(lambda d: int(d), birth_date.split('-')))
     #     super().__init__(birth_date=birth_date, **data)
-
-
-'''
-user_table = Table(
-    'user', metadata,
-    Column('user_id', Integer, primary_key=True, autoincrement=True),
-)
-
-transaction_table = Table(
-    'transaction', metadata,
-    Column('transaction_id', Integer, primary_key=True, autoincrement=True),
-    Column(
-        'user_id', Integer,
-        ForeignKey(user_table.c.user_id, ondelete='CASCADE'),
-    ),
-    UniqueConstraint('user_id', 'authority'),
-)
-'''

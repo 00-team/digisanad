@@ -1,127 +1,93 @@
 
+from typing import Annotated
+
+from pydantic import AfterValidator, WithJsonSchema
+
 from shared import settings
 from shared.tools import isallnum
 
 
-class VerificationCode(str):
+def code_validator(value: str):
+    if not isinstance(value, str):
+        raise TypeError('string required')
 
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
+    if len(value) != settings.verification_code_len:
+        raise ValueError('invalid code length')
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['99999', '12345'],
-            maxLength=settings.verification_code_len,
-            minLength=settings.verification_code_len
-        )
+    if not isallnum(value):
+        raise ValueError('invalid code')
 
-    @classmethod
-    def validate(cls, value):
-        if not isinstance(value, str):
-            raise TypeError('string required')
-
-        if len(value) != settings.verification_code_len:
-            raise ValueError('invalid code length')
-
-        if not isallnum(value):
-            raise ValueError('code must be all number')
-
-        return value
-
-    def __repr__(self):
-        return f'VerificationCode({super().__repr__()})'
+    return value
 
 
-class PhoneNumber(str):
-
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['09223334444', '09123456789'],
-            maxLength=11,
-            minLength=11
-        )
-
-    @classmethod
-    def validate(cls, value):
-        if not isinstance(value, str):
-            raise TypeError('string required')
-
-        if len(value) != 11:
-            raise ValueError('invalid phone number length')
-
-        if value[:2] != '09' or not isallnum(value):
-            raise ValueError('invalid phone number string')
-
-        return value
-
-    def __repr__(self):
-        return f'PhoneNumber({super().__repr__()})'
+VerificationCode = Annotated[
+    str,
+    AfterValidator(code_validator),
+    WithJsonSchema({
+        'type': 'string',
+        'minLength': 5,
+        'maxLength': 5,
+        'example': '99999'
+    }),
+]
 
 
-class NationalID(str):
+def phone_validator(value: str):
+    if not isinstance(value, str):
+        raise TypeError('string required')
 
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
+    if len(value) != 11:
+        raise ValueError('invalid phone number length')
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['0625557777'],
-            maxLength=10,
-            minLength=10
-        )
+    if value[:2] != '09' or not isallnum(value):
+        raise ValueError('invalid phone number')
 
-    @classmethod
-    def validate(cls, value):
-        if not isinstance(value, str):
-            raise TypeError('string required')
-
-        if len(value) != 10:
-            raise ValueError('invalid national id length')
-
-        if not isallnum(value):
-            raise ValueError('invalid national id')
-
-        return value
-
-    def __repr__(self):
-        return f'NationalID({super().__repr__()})'
+    return value
 
 
-class PostalCode(str):
+PhoneNumber = Annotated[
+    str,
+    AfterValidator(phone_validator),
+    WithJsonSchema({
+        'type': 'string',
+        'minLength': 11,
+        'maxLength': 11,
+        'example': '09223334444'
+    }),
+]
 
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(
-            examples=['1234567890'],
-            maxLength=10,
-            minLength=10
-        )
+def natpos(value: str):
+    if not isinstance(value, str):
+        raise TypeError('string required')
 
-    @classmethod
-    def validate(cls, value):
-        if not isinstance(value, str):
-            raise TypeError('string required')
+    if len(value) != 10:
+        raise ValueError('invalid length')
 
-        if len(value) != 10:
-            raise ValueError('invalid postal code length')
+    if not isallnum(value):
+        raise ValueError('all chars must be number')
 
-        if not isallnum(value):
-            raise ValueError('invalid postal code')
+    return value
 
-        return value
 
-    def __repr__(self):
-        return f'PostalCode({super().__repr__()})'
+NationalID = Annotated[
+    str,
+    AfterValidator(natpos),
+    WithJsonSchema({
+        'type': 'string',
+        'minLength': 10,
+        'maxLength': 10,
+        'example': '0625557777'
+    }),
+]
+
+PostalCode = Annotated[
+    str,
+    AfterValidator(natpos),
+    WithJsonSchema({
+        'type': 'string',
+        'minLength': 10,
+        'maxLength': 10,
+        'example': '1234567890'
+    }),
+]
