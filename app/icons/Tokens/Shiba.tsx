@@ -1,12 +1,13 @@
-import React, { FC } from 'react'
+import React from 'react'
 
-export const ShibaSvg: FC = () => {
+export const ShibaSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 641.7 649'
-            width={25}
-            height={25}
+            width={size}
+            height={size}
+            {...attr}
         >
             <g transform='translate(-953.348 -232.003)'>
                 <g>
