@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-export const CodeSvg = () => {
+export const CodeSvg: FC = () => {
     return (
         <svg
             stroke='currentColor'
