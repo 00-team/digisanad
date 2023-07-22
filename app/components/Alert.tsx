@@ -21,11 +21,7 @@ const Alert: FC<TemplateProps> = ({ message, close, options }) => {
 }
 export { Alert }
 
-interface SvgProps {
-    size: number
-}
-
-const AiFillCheckCircle = ({ size }: SvgProps) => (
+const AiFillCheckCircle: Icon = ({ size, ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
@@ -34,11 +30,12 @@ const AiFillCheckCircle = ({ size }: SvgProps) => (
         height={size}
         width={size}
         xmlns='http://www.w3.org/2000/svg'
+        {...attr}
     >
         <path d='M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 0 1-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z'></path>
     </svg>
 )
-const ImCross = ({ size }: SvgProps) => (
+const ImCross: Icon = ({ size, ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
@@ -48,12 +45,13 @@ const ImCross = ({ size }: SvgProps) => (
         height={size}
         width={size}
         xmlns='http://www.w3.org/2000/svg'
+        {...attr}
     >
         <path d='M15.854 12.854c-0-0-0-0-0-0l-4.854-4.854 4.854-4.854c0-0 0-0 0-0 0.052-0.052 0.090-0.113 0.114-0.178 0.066-0.178 0.028-0.386-0.114-0.529l-2.293-2.293c-0.143-0.143-0.351-0.181-0.529-0.114-0.065 0.024-0.126 0.062-0.178 0.114 0 0-0 0-0 0l-4.854 4.854-4.854-4.854c-0-0-0-0-0-0-0.052-0.052-0.113-0.090-0.178-0.114-0.178-0.066-0.386-0.029-0.529 0.114l-2.293 2.293c-0.143 0.143-0.181 0.351-0.114 0.529 0.024 0.065 0.062 0.126 0.114 0.178 0 0 0 0 0 0l4.854 4.854-4.854 4.854c-0 0-0 0-0 0-0.052 0.052-0.090 0.113-0.114 0.178-0.066 0.178-0.029 0.386 0.114 0.529l2.293 2.293c0.143 0.143 0.351 0.181 0.529 0.114 0.065-0.024 0.126-0.062 0.178-0.114 0-0 0-0 0-0l4.854-4.854 4.854 4.854c0 0 0 0 0 0 0.052 0.052 0.113 0.090 0.178 0.114 0.178 0.066 0.386 0.029 0.529-0.114l2.293-2.293c0.143-0.143 0.181-0.351 0.114-0.529-0.024-0.065-0.062-0.126-0.114-0.178z'></path>
     </svg>
 )
 
-const IoWarning = ({ size }: SvgProps) => (
+const IoWarning: Icon = ({ size, ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
@@ -62,12 +60,13 @@ const IoWarning = ({ size }: SvgProps) => (
         height={size}
         width={size}
         xmlns='http://www.w3.org/2000/svg'
+        {...attr}
     >
         <path d='M449.07 399.08L278.64 82.58c-12.08-22.44-44.26-22.44-56.35 0L51.87 399.08A32 32 0 0080 446.25h340.89a32 32 0 0028.18-47.17zm-198.6-1.83a20 20 0 1120-20 20 20 0 01-20 20zm21.72-201.15l-5.74 122a16 16 0 01-32 0l-5.74-121.95a21.73 21.73 0 0121.5-22.69h.21a21.74 21.74 0 0121.73 22.7z'></path>
     </svg>
 )
 
-const TiInfo = ({ size }: SvgProps) => (
+const TiInfo: Icon = ({ size, ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
@@ -78,6 +77,7 @@ const TiInfo = ({ size }: SvgProps) => (
         height={size}
         width={size}
         xmlns='http://www.w3.org/2000/svg'
+        {...attr}
     >
         <path
             d='M21.17,15.4l-5.91-9.85C14.48,4.25,13.3,3.51,12,3.51S9.52,4.25,8.74,5.54L2.83,15.4c-0.44,0.73-0.66,1.49-0.66,2.21
