@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { user_get_me } from 'api'
-import { PersonSvg } from 'icons'
+import { ArrowUpSvg, PersonSvg } from 'icons'
 import { SendSvg } from 'icons/Actions/Send'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -58,6 +58,12 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     },
     {
         title: 'افزایش موجودی',
+        Icon: WalletSvg,
+        Component: ArrowUpSvg,
+        id: 'chargewallet',
+    },
+    {
+        title: 'برداشت موجودی',
         Icon: WalletSvg,
         Component: ChargeWallet,
         id: 'chargewallet',
