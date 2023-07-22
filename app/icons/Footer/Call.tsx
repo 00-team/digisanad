@@ -1,8 +1,6 @@
-import React, { FC } from 'react'
+import React from 'react'
 
-import { SvgProps } from 'icons'
-
-export const CallSvg: FC<SvgProps> = ({ size, ...attr }) => {
+export const CallSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             stroke='currentColor'
