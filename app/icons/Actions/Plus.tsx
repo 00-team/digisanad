@@ -1,14 +1,15 @@
-import React, { FC } from 'react'
+import React from 'react'
 
-export const PlusSvg: FC = () => {
+export const PlusSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             stroke='currentColor'
             fill='none'
             strokeWidth='0'
             viewBox='0 0 24 24'
-            height={20}
-            width={20}
+            height={size}
+            width={size}
+            {...attr}
             xmlns='http://www.w3.org/2000/svg'
         >
             <path
