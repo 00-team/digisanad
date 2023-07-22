@@ -1,15 +1,17 @@
 import React, { FC } from 'react'
 
-import { PersonSvg } from 'icons'
-import { EmailSvg } from 'icons/Models/Email'
-import { PhoneSvg2 } from 'icons/Models/Phone2'
+import {
+    AddressSvg,
+    CallenderSvg,
+    EmailSvg,
+    NationalIdSvg,
+    PersonSvg,
+    PhoneSvg2,
+} from 'icons'
 
 import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
 
-import { AddressSvg } from 'icons/Dashboard/Address'
-import { CallenderSvg } from 'icons/Dashboard/Callender'
-import { NationalIdSvg } from 'icons/Dashboard/NationalId'
 import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import './style/myinfo.scss'
@@ -72,7 +74,7 @@ const MyInfo: FC = () => {
 }
 
 interface RowProps {
-    Svg: FC
+    Svg: Icon
     holder: string
     data: any
     className?: string
@@ -83,7 +85,7 @@ const Row: FC<RowProps> = ({ data, holder, Svg, className }) => {
         <div className={`row title ${className && className}`}>
             <div className='nickname-title title  row-title'>
                 <div className='icon'>
-                    <Svg />
+                    <Svg size={25} />
                 </div>
                 {holder}
             </div>
