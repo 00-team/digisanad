@@ -2,18 +2,20 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { user_get_me } from 'api'
 import axios from 'axios'
-import { PersonSvg } from 'icons'
-import { EmailSvg } from 'icons/Models/Email'
-import { GoBack } from 'icons/Models/GoBack'
+import {
+    AddressSvg,
+    CallenderSvg,
+    CodeSvg,
+    EmailSvg,
+    GoBack,
+    NationalIdSvg,
+    PersonSvg,
+} from 'icons'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
 import { LoginAtom, TokenAtom, UserAtom } from 'state'
 
-import { AddressSvg } from 'icons/Dashboard/Address'
-import { CallenderSvg } from 'icons/Dashboard/Callender'
-import { CodeSvg } from 'icons/Dashboard/Code'
-import { NationalIdSvg } from 'icons/Dashboard/NationalId'
 import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import Clouds from '../../../components/Clouds'
@@ -220,7 +222,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PersonSvg />
+                                    <PersonSvg size={25} />
                                 </div>
                                 <div className='holder-data'>نام</div>
                             </div>
@@ -273,7 +275,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <EmailSvg />
+                                    <EmailSvg size={25} />
                                 </div>
                                 <div className='holder-data'>
                                     پست الکترونیکی{' '}
@@ -296,7 +298,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <NationalIdSvg />
+                                    <NationalIdSvg size={25} />
                                 </div>
                                 <div className='holder-data'>کد ملی </div>
                             </div>
@@ -316,7 +318,7 @@ const Register: FC = () => {
                         <div className='input-wrapper birthday'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <CallenderSvg />
+                                    <CallenderSvg size={25} />
                                 </div>
                                 <div className='holder-data'>تاریخ تولد</div>
                             </div>
@@ -423,7 +425,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <AddressSvg />
+                                    <AddressSvg size={25} />
                                 </div>
                                 <div className='holder-data'>
                                     نشانی محل سکونت{' '}
@@ -448,7 +450,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PostalCodeSvg />
+                                    <PostalCodeSvg size={25} />
                                 </div>
                                 <div className='holder-data'>کد پستی</div>
                             </div>
@@ -472,7 +474,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <CodeSvg />
+                                    <CodeSvg size={25} />
                                 </div>
                                 <div className='holder-data'>کد تایید</div>
                             </div>
@@ -524,7 +526,7 @@ const Register: FC = () => {
                             Stages === 'code' && setStages('address')
                         }}
                     >
-                        <GoBack />
+                        <GoBack size={25} />
                     </div>
                 )}
 
