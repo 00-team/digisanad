@@ -76,7 +76,7 @@ const Wallet: FC = () => {
 }
 
 interface RowProps {
-    Svg: FC
+    Svg: Icon
     holder: string
     data: React.ReactNode
     className?: string
@@ -87,7 +87,7 @@ const Row: FC<RowProps> = ({ data, holder, Svg, className }) => {
         <div className={`row title ${className && className}`}>
             <div className='nickname-title title  row-title'>
                 <div className='icon'>
-                    <Svg />
+                    <Svg size={25} />
                 </div>
                 {holder}
             </div>
