@@ -12,6 +12,11 @@ export * from './Dashboard/ArrowUp'
 export * from './Dashboard/ArrowDown'
 
 export * from './Models/Person'
+export * from './Models/CloseFill'
+export * from './Models/Email'
+export * from './Models/GoBack'
+export * from './Models/Phone'
+export * from './Models/Phone2'
 
 export * from './Socials/Instagram'
 export * from './Socials/Telegram'
