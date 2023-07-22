@@ -22,6 +22,11 @@ export * from './Socials/Instagram'
 export * from './Socials/Telegram'
 export * from './Socials/Whatsapp'
 
+export * from './Alert/Warning'
+export * from './Alert/Success'
+export * from './Alert/Error'
+export * from './Alert/Info'
+
 export * from './Footer/Call'
 export * from './Footer/Fax'
 export * from './Footer/Location'
