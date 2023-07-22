@@ -1,8 +1,6 @@
-import React, { FC } from 'react'
+import React from 'react'
 
-import { SvgProps } from 'icons'
-
-export const LocationSvg: FC<SvgProps> = ({ size, ...attr }) => {
+export const LocationSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             stroke='currentColor'
