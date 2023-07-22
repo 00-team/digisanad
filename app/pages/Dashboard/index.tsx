@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { user_get_me } from 'api'
-import { ArrowUpSvg, PersonSvg } from 'icons'
+import { ArrowDownSvg, ArrowUpSvg, PersonSvg } from 'icons'
 import { SendSvg } from 'icons/Actions/Send'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -17,7 +17,6 @@ import { WalletSvg } from 'icons/Dashboard/Wallet'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
-import ChargeWallet from './ChargeWallet'
 import Contracts from './Contracts'
 import MyInfo from './MyInfo'
 import Wallet from './Wallet'
@@ -29,7 +28,7 @@ const ADDED_DELAY = 0.1
 
 interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
     title: string
-    Icon: FC<{}>
+    Icon: Icon
     Component: FC
     style?: React.CSSProperties
     active?: boolean
@@ -65,7 +64,7 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     {
         title: 'برداشت موجودی',
         Icon: WalletSvg,
-        Component: ChargeWallet,
+        Component: ArrowDownSvg,
         id: 'chargewallet',
     },
 ]
@@ -197,7 +196,7 @@ const SidebarColumn: FC<Omit<OptionsProps, 'Component'>> = ({
         >
             <div className='column'>
                 <div className='holder-icon icon'>
-                    <Icon />
+                    <Icon size={2} />
                 </div>
                 <div className='holder-text '>{title}</div>
             </div>
