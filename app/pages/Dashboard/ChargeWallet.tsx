@@ -55,7 +55,7 @@ const ChargeWallet: FC = () => {
                 <div className='charge-amount'>
                     <div className='amount-holder title'>
                         <div className='icon'>
-                            <CoinSvg />
+                            <CoinSvg size={25} />
                         </div>
                         <div className='holder'>مقدار واریزی</div>
                     </div>
@@ -66,7 +66,7 @@ const ChargeWallet: FC = () => {
                                 setChargeAmount(ChargeAmount + 10000)
                             }
                         >
-                            <PlusSvg />
+                            <PlusSvg size={25} />
                         </div>
                         <input
                             inputMode={'numeric'}
@@ -86,7 +86,7 @@ const ChargeWallet: FC = () => {
                                 setChargeAmount(ChargeAmount - 10000)
                             }
                         >
-                            <MinusSvg />
+                            <MinusSvg size={25} />
                         </div>
                     </div>
                 </div>
