@@ -7,6 +7,7 @@ export * from './Dashboard/Contract'
 export * from './Dashboard/Globe'
 export * from './Dashboard/Transaction'
 export * from './Dashboard/Coin'
+export * from './Dashboard/ArrowUp'
 
 export * from './Models/Person'
 
@@ -20,8 +21,3 @@ export * from './Footer/Location'
 
 export * from './Tokens/Shiba'
 export * from './Tokens/Tether'
-
-export interface SvgProps {
-    size: number
-    style?: React.CSSProperties
-}
