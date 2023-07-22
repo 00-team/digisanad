@@ -1,11 +1,13 @@
-import React, { FC } from 'react'
+import React from 'react'
 
-export const TetherSvg: FC = () => {
+export const TetherSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 339.43 295.27'
-            width={25}
+            width={size}
+            height={size}
+            {...attr}
         >
             <path
                 d='M62.15,1.45l-61.89,130a2.52,2.52,0,0,0,.54,2.94L167.95,294.56a2.55,2.55,0,0,0,3.53,0L338.63,134.4a2.52,2.52,0,0,0,.54-2.94l-61.89-130A2.5,2.5,0,0,0,275,0H64.45a2.5,2.5,0,0,0-2.3,1.45h0Z'
