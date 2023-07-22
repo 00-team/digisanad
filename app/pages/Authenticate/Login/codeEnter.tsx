@@ -1,12 +1,10 @@
 import React, { FC } from 'react'
 
 import axios from 'axios'
-import { GoBack } from 'icons/Models/GoBack'
+import { CodeSvg, GoBack } from 'icons'
 
 import { useAtom } from 'jotai'
 import { LoginAtom } from 'state'
-
-import { CodeSvg } from 'icons/Dashboard/Code'
 
 import { Timer } from 'components/common/Timer'
 
@@ -36,7 +34,7 @@ const CodeEnter: FC = () => {
             <div className='input-wrapper title'>
                 <div className='placeholder'>
                     <div className='icon'>
-                        <CodeSvg />
+                        <CodeSvg size={25} />
                     </div>
                     <div className='holder'>کد تایید</div>
                 </div>
@@ -74,7 +72,7 @@ const CodeEnter: FC = () => {
                 className='go-back-wrapper icon'
                 onClick={() => setLogin({ stage: 'phone' })}
             >
-                <GoBack />
+                <GoBack size={25} />
             </div>
         </>
     )
