@@ -60,15 +60,15 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     },
     {
         title: 'افزایش موجودی',
-        Icon: WalletSvg,
-        Component: ArrowUpSvg,
-        id: 'chargewallet',
+        Icon: ArrowUpSvg,
+        Component: MyInfo,
+        id: 'deposit',
     },
     {
         title: 'برداشت موجودی',
-        Icon: WalletSvg,
-        Component: ArrowDownSvg,
-        id: 'chargewallet',
+        Icon: ArrowDownSvg,
+        Component: MyInfo,
+        id: 'withdraw',
     },
 ]
 
