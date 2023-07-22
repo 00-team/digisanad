@@ -1,12 +1,10 @@
 import React, { FC, useEffect } from 'react'
 
 import { get_wallet } from 'api'
-import { CoinSvg } from 'icons'
+import { CoinSvg, NationalIdSvg } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { EthTokesKeys, ETH_TOKENS, TokenAtom, WalletAtom } from 'state'
-
-import { NationalIdSvg } from 'icons/Dashboard/NationalId'
 
 import './style/wallet.scss'
 
