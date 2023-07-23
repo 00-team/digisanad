@@ -15,19 +15,6 @@ async def transaction_get(*where) -> TM | None:
     return TM(**row)
 
 
-async def transaction_list(
-    *where, limit=settings.page_size, offset=0
-) -> list[TM]:
-    rows = await sqlx.fetch_all(
-        select(TT)
-        .where(*where)
-        .limit(limit)
-        .offset(offset)
-    )
-
-    return [TM(**r) for r in rows]
-
-
 async def transaction_update(*where, **values: dict):
     await sqlx.execute(
         update(TT).where(*where),
