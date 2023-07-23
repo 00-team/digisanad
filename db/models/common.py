@@ -20,3 +20,10 @@ class BaseCoin(BaseModel):
     name: str
     display: str
     network: NetworkType
+
+
+def model_dict(data: BaseModel | dict) -> dict:
+    if isinstance(data, BaseModel):
+        return data.dict()
+
+    return data
