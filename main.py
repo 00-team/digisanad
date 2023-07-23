@@ -7,6 +7,7 @@ from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
+import shared.logger
 from deps import get_ip
 from shared import redis, settings, sqlx, w3
 from shared.errors import Error, all_errors
