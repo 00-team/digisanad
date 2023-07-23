@@ -132,7 +132,7 @@ async def transaction_to_response(
             FROM {UserTable.__tablename__}
             WHERE user_id IN :user_ids
             ''',
-            {'user_ids': list(user_ids)}
+            {'user_ids': '(' + ','.join((str(i) for i in user_ids)) + ')'}
         )
         users_dict = {
             u[0]: TransactionUser(**u) for u in users
