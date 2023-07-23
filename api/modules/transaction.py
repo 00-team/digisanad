@@ -164,8 +164,8 @@ async def get_transactions(request: Request, page: int = 0):
         f'''
         SELECT * FROM {TransactionTable.__tablename__}
         WHERE (sender == :user_id OR receiver == :user_id)
-        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
         ORDER BY transaction_id DESC
+        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
         ''',
         {'user_id': user.user_id}
     )
