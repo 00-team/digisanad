@@ -1,7 +1,7 @@
 
 from sqlalchemy import insert, select, update
 
-from shared import sqlx
+from shared import settings, sqlx
 
 from .models import TransactionModel as TM
 from .models import TransactionTable as TT
@@ -15,7 +15,9 @@ async def transaction_get(*where) -> TM | None:
     return TM(**row)
 
 
-async def transaction_list(*where, limit=10, offset=0) -> list[TM]:
+async def transaction_list(
+    *where, limit=settings.page_size, offset=0
+) -> list[TM]:
     rows = await sqlx.fetch_all(
         select(TT)
         .where(*where)
