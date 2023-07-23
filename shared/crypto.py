@@ -181,6 +181,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
                 receiver=-1,
                 status=TransactionStatus.UNKNOWN,
                 amount=td['value'],
+                fee=settings.eth_main_fee,
                 last_update=utc_now(),
                 timestamp=utc_now(),
             )
