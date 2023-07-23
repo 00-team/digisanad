@@ -131,8 +131,10 @@ async def transaction_to_response(
     }
     users_dict[-1] = 'system'
 
+    result = []
+
     for ta in ta_list:
-        yield TransactionResponse(
+        result.append(TransactionResponse(
             transaction_id=ta.transaction_id,
             transaction_hash=ta.transaction_hash,
             network=ta.network,
@@ -144,7 +146,9 @@ async def transaction_to_response(
             status=ta.status,
             next_update=ta.next_update,
             timestamp=ta.timestamp,
-        )
+        ))
+
+    return result
 
 
 @router.get('/transactions/', response_model=list[TransactionModel])
@@ -158,9 +162,7 @@ async def get_transactions(request: Request, page: int = 0):
         ''',
         {'user_id': user.user_id}
     )
-    return list(transaction_to_response(
-        [TransactionModel(**r) for r in rows]
-    ))
+    return transaction_to_response([TransactionModel(**r) for r in rows])
 
 
 @router.get(
@@ -178,4 +180,4 @@ async def get_transaction(request: Request, transaction_id: int):
     if ta is None:
         raise bad_id('Transaction', transaction_id, id=transaction_id)
 
-    return next(transaction_to_response([ta]))
+    return transaction_to_response([ta])[0]
