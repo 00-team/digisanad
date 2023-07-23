@@ -3,26 +3,38 @@ from sqlalchemy import insert, select, update
 
 from shared import sqlx
 
-from .models import TransactionModel, TransactionTable
+from .models import TransactionModel as TM
+from .models import TransactionTable as TT
 
 
-async def transaction_get(*where) -> TransactionModel | None:
-    row = await sqlx.fetch_one(select(TransactionTable).where(*where))
+async def transaction_get(*where) -> TM | None:
+    row = await sqlx.fetch_one(select(TT).where(*where))
     if row is None:
         return None
 
-    return TransactionModel(**row)
+    return TM(**row)
+
+
+async def transaction_list(*where, limit=10, offset=0) -> list[TM]:
+    rows = await sqlx.fetch_all(
+        select(TT)
+        .where(*where)
+        .limit(limit)
+        .offset(offset)
+    )
+
+    return [TM(**r) for r in rows]
 
 
 async def transaction_update(*where, **values: dict):
     await sqlx.execute(
-        update(TransactionTable).where(*where),
+        update(TT).where(*where),
         values
     )
 
 
 async def transaction_add(**values: dict) -> int:
-    return await sqlx.execute(insert(TransactionTable), values)
+    return await sqlx.execute(insert(TT), values)
 
 
 async def transaction_count() -> int:
@@ -32,7 +44,7 @@ async def transaction_count() -> int:
 
 async def transaction_get_all(limit: int, offset: int):
     return await sqlx.fetch_all(
-        select(TransactionTable)
+        select(TT)
         .limit(limit)
         .offset(offset)
     )
