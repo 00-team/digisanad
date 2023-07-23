@@ -40,3 +40,6 @@ export * from './Footer/Location'
 
 export * from './Tokens/Shiba'
 export * from './Tokens/Tether'
+export * from './Tokens/Bitcoin'
+export * from './Tokens/Unknown'
+export * from './Tokens/Ethereum'
