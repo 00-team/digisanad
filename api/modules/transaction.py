@@ -7,8 +7,7 @@ from pydantic import BaseModel
 
 from db.general import general_get, general_update
 from db.models import NetworkType, TransactionModel, TransactionStatus
-from db.models import TransactionTable, UserModel, UserPublic, UserTable
-from db.models import WalletTable
+from db.models import TransactionTable, UserModel, UserPublic, WalletTable
 from db.transaction import transaction_get, transaction_update
 from db.user import user_public
 from db.wallet import wallet_get, wallet_update
