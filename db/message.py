@@ -30,4 +30,4 @@ async def message_unseen_count(user_id: int) -> int:
         SELECT COUNT(0) FROM messages
         WHERE seen IS false AND receiver = :user_id
     '''
-    return await sqlx.fetch_one(query, {'user_id': user_id})[0]
+    return (await sqlx.fetch_one(query, {'user_id': user_id}))[0]
