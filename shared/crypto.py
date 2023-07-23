@@ -173,7 +173,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             timestamp=utc_now(),
         )
 
-        await general_update(general.general_id, coins=general.coins)
+        await general_update(coins=general.coins)
 
     # for k, t in ETH_TOKENS.items():
     #     c = t['contract']
