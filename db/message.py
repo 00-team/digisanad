@@ -1,9 +1,17 @@
 
-from sqlalchemy import insert, update
+from sqlalchemy import insert, select, update
 
 from shared import sqlx
 
-from .models import MessageTable
+from .models import MessageModel, MessageTable
+
+
+async def message_get(*where) -> MessageModel | None:
+    row = await sqlx.fetch_one(select(MessageTable).where(*where))
+    if row is None:
+        return None
+
+    return MessageModel(**row)
 
 
 async def message_update(*where, **values: dict):
