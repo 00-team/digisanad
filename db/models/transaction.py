@@ -19,6 +19,7 @@ class TransactionTable(BaseTable):
     )
     transaction_hash = Column(String)
     network = Column(Integer, nullable=False)
+    coin_name = Column(String, nullable=False)
 
     sender = Column(
         'sender', Integer,
@@ -45,6 +46,7 @@ class TransactionModel(BaseModel):
     transaction_id: int
     transaction_hash: str | None = None
     network: NetworkType
+    coin_name: str
     sender: int
     receiver: int
     amount: int
