@@ -29,12 +29,76 @@ class TransactionResponse(BaseModel):
     transaction_id: int
     transaction_hash: str | None = None
     network: NetworkType
-    sender: UserModel | Literal['system']
-    receiver: UserModel | Literal['system']
+    coin_name: str
+    sender: TransactionUser | Literal['system']
+    receiver: TransactionUser | Literal['system']
     amount: int
+    fee: int
     status: TransactionStatus
-    last_update: int
+    next_update: int
     timestamp: int
+
+
+async def check_transaction(ta: TransactionModel) -> TransactionModel:
+    if not ta.transaction_hash or ta.status != TransactionStatus.UNKNOWN:
+        return ta
+
+    if ta.next_update > 1:
+        return ta
+
+    status = await transaction_status(ta.transaction_hash)
+
+    await transaction_update(
+        TransactionTable.transaction_id == ta.transaction_id,
+        status=status,
+        last_update=utc_now(),
+    )
+
+    if status == ta.status or ta.status == TransactionStatus.SUCCESS:
+        return ta
+
+    coinkey = f'{ta.network.value}_{ta.coin_name}'
+    general = await general_get()
+
+    if ta.sender == ta.receiver:
+        logging.warn(f'invalid transaction: {ta.transaction_id}')
+        return ta
+
+    if ta.sender == -1:
+        # from system to user
+        wallet = await wallet_get(WalletTable.user_id == ta.sender)
+
+        wallet.coins[coinkey].in_system += ta.amount
+
+        general.coins[coinkey].available -= ta.fee
+        general.coins[coinkey].total += ta.amount
+
+        await general_update(coins=general.coins)
+        await wallet_update(
+            WalletTable.wallet_id == wallet.wallet_id,
+            coins=wallet.coins
+        )
+
+    elif ta.receiver == -1:
+        # from user to system
+        wallet = await wallet_get(WalletTable.user_id == ta.sender)
+
+        wallet.coins[coinkey].in_system -= ta.amount - settings.eth_main_fee
+        wallet.coins[coinkey].in_wallet += ta.amount
+
+        general.coins[coinkey].total -= ta.amount
+        general.coins[coinkey].available -= ta.fee
+
+        await general_update(coins=general.coins)
+        await wallet_update(
+            WalletTable.wallet_id == wallet.wallet_id,
+            coins=wallet.coins
+        )
+    else:
+        # from user to another user
+        logging.warn(
+            f'invalid state of transaction: {ta.transaction_id}'
+        )
 
 
 @router.get('/transactions/', response_model=list[TransactionModel])
