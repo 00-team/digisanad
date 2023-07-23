@@ -25,15 +25,6 @@ async def user_add(**values: dict) -> int:
     return await sqlx.execute(insert(UserTable), values)
 
 
-async def user_count() -> int:
-    query = 'SELECT COUNT(0) from user'
-    return await sqlx.fetch_one(query)[0]
-
-
-async def user_get_all(limit: int, offset: int):
-    return await sqlx.fetch_all(select(UserTable).limit(limit).offset(offset))
-
-
 async def user_public(user_ids: list[int]) -> dict[int, UserPublic]:
     value = '(' + ','.join((str(i) for i in user_ids)) + ')'
     users = await sqlx.fetch_all(
