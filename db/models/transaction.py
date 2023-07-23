@@ -30,7 +30,7 @@ class TransactionTable(BaseTable):
         nullable=False, index=True, server_default=text('-1')
     )
     network = Column(String, nullable=False)
-    status = Column(String, nullable=False, server_default=text('unknown'))
+    status = Column(String, nullable=False, server_default='unknown')
     amount = Column(Integer, nullable=False)
     fee = Column(Integer, nullable=False)
     last_update = Column(Integer, nullable=False, server_default=text('0'))
