@@ -1,12 +1,19 @@
 
+import logging
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 
-from db.models import NetworkType, UserModel, WalletCoin, WalletTable
+from db.general import general_get, general_update
+from db.models import NetworkType, TransactionStatus, UserModel, WalletCoin
+from db.models import WalletTable
+from db.transaction import transaction_add
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
+from shared import ETH_ACC, settings, w3
 from shared.crypto import update_wallet
+from shared.errors import bad_balance
+from shared.tools import utc_now
 
 router = APIRouter(
     prefix='/user',
@@ -68,12 +75,89 @@ async def wallet(request: Request):
     )
 
 
-class TransferBody(BaseModel):
+class WithdrawalBody(BaseModel):
     addr: constr(min_length=16, max_length=1024)
     coin_name: str
-    coin_network: str
+    network: NetworkType
+    amount: int
 
 
-@router.post('/transfer/')
-async def transfer(request: Request, body: TransferBody):
-    return {'hi': 0}
+class WithdrawalResponse(BaseModel):
+    transaction_id: int
+
+
+@router.post(
+    '/withdrawal/', response_model=WithdrawalResponse,
+    openapi_extra={'errors': [bad_balance]}
+)
+async def withdrawal(request: Request, body: WithdrawalBody):
+    user: UserModel = request.state.user
+    wallet = await wallet_get(WalletTable.user_id == user.user_id)
+
+    coinkey = f'{body.network.value}_{body.coin_name}'
+
+    if wallet is None or coinkey not in wallet.coins:
+        raise bad_balance
+
+    balance = wallet.coins[coinkey].in_system
+    fee = settings.eth_fee
+    gas = 21000
+    gas_price = await w3.eth.gas_price
+    gas_fee = gas * gas_price
+
+    general = await general_get()
+    if coinkey not in general.coins:
+        logging.error(f'{coinkey=} is not in general coins')
+        raise bad_balance
+
+    value = body.amount - fee - gas_fee
+    if value < 1:
+        raise bad_balance
+
+    if body.amount > balance - fee - gas_fee:
+        raise bad_balance
+
+    eth_balance = await w3.eth.get_balance(ETH_ACC.address)
+    general.coins[coinkey].total = eth_balance
+
+    if eth_balance < body.amount:
+        logging.error('not enough money in the system')
+        raise bad_balance
+
+    if eth_balance < gas * gas_price:
+        logging.error('not enough money in the system :(')
+        raise bad_balance
+
+    td = {
+        'from': ETH_ACC.address,
+        'to': body.addr,
+        'value': value,
+        'nonce': await w3.eth.get_transaction_count(ETH_ACC.address),
+        'gas': gas,
+        'gasPrice': gas_price,
+    }
+    st = ETH_ACC.sign_transaction(td)
+    tx = await w3.eth.send_raw_transaction(st.rawTransaction)
+
+    wallet.coins[coinkey].in_system -= body.amount
+
+    general.coins[coinkey].total -= value + gas_fee
+    general.coins[coinkey].available += fee
+
+    await general_update(coins=general.coins)
+    transaction_id = await transaction_add(
+        transaction_hash=tx.hex(),
+        network=NetworkType.ethereum,
+        coin_name='eth',
+        sender=-1,
+        receiver=wallet.user_id,
+        status=TransactionStatus.UNKNOWN,
+        amount=value + fee,
+        fee=fee,
+        last_update=utc_now(),
+        timestamp=utc_now(),
+    )
+
+    return {
+        'transaction_id': transaction_id
+    }
