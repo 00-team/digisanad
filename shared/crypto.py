@@ -1,7 +1,8 @@
 
 # import json
-# import logging
+import logging
 
+from aiohttp.client_exceptions import ClientResponseError
 # from eth_account.signers.local import LocalAccount
 from web3.exceptions import TransactionNotFound
 from web3.types import HexBytes
@@ -145,44 +146,50 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
 
     eth_acc = w3.eth.account.from_key(accounts[NetworkType.ethereum].pk)
 
-    eth_balance = await w3.eth.get_balance(eth_acc.address)
+    try:
+        eth_balance = await w3.eth.get_balance(eth_acc.address)
 
-    nonce = 0
-    gas = 21000
-    gas_price = await w3.eth.gas_price
+        nonce = 0
+        gas = 21000
+        gas_price = await w3.eth.gas_price
 
-    if eth_balance - 1e5 > gas * gas_price:
-        nonce = await w3.eth.get_transaction_count(eth_acc.address)
-        td = {
-            'from': eth_acc.address,
-            'to': settings.eth_main_wallet,
-            'value': eth_balance - (gas * gas_price),
-            'nonce': nonce,
-            'gas': gas,
-            'gasPrice': gas_price,
-        }
-        nonce += 1
-        st = eth_acc.sign_transaction(td)
-        tx = w3.eth.send_raw_transaction(st.rawTransaction)
+        if eth_balance - 1e5 > gas * gas_price:
+            nonce = await w3.eth.get_transaction_count(eth_acc.address)
+            td = {
+                'from': eth_acc.address,
+                'to': settings.eth_main_wallet,
+                'value': eth_balance - (gas * gas_price),
+                'nonce': nonce,
+                'gas': gas,
+                'gasPrice': gas_price,
+            }
+            nonce += 1
+            st = eth_acc.sign_transaction(td)
+            tx = await w3.eth.send_raw_transaction(st.rawTransaction)
 
-        wallet.coins[eck].in_system += td['value'] - settings.eth_main_fee
-        wallet.coins[eck].in_wallet = 0
+            wallet.coins[eck].in_system += td['value'] - settings.eth_main_fee
+            wallet.coins[eck].in_wallet = 0
 
-        general.coins[eck].total += td['value']
-        general.coins[eck].available += settings.eth_main_fee
+            general.coins[eck].total += td['value']
+            general.coins[eck].available += settings.eth_main_fee
 
-        await transaction_add(
-            transaction_hash=tx.hex(),
-            network=NetworkType.ethereum,
-            sender=wallet.user_id,
-            receiver=-1,
-            status=TransactionStatus.UNKNOWN,
-            amount=td['value'],
-            last_update=utc_now(),
-            timestamp=utc_now(),
-        )
+            await transaction_add(
+                transaction_hash=tx.hex(),
+                network=NetworkType.ethereum,
+                sender=wallet.user_id,
+                receiver=-1,
+                status=TransactionStatus.UNKNOWN,
+                amount=td['value'],
+                last_update=utc_now(),
+                timestamp=utc_now(),
+            )
 
-        await general_update(coins=general.coins)
+            await general_update(coins=general.coins)
+    except TimeoutError:
+        logging.warn('timeout error')
+    except ClientResponseError as e:
+        logging.exception(e)
+        logging.error(e.message)
 
     # for k, t in ETH_TOKENS.items():
     #     c = t['contract']
@@ -197,7 +204,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     #             contract=t['contract'].address,
     #         ))
     #
-    # wallet.last_update = utc_now()
+    wallet.last_update = utc_now()
     # wallet.coin = coin
 
     return wallet
