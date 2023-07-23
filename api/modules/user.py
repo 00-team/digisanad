@@ -22,12 +22,17 @@ async def get(request: Request):
     return user
 
 
+class WalletAddr(BaseModel):
+    network: NetworkType
+    addr: str
+
+
 class WalletResponse(BaseModel):
     wallet_id: int
     user_id: int
     next_update: int
     coins: list[WalletCoin]
-    addrs: dict[NetworkType, str]
+    addrs: list[WalletAddr]
 
 
 @router.get('/wallet/', response_model=WalletResponse)
@@ -56,7 +61,10 @@ async def wallet(request: Request):
         user_id=wallet.user_id,
         next_update=wallet.next_update,
         coins=[c for c in wallet.coins.values()],
-        addrs={k: a.addr for k, a in wallet.accounts.items()},
+        addrs=[
+            WalletAddr(network=a.network, addr=a.addr)
+            for a in wallet.accounts.values()
+        ],
     )
 
 
