@@ -7,8 +7,10 @@ from pydantic import BaseModel
 
 from db.general import general_get, general_update
 from db.models import NetworkType, TransactionModel, TransactionStatus
-from db.models import TransactionTable, UserModel, UserTable, WalletTable
+from db.models import TransactionTable, UserModel, UserPublic, UserTable
+from db.models import WalletTable
 from db.transaction import transaction_get, transaction_update
+from db.user import user_public
 from db.wallet import wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared import settings, sqlx
@@ -23,19 +25,13 @@ router = APIRouter(
 )
 
 
-class TransactionUser(BaseModel):
-    user_id: int
-    first_name: str
-    last_name: str
-
-
 class TransactionResponse(BaseModel):
     transaction_id: int
     transaction_hash: str | None = None
     network: NetworkType
     coin_name: str
-    sender: TransactionUser | Literal['system'] | None
-    receiver: TransactionUser | Literal['system'] | None
+    sender: UserPublic | Literal['system'] | None
+    receiver: UserPublic | Literal['system'] | None
     amount: int
     fee: int
     status: TransactionStatus
@@ -113,9 +109,6 @@ async def transaction_to_response(
         return []
 
     user_ids = set()
-    users_dict = {
-        -1: 'system'
-    }
 
     for ta in ta_list:
         ta = await check_transaction(ta)
@@ -126,18 +119,7 @@ async def transaction_to_response(
         if ta.receiver != -1:
             user_ids.add(ta.receiver)
 
-    if user_ids:
-        user_ids_value = '(' + ','.join((str(i) for i in user_ids)) + ')'
-        users = await sqlx.fetch_all(
-            f'''
-            SELECT user_id, first_name, last_name
-            FROM {UserTable.__tablename__}
-            WHERE user_id IN {user_ids_value}
-            '''
-        )
-        for u in users:
-            users_dict[u[0]] = TransactionUser(**u)
-
+    users = await user_public(user_ids)
     result = []
     for ta in ta_list:
         result.append(TransactionResponse(
@@ -145,8 +127,8 @@ async def transaction_to_response(
             transaction_hash=ta.transaction_hash,
             network=ta.network,
             coin_name=ta.coin_name,
-            sender=users_dict.get(ta.sender),
-            receiver=users_dict.get(ta.receiver),
+            sender=users.get(ta.sender),
+            receiver=users.get(ta.receiver),
             amount=ta.amount,
             fee=ta.fee,
             status=ta.status,
