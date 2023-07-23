@@ -32,6 +32,7 @@ class TransactionTable(BaseTable):
     network = Column(String, nullable=False)
     status = Column(Integer, nullable=False, server_default=text('0'))
     amount = Column(Integer, nullable=False)
+    fee = Column(Integer, nullable=False)
     last_update = Column(Integer, nullable=False, server_default=text('0'))
     timestamp = Column(Integer, nullable=False, server_default=text('0'))
 
@@ -50,6 +51,7 @@ class TransactionModel(BaseModel):
     sender: int
     receiver: int
     amount: int
+    fee: int
     status: TransactionStatus
     last_update: int
     timestamp: int
