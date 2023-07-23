@@ -5,7 +5,7 @@ from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
 from shared import settings
 from shared.tools import utc_now
 
-from .common import BaseCoin, BaseTable
+from .common import BaseCoin, BaseTable, NetworkType
 from .user import UserTable
 
 
@@ -23,15 +23,19 @@ class WalletTable(BaseTable):
     )
     last_update = Column(Integer, nullable=False, server_default=text('0'))
     coins = Column(JSON, nullable=False, server_default='{}')
+    accounts = Column(JSON, nullable=False, server_default='{}')
 
 
 class WalletCoin(BaseCoin):
     in_wallet: int
     in_system: int
-    pk: str | None = None
-    addr: str | None = None
-    contract: str | None = None
     hidden: bool = False
+
+
+class WalletAccount(BaseModel):
+    network: NetworkType
+    pk: str
+    addr: str
 
 
 class WalletModel(BaseModel):
@@ -39,6 +43,7 @@ class WalletModel(BaseModel):
     user_id: int
     last_update: int
     coins: dict[str, WalletCoin]
+    accounts: dict[NetworkType, WalletAccount]
 
     @property
     def next_update(self) -> int:

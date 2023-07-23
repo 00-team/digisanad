@@ -5,7 +5,7 @@ from string import ascii_letters, digits
 from databases import Database
 from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
-from web3 import AsyncHTTPProvider, AsyncWeb3, EthereumTesterProvider
+from web3 import AsyncHTTPProvider, AsyncWeb3
 
 
 class Connection(sqlite3.Connection):
@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     base_dir: Path = Path(__file__).parent.parent
 
     sql_dir: Path = base_dir / 'db/files/'
-    sql_url: str = 'sqlite:///' + str(sql_dir / 'main.db')
 
     redis_pass: str
     infura_token: str
@@ -40,17 +39,24 @@ class Settings(BaseSettings):
     eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
     eth_main_fee: int = 4000
 
-    debug: bool = False
+    debug: bool = True
+    page_size: int = 10
 
 
 settings = Settings(_env_file='.secrets')
 settings.sql_dir.mkdir(parents=True, exist_ok=True)
-
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
+
+SQL_URL = 'sqlite:///'
+if settings.debug:
+    SQL_URL += str(settings.sql_dir / 'debug.db')
+else:
+    SQL_URL += str(settings.sql_dir / 'main.db')
+
 
 if settings.debug:
     w3 = AsyncWeb3(AsyncHTTPProvider(
-        'https://eth-sepolia.g.alchemy.com/v2/' + settings.alchemy_test_token
+        'https://sepolia.infura.io/v3/' + settings.infura_token
     ))
 else:
     w3 = AsyncWeb3(AsyncHTTPProvider(
@@ -62,4 +68,4 @@ redis = Redis(
     unix_socket_path='/run/redis/digisanad.sock'
 )
 
-sqlx = Database(settings.sql_url, factory=Connection)
+sqlx = Database(SQL_URL, factory=Connection)

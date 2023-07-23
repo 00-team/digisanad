@@ -1,14 +1,13 @@
 
-from enum import Enum, auto
+from enum import Enum
 
 from pydantic import BaseModel
-from sqlalchemy import Column, ForeignKey, Integer, String, text
+from sqlalchemy import Column, Integer, String, text
 
 from shared import settings
 from shared.tools import utc_now
 
 from .common import BaseTable, NetworkType
-from .user import UserTable
 
 
 class TransactionTable(BaseTable):
@@ -18,45 +17,50 @@ class TransactionTable(BaseTable):
         Integer, primary_key=True,
         index=True, autoincrement=True
     )
-    transaction_hash = Column(String, nullable=False)
+    transaction_hash = Column(String)
     network = Column(Integer, nullable=False)
+    coin_name = Column(String, nullable=False)
 
     sender = Column(
         'sender', Integer,
-        ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True, server_default=text('-1')
     )
     receiver = Column(
         'receiver', Integer,
-        ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True, server_default=text('-1')
     )
-    network = Column(Integer, nullable=False)
-    status = Column(Integer, nullable=False, server_default=text('0'))
+    network = Column(String, nullable=False)
+    status = Column(String, nullable=False, server_default='unknown')
     amount = Column(Integer, nullable=False)
+    fee = Column(Integer, nullable=False)
     last_update = Column(Integer, nullable=False, server_default=text('0'))
     timestamp = Column(Integer, nullable=False, server_default=text('0'))
 
 
-class TransactionStatus(int, Enum):
-    UNKNOWN = 0
-    SUCCESS = auto()
-    FAILURE = auto()
+class TransactionStatus(str, Enum):
+    UNKNOWN = 'unknown'
+    SUCCESS = 'success'
+    FAILURE = 'failure'
 
 
 class TransactionModel(BaseModel):
     transaction_id: int
-    transaction_hash: str
+    transaction_hash: str | None = None
     network: NetworkType
+    coin_name: str
     sender: int
     receiver: int
     amount: int
+    fee: int
     status: TransactionStatus
     last_update: int
     timestamp: int
 
     @property
     def next_update(self) -> int:
+        if self.status != TransactionStatus.UNKNOWN:
+            return 0
+
         return (
             (self.last_update + settings.update_transaction_timeout)
             - utc_now()

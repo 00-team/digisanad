@@ -1,5 +1,4 @@
 
-from os import environ
 
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
@@ -8,12 +7,16 @@ from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
+import shared.logger
 from deps import get_ip
-from shared import redis, settings, sqlx
+from shared import redis, settings, sqlx, w3
 from shared.errors import Error, all_errors
 
-with open(settings.base_dir / 'static/index.html', 'r') as f:
-    INDEX_HTML = f.read()
+index_path = settings.base_dir / 'static/dist/index.html'
+INDEX_HTML = 'index.html not found :/'
+if index_path.is_file():
+    with open(index_path, 'r') as f:
+        INDEX_HTML = f.read()
 
 app = FastAPI(
     title='DigiSanad',
@@ -35,6 +38,7 @@ async def error_exception_handler(request, exc: Error):
 
 @app.on_event('startup')
 async def startup():
+    # assert await w3.is_connected()
     await redis.ping()
     await sqlx.connect()
 
