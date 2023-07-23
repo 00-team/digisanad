@@ -1,23 +1,27 @@
 import { FC } from 'react'
 
-import { ShibaSvg, TetherSvg } from 'icons'
+import { BitcoinSvg, EthereumSvg, UnknownSvg } from 'icons'
 
-type EthTokesKeys = 'usdt' | 'shib'
-type EthTokens = {
-    [k in EthTokesKeys]: {
+type NetworkTypes = 'eth' | 'btc' | 'xtz'
+type Networks = {
+    [k in NetworkTypes]: {
         name: string
         logo: FC
     }
 }
 
-const ETH_TOKENS: EthTokens = {
-    usdt: {
-        name: 'تتر',
-        logo: TetherSvg,
+const Networks_List: Networks = {
+    eth: {
+        name: 'اتریوم',
+        logo: EthereumSvg,
     },
-    shib: {
-        name: 'شیبا',
-        logo: ShibaSvg,
+    btc: {
+        name: 'بیتکوین',
+        logo: BitcoinSvg,
+    },
+    xtz: {
+        name: 'تزوس',
+        logo: UnknownSvg,
     },
 } as const
 
@@ -25,9 +29,23 @@ type Wallet = {
     wallet_id: number
     user_id: number
     next_update: number
-    eth_addr: string
-    eth_balance: number
-    eth_tokens: { [k in EthTokesKeys]: number }
+
+    coins: {
+        name: string
+        display: string
+        network: NetworkTypes
+        in_wallet: number
+        in_system: number
+        hidden: boolean
+    }[]
+    addrs: {
+        network: NetworkTypes
+        addr: string
+    }[]
+
+    // eth_addr: string
+    // eth_balance: number
+    // eth_tokens: { [k in EthTokesKeys]: number }
 }
 
-export { Wallet as WalletModel, ETH_TOKENS, EthTokesKeys }
+export { Wallet as WalletModel, Networks_List }
