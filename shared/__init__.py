@@ -67,4 +67,4 @@ redis = Redis(
     unix_socket_path='/run/redis/digisanad.sock'
 )
 
-sqlx = Database(settings.sql_url, factory=Connection)
+sqlx = Database(SQL_URL, factory=Connection)
