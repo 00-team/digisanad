@@ -24,6 +24,7 @@ import Contracts from './Contracts'
 import { Deposit } from './Deposit'
 import MyInfo from './MyInfo'
 import Wallet from './Wallet'
+import Withdraw from './Withdraw'
 
 import './style/dashboard.scss'
 
@@ -68,7 +69,7 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     {
         title: 'برداشت موجودی',
         Icon: ArrowDownSvg,
-        Component: MyInfo,
+        Component: Withdraw,
         id: 'withdraw',
     },
 ]
