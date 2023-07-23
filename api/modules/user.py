@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 
-from db.models import UserModel, WalletTable
+from db.models import NetworkType, UserModel, WalletCoin, WalletTable
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared.crypto import update_wallet
@@ -22,20 +22,12 @@ async def get(request: Request):
     return user
 
 
-class CoinModel(BaseModel):
-    name: str
-    display: str
-    balance: float
-    network: str
-    addr: str | None = None
-    contract: str | None = None
-
-
 class WalletResponse(BaseModel):
     wallet_id: int
     user_id: int
     next_update: int
-    coin: list[CoinModel]
+    coins: list[WalletCoin]
+    addrs: dict[NetworkType, str]
 
 
 @router.get('/wallet/', response_model=WalletResponse)
@@ -59,10 +51,13 @@ async def wallet(request: Request):
 
         wallet = new_wallet
 
-    response = wallet.dict()
-    response['next_update'] = wallet.next_update
-
-    return response
+    return WalletResponse(
+        wallet_id=wallet.wallet_id,
+        user_id=wallet.user_id,
+        next_update=wallet.next_update,
+        coins=[c for c in wallet.coins.values()],
+        addrs={k: a.addr for k, a in wallet.accounts.items()},
+    )
 
 
 class TransferBody(BaseModel):
