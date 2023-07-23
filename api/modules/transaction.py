@@ -157,6 +157,18 @@ async def transaction_to_response(
     return result
 
 
+@router.get('/global/', response_model=list[TransactionResponse])
+async def global_transactions(request: Request, page: int = 0):
+    rows = await sqlx.fetch_all(
+        f'''
+        SELECT * FROM {TransactionTable.__tablename__}
+        ORDER BY transaction_id DESC
+        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
+        ''',
+    )
+    return await transaction_to_response([TransactionModel(**r) for r in rows])
+
+
 @router.get('/', response_model=list[TransactionResponse])
 async def get_transactions(request: Request, page: int = 0):
     user: UserModel = request.state.user
