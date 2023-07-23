@@ -89,9 +89,9 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             network=NetworkType.ethereum,
             available=0,
             total=0
-        )
+        ).dict()
         # general.coins.update(ETH_GENERAL_COINS)
-        await general_update(general.general_id, coins=general.coins)
+        await general_update(coins=general.coins)
 
     if wallet is None:
         eth_acc = w3.eth.account.create()
