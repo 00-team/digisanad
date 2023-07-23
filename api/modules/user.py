@@ -12,7 +12,7 @@ from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared import ETH_ACC, settings, w3
 from shared.crypto import update_wallet
-from shared.errors import bad_balance
+from shared.errors import bad_args, bad_balance
 from shared.tools import utc_now
 
 router = APIRouter(
@@ -88,7 +88,7 @@ class WithdrawalResponse(BaseModel):
 
 @router.post(
     '/withdrawal/', response_model=WithdrawalResponse,
-    openapi_extra={'errors': [bad_balance]}
+    openapi_extra={'errors': [bad_balance, bad_args]}
 )
 async def withdrawal(request: Request, body: WithdrawalBody):
     user: UserModel = request.state.user
@@ -128,16 +128,19 @@ async def withdrawal(request: Request, body: WithdrawalBody):
         logging.error('not enough money in the system :(')
         raise bad_balance
 
-    td = {
-        'from': ETH_ACC.address,
-        'to': body.addr,
-        'value': value,
-        'nonce': await w3.eth.get_transaction_count(ETH_ACC.address),
-        'gas': gas,
-        'gasPrice': gas_price,
-    }
-    st = ETH_ACC.sign_transaction(td)
-    tx = await w3.eth.send_raw_transaction(st.rawTransaction)
+    try:
+        td = {
+            'from': ETH_ACC.address,
+            'to': body.addr,
+            'value': value,
+            'nonce': await w3.eth.get_transaction_count(ETH_ACC.address),
+            'gas': gas,
+            'gasPrice': gas_price,
+        }
+        st = ETH_ACC.sign_transaction(td)
+        tx = await w3.eth.send_raw_transaction(st.rawTransaction)
+    except TypeError:
+        raise bad_args
 
     wallet.coins[coinkey].in_system -= body.amount
 
