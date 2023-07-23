@@ -1,6 +1,6 @@
 
 
-from enum import Enum, auto
+from enum import Enum
 
 from pydantic import BaseModel
 from sqlalchemy import MetaData
