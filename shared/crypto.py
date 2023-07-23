@@ -131,7 +131,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             in_system=0,
             pk=eth_acc.key.hex(),
             addr=eth_acc.address
-        )
+        ).dict()
         # wallet.coins.update(ETH_WALLET_COINS)
         return wallet
 
