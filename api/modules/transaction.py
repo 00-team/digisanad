@@ -169,7 +169,7 @@ async def get_transactions(request: Request, page: int = 0):
         ''',
         {'user_id': user.user_id}
     )
-    return transaction_to_response([TransactionModel(**r) for r in rows])
+    return await transaction_to_response([TransactionModel(**r) for r in rows])
 
 
 @router.get(
@@ -187,4 +187,4 @@ async def get_transaction(request: Request, transaction_id: int):
     if ta is None:
         raise bad_id('Transaction', transaction_id, id=transaction_id)
 
-    return transaction_to_response([ta])[0]
+    return (await transaction_to_response([ta]))[0]
