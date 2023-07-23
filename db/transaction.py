@@ -24,16 +24,3 @@ async def transaction_update(*where, **values: dict):
 
 async def transaction_add(**values: dict) -> int:
     return await sqlx.execute(insert(TT), values)
-
-
-async def transaction_count() -> int:
-    query = 'SELECT COUNT(0) from transactions'
-    return await sqlx.fetch_one(query)[0]
-
-
-async def transaction_get_all(limit: int, offset: int):
-    return await sqlx.fetch_all(
-        select(TT)
-        .limit(limit)
-        .offset(offset)
-    )
