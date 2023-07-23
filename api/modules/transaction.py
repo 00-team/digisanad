@@ -176,10 +176,8 @@ async def get_transactions(request: Request, page: int = 0):
     openapi_extra={'errors': [bad_id]}
 )
 async def get_transaction(request: Request, transaction_id: int):
-    user: UserModel = request.state.user
     ta = await transaction_get(
         TransactionTable.transaction_id == transaction_id,
-        TransactionTable.user_id == user.user_id
     )
 
     if ta is None:
