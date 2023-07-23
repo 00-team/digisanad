@@ -20,6 +20,7 @@ class UserTable(BaseTable):
     address = Column(String, nullable=False)
     email = Column(String, nullable=False)
     token = Column(String, unique=True)  # hashed token
+    admin = Column(String)
 
     # block_list = Column(JSON, server_default='{}')
 
@@ -34,8 +35,7 @@ class UserModel(BaseModel):
     postal_code: str
     address: str
     email: str
-    # wallet: int
-
+    admin: str | None = None
     token: str | None
 
     @property
