@@ -114,6 +114,11 @@ account_exists = Error(
     'an account has been registered with this phone number already!',
     400
 )
+bad_balance = Error(
+    40012, 'Bad Balance',
+    'not enough balance in this wallet for transfer',
+    400
+)
 
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
@@ -122,6 +127,7 @@ all_errors = [
     forbidden, bad_verification,
     no_change, bad_id, bad_auth, rate_limited,
     bad_args, register_required, account_exists,
+    bad_balance,
 
     database_error
 ]
