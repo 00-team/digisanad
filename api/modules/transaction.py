@@ -50,7 +50,12 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
     if ta.next_update > 1:
         return ta
 
+    if ta.sender == ta.receiver:
+        logging.warn(f'invalid transaction: {ta.transaction_id}')
+        return ta
+
     status = await transaction_status(ta.transaction_hash)
+    ta.status = status
 
     await transaction_update(
         TransactionTable.transaction_id == ta.transaction_id,
@@ -58,15 +63,11 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
         last_update=utc_now(),
     )
 
-    if status == ta.status or ta.status == TransactionStatus.SUCCESS:
+    if ta.status != TransactionStatus.FAILURE:
         return ta
 
     coinkey = f'{ta.network.value}_{ta.coin_name}'
     general = await general_get()
-
-    if ta.sender == ta.receiver:
-        logging.warn(f'invalid transaction: {ta.transaction_id}')
-        return ta
 
     if ta.sender == -1:
         # from system to user
@@ -87,7 +88,7 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
         # from user to system
         wallet = await wallet_get(WalletTable.user_id == ta.sender)
 
-        wallet.coins[coinkey].in_system -= ta.amount - settings.eth_main_fee
+        wallet.coins[coinkey].in_system -= ta.amount - ta.fee
         wallet.coins[coinkey].in_wallet += ta.amount
 
         general.coins[coinkey].total -= ta.amount
