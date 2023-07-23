@@ -31,7 +31,7 @@ class TransactionTable(BaseTable):
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True, server_default=text('-1')
     )
-    network = Column(Integer, nullable=False)
+    network = Column(String, nullable=False)
     status = Column(Integer, nullable=False, server_default=text('0'))
     amount = Column(Integer, nullable=False)
     last_update = Column(Integer, nullable=False, server_default=text('0'))
