@@ -1,10 +1,12 @@
 import React, { FC, useEffect } from 'react'
 
 import { get_wallet } from 'api'
-import { CoinSvg, NationalIdSvg } from 'icons'
+import { CoinSvg } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
-import { EthTokesKeys, ETH_TOKENS, TokenAtom, WalletAtom } from 'state'
+import { Networks_List, TokenAtom, WalletAtom } from 'state'
+
+import { Loading } from 'components'
 
 import './style/wallet.scss'
 
@@ -28,7 +30,7 @@ const Wallet: FC = () => {
             <section id='wallet' className='wallet-container'>
                 <div className='section-header section_title'>کیف پول</div>
                 <div className='wallet-wrapper'>
-                    <span className='title'>درحال بارگذاری</span>
+                    <Loading style={{ height: '50vh' }} />
                 </div>
             </section>
         )
@@ -39,34 +41,38 @@ const Wallet: FC = () => {
             <div className='section-header section_title'>کیف پول</div>
             <div className='wallet-wrapper'>
                 <div className='rows'>
-                    <Row
+                    {/* <Row
                         Svg={CoinSvg}
-                        data={wallet.eth_balance.toLocaleString()}
+                        data={wallet.coins.in_wallet.toLocaleString()}
                         holder={'مقدار اتریوم'}
-                    />
-                    <Row
-                        Svg={NationalIdSvg}
-                        data={
-                            <input
-                                className='addr'
-                                value={wallet.eth_addr}
-                                onChange={() => {}}
+                    /> */}
+                    {wallet.addrs.map((addr, index) => {
+                        const coinAddr = Networks_List[addr.network]
+                        return (
+                            <Row
+                                key={index}
+                                Svg={coinAddr.logo}
+                                data={
+                                    <input
+                                        className='addr'
+                                        value={addr.addr}
+                                        onChange={() => {}}
+                                    />
+                                }
+                                holder={coinAddr.name}
                             />
-                        }
-                        holder={'آدرس اتریوم'}
-                    />
-                    {Object.entries(wallet.eth_tokens).map(
-                        ([token_key, token_balance]) => {
-                            let D = ETH_TOKENS[token_key as EthTokesKeys]
-                            return (
-                                <Row
-                                    holder={D.name}
-                                    Svg={D.logo}
-                                    data={token_balance}
-                                />
-                            )
-                        }
-                    )}
+                        )
+                    })}
+                    {wallet.coins.map((coin, index) => {
+                        return (
+                            <Row
+                                key={index}
+                                holder={coin.name}
+                                Svg={CoinSvg}
+                                data={coin.in_wallet}
+                            />
+                        )
+                    })}
                 </div>
             </div>
         </section>
