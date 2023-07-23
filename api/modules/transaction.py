@@ -108,7 +108,13 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
 async def transaction_to_response(
     ta_list: list[TransactionModel]
 ) -> list[TransactionResponse]:
+    if not ta_list:
+        return []
+
     user_ids = set()
+    users_dict = {
+        -1: 'system'
+    }
 
     for ta in ta_list:
         ta = await check_transaction(ta)
