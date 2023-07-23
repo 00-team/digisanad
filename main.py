@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 import api
 from deps import get_ip
-from shared import redis, settings, sqlx
+from shared import redis, settings, sqlx, w3
 from shared.errors import Error, all_errors
 
 index_path = settings.base_dir / 'static/dist/index.html'
@@ -37,6 +37,7 @@ async def error_exception_handler(request, exc: Error):
 
 @app.on_event('startup')
 async def startup():
+    assert await w3.is_connected()
     await redis.ping()
     await sqlx.connect()
 
