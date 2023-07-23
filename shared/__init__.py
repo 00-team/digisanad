@@ -39,10 +39,11 @@ class Settings(BaseSettings):
     eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
     eth_main_fee: int = 4000
 
-    debug: bool = True
+    debug: bool = False
 
 
 settings = Settings(_env_file='.secrets')
+settings.debug = True
 settings.sql_dir.mkdir(parents=True, exist_ok=True)
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
