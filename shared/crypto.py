@@ -78,6 +78,42 @@ async def transaction_status(tx: str | HexBytes) -> TransactionStatus:
         return TransactionStatus.UNKNOWN
 
 
+RT = tuple[
+    dict[str, WalletCoin],
+    dict[NetworkType, WalletAccount]
+]
+
+
+def update_wallet_data(wallet: WalletModel = None) -> RT:
+    ethkey = f'{NetworkType.ethereum.value}_eth'
+
+    coins = {}
+    accounts = {}
+
+    if wallet:
+        coins = wallet.coins
+        accounts = wallet.accounts
+
+    if NetworkType.ethereum not in accounts:
+        eth_acc = w3.eth.account.create()
+        accounts[NetworkType.ethereum] = WalletAccount(
+            network=NetworkType.ethereum,
+            pk=eth_acc.key.hex(),
+            addr=eth_acc.address
+        ).dict()
+
+    if ethkey not in coins:
+        coins[ethkey] = WalletCoin(
+            name='eth',
+            display='Ether',
+            network=NetworkType.ethereum,
+            in_wallet=0,
+            in_system=0,
+        ).dict()
+
+    return coins, accounts
+
+
 async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     eck = f'{NetworkType.ethereum.value}_eth'
 
@@ -93,25 +129,9 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
         # general.coins.update(ETH_GENERAL_COINS)
         await general_update(coins=general.coins)
 
+    coins, accounts = update_wallet_data(wallet)
+
     if wallet is None:
-        eth_acc = w3.eth.account.create()
-        coins = {eck: WalletCoin(
-            name='eth',
-            display='Ether',
-            network=NetworkType.ethereum,
-            in_wallet=0,
-            in_system=0,
-        ).dict()}
-        # coins.update(ETH_WALLET_COINS)
-
-        accounts = {
-            NetworkType.ethereum: WalletAccount(
-                network=NetworkType.ethereum,
-                pk=eth_acc.key.hex(),
-                addr=eth_acc.address
-            ).dict()
-        }
-
         return WalletModel(
             wallet_id=0,
             user_id=0,
@@ -120,22 +140,11 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             accounts=accounts,
         )
 
-    eth_coin = wallet.coins.get(eck)
-    if eth_coin is None:
-        eth_acc = w3.eth.account.create()
-        wallet.coins[eck] = WalletCoin(
-            name='eth',
-            display='Ether',
-            network=NetworkType.ethereum,
-            in_wallet=0,
-            in_system=0,
-            pk=eth_acc.key.hex(),
-            addr=eth_acc.address
-        ).dict()
-        # wallet.coins.update(ETH_WALLET_COINS)
-        return wallet
+    wallet.coins = coins
+    wallet.accounts = accounts
 
-    eth_acc = w3.eth.account.from_key(eth_coin.pk)
+    eth_acc = w3.eth.account.from_key(accounts[NetworkType.ethereum].pk)
+
     eth_balance = await w3.eth.get_balance(eth_acc.address)
 
     nonce = 0
