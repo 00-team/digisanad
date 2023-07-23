@@ -11,8 +11,11 @@ from deps import get_ip
 from shared import redis, settings, sqlx
 from shared.errors import Error, all_errors
 
-with open(settings.base_dir / 'static/index.html', 'r') as f:
-    INDEX_HTML = f.read()
+index_path = settings.base_dir / 'static/dist/index.html'
+INDEX_HTML = 'index.html not found :/'
+if index_path.is_file():
+    with open(index_path, 'r') as f:
+        INDEX_HTML = f.read()
 
 app = FastAPI(
     title='DigiSanad',
