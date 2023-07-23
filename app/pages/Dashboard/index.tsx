@@ -21,12 +21,13 @@ import { TokenAtom, UserAtom } from 'state'
 import { LogoutButton } from 'components/common/LogoutButton'
 
 import Contracts from './Contracts'
+import { Deposit } from './Deposit'
 import MyInfo from './MyInfo'
 import Wallet from './Wallet'
 
 import './style/dashboard.scss'
 
-const OPTIONS_BASE_DELAY = 1.75
+const OPTIONS_BASE_DELAY = 1
 const ADDED_DELAY = 0.1
 
 interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
@@ -61,7 +62,7 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     {
         title: 'افزایش موجودی',
         Icon: ArrowUpSvg,
-        Component: MyInfo,
+        Component: Deposit,
         id: 'deposit',
     },
     {
