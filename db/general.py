@@ -23,7 +23,7 @@ async def general_update(**values: dict):
     coins = values.get('coins')
 
     if coins:
-        for k, v in coins:
+        for k, v in coins.items():
             values['coins'][k] = model_dict(v)
 
     await sqlx.execute(
