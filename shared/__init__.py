@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     base_dir: Path = Path(__file__).parent.parent
 
     sql_dir: Path = base_dir / 'db/files/'
-    sql_url: str = 'sqlite:///' + str(sql_dir / 'main.db')
 
     redis_pass: str
     infura_token: str
