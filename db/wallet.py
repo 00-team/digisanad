@@ -20,11 +20,11 @@ def update_values(values: dict) -> dict:
     coins = values.get('coins')
 
     if accounts:
-        for k, v in accounts:
+        for k, v in accounts.items():
             values['accounts'][k] = model_dict(v)
 
     if coins:
-        for k, v in coins:
+        for k, v in coins.items():
             values['coins'][k] = model_dict(v)
 
     return values
