@@ -164,7 +164,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
 
         await transaction_add(
             transaction_hash=tx.hex(),
-            network=NetworkType.ethereum.value,
+            network=NetworkType.ethereum,
             sender=wallet.user_id,
             receiver=-1,
             status=TransactionStatus.UNKNOWN,
