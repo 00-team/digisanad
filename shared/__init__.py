@@ -39,13 +39,19 @@ class Settings(BaseSettings):
     eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
     eth_main_fee: int = 4000
 
-    debug: bool = False
+    debug: bool = True
 
 
 settings = Settings(_env_file='.secrets')
 settings.sql_dir.mkdir(parents=True, exist_ok=True)
-
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
+
+SQL_URL = 'sqlite:///'
+if settings.debug:
+    SQL_URL += str(settings.sql_dir / 'debug.db')
+else:
+    SQL_URL += str(settings.sql_dir / 'main.db')
+
 
 if settings.debug:
     w3 = AsyncWeb3(AsyncHTTPProvider(
