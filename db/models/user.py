@@ -22,8 +22,6 @@ class UserTable(BaseTable):
     token = Column(String, unique=True)  # hashed token
     admin = Column(String)
 
-    # block_list = Column(JSON, server_default='{}')
-
 
 class UserModel(BaseModel):
     user_id: int
