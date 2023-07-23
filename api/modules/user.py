@@ -74,7 +74,6 @@ async def wallet(request: Request):
 @router.get('/transactions/', response_model=list[TransactionModel])
 async def transactions(request: Request, page: int = 0):
     user: UserModel = request.state.user
-    TransactionTable.receiver
     rows = await sqlx.fetch_all(
         f'''
         SELECT * FROM {TransactionTable.__tablename__}
