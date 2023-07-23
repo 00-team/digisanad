@@ -76,7 +76,7 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
         wallet.coins[coinkey].in_system += ta.amount
 
         general.coins[coinkey].available -= ta.fee
-        general.coins[coinkey].total += ta.amount
+        general.coins[coinkey].total += ta.amount - ta.fee
 
         await general_update(coins=general.coins)
         await wallet_update(

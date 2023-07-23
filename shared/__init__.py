@@ -3,6 +3,7 @@ from pathlib import Path
 from string import ascii_letters, digits
 
 from databases import Database
+from eth_account.account import Account, LocalAccount
 from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
 from web3 import AsyncHTTPProvider, AsyncWeb3
@@ -36,8 +37,8 @@ class Settings(BaseSettings):
     update_wallet_timeout: int = 5 * 60
     update_transaction_timeout: int = 1 * 60
 
-    eth_main_wallet: str = '0x7aE0A149Ce992145078b6E44091fec5358E7AE9A'
-    eth_main_fee: int = 4000
+    eth_fee: int = 4000
+    eth_pk: str
 
     debug: bool = True
     page_size: int = 10
@@ -53,6 +54,8 @@ if settings.debug:
 else:
     SQL_URL += str(settings.sql_dir / 'main.db')
 
+
+ETH_ACC: LocalAccount = Account.from_key(settings.eth_pk)
 
 if settings.debug:
     w3 = AsyncWeb3(AsyncHTTPProvider(

@@ -33,8 +33,6 @@ def get_ip():
 
 
 async def rate_limit(request, path_id):
-    # TODO: remove this debug code
-    return
     period = 3600
     amount = 10
 
@@ -96,9 +94,9 @@ def admin_required():
     '''admin token is required'''
 
     async def decorator(request: Request, user: UserModel = user_required()):
-        # if not user.admin or state.agent.admin_perms == 0:
-        #     await rate_limit(request, 'admin_check')
-        raise forbidden
+        if not user.is_admin:
+            await rate_limit(request, 'admin_check')
+            raise forbidden
 
     dep = Depends(decorator)
     dep.errors = errors + [forbidden]

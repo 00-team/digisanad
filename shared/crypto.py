@@ -11,7 +11,7 @@ from db.general import general_get, general_update
 from db.models import GeneralCoin, NetworkType, TransactionStatus
 from db.models import WalletAccount, WalletCoin, WalletModel
 from db.transaction import transaction_add
-from shared import settings, w3
+from shared import ETH_ACC, settings, w3
 from shared.tools import utc_now
 
 # def get_abi(name: str) -> list:
@@ -157,7 +157,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             nonce = await w3.eth.get_transaction_count(eth_acc.address)
             td = {
                 'from': eth_acc.address,
-                'to': settings.eth_main_wallet,
+                'to': ETH_ACC.address,
                 'value': eth_balance - (gas * gas_price),
                 'nonce': nonce,
                 'gas': gas,
@@ -167,11 +167,11 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             st = eth_acc.sign_transaction(td)
             tx = await w3.eth.send_raw_transaction(st.rawTransaction)
 
-            wallet.coins[eck].in_system += td['value'] - settings.eth_main_fee
+            wallet.coins[eck].in_system += td['value'] - settings.eth_fee
             wallet.coins[eck].in_wallet = 0
 
             general.coins[eck].total += td['value']
-            general.coins[eck].available += settings.eth_main_fee
+            general.coins[eck].available += settings.eth_fee
 
             await transaction_add(
                 transaction_hash=tx.hex(),
@@ -181,7 +181,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
                 receiver=-1,
                 status=TransactionStatus.UNKNOWN,
                 amount=td['value'],
-                fee=settings.eth_main_fee,
+                fee=settings.eth_fee,
                 last_update=utc_now(),
                 timestamp=utc_now(),
             )

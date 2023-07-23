@@ -21,6 +21,10 @@ update_db)
     alembic -c config/alembic.ini upgrade head
     ;;
 
+master)
+    sqlite3 $2 "UPDATE users SET admin = '1' WHERE user_id = $3"
+    ;;
+
 tag)
     if [[ -z $2 ]]; then
         exit
