@@ -1,5 +1,5 @@
 
-from enum import Enum, auto
+from enum import Enum
 
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, text
@@ -37,10 +37,10 @@ class TransactionTable(BaseTable):
     timestamp = Column(Integer, nullable=False, server_default=text('0'))
 
 
-class TransactionStatus(int, Enum):
-    UNKNOWN = 0
-    SUCCESS = auto()
-    FAILURE = auto()
+class TransactionStatus(str, Enum):
+    UNKNOWN = 'unknown'
+    SUCCESS = 'success'
+    FAILURE = 'failure'
 
 
 class TransactionModel(BaseModel):
