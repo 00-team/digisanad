@@ -134,12 +134,10 @@ async def transaction_to_response(
             WHERE user_id IN {user_ids_value}
             '''
         )
-        users_dict = {
-            u[0]: TransactionUser(**u) for u in users
-        }
+        for u in users:
+            users_dict[u[0]] = TransactionUser(**u)
 
     result = []
-
     for ta in ta_list:
         result.append(TransactionResponse(
             transaction_id=ta.transaction_id,
