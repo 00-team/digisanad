@@ -149,7 +149,7 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
 
     nonce = 0
     gas = 21000
-    gas_price = w3.eth.gas_price
+    gas_price = await w3.eth.gas_price
 
     if eth_balance - 1e5 > gas * gas_price:
         nonce = await w3.eth.get_transaction_count(eth_acc.address)
