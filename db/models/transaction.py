@@ -58,6 +58,9 @@ class TransactionModel(BaseModel):
 
     @property
     def next_update(self) -> int:
+        if self.status != TransactionStatus.UNKNOWN:
+            return 0
+
         return (
             (self.last_update + settings.update_transaction_timeout)
             - utc_now()
