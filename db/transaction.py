@@ -1,7 +1,7 @@
 
 from sqlalchemy import insert, select, update
 
-from shared import settings, sqlx
+from shared import sqlx
 
 from .models import TransactionModel as TM
 from .models import TransactionTable as TT

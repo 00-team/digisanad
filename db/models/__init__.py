@@ -1,13 +1,15 @@
 from .common import BaseCoin, BaseTable, NetworkType, metadata, model_dict
 from .general import GeneralCoin, GeneralModel, GeneralTable
+from .message import MessageLevel, MessageModel, MessageTable
 from .transaction import TransactionModel, TransactionStatus, TransactionTable
-from .user import AdminPerms, UserModel, UserTable
+from .user import AdminPerms, UserModel, UserPublic, UserTable
 from .wallet import WalletAccount, WalletCoin, WalletModel, WalletTable
 
 __all__ = [
     'BaseTable', 'metadata', 'NetworkType', 'BaseCoin', 'model_dict',
-    'UserTable', 'UserModel', 'AdminPerms',
-    'WalletTable', 'WalletModel', 'WalletCoin', 'WalletAccount',
     'GeneralTable', 'GeneralCoin', 'GeneralModel',
+    'MessageTable', 'MessageModel', 'MessageLevel',
     'TransactionStatus', 'TransactionModel', 'TransactionTable',
+    'UserTable', 'UserModel', 'AdminPerms', 'UserPublic',
+    'WalletTable', 'WalletModel', 'WalletCoin', 'WalletAccount',
 ]

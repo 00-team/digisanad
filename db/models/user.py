@@ -54,11 +54,14 @@ class AdminPerms(int, Enum):
     C_GENERAL = auto()
 
 
-class UserModel(BaseModel):
+class UserPublic(BaseModel):
     user_id: int
-    phone: str
     first_name: str
     last_name: str
+
+
+class UserModel(UserPublic):
+    phone: str
     birth_date: str
     national_id: str
     postal_code: str
