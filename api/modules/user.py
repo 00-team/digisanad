@@ -148,6 +148,11 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     general.coins[coinkey].available += fee
 
     await general_update(coins=general.coins)
+    await wallet_update(
+        WalletTable.wallet_id == wallet.wallet_id,
+        coins=wallet.coins
+    )
+
     transaction_id = await transaction_add(
         transaction_hash=tx.hex(),
         network=NetworkType.ethereum,
