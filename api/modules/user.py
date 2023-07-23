@@ -3,14 +3,10 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 
-from db.models import NetworkType, TransactionModel, TransactionTable
-from db.models import UserModel, WalletCoin, WalletTable
-from db.transaction import transaction_get
+from db.models import NetworkType, UserModel, WalletCoin, WalletTable
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
-from shared import settings, sqlx
 from shared.crypto import update_wallet
-from shared.errors import bad_id
 
 router = APIRouter(
     prefix='/user',
