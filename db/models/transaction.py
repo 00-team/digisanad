@@ -17,7 +17,7 @@ class TransactionTable(BaseTable):
         Integer, primary_key=True,
         index=True, autoincrement=True
     )
-    transaction_hash = Column(String, nullable=False)
+    transaction_hash = Column(String)
     network = Column(Integer, nullable=False)
 
     sender = Column(
@@ -43,7 +43,7 @@ class TransactionStatus(int, Enum):
 
 class TransactionModel(BaseModel):
     transaction_id: int
-    transaction_hash: str
+    transaction_hash: str | None = None
     network: NetworkType
     sender: int
     receiver: int
