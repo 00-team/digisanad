@@ -2,13 +2,12 @@
 from enum import Enum, auto
 
 from pydantic import BaseModel
-from sqlalchemy import Column, ForeignKey, Integer, String, text
+from sqlalchemy import Column, Integer, String, text
 
 from shared import settings
 from shared.tools import utc_now
 
 from .common import BaseTable, NetworkType
-from .user import UserTable
 
 
 class TransactionTable(BaseTable):
@@ -23,12 +22,10 @@ class TransactionTable(BaseTable):
 
     sender = Column(
         'sender', Integer,
-        ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True, server_default=text('-1')
     )
     receiver = Column(
         'receiver', Integer,
-        ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True, server_default=text('-1')
     )
     network = Column(String, nullable=False)
