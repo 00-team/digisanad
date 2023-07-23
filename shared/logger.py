@@ -48,7 +48,8 @@ logging.config.dictConfig({
     'formatters': {
         'term': {
             'format': (
-                '\033[90m%(asctime)s.%(msecs)03d\033[0m <%(levelname)s> '
+                '\033[90m%(asctime)s.%(msecs)03d\033[0m '
+                '\033[32m<\033[0m%(levelname)s\033[32m>\033[0m '
                 '[\033[33m%(module)s\033[0m]: %(message)s'
             ),
             'datefmt': '%H:%M:%S'
