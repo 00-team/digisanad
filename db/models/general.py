@@ -8,7 +8,7 @@ from .common import BaseCoin, BaseTable
 class GeneralTable(BaseTable):
     __tablename__ = 'general'
 
-    general_id = Column(Integer, primary_key=True, autoincrement=True)
+    general_id = Column(Integer, primary_key=True)
     coins = Column(JSON, nullable=False, server_default='{}')
 
 
