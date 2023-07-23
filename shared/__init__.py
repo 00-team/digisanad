@@ -5,7 +5,7 @@ from string import ascii_letters, digits
 from databases import Database
 from pydantic_settings import BaseSettings
 from redis.asyncio import Redis
-from web3 import AsyncHTTPProvider, AsyncWeb3, EthereumTesterProvider
+from web3 import AsyncHTTPProvider, AsyncWeb3
 
 
 class Connection(sqlite3.Connection):
