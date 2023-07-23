@@ -1,8 +1,11 @@
 
+from typing import Literal
+
 from fastapi import APIRouter, Request
 
 from db.message import message_get, message_unseen_count, message_update
-from db.models import MessageModel, MessageTable, UserModel
+from db.models import MessageModel, MessageTable, UserModel, UserPublic
+from db.user import user_public
 from deps import user_required
 from shared import settings, sqlx
 from shared.errors import bad_id
@@ -17,10 +20,14 @@ router = APIRouter(
 @router.get('/unseen_count/', response_model=int)
 async def unseen_count(request: Request):
     user: UserModel = request.state.user
-    return await message_unseen_count(user.user_id)
+    return (await message_unseen_count(user.user_id))
 
 
-@router.get('/', response_model=list[MessageModel])
+class MessageResponse(MessageModel):
+    sender: UserPublic | Literal['system'] | None
+
+
+@router.get('/', response_model=list[MessageResponse])
 async def get_messages(request: Request, seen: bool = None, page: int = 0):
     user: UserModel = request.state.user
     seen_condition = ''
@@ -39,7 +46,22 @@ async def get_messages(request: Request, seen: bool = None, page: int = 0):
         {'user_id': user.user_id}
     )
 
-    return [MessageModel(**r) for r in rows]
+    user_ids = set()
+    messages = [MessageModel(**r) for r in rows]
+
+    for msg in messages:
+        if msg.sender != -1:
+            user_ids.add(msg.sender)
+
+    users = await user_public(user_ids)
+
+    result = []
+    for msg in messages:
+        r = msg.dict()
+        r['sender'] = users.get(r['sender'])
+        result.append(r)
+
+    return result
 
 
 @router.patch(
