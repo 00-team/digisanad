@@ -5,11 +5,12 @@ from pydantic import BaseModel, constr
 
 from db.models import NetworkType, TransactionModel, TransactionTable
 from db.models import UserModel, WalletCoin, WalletTable
-from db.transaction import transaction_list
+from db.transaction import transaction_get
 from db.wallet import wallet_add, wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared import settings, sqlx
 from shared.crypto import update_wallet
+from shared.errors import bad_id
 
 router = APIRouter(
     prefix='/user',
@@ -69,20 +70,6 @@ async def wallet(request: Request):
             for a in wallet.accounts.values()
         ],
     )
-
-
-@router.get('/transactions/', response_model=list[TransactionModel])
-async def transactions(request: Request, page: int = 0):
-    user: UserModel = request.state.user
-    rows = await sqlx.fetch_all(
-        f'''
-        SELECT * FROM {TransactionTable.__tablename__}
-        WHERE (sender == :user_id OR receiver == :user_id)
-        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
-        ''',
-        {'user_id': user.user_id}
-    )
-    return [TransactionModel(**r) for r in rows]
 
 
 class TransferBody(BaseModel):
