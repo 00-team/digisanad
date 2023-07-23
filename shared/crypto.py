@@ -7,8 +7,8 @@ from web3.exceptions import TransactionNotFound
 from web3.types import HexBytes
 
 from db.general import general_get, general_update
-from db.models import GeneralCoin, NetworkType, TransactionStatus, WalletCoin
-from db.models import WalletModel
+from db.models import GeneralCoin, NetworkType, TransactionStatus
+from db.models import WalletAccount, WalletCoin, WalletModel
 from db.transaction import transaction_add
 from shared import settings, w3
 from shared.tools import utc_now
