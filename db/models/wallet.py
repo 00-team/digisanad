@@ -43,7 +43,7 @@ class WalletModel(BaseModel):
     user_id: int
     last_update: int
     coins: dict[str, WalletCoin]
-    accounts: dict[str, WalletAccount]
+    accounts: dict[NetworkType, WalletAccount]
 
     @property
     def next_update(self) -> int:
