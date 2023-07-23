@@ -164,7 +164,7 @@ database/doom.json
 database/secrets.json
 
 secrets.json
-.secrets
+.secrets*
 
 db/files/
 db/versions/
