@@ -4,11 +4,11 @@ import HtmlPlugin from 'html-webpack-plugin'
 import { Configuration } from 'webpack'
 
 import Base from './base'
-import { APP_DIR, BASE_DIR, resolve } from './config/path'
+import { APP_DIR, DIST_DIR, resolve } from './config/path'
 import { BuildStyle, CssExtract } from './config/style'
 
 const Html = new HtmlPlugin({
-    filename: resolve(BASE_DIR, 'static/index.html'),
+    filename: resolve(DIST_DIR, 'index.html'),
     template: resolve(APP_DIR, 'template.html'),
     inject: true,
     publicPath: '/static/dist/',
