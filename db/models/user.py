@@ -53,6 +53,11 @@ class AdminPerms(int, Enum):
     V_GENERAL = auto()
     C_GENERAL = auto()
 
+    V_MESSAGE = auto()
+    A_MESSAGE = auto()
+    C_MESSAGE = auto()
+    D_MESSAGE = auto()
+
 
 class UserPublic(BaseModel):
     user_id: int
