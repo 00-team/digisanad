@@ -10,10 +10,10 @@ metadata = MetaData()
 BaseTable = declarative_base(metadata=metadata)
 
 
-class NetworkType(int, Enum):
-    ethereum = 0
-    bitcoin = auto()
-    tezos = auto()
+class NetworkType(str, Enum):
+    ethereum = 'eth'
+    bitcoin = 'btc'
+    tezos = 'xtz'
 
 
 class BaseCoin(BaseModel):
