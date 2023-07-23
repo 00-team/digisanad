@@ -38,7 +38,7 @@ async def error_exception_handler(request, exc: Error):
 
 @app.on_event('startup')
 async def startup():
-    assert await w3.is_connected()
+    # assert await w3.is_connected()
     await redis.ping()
     await sqlx.connect()
 
