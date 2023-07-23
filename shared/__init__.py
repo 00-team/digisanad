@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     eth_main_fee: int = 4000
 
     debug: bool = True
+    page_size: int = 10
 
 
 settings = Settings(_env_file='.secrets')
