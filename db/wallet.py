@@ -40,16 +40,3 @@ async def wallet_update(*where, **values: dict):
 async def wallet_add(**values: dict) -> int:
     values = update_values(values)
     return await sqlx.execute(insert(WalletTable), values)
-
-
-async def wallet_count() -> int:
-    query = 'SELECT COUNT(0) from wallet'
-    return await sqlx.fetch_one(query)[0]
-
-
-async def wallet_get_all(limit: int, offset: int):
-    return await sqlx.fetch_all(
-        select(WalletTable)
-        .limit(limit)
-        .offset(offset)
-    )
