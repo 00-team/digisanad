@@ -1,5 +1,4 @@
 
-from pydantic import BaseModel
 from sqlalchemy import insert, select, update
 
 from shared import sqlx
