@@ -96,7 +96,7 @@ def admin_required():
     async def decorator(request: Request, user: UserModel = user_required()):
         if not user.is_admin:
             await rate_limit(request, 'admin_check')
-        raise forbidden
+            raise forbidden
 
     dep = Depends(decorator)
     dep.errors = errors + [forbidden]
