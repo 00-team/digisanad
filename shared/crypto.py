@@ -101,16 +101,23 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             network=NetworkType.ethereum,
             in_wallet=0,
             in_system=0,
-            pk=eth_acc.key.hex(),
-            addr=eth_acc.address
-        )}
+        ).dict()}
         # coins.update(ETH_WALLET_COINS)
+
+        accounts = {
+            NetworkType.ethereum: WalletAccount(
+                network=NetworkType.ethereum,
+                pk=eth_acc.key.hex(),
+                addr=eth_acc.address
+            ).dict()
+        }
 
         return WalletModel(
             wallet_id=0,
             user_id=0,
             last_update=utc_now(),
             coins=coins,
+            accounts=accounts,
         )
 
     eth_coin = wallet.coins.get(eck)
