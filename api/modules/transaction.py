@@ -151,7 +151,7 @@ async def transaction_to_response(
     return result
 
 
-@router.get('/', response_model=list[TransactionModel])
+@router.get('/', response_model=list[TransactionResponse])
 async def get_transactions(request: Request, page: int = 0):
     user: UserModel = request.state.user
     rows = await sqlx.fetch_all(
@@ -167,7 +167,7 @@ async def get_transactions(request: Request, page: int = 0):
 
 @router.get(
     '/{transaction_id}/',
-    response_model=TransactionModel,
+    response_model=TransactionResponse,
     openapi_extra={'errors': [bad_id]}
 )
 async def get_transaction(request: Request, transaction_id: int):
