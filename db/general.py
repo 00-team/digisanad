@@ -3,7 +3,7 @@ from sqlalchemy import insert, select, update
 
 from shared import sqlx
 
-from .models import GeneralModel, GeneralTable
+from .models import GeneralModel, GeneralTable, model_dict
 
 
 async def general_get() -> GeneralModel:
@@ -20,6 +20,12 @@ async def general_get() -> GeneralModel:
 
 
 async def general_update(**values: dict):
+    coins = values.get('coins')
+
+    if coins:
+        for k, v in coins:
+            values['coins'][k] = model_dict(v)
+
     await sqlx.execute(
         update(GeneralTable).where(GeneralTable.general_id == 0),
         values
