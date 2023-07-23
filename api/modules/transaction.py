@@ -1,14 +1,19 @@
 
+import logging
 from typing import Literal
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
+from db.general import general_get, general_update
 from db.models import NetworkType, TransactionModel, TransactionStatus
-from db.models import TransactionTable, UserTable
+from db.models import TransactionTable, UserModel, UserTable, WalletModel
+from db.models import WalletTable
 from db.transaction import transaction_get, transaction_update
+from db.wallet import wallet_get, wallet_update
 from deps import rate_limit, user_required
 from shared import settings, sqlx
+from shared.crypto import transaction_status
 from shared.errors import bad_id
 from shared.tools import utc_now
 
@@ -19,7 +24,7 @@ router = APIRouter(
 )
 
 
-class UserModel(BaseModel):
+class TransactionUser(BaseModel):
     user_id: int
     first_name: str
     last_name: str
@@ -30,8 +35,8 @@ class TransactionResponse(BaseModel):
     transaction_hash: str | None = None
     network: NetworkType
     coin_name: str
-    sender: TransactionUser | Literal['system']
-    receiver: TransactionUser | Literal['system']
+    sender: TransactionUser | Literal['system'] | None
+    receiver: TransactionUser | Literal['system'] | None
     amount: int
     fee: int
     status: TransactionStatus
@@ -101,6 +106,48 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
         )
 
 
+async def transaction_to_response(
+    ta_list: list[TransactionModel]
+) -> list[TransactionResponse]:
+    user_ids = set()
+
+    for ta in ta_list:
+        ta = await check_transaction(ta)
+
+        if ta.sender != -1:
+            user_ids.add(ta.sender)
+
+        if ta.receiver != -1:
+            user_ids.add(ta.receiver)
+
+    users = await sqlx.fetch_all(
+        f'''
+        SELECT user_id, first_name, last_name FROM {UserTable.__tablename__}
+        WHERE user_id IN :user_ids
+        ''',
+        {'user_ids': list(user_ids)}
+    )
+    users_dict = {
+        u[0]: TransactionUser(**u) for u in users
+    }
+    users_dict[-1] = 'system'
+
+    for ta in ta_list:
+        yield TransactionResponse(
+            transaction_id=ta.transaction_id,
+            transaction_hash=ta.transaction_hash,
+            network=ta.network,
+            coin_name=ta.coin_name,
+            sender=users_dict.get(ta.sender),
+            receiver=users_dict.get(ta.receiver),
+            amount=ta.amount,
+            fee=ta.fee,
+            status=ta.status,
+            next_update=ta.next_update,
+            timestamp=ta.timestamp,
+        )
+
+
 @router.get('/transactions/', response_model=list[TransactionModel])
 async def get_transactions(request: Request, page: int = 0):
     user: UserModel = request.state.user
@@ -112,7 +159,9 @@ async def get_transactions(request: Request, page: int = 0):
         ''',
         {'user_id': user.user_id}
     )
-    return [TransactionModel(**r) for r in rows]
+    return list(transaction_to_response(
+        [TransactionModel(**r) for r in rows]
+    ))
 
 
 @router.get(
@@ -122,12 +171,12 @@ async def get_transactions(request: Request, page: int = 0):
 )
 async def get_transaction(request: Request, transaction_id: int):
     user: UserModel = request.state.user
-    transaction = await transaction_get(
+    ta = await transaction_get(
         TransactionTable.transaction_id == transaction_id,
         TransactionTable.user_id == user.user_id
     )
 
-    if transaction is None:
+    if ta is None:
         raise bad_id('Transaction', transaction_id, id=transaction_id)
 
-    return [TransactionModel(**r) for r in rows]
+    return next(transaction_to_response([ta]))
