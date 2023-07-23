@@ -126,13 +126,13 @@ async def transaction_to_response(
             user_ids.add(ta.receiver)
 
     if user_ids:
+        user_ids_value = '(' + ','.join((str(i) for i in user_ids)) + ')'
         users = await sqlx.fetch_all(
             f'''
             SELECT user_id, first_name, last_name
             FROM {UserTable.__tablename__}
-            WHERE user_id IN :user_ids
-            ''',
-            {'user_ids': '(' + ','.join((str(i) for i in user_ids)) + ')'}
+            WHERE user_id IN {user_ids_value}
+            '''
         )
         users_dict = {
             u[0]: TransactionUser(**u) for u in users
