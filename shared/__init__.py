@@ -55,7 +55,7 @@ else:
 
 if settings.debug:
     w3 = AsyncWeb3(AsyncHTTPProvider(
-        'https://eth-sepolia.g.alchemy.com/v2/' + settings.alchemy_test_token
+        'https://sepolia.infura.io/v3/' + settings.infura_token
     ))
 else:
     w3 = AsyncWeb3(AsyncHTTPProvider(
