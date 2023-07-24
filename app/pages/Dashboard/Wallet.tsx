@@ -28,7 +28,7 @@ const Wallet: FC = () => {
     if (wallet == null) {
         return (
             <section id='wallet' className='wallet-container'>
-                <div className='section-header section_title'>کیف پول</div>
+                <h2 className='section-header section_title'>کیف پول</h2>
                 <div className='wallet-wrapper'>
                     <Loading style={{ height: '50vh' }} />
                 </div>
@@ -38,7 +38,7 @@ const Wallet: FC = () => {
 
     return (
         <section id='wallet' className='wallet-container'>
-            <div className='section-header section_title'>کیف پول</div>
+            <h2 className='section-header section_title'>کیف پول</h2>
             <div className='wallet-wrapper'>
                 <div className='rows'>
                     {/* <Row
