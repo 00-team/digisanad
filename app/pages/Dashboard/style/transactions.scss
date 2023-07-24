@@ -35,17 +35,17 @@ section.transactions-container {
 
             &.withdraw {
                 background: linear-gradient(
-                    to bottom,
-                    rgba(226, 3, 55, 0.9) 5%,
-                    rgba(255, 255, 255, 1) 25%
+                    to top,
+                    rgba(226, 3, 55, 0.9) -10%,
+                    rgb(255, 255, 255) 100%
                 );
             }
 
             &.deposit {
                 background: linear-gradient(
-                    to bottom,
-                    #00dc7d 5%,
-                    rgba(255, 255, 255, 1) 25%
+                    to top,
+                    #00dc7d -10%,
+                    rgb(255, 255, 255) 100%
                 );
             }
 
