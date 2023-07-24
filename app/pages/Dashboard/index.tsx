@@ -23,6 +23,7 @@ import { LogoutButton } from 'components/common/LogoutButton'
 import Contracts from './Contracts'
 import { Deposit } from './Deposit'
 import MyInfo from './MyInfo'
+import Transactions from './Transactions'
 import Wallet from './Wallet'
 import Withdraw from './Withdraw'
 
@@ -51,7 +52,7 @@ const SIDEBAR_OPTIONS: OptionsProps[] = [
     {
         title: 'تراکنش های من',
         Icon: TransactionSvg,
-        Component: MyInfo,
+        Component: Transactions,
         id: 'transactins',
     },
     {
