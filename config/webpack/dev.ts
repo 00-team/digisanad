@@ -10,6 +10,15 @@ interface Configuration extends WConf {
     devServer: DConf
 }
 
+let host = ''
+if (process.env.local) {
+    host = 'http://localhost:7100'
+} else {
+    host = 'https://digisanad.com'
+}
+
+console.log('proxy host: ' + host)
+
 const DevConfig: Configuration = {
     ...Base,
     mode: 'development',
@@ -35,14 +44,14 @@ const DevConfig: Configuration = {
         proxy: [
             {
                 context: ['/api', '/static', '/media'],
-                target: 'https://digisanad.com/',
+                target: host,
                 changeOrigin: true,
             },
 
             // static
             {
                 context: ['/favicon.ico'],
-                target: 'https://digisanad.com/static/',
+                target: host + '/static/',
                 changeOrigin: true,
             },
         ],
