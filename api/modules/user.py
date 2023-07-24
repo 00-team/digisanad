@@ -100,32 +100,37 @@ async def withdrawal(request: Request, body: WithdrawalBody):
         raise bad_balance
 
     balance = wallet.coins[coinkey].in_system
-    fee = settings.eth_fee
+    sys_fee = settings.eth_fee
     gas = 21000
     gas_price = await w3.eth.gas_price
     gas_fee = gas * gas_price
+
+    total_fee = gas_fee + sys_fee
+
+    if body.amount + total_fee <= balance:
+        value = body.amount
+    else:
+        value = body.amount - total_fee
+        if body.amount > balance:
+            raise bad_balance
 
     general = await general_get()
     if coinkey not in general.coins:
         logging.error(f'{coinkey=} is not in general coins')
         raise bad_balance
 
-    value = body.amount - fee - gas_fee
-    if value < 1:
-        raise bad_balance
-
-    if body.amount > balance - fee - gas_fee:
-        raise bad_balance
+    # value = body.amount - fee - gas_fee
+    # if value < 1:
+    #     raise bad_balance
+    #
+    # if body.amount > balance - fee - gas_fee:
+    #     raise bad_balance
 
     eth_balance = await w3.eth.get_balance(ETH_ACC.address)
     general.coins[coinkey].total = eth_balance
 
-    if eth_balance < body.amount:
+    if eth_balance < value + gas_fee:
         logging.error('not enough money in the system')
-        raise bad_balance
-
-    if eth_balance < gas * gas_price:
-        logging.error('not enough money in the system :(')
         raise bad_balance
 
     try:
@@ -142,10 +147,10 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     except TypeError:
         raise bad_args
 
-    wallet.coins[coinkey].in_system -= body.amount
+    wallet.coins[coinkey].in_system -= value + total_fee
 
     general.coins[coinkey].total -= value + gas_fee
-    general.coins[coinkey].available += fee
+    general.coins[coinkey].available += sys_fee
 
     await general_update(coins=general.coins)
     await wallet_update(
@@ -160,8 +165,8 @@ async def withdrawal(request: Request, body: WithdrawalBody):
         sender=-1,
         receiver=wallet.user_id,
         status=TransactionStatus.UNKNOWN,
-        amount=value + fee,
-        fee=fee,
+        amount=value + sys_fee,
+        fee=sys_fee,
         last_update=utc_now(),
         timestamp=utc_now(),
     )
