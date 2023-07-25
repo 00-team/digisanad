@@ -1,5 +1,5 @@
 
-from sqlalchemy import insert, select, update
+from sqlalchemy import delete, insert, select, update
 
 from shared import sqlx
 
@@ -23,3 +23,7 @@ async def record_update(*where, **values: dict):
 
 async def record_add(**values: dict) -> int:
     return await sqlx.execute(insert(RecordTable), values)
+
+
+async def record_delete(*where) -> int:
+    return await sqlx.execute(delete(RecordTable).where(*where))
