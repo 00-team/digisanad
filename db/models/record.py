@@ -7,10 +7,10 @@ from sqlalchemy import BLOB, Column, Integer, String, text
 from .common import BaseTable
 
 
-class FileTable(BaseTable):
-    __tablename__ = 'files'
+class RecordTable(BaseTable):
+    __tablename__ = 'records'
 
-    file_id = Column(
+    record_id = Column(
         Integer, primary_key=True,
         index=True, autoincrement=True
     )
@@ -25,8 +25,8 @@ class FileTable(BaseTable):
     # readers = Column(JSON, nullable=False, server_default='[]')
 
 
-class FileModel(BaseModel):
-    file_id: int
+class RecordModel(BaseModel):
+    record_id: int
     salt: bytes
     owner: int
     size: int
@@ -36,5 +36,5 @@ class FileModel(BaseModel):
     @property
     def name(self) -> str:
         return sha3_256(
-            self.file_id.to_bytes(12, byteorder='little') + self.salt
+            self.record_id.to_bytes(12, byteorder='little') + self.salt
         ).hexdigest()
