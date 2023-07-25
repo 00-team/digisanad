@@ -2,9 +2,10 @@
 
 import mimetypes
 import os
+from typing import Annotated
 
 import magic
-from fastapi import APIRouter, Request, UploadFile
+from fastapi import APIRouter, Form, Request, UploadFile
 from pydantic import BaseModel
 
 from api.models import OkModel
@@ -111,7 +112,11 @@ async def delete_record(request: Request, record_id: int):
     '/', response_model=RecordResponse,
     openapi_extra={'errors': [bad_file]}
 )
-async def add_record(request: Request, file: UploadFile, contract: int = None):
+async def add_record(
+    request: Request,
+    file: UploadFile,
+    contract: Annotated[int, Form()] = None
+):
     user: UserModel = request.state.user
     mime = magic.from_buffer(file.file.read(2048), mime=True)
     if mime is None:
@@ -130,6 +135,7 @@ async def add_record(request: Request, file: UploadFile, contract: int = None):
         mime=mime,
         ext=ext[1:],
         timestamp=utc_now(),
+        # TODO: check and validate the contract
         contract=contract
     )
 
