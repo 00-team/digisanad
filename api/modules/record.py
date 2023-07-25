@@ -111,7 +111,7 @@ async def delete_record(request: Request, record_id: int):
     '/', response_model=RecordResponse,
     openapi_extra={'errors': [bad_file]}
 )
-async def add_record(request: Request, file: UploadFile):
+async def add_record(request: Request, file: UploadFile, contract: int = None):
     user: UserModel = request.state.user
     mime = magic.from_buffer(file.file.read(2048), mime=True)
     if mime is None:
@@ -129,12 +129,12 @@ async def add_record(request: Request, file: UploadFile):
         size=file.size,
         mime=mime,
         ext=ext[1:],
-        timestamp=utc_now()
+        timestamp=utc_now(),
+        contract=contract
     )
 
     args = record.dict()
     args.pop('record_id')
-    args.pop('contract')
 
     record_id = await record_add(**args)
     record.record_id = record_id
