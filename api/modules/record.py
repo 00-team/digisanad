@@ -1,14 +1,18 @@
 
 
-from fastapi import APIRouter, Request
+import mimetypes
+import os
+
+import magic
+from fastapi import APIRouter, Request, UploadFile
 from pydantic import BaseModel
 
 from api.models import OkModel
 from db.models import RecordModel, RecordTable, UserModel
-from db.record import record_add, record_delete, record_get, record_update
+from db.record import record_add, record_delete, record_get
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_id
+from shared.errors import bad_file, bad_id
 from shared.tools import utc_now
 
 router = APIRouter(
@@ -95,3 +99,43 @@ async def delete_record(request: Request, record_id: int):
         raise bad_id('Record', record_id, id=record_id)
 
     return {'ok': True}
+
+
+@router.post(
+    '/', response_model=RecordResponse,
+    openapi_extra={'errors': [bad_file]}
+)
+async def add_record(request: Request, file: UploadFile):
+    user: UserModel = request.state.user
+    mime = magic.from_buffer(file.file.read(2048), mime=True)
+    if mime is None:
+        raise bad_file
+
+    ext = mimetypes.guess_extension(mime)
+    if ext is None or len(ext) < 2:
+        raise bad_file
+
+    file.file.seek(0)
+    record = RecordModel(
+        record_id=0,
+        salt=os.urandom(4),
+        owner=user.user_id,
+        size=file.size,
+        mime=mime,
+        ext=ext[1:],
+        timestamp=utc_now()
+    )
+
+    args = record.dict()
+    args.pop('record_id')
+    args.pop('contract')
+
+    record_id = await record_add(**args)
+    record.record_id = record_id
+
+    path = settings.record_dir / (record.name + ext)
+    with open(path, 'wb') as f:
+        while (chunk := file.file.read(1024)):
+            f.write(chunk)
+
+    return record_response(record)
