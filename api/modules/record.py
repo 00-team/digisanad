@@ -81,7 +81,7 @@ async def get_record(request: Request, record_id: int):
     if record is None:
         raise bad_id('Record', record_id, id=record_id)
 
-    return record_response(RecordModel(**record))
+    return record_response(record)
 
 
 @router.delete(
