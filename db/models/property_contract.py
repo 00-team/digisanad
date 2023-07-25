@@ -50,7 +50,7 @@ class PropertyContractData(BaseModel):
     longitude: float
     ownership_status: list[BQuestion]
     documents_status: list[BQuestion]
-    documents: list[int]
+    records: list[int]
 
 
 class PropertyContractModel(BaseModel):
