@@ -28,6 +28,7 @@ app = FastAPI(
 
 if settings.debug:
     app.mount('/media', StaticFiles(directory='media'), name='media')
+    app.mount('/records', StaticFiles(directory='records'), name='records')
     app.mount('/static', StaticFiles(directory='static'), name='static')
 
 
