@@ -1,6 +1,6 @@
 
 from pydantic import BaseModel
-from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
+from sqlalchemy import JSON, Column, ForeignKey, Integer, text
 
 from shared import settings
 from shared.tools import utc_now
