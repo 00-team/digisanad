@@ -32,7 +32,6 @@
 
             .wallet-data {
                 display: flex;
-                align-items: center;
                 justify-content: center;
                 flex-direction: column;
                 gap: 2vh;
@@ -56,6 +55,10 @@
                 justify-content: center;
 
                 width: 100%;
+
+                &.coin-options {
+                    gap: 1vh;
+                }
 
                 .option-title {
                     display: flex;
