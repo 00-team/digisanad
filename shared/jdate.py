@@ -1399,9 +1399,12 @@ class jdatetime(jdate):
         """Return ctime() style string."""
         return self.strftime("%c")
 
-    # TODO: check what this def does !
     def dst(self):
-        """Return self.tzinfo.dst(self)"""
+        """
+        Return the daylight saving time (DST) adjustment
+        Return self.tzinfo.dst(self)
+        """
+
         if self.tzinfo:
             return self.tzinfo.dst(self)
         return None
