@@ -108,16 +108,18 @@ async def verify_verification(phone, code, action) -> Value:
     if value.action != action:
         raise bad_verification
 
-    # TODO: remove this debug code
-    if code != '99999' and code != value.code:
-        value.tries += 1
+    if code == value.code:
+        await redis.delete(key)
+        return value
 
-        if value.tries > 2:
-            await redis.delete(key)
-        else:
-            await redis.set(key, value.to_bytes(), xx=True, keepttl=True)
+    if settings.debug and code == '99999':
+        await redis.delete(key)
+        return value
 
-        raise bad_verification
+    value.tries += 1
+    if value.tries > 2:
+        await redis.delete(key)
+    else:
+        await redis.set(key, value.to_bytes(), xx=True, keepttl=True)
 
-    await redis.delete(key)
-    return value
+    raise bad_verification
