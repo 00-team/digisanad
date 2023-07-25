@@ -168,3 +168,6 @@ secrets.json
 
 db/files/
 db/versions/
+
+records/
+

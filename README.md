@@ -3,7 +3,7 @@
 ## Todos
 
 -   [x] sql migratio support
--   [ ] logging
+-   [x] logging
 -   [ ] use web3 test servers to further understand the api for
         sending transactions
 

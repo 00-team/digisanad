@@ -119,6 +119,11 @@ bad_balance = Error(
     'not enough balance in this wallet for transfer',
     400
 )
+bad_file = Error(
+    40013, 'Bad File',
+    'invalid or unknown file',
+    400
+)
 
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
@@ -127,7 +132,7 @@ all_errors = [
     forbidden, bad_verification,
     no_change, bad_id, bad_auth, rate_limited,
     bad_args, register_required, account_exists,
-    bad_balance,
+    bad_balance, bad_file,
 
     database_error
 ]

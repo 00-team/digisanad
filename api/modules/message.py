@@ -2,6 +2,7 @@
 from typing import Literal
 
 from fastapi import APIRouter, Request
+from pydantic import BaseModel
 
 from db.message import message_get, message_unseen_count, message_update
 from db.models import MessageModel, MessageTable, UserModel, UserPublic
@@ -17,10 +18,16 @@ router = APIRouter(
 )
 
 
-@router.get('/unseen_count/', response_model=int)
-async def unseen_count(request: Request):
+class UnseenCount(BaseModel):
+    count: int
+
+
+@router.get('/unseen_count/')
+async def unseen_count(request: Request) -> UnseenCount:
     user: UserModel = request.state.user
-    return (await message_unseen_count(user.user_id))
+    return {
+        'count': await message_unseen_count(user.user_id)
+    }
 
 
 class MessageResponse(MessageModel):
@@ -64,8 +71,12 @@ async def get_messages(request: Request, seen: bool = None, page: int = 0):
     return result
 
 
+class SeenMessage(BaseModel):
+    seened: bool
+
+
 @router.patch(
-    '/{message_id}/', response_model=bool,
+    '/{message_id}/', response_model=SeenMessage,
     openapi_extra={'errors': [bad_id]}
 )
 async def seen_message(request: Request, message_id: int):
@@ -78,10 +89,10 @@ async def seen_message(request: Request, message_id: int):
         raise bad_id('Message', message_id, id=message_id)
 
     if message.seen:
-        return False
+        return {'seened': False}
 
     await message_update(
         MessageTable.message_id == message_id,
         seen=True
     )
-    return True
+    return {'seened': True}

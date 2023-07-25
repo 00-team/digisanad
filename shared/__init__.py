@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     base_dir: Path = Path(__file__).parent.parent
 
     sql_dir: Path = base_dir / 'db/files/'
+    record_dir: Path = base_dir / 'records/'
 
     redis_pass: str
     infura_token: str
@@ -46,6 +47,7 @@ class Settings(BaseSettings):
 
 settings = Settings(_env_file='.secrets')
 settings.sql_dir.mkdir(parents=True, exist_ok=True)
+settings.record_dir.mkdir(parents=True, exist_ok=True)
 (settings.base_dir / 'db/versions').mkdir(parents=True, exist_ok=True)
 
 SQL_URL = 'sqlite:///'
