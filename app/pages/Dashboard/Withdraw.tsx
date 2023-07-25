@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 
 import { CoinSvg, WalletSvg } from 'icons'
 
+import { Submit } from 'components'
+
 import './style/withdraw.scss'
 
 const Withdraw: FC = () => {
@@ -41,6 +43,9 @@ const Withdraw: FC = () => {
                             maxLength={1024}
                         />
                     </div>
+                </div>
+                <div className='submit-btn'>
+                    <Submit className='title_small' title='برداشت' />
                 </div>
             </div>
         </section>
