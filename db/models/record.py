@@ -23,6 +23,7 @@ class RecordTable(BaseTable):
     mime = Column(String, nullable=False, server_default='unknown')
     ext = Column(String, nullable=False)
     contract = Column(Integer, index=True)
+    timestamp = Column(Integer, nullable=False, server_default=text('0'))
     # readers = Column(JSON, nullable=False, server_default='[]')
 
 
@@ -33,6 +34,7 @@ class RecordModel(BaseModel):
     size: int
     mime: str
     ext: str
+    timestamp: int
     contract: int | None = None
 
     @property
