@@ -1,8 +1,12 @@
 
+from functools import cached_property
 from hashlib import sha3_256
+from pathlib import Path
 
 from pydantic import BaseModel
 from sqlalchemy import BLOB, Column, Integer, String, text
+
+from shared import settings
 
 from .common import BaseTable
 
@@ -37,8 +41,12 @@ class RecordModel(BaseModel):
     timestamp: int
     contract: int | None = None
 
-    @property
+    @cached_property
     def name(self) -> str:
         return sha3_256(
             self.record_id.to_bytes(12, byteorder='little') + self.salt
         ).hexdigest()
+
+    @cached_property
+    def path(self) -> Path:
+        return settings.record_dir / (self.name + '.' + self.ext)
