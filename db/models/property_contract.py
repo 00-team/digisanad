@@ -51,6 +51,7 @@ class PropertyContractData(BaseModel):
     ownership_status: list[BQuestion]
     documents_status: list[BQuestion]
     records: list[int]
+    conditions: list[str]
 
 
 class PropertyContractModel(BaseModel):
