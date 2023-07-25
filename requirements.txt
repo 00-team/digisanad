@@ -60,6 +60,7 @@ pyethash==0.1.27
 pyparsing==3.0.9
 pyrsistent==0.19.3
 python-dotenv==0.21.0
+python-magic==0.4.27
 python-multipart==0.0.5
 PyYAML==6.0
 redis==4.3.4
