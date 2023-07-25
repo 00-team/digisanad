@@ -21,6 +21,7 @@ class RecordTable(BaseTable):
     )
     size = Column(Integer, nullable=False, server_default=text('0'))
     mime = Column(String, nullable=False, server_default='unknown')
+    ext = Column(String, nullable=False)
     contract = Column(Integer, index=True)
     # readers = Column(JSON, nullable=False, server_default='[]')
 
@@ -31,6 +32,7 @@ class RecordModel(BaseModel):
     owner: int
     size: int
     mime: str
+    ext: str
     contract: int | None = None
 
     @property
