@@ -90,13 +90,19 @@ async def get_record(request: Request, record_id: int):
 )
 async def delete_record(request: Request, record_id: int):
     user: UserModel = request.state.user
-    count = await record_delete(
+    record = await record_get(
         RecordTable.record_id == record_id,
         RecordTable.owner == user.user_id
     )
-
-    if not count:
+    if record is None:
         raise bad_id('Record', record_id, id=record_id)
+
+    record.path.unlink(True)
+
+    await record_delete(
+        RecordTable.record_id == record_id,
+        RecordTable.owner == user.user_id
+    )
 
     return {'ok': True}
 
