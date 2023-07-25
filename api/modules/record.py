@@ -126,6 +126,9 @@ async def add_record(
     if ext is None or len(ext) < 2:
         raise bad_file
 
+    if file.size > 40 * 1024 * 1024:
+        raise bad_file
+
     file.file.seek(0)
     record = RecordModel(
         record_id=0,
