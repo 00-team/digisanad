@@ -5,7 +5,7 @@ import './style/deposit.scss'
 export const Deposit: FC = () => {
     return (
         <section className='deposit-container'>
-            <div className='section-header section_title'>افزایش موجودی</div>
+            <h2 className='section-header section_title'>افزایش موجودی</h2>
             <div className='deposit-wrapper'>
                 <div className='video-wrapper'>
                     <iframe
