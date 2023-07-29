@@ -1,2 +1,31 @@
 .notifications-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    .notification-icon {
+        background-color: white;
+        border-radius: 10px;
+
+        cursor: pointer;
+
+        @keyframes notification-ring {
+            0% {
+                rotate: 30deg;
+            }
+            50% {
+                rotate: -30deg;
+            }
+            75% {
+                rotate: 15deg;
+            }
+            100% {
+                rotate: 0deg;
+            }
+        }
+
+        svg {
+            margin: 10px;
+        }
+    }
 }
