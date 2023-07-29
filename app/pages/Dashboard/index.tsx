@@ -23,6 +23,7 @@ import { LogoutButton } from 'components/common/LogoutButton'
 import Contracts from './Contracts'
 import { Deposit } from './Deposit'
 import MyInfo from './MyInfo'
+import Notifications from './Notifications'
 import Transactions from './Transactions'
 import Wallet from './Wallet'
 import Withdraw from './Withdraw'
@@ -112,6 +113,7 @@ const Dashboard: FC = () => {
                     if (!so) return <></>
                     return <so.Component />
                 })()}
+                <Notifications />
             </div>
         </section>
     )
