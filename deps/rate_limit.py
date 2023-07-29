@@ -3,6 +3,7 @@ from hashlib import sha256
 from fastapi import Depends, Request
 
 from db.rate_limit import rate_limit_get, rate_limit_set
+from shared import settings
 from shared.errors import rate_limited
 
 from .auth import user_required
@@ -10,8 +11,9 @@ from .auth import user_required
 
 def rate_limit(path_id: str, period: int, amount: int, use_id=True):
     async def check(identifier: str):
-        # TODO: remove this debug code
-        return
+        if settings.debug:
+            return
+
         value, expire = await rate_limit_get(identifier)
 
         if value >= amount:
