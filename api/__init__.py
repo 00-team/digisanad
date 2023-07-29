@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from shared.errors import bad_verification
 
-from .modules import admin, auth, message, record, transaction, user
+from .modules import admin, auth, message, record, schema, transaction, user
 from .verification import VerificationResponse, verification
 
 router = APIRouter(
@@ -22,6 +22,7 @@ router.add_api_route(
 
 
 router.include_router(auth.router)
+router.include_router(schema.router)
 router.include_router(user.router)
 router.include_router(transaction.router)
 router.include_router(admin.router)
