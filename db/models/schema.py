@@ -61,14 +61,28 @@ class UIDD(BaseModel):
 
 
 class QuestionField(BaseField):
-    type: Literal['questions']
+    type: Literal['question']
     answers: list[UIDD]
     questions: list[UIDD]
 
 
+class OptionFeild(BaseModel):
+    type: Literal['option']
+    singleton: bool = False
+    options: list[UIDD]
+
+
+class DateField(BaseField):
+    type: Literal['date']
+
+
+class SignatureField(BaseField):
+    type: Literal['signature']
+
+
 Field = (
-    UserField | IntField | StrField |
-    TextField | GeoField | QuestionField | RecordField
+    UserField | IntField | StrField | OptionFeild | DateField |
+    TextField | GeoField | QuestionField | RecordField | SignatureField
 )
 
 
