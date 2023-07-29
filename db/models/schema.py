@@ -7,8 +7,8 @@ from sqlalchemy import JSON, Boolean, Column, Integer, String
 from .common import BaseTable
 
 
-class ContractSchemaTable(BaseTable):
-    __tablename__ = 'contract_schemas'
+class SchemaTable(BaseTable):
+    __tablename__ = 'schemas'
 
     schema_id = Column(
         Integer, primary_key=True,
@@ -17,7 +17,7 @@ class ContractSchemaTable(BaseTable):
     draft = Column(Boolean, nullable=False, server_default='true')
     title = Column(String, nullable=False)
     description = Column(String)
-    schema = Column(JSON, nullable=False, server_default='{}')
+    data = Column(JSON, nullable=False, server_default='{}')
 
 
 class BaseField(BaseModel):
@@ -44,13 +44,13 @@ class Stage(BaseField):
     fields: list[Field]
 
 
-class ContractSchemaData(BaseModel):
+class SchemaData(BaseModel):
     stages: list[Stage]
 
 
-class ContractSchemaModel(BaseModel):
+class SchemaModel(BaseModel):
     schema_id: int
     draft: bool
     title: str
     description: str | None = None
-    schema: ContractSchemaData
+    data: SchemaData
