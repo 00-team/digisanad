@@ -9,18 +9,31 @@
 
         cursor: pointer;
 
+        &:hover {
+            svg {
+                animation: notification-ring 0.5s ease-in-out;
+            }
+        }
+
         @keyframes notification-ring {
             0% {
-                rotate: 30deg;
+                transform: rotateZ(0);
             }
-            50% {
-                rotate: -30deg;
+
+            20% {
+                transform: rotateZ(-16deg);
             }
-            75% {
-                rotate: 15deg;
+            40% {
+                transform: rotateZ(14deg);
+            }
+            60% {
+                transform: rotateZ(-12deg);
+            }
+            80% {
+                transform: rotateZ(12deg);
             }
             100% {
-                rotate: 0deg;
+                transform: rotateZ(0);
             }
         }
 
