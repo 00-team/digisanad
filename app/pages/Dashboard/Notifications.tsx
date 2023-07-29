@@ -13,7 +13,7 @@ const Notifications: FC = () => {
                 onClick={() => setUnseen(!Unseen)}
             >
                 {Unseen && <span className='unseen-count description'>1</span>}
-                <NotificationSvg size={innerWidth >= 1024 ? 40 : 20} />
+                <NotificationSvg size={innerWidth >= 1024 ? 40 : 30} />
             </button>
         </div>
     )
