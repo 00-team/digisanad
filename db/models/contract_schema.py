@@ -1,5 +1,5 @@
 
-from enum import Enum
+from typing import Literal
 
 from pydantic import BaseModel
 from sqlalchemy import JSON, Boolean, Column, Integer, String
@@ -20,8 +20,32 @@ class ContractSchemaTable(BaseTable):
     schema = Column(JSON, nullable=False, server_default='{}')
 
 
+class BaseField(BaseModel):
+    uid: str
+    title: str
+    description: str | None = None
+
+
+class UserField(BaseField):
+    type = 'user'
+    user_id: int
+
+
+class IntField(BaseField):
+    type: Literal['int'] = 'int'
+    min: int | None = None
+    max: int | None = None
+
+
+Field = UserField | IntField
+
+
+class Stage(BaseField):
+    fields: list[Field]
+
+
 class ContractSchemaData(BaseModel):
-    pass
+    stages: list[Stage]
 
 
 class ContractSchemaModel(BaseModel):
