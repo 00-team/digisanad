@@ -1,10 +1,9 @@
 import React from 'react'
 
-export const Notifications: Icon = ({ size, ...attr }) => {
+export const NotificationSvg: Icon = ({ size, ...attr }) => {
     return (
         <svg
             stroke='currentColor'
-            fill='currentColor'
             strokeWidth='0'
             viewBox='0 0 512 512'
             height={size}
