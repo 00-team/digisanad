@@ -1,7 +1,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import JSON, Boolean, Column, Integer, String
 
 from .common import BaseTable
@@ -21,23 +21,48 @@ class SchemaTable(BaseTable):
 
 
 class BaseField(BaseModel):
-    uid: str
+    uid: str = Field(title='unique id', description='unique id of the field')
     title: str
-    description: str | None = None
+    description: str = Field(
+        None, description='optinal description of the field'
+    )
 
 
 class UserField(BaseField):
-    type = 'user'
-    user_id: int
+    type: Literal['user']
 
 
 class IntField(BaseField):
-    type: Literal['int'] = 'int'
-    min: int | None = None
-    max: int | None = None
+    type: Literal['int']
+    min: int = None
+    max: int = None
 
 
-Field = UserField | IntField
+class StrField(IntField):
+    type: Literal['str']
+
+
+class TextField(IntField):
+    type: Literal['text']
+
+
+class GeoField(BaseField):
+    type: Literal['geo']
+
+
+class UIDD(BaseModel):
+    '''unique id & display'''
+    uid: str
+    display: str
+
+
+class QuestionField(BaseField):
+    type: Literal['questions']
+    answers: list[UIDD]
+    questions: list[UIDD]
+
+
+Field = UserField | IntField | StrField | TextField | GeoField | QuestionField
 
 
 class Stage(BaseField):
