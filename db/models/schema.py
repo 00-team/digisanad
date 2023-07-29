@@ -98,5 +98,5 @@ class SchemaModel(BaseModel):
     schema_id: int
     draft: bool
     title: str
-    description: str | None = None
+    description: str = None
     data: SchemaData
