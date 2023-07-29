@@ -208,6 +208,8 @@
 
         overflow-y: auto;
         direction: ltr;
+        position: relative;
+        isolation: isolate;
 
         section {
             display: flex;

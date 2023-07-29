@@ -17,6 +17,7 @@ export * from './Dashboard/PostalCode'
 export * from './Dashboard/Profile'
 export * from './Dashboard/Transaction'
 export * from './Dashboard/Wallet'
+export * from './Dashboard/Notifications'
 
 export * from './Models/Person'
 export * from './Models/CloseFill'

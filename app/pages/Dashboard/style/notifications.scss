@@ -1,0 +1,92 @@
+.notifications-container {
+    width: 100%;
+
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+
+    direction: rtl;
+
+    .notification-icon {
+        background-color: white;
+        border-radius: 10px;
+
+        width: fit-content;
+
+        display: inline-block;
+        cursor: pointer;
+        box-shadow: 0px 15px 20px -15px black;
+
+        position: relative;
+
+        &:hover {
+            svg {
+                animation: notification-ring 0.5s ease-in-out;
+            }
+        }
+
+        @keyframes notification-ring {
+            0% {
+                transform: rotateZ(0);
+            }
+
+            20% {
+                transform: rotateZ(-16deg);
+            }
+            40% {
+                transform: rotateZ(14deg);
+            }
+            60% {
+                transform: rotateZ(-12deg);
+            }
+            80% {
+                transform: rotateZ(12deg);
+            }
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+        .unseen-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            min-width: 25px;
+            aspect-ratio: 1/1;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transform: translate(50%, -50%);
+
+            background-color: var(--alert-error);
+
+            border-radius: 100vmax;
+        }
+
+        svg {
+            margin: 10px;
+        }
+    }
+    .notifications-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        gap: 2vh;
+
+        background-color: white;
+        border-radius: 10px;
+        width: clamp(0px, 100%, 500px);
+
+        box-shadow: 0px 15px 20px -15px black;
+
+        // debug
+        height: 500px;
+    }
+}
