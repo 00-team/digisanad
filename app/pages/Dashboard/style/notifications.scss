@@ -1,14 +1,27 @@
 .notifications-container {
+    width: 100%;
+
     position: absolute;
     top: 20px;
     right: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+
+    direction: rtl;
 
     .notification-icon {
         background-color: white;
         border-radius: 10px;
 
+        width: fit-content;
+
+        display: inline-block;
         cursor: pointer;
         box-shadow: 0px 15px 20px -15px black;
+
+        position: relative;
 
         &:hover {
             svg {
@@ -60,5 +73,20 @@
         svg {
             margin: 10px;
         }
+    }
+    .notifications-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        gap: 2vh;
+
+        background-color: white;
+        border-radius: 10px;
+        width: clamp(0px, 100%, 500px);
+
+        box-shadow: 0px 15px 20px -15px black;
+
+        // debug
+        height: 500px;
     }
 }
