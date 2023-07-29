@@ -50,6 +50,10 @@ class GeoField(BaseField):
     type: Literal['geo']
 
 
+class RecordField(BaseField):
+    type: Literal['record']
+
+
 class UIDD(BaseModel):
     '''unique id & display'''
     uid: str
@@ -62,7 +66,10 @@ class QuestionField(BaseField):
     questions: list[UIDD]
 
 
-Field = UserField | IntField | StrField | TextField | GeoField | QuestionField
+Field = (
+    UserField | IntField | StrField |
+    TextField | GeoField | QuestionField | RecordField
+)
 
 
 class Stage(BaseField):
