@@ -7,7 +7,39 @@ import './test.scss'
 const Test: FC = () => {
     const output = useRef<ElementRef<'textarea'>>(null)
     const [activeStage, setActiveStage] = useState(0)
-    const [schema, setSchema] = useState<SchemaData>({ stages: [] })
+    const [schema, setSchema] = useState<SchemaData>({
+        stages: [
+            {
+                fields: [
+                    {
+                        title: 'Seller',
+                        type: 'user',
+                        uid: 'seller',
+                    },
+                    {
+                        title: 'Buyer',
+                        type: 'user',
+                        uid: 'buyer',
+                    },
+                ],
+                title: 'the parties',
+                uid: 'parties',
+            },
+            {
+                fields: [
+                    {
+                        max: 6,
+                        min: 1,
+                        title: 'amount of dong',
+                        type: 'int',
+                        uid: 'dang_amount',
+                    },
+                ],
+                title: 'Property details',
+                uid: 'prop_detail',
+            },
+        ],
+    })
 
     useEffect(() => {
         if (!output.current) return
@@ -29,13 +61,13 @@ const Test: FC = () => {
                         <div
                             onClick={() =>
                                 appendStage({
-                                    uid: 'gg',
-                                    title: 'cool',
+                                    uid: 'stage_1',
+                                    title: 'stage_1',
                                     fields: [],
                                 })
                             }
                         >
-                            <span className='title'>Append</span>
+                            <span>Append</span>
                         </div>
                         {schema.stages.map((s, i) => (
                             <div
@@ -77,7 +109,38 @@ type StrField = IntField & {
     type: 'str'
 }
 
-type FieldType = IntField | StrField
+type GenericField = BaseField & {
+    type: 'user' | 'geo' | 'record' | 'date' | 'signature'
+}
+
+type TextField = IntField & {
+    type: 'text'
+}
+
+type UIDD = {
+    uid: string
+    display: string
+}
+
+type QuestionField = BaseField & {
+    type: 'question'
+    answers: UIDD[]
+    questions: UIDD[]
+}
+
+type OptionFeild = BaseField & {
+    type: 'option'
+    singleton: boolean
+    options: UIDD[]
+}
+
+type FieldType =
+    | IntField
+    | StrField
+    | GenericField
+    | OptionFeild
+    | QuestionField
+    | TextField
 
 type Stage = BaseField & {
     fields: FieldType[]
