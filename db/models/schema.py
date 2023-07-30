@@ -26,6 +26,7 @@ class BaseField(BaseModel):
     description: str = Field(
         None, description='optinal description of the field'
     )
+    optinal: bool = False
 
 
 class UserField(BaseField):
