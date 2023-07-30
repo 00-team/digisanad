@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { get_messages } from 'api'
-import { InfoSvg, NotificationSvg, WarningSvg } from 'icons'
+import { InfoSvg, NotificationSvg, SenderSvg, WarningSvg } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { MessageModel, MessagesAtom, TokenAtom } from 'state'
@@ -41,9 +41,9 @@ const Notifications: FC = () => {
                 <NotificationSvg size={innerWidth >= 1024 ? 40 : 30} />
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
-                <NotifMessage level='info' />
-                <NotifMessage level='notification' />
-                <NotifMessage level='urgent' />
+                {messages?.map((message, index) => {
+                    return <NotifMessage {...message} key={index} />
+                })}
             </div>
         </div>
     )
@@ -51,7 +51,7 @@ const Notifications: FC = () => {
 
 interface NotifMessageProps extends MessageModel {}
 
-const NotifMessage: FC<Pick<NotifMessageProps, 'level'>> = ({ level }) => {
+const NotifMessage: FC<NotifMessageProps> = ({ seen, sender, text, level }) => {
     type levels = {
         [k in typeof level]: string
     }
@@ -62,9 +62,15 @@ const NotifMessage: FC<Pick<NotifMessageProps, 'level'>> = ({ level }) => {
         urgent: 'مهم',
     } as const
 
+    const getSender = (): string => {
+        if (sender === 'system') return 'سیستم'
+        else if (sender === null) return 'نامعلوم'
+        else return sender.first_name + ' ' + sender.last_name
+    }
+
     return (
         <div className={`notif-container ${level}`}>
-            <div className='has-seen'></div>
+            {seen && <div className='has-seen'></div>}
 
             {level !== 'notification' && (
                 <div className={`notif-level ${level}`}>
@@ -75,6 +81,16 @@ const NotifMessage: FC<Pick<NotifMessageProps, 'level'>> = ({ level }) => {
                     <p className='title_small'>{levels_title[level]}</p>
                 </div>
             )}
+
+            <div className='sender title_smaller'>
+                <div className='holder'>
+                    <SenderSvg size={20} />
+                    فرستنده:
+                </div>
+                <p className='data '>{getSender()}</p>
+            </div>
+
+            <p className='text title_smaller'>{text}</p>
         </div>
     )
 }
