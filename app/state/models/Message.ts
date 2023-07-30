@@ -8,6 +8,10 @@ type Message = {
     level: 'notification' | 'info' | 'urgent'
 }
 
+type unseenCount = {
+    count: number
+}
+
 type User = {
     user_id: number
 
@@ -15,4 +19,8 @@ type User = {
     last_name: string
 }
 
-export { Message as MessageModel }
+export {
+    Message as MessageModel,
+    User as SenderUser,
+    unseenCount as unseenCountModel,
+}

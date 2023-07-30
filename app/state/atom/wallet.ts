@@ -1,5 +1,7 @@
 import { atom } from 'jotai'
-import { WalletModel } from 'state'
+import { WalletModel, unseenCountModel } from 'state'
 
 const WalletAtom = atom<WalletModel | null>(null)
-export { WalletAtom }
+const UnseenCountAtom = atom<unseenCountModel | null>(null)
+
+export { WalletAtom, UnseenCountAtom }
