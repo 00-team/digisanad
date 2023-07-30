@@ -24,6 +24,7 @@
             border-radius: 5px;
             border: 2px solid #0260e8;
             display: flex;
+            flex-direction: column;
 
             .stages {
                 width: 100%;
@@ -51,6 +52,11 @@
                         opacity: 1;
                     }
                 }
+            }
+
+            .fields {
+                display: flex;
+                flex-direction: column;
             }
         }
 
