@@ -108,7 +108,7 @@
         .notif-container {
             display: flex;
             flex-direction: column;
-            gap: 1vh;
+            gap: 2vh;
 
             padding: 1rem;
 
@@ -121,6 +121,23 @@
             isolation: isolate;
 
             direction: rtl;
+
+            &.info {
+                background-image: linear-gradient(
+                    -312deg,
+                    rgb(81 153 255 / 80%),
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0)
+                );
+            }
+            &.urgent {
+                background-image: linear-gradient(
+                    -312deg,
+                    rgb(226 3 56 / 80%),
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0)
+                );
+            }
 
             .has-seen {
                 position: absolute;
@@ -155,7 +172,7 @@
             }
 
             .text {
-                margin-top: 2vh;
+                margin-top: 1vh;
                 word-break: break-word;
             }
         }
