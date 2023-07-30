@@ -1,5 +1,6 @@
 type Message = {
     message_id: number
+    text: string
     seen: boolean
     sender: User | null | 'system'
     receiver: number
