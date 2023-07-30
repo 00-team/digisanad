@@ -67,7 +67,36 @@ class SchemaAddBody(BaseModel):
                             {
                                 'uid': 'seller',
                                 'title': 'Seller',
-                            }
+                                'type': 'user'
+                            },
+                            {
+                                'uid': 'buyer',
+                                'title': 'Buyer',
+                                'type': 'user'
+                            },
+                        ]
+                    },
+                    {
+                        'title': 'Property details',
+                        'uid': 'prop_detail',
+                        'fields': [
+                            {
+                                'uid': 'dang_amount',
+                                'title': 'amount of dong',
+                                'type': 'int',
+                                'min': 1,
+                                'max': 6
+                            },
+                            {
+                                'title': 'Original registration plate',
+                                'uid': 'org_reg_plate',
+                                'type': 'str'
+                            },
+                            {
+                                'title': 'Sub registration plate',
+                                'uid': 'sub_reg_plate',
+                                'type': 'str'
+                            },
                         ]
                     }
                 ]
