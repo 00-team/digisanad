@@ -79,6 +79,13 @@ const Test: FC = () => {
                             </div>
                         ))}
                     </div>
+                    <div className='fields'>
+                        <h2>{schema.stages[activeStage]!.title}</h2>
+
+                        {schema.stages[activeStage]!.fields.map((f, i) => (
+                            <div key={i}>{f.type}</div>
+                        ))}
+                    </div>
                 </div>
                 <div className='builder'>
                     <button>add field</button>
