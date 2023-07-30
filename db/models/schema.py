@@ -1,4 +1,5 @@
 
+from enum import Enum
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -23,19 +24,28 @@ class SchemaTable(BaseTable):
 class BaseField(BaseModel):
     uid: str = Field(title='unique id', description='unique id of the field')
     title: str
-    description: str = Field(
+    description: str | None = Field(
         None, description='optinal description of the field'
     )
+    optinal: bool = False
 
 
-class UserField(BaseField):
-    type: Literal['user']
+class FieldTypes(str, Enum):
+    USER = 'user'
+    GEO = 'geo'
+    RECORD = 'record'
+    DATE = 'date'
+    SIGNATURE = 'signature'
+
+
+class GenericField(BaseField):
+    type: FieldTypes
 
 
 class IntField(BaseField):
     type: Literal['int']
-    min: int = None
-    max: int = None
+    min: int | None = None
+    max: int | None = None
 
 
 class StrField(IntField):
@@ -44,14 +54,6 @@ class StrField(IntField):
 
 class TextField(IntField):
     type: Literal['text']
-
-
-class GeoField(BaseField):
-    type: Literal['geo']
-
-
-class RecordField(BaseField):
-    type: Literal['record']
 
 
 class UIDD(BaseModel):
@@ -72,17 +74,9 @@ class OptionFeild(BaseModel):
     options: list[UIDD]
 
 
-class DateField(BaseField):
-    type: Literal['date']
-
-
-class SignatureField(BaseField):
-    type: Literal['signature']
-
-
 Field = (
-    UserField | IntField | StrField | OptionFeild | DateField |
-    TextField | GeoField | QuestionField | RecordField | SignatureField
+    GenericField | IntField | StrField | OptionFeild |
+    TextField | QuestionField
 )
 
 
@@ -98,5 +92,5 @@ class SchemaModel(BaseModel):
     schema_id: int
     draft: bool
     title: str
-    description: str = None
+    description: str | None = None
     data: SchemaData
