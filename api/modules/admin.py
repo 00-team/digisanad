@@ -61,7 +61,14 @@ class SchemaAddBody(BaseModel):
             'data': {
                 'stages': [
                     {
-                        'title': 'the parties'
+                        'title': 'the parties',
+                        'uid': 'parties',
+                        'fields': [
+                            {
+                                'uid': 'seller',
+                                'title': 'Seller',
+                            }
+                        ]
                     }
                 ]
             }
@@ -73,7 +80,7 @@ async def add_schema(request: Request, body: SchemaAddBody):
     user: UserModel = request.state.user
     user.admin_assert(AP.C_SCHEMA)
 
-    print(json.dumps(body.data, indent=2))
+    print(json.dumps(body.data.dict(), indent=2))
 
     # schema_id = await schema_add(
     #     title=body.title,
