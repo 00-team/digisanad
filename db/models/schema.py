@@ -1,4 +1,5 @@
 
+from enum import Enum
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -29,8 +30,16 @@ class BaseField(BaseModel):
     optinal: bool = False
 
 
-class UserField(BaseField):
-    type: Literal['user']
+class FieldTypes(str, Enum):
+    USER = 'user'
+    GEO = 'geo'
+    RECORD = 'record'
+    DATE = 'date'
+    SIGNATURE = 'signature'
+
+
+class GenericField(BaseField):
+    type: FieldTypes
 
 
 class IntField(BaseField):
@@ -45,14 +54,6 @@ class StrField(IntField):
 
 class TextField(IntField):
     type: Literal['text']
-
-
-class GeoField(BaseField):
-    type: Literal['geo']
-
-
-class RecordField(BaseField):
-    type: Literal['record']
 
 
 class UIDD(BaseModel):
@@ -73,17 +74,9 @@ class OptionFeild(BaseModel):
     options: list[UIDD]
 
 
-class DateField(BaseField):
-    type: Literal['date']
-
-
-class SignatureField(BaseField):
-    type: Literal['signature']
-
-
 Field = (
-    UserField | IntField | StrField | OptionFeild | DateField |
-    TextField | GeoField | QuestionField | RecordField | SignatureField
+    GenericField | IntField | StrField | OptionFeild |
+    TextField | QuestionField
 )
 
 
