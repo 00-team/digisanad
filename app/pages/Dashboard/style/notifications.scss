@@ -87,6 +87,11 @@
 
         padding: 1rem;
 
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        direction: ltr;
+
         opacity: 0;
         transform: translateX(100%);
         z-index: -1;
@@ -112,11 +117,10 @@
 
             box-shadow: 0px 3px 6px -3px black;
 
-            // debug
-            height: 100px;
-
             position: relative;
             isolation: isolate;
+
+            direction: rtl;
 
             .has-seen {
                 position: absolute;
@@ -136,6 +140,23 @@
                 display: flex;
                 align-items: center;
                 gap: 1vw;
+            }
+
+            .sender {
+                display: flex;
+                align-items: center;
+                gap: 1vw;
+
+                .holder {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5vw;
+                }
+            }
+
+            .text {
+                margin-top: 2vh;
+                word-break: break-word;
             }
         }
     }
