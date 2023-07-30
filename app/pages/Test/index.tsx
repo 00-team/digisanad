@@ -19,15 +19,17 @@ const Test: FC = () => {
             <div className='contract-builder'>
                 <div className='view'>
                     <div className='stages'>
-                        {[12, 'GG', 14, 15].map((n, i) => (
-                            <div
-                                className={C(i === activeStage)}
-                                onClick={() => setActiveStage(i)}
-                                key={i}
-                            >
-                                <span className='title'>Stage {n}</span>
-                            </div>
-                        ))}
+                        {[12, 'GG', 14, 15, 1, 1, 2, 3, 4, 5, 5, 6, 7].map(
+                            (n, i) => (
+                                <div
+                                    className={C(i === activeStage)}
+                                    onClick={() => setActiveStage(i)}
+                                    key={i}
+                                >
+                                    <span className='title'>Stage {n}</span>
+                                </div>
+                            )
+                        )}
                     </div>
                 </div>
                 <div className='builder'></div>
