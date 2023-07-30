@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 import { MessageModel } from 'state'
 
-const MessageAtom = atom<MessageModel | null>(null)
+const MessagesAtom = atom<MessageModel[] | null>(null)
 
-export { MessageAtom }
+export { MessagesAtom }
