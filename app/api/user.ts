@@ -34,7 +34,7 @@ const get_wallet = async (token: string): Promise<WalletModel | null> => {
     return null
 }
 
-const get_messages = async (token: string): Promise<MessageModel | null> => {
+const get_messages = async (token: string): Promise<MessageModel[] | null> => {
     try {
         const response = await axios.get('/api/messages/', {
             headers: {
@@ -42,7 +42,7 @@ const get_messages = async (token: string): Promise<MessageModel | null> => {
             },
         })
 
-        const messages: MessageModel = response.data
+        const messages: MessageModel[] = response.data
 
         return messages
     } catch (error) {
