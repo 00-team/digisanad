@@ -68,14 +68,14 @@ class QuestionField(BaseField):
     questions: list[UIDD]
 
 
-class OptionFeild(BaseField):
+class OptionField(BaseField):
     type: Literal['option']
     singleton: bool = False
     options: list[UIDD]
 
 
 Field = (
-    GenericField | IntField | StrField | OptionFeild |
+    GenericField | IntField | StrField | OptionField |
     TextField | QuestionField
 )
 
