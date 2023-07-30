@@ -68,4 +68,21 @@
         background: transparent;
         color: inherit;
     }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 6px;
+        background: #040404;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #0351c1;
+        border: 0;
+        border-radius: 0;
+    }
+
+    ::selection {
+        color: #fff;
+        background-color: #0260e8;
+    }
 }
