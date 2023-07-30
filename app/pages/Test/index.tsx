@@ -44,7 +44,7 @@ const Test: FC = () => {
     useEffect(() => {
         if (!output.current) return
 
-        output.current.value = JSON.stringify(schema, null, 4)
+        output.current.value = JSON.stringify(schema, null, 2)
     }, [schema])
 
     const appendStage = (stage: Stage) => {
