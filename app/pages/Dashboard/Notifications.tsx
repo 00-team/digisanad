@@ -12,11 +12,10 @@ import './style/notifications.scss'
 
 const Notifications: FC = () => {
     const token = useAtomValue(TokenAtom)
-
     const [messages, setMessages] = useAtom(MessagesAtom)
     const [UnseenCount, setUnseenCount] = useAtom(UnseenCountAtom)
 
-    const [Open, setOpen] = useState(true)
+    const [Open, setOpen] = useState(false)
 
     useEffect(() => {
         if (!token) return
