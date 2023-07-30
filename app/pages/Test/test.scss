@@ -8,6 +8,8 @@
     align-items: center;
     padding: 1rem;
     gap: 0.5rem;
+    font-family: 'monospace';
+    font-size: 18px;
 
     .contract-builder {
         width: 100%;
@@ -59,8 +61,15 @@
         }
     }
 
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     textarea {
         width: 100%;
+        max-width: 100%;
+        resize: none;
         height: 100%;
         font-size: 18px;
         border-radius: 5px;
