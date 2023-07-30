@@ -207,6 +207,8 @@
         justify-content: flex-start;
 
         overflow-y: auto;
+        overflow-x: hidden;
+
         direction: ltr;
         position: relative;
         isolation: isolate;

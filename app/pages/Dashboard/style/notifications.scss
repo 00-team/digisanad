@@ -77,7 +77,6 @@
     .notifications-wrapper {
         display: flex;
         flex-direction: column;
-
         gap: 2vh;
 
         background-color: white;
@@ -86,7 +85,58 @@
 
         box-shadow: 0px 15px 20px -15px black;
 
-        // debug
-        height: 500px;
+        padding: 1rem;
+
+        opacity: 0;
+        transform: translateX(100%);
+        z-index: -1;
+
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out,
+            z-index 0.5s ease-in-out;
+
+        &.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 1;
+        }
+
+        .notif-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+
+            padding: 1rem;
+
+            border-radius: 5px;
+            width: 100%;
+
+            box-shadow: 0px 3px 6px -3px black;
+
+            // debug
+            height: 100px;
+
+            position: relative;
+            isolation: isolate;
+
+            .has-seen {
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                min-width: calc(15px);
+                aspect-ratio: 1/1;
+
+                background-color: var(--alert-error);
+                border-radius: 100vmax;
+
+                transform: translate(50%, -50%);
+            }
+
+            .notif-level {
+                display: flex;
+                align-items: center;
+                gap: 1vw;
+            }
+        }
     }
 }
