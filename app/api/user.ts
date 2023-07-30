@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { MessageModel, UserModel, WalletModel } from 'state'
+import { MessageModel, unseenCountModel, UserModel, WalletModel } from 'state'
 
 const user_get_me = async (token: string): Promise<UserModel | null> => {
     try {
@@ -51,5 +51,24 @@ const get_messages = async (token: string): Promise<MessageModel[] | null> => {
 
     return null
 }
+const get_unseen_count = async (
+    token: string
+): Promise<unseenCountModel | null> => {
+    try {
+        const response = await axios.get('/api/messages/unseen_count/', {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        })
 
-export { user_get_me, get_wallet, get_messages }
+        const unseen_count: unseenCountModel | null = response.data
+
+        return unseen_count
+    } catch (error) {
+        console.log(error)
+    }
+
+    return null
+}
+
+export { user_get_me, get_wallet, get_messages, get_unseen_count }
