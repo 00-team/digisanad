@@ -33,9 +33,17 @@ class MessageAddBody(BaseModel):
 
 @router.post('/message/', response_model=int)
 async def add_message(request: Request, body: MessageAddBody):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.C_MESSAGE)
+
     return await message_add(
         text=body.text,
         receiver=body.receiver,
         timestamp=utc_now(),
         level=body.level
     )
+
+
+@router.post('/schema/')
+async def add_schema(request: Request, body: None):
+    pass
