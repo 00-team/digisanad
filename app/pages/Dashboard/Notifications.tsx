@@ -5,18 +5,32 @@ import { C } from '@00-team/utils'
 import { get_messages } from 'api'
 import { NotificationSvg } from 'icons'
 
-import { useAtomValue } from 'jotai'
-import { TokenAtom } from 'state'
+import { useAtom, useAtomValue } from 'jotai'
+import { MessagesAtom, TokenAtom } from 'state'
 
 import './style/notifications.scss'
 
 const Notifications: FC = () => {
-    const [Open, setOpen] = useState(false)
     const token = useAtomValue(TokenAtom)
 
+    const [messages, setMessages] = useAtom(MessagesAtom)
+
+    const [Open, setOpen] = useState(true)
+
     useEffect(() => {
-        get_messages(token)
+        if (!token) return
+
+        if (messages == null) {
+            get_messages(token).then(data => setMessages(data))
+
+            return
+        }
     }, [])
+
+    useEffect(() => {
+        console.log(messages)
+    }, [messages])
+
     return (
         <div className='notifications-container'>
             <button
@@ -26,9 +40,17 @@ const Notifications: FC = () => {
                 <span className='unseen-count description'>1</span>
                 <NotificationSvg size={innerWidth >= 1024 ? 40 : 30} />
             </button>
-            <div className={`notifications-wrapper ${C(Open)}`}></div>
+            <div className={`notifications-wrapper ${C(Open)}`}>
+                <NotifMessage />
+            </div>
         </div>
     )
+}
+
+interface NotifMessageProps {}
+
+const NotifMessage: FC<NotifMessageProps> = () => {
+    return <div className='notif-container'></div>
 }
 
 export default Notifications
