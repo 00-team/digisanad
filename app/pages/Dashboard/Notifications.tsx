@@ -48,10 +48,6 @@ const Notifications: FC = () => {
         }
     }, [])
 
-    // useEffect(() => {
-    //     console.log(messages)
-    // }, [messages])
-
     return (
         <div className='notifications-container'>
             <button
