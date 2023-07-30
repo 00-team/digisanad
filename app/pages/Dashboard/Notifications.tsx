@@ -42,6 +42,8 @@ const Notifications: FC = () => {
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
                 <NotifMessage />
+                <NotifMessage />
+                <NotifMessage />
             </div>
         </div>
     )
@@ -50,7 +52,11 @@ const Notifications: FC = () => {
 interface NotifMessageProps {}
 
 const NotifMessage: FC<NotifMessageProps> = () => {
-    return <div className='notif-container'></div>
+    return (
+        <div className='notif-container'>
+            <div className='has-seen'></div>
+        </div>
+    )
 }
 
 export default Notifications
