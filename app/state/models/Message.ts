@@ -15,4 +15,4 @@ type User = {
     last_name: string
 }
 
-export { Message as MessageModel }
+export { Message as MessageModel, User as SenderUser }
