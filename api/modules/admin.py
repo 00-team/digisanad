@@ -1,5 +1,7 @@
 
 
+import json
+
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
@@ -33,17 +35,19 @@ class MessageAddBody(BaseModel):
     level: MessageLevel = MessageLevel.INFO
 
 
-@router.post('/message/', response_model=int)
+@router.post('/message/', response_model=IDModel)
 async def add_message(request: Request, body: MessageAddBody):
     user: UserModel = request.state.user
     user.admin_assert(AP.C_MESSAGE)
 
-    return await message_add(
+    message_id = await message_add(
         text=body.text,
         receiver=body.receiver,
         timestamp=utc_now(),
         level=body.level
     )
+
+    return {'id': message_id}
 
 
 class SchemaAddBody(BaseModel):
@@ -51,16 +55,30 @@ class SchemaAddBody(BaseModel):
     description: str = None
     data: SchemaData
 
+    class Config:
+        json_schema_extra = {'example': {
+            'title': 'property contract',
+            'data': {
+                'stages': [
+                    {
+                        'title': 'the parties'
+                    }
+                ]
+            }
+        }}
+
 
 @router.post('/schema/', response_model=IDModel)
 async def add_schema(request: Request, body: SchemaAddBody):
     user: UserModel = request.state.user
     user.admin_assert(AP.C_SCHEMA)
 
-    schema_id = await schema_add(
-        title=body.title,
-        description=body.description,
-        data=body.data
-    )
+    print(json.dumps(body.data, indent=2))
 
-    return {'id': schema_id}
+    # schema_id = await schema_add(
+    #     title=body.title,
+    #     description=body.description,
+    #     data=body.data
+    # )
+
+    return {'id': 12}
