@@ -23,7 +23,7 @@ class SchemaTable(BaseTable):
 class BaseField(BaseModel):
     uid: str = Field(title='unique id', description='unique id of the field')
     title: str
-    description: str = Field(
+    description: str | None = Field(
         None, description='optinal description of the field'
     )
     optinal: bool = False
@@ -35,8 +35,8 @@ class UserField(BaseField):
 
 class IntField(BaseField):
     type: Literal['int']
-    min: int = None
-    max: int = None
+    min: int | None = None
+    max: int | None = None
 
 
 class StrField(IntField):
@@ -99,5 +99,5 @@ class SchemaModel(BaseModel):
     schema_id: int
     draft: bool
     title: str
-    description: str = None
+    description: str | None = None
     data: SchemaData
