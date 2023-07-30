@@ -2,11 +2,11 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { get_messages } from 'api'
+import { get_messages, get_unseen_count } from 'api'
 import { InfoSvg, NotificationSvg, SenderSvg, WarningSvg } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
-import { MessageModel, MessagesAtom, TokenAtom } from 'state'
+import { MessageModel, MessagesAtom, TokenAtom, UnseenCountAtom } from 'state'
 
 import './style/notifications.scss'
 
@@ -14,6 +14,7 @@ const Notifications: FC = () => {
     const token = useAtomValue(TokenAtom)
 
     const [messages, setMessages] = useAtom(MessagesAtom)
+    const [UnseenCount, setUnseenCount] = useAtom(UnseenCountAtom)
 
     const [Open, setOpen] = useState(true)
 
@@ -28,8 +29,28 @@ const Notifications: FC = () => {
     }, [])
 
     useEffect(() => {
-        console.log(messages)
-    }, [messages])
+        if (!token) return
+
+        if (UnseenCount == null) {
+            get_unseen_count(token).then(data => setUnseenCount(data))
+
+            return
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!token) return
+
+        if (messages == null) {
+            get_messages(token).then(data => setMessages(data))
+
+            return
+        }
+    }, [])
+
+    // useEffect(() => {
+    //     console.log(messages)
+    // }, [messages])
 
     return (
         <div className='notifications-container'>
@@ -37,7 +58,11 @@ const Notifications: FC = () => {
                 className='notification-icon'
                 onClick={() => setOpen(!Open)}
             >
-                <span className='unseen-count description'>1</span>
+                {UnseenCount && UnseenCount.count >= 1 && (
+                    <span className='unseen-count description'>
+                        {UnseenCount?.count}
+                    </span>
+                )}
                 <NotificationSvg size={innerWidth >= 1024 ? 40 : 30} />
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
