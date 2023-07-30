@@ -68,7 +68,7 @@ class QuestionField(BaseField):
     questions: list[UIDD]
 
 
-class OptionFeild(BaseModel):
+class OptionFeild(BaseField):
     type: Literal['option']
     singleton: bool = False
     options: list[UIDD]
