@@ -1,8 +1,8 @@
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, SVGAttributes } from 'react'
 
 import { AlertContextModel } from '@00-team/react-alert'
 
-interface IconAttrs extends HTMLAttributes<SVGSVGElement> {
+interface IconAttrs extends SVGAttributes<SVGElement> {
     size?: number | string
 }
 
