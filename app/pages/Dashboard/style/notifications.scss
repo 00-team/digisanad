@@ -105,7 +105,7 @@
             flex-direction: column;
             gap: 1vh;
 
-            padding: 1rem 2rem;
+            padding: 1rem;
 
             border-radius: 5px;
             width: 100%;
@@ -130,6 +130,12 @@
                 border-radius: 100vmax;
 
                 transform: translate(50%, -50%);
+            }
+
+            .notif-level {
+                display: flex;
+                align-items: center;
+                gap: 1vw;
             }
         }
     }
