@@ -55,9 +55,12 @@ async def get_records(request: Request, page: int = 0):
         f'''
         SELECT * FROM records WHERE owner = :user_id
         ORDER BY record_id DESC
-        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
+        LIMIT {settings.page_size} OFFSET :skip
         ''',
-        {'user_id': user.user_id}
+        {
+            'user_id': user.user_id,
+            'skip': page * settings.page_size
+        }
     )
 
     result = []
