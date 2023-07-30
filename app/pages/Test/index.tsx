@@ -83,7 +83,9 @@ const Test: FC = () => {
                         <h2>{schema.stages[activeStage]!.title}</h2>
 
                         {schema.stages[activeStage]!.fields.map((f, i) => (
-                            <div key={i}>{f.type}</div>
+                            <div key={i}>
+                                {f.title} - {f.type}
+                            </div>
                         ))}
                     </div>
                 </div>
