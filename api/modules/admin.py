@@ -3,10 +3,12 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
+from api.models import IDModel, OkModel
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, UserModel
+from db.models import GeneralModel, MessageLevel, SchemaData, UserModel
+from db.schema import schema_add
 from deps import admin_required
 from shared.tools import utc_now
 
@@ -44,6 +46,21 @@ async def add_message(request: Request, body: MessageAddBody):
     )
 
 
-@router.post('/schema/')
-async def add_schema(request: Request, body: None):
-    pass
+class SchemaAddBody(BaseModel):
+    title: str
+    description: str = None
+    data: SchemaData
+
+
+@router.post('/schema/', response_model=IDModel)
+async def add_schema(request: Request, body: SchemaAddBody):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.C_SCHEMA)
+
+    schema_id = await schema_add(
+        title=body.title,
+        description=body.description,
+        data=body.data
+    )
+
+    return {'id': schema_id}
