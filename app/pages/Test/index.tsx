@@ -71,6 +71,12 @@ const Test: FC = () => {
                                 className={C(i === activeStage)}
                                 onClick={() => setActiveStage(i)}
                                 key={i}
+                                onAuxClick={() =>
+                                    setSchema(s => {
+                                        s.stages.splice(i, 1)
+                                        return { ...s }
+                                    })
+                                }
                             >
                                 <span>{s.title}</span>
                             </div>
