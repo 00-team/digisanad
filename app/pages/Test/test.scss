@@ -139,7 +139,17 @@
             height: 30px;
             position: absolute;
             bottom: 0;
-            right: 0;
+            right: 8px;
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: -8px;
+                height: 2px;
+                width: 8px;
+                background: #0260e8;
+                top: -2px;
+            }
         }
     }
 
