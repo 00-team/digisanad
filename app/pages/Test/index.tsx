@@ -82,12 +82,27 @@ const Test: FC = () => {
                             </div>
                         ))}
                     </div>
-                    <div className='fields'>
-                        <h2>{schema.stages[activeStage]!.title}</h2>
+                    <h2>{schema.stages[activeStage]!.title}</h2>
 
+                    <div className='fields'>
                         {schema.stages[activeStage]!.fields.map((f, i) => (
-                            <div key={i}>
-                                {f.title} - {f.type}
+                            <div key={i} className='field'>
+                                {f.type}
+                                <input
+                                    type='text'
+                                    onChange={e => {
+                                        let v = e.currentTarget.value
+                                        if (v.length > 64) return
+
+                                        setSchema(s => {
+                                            s.stages[activeStage]!.fields[
+                                                i
+                                            ]!.title = v
+                                            return { ...s }
+                                        })
+                                    }}
+                                    value={f.title}
+                                />
                             </div>
                         ))}
                     </div>
