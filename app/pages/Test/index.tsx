@@ -42,7 +42,16 @@ const Test: FC = () => {
                         title: 'OPTION',
                         type: 'option',
                         uid: 'F_option_1',
-                        options: [],
+                        options: [
+                            {
+                                uid: 'F_option_31',
+                                display: '',
+                            },
+                            {
+                                uid: 'F_option_32',
+                                display: '',
+                            },
+                        ],
                         singleton: false,
                     },
                     {
@@ -255,20 +264,19 @@ const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
             {have_minmax(field) && <MinMax field={field} update={update} />}
             {field.type == 'option' && (
                 <>
-                    <input
-                        type='checkbox'
-                        checked={field.singleton}
-                        onChange={e => {
-                            const v = e.currentTarget.checked
-                            setSchema(s => {
-                                s.stages[stage]!.fields[
-                                    index
-                                    // @ts-ignore
-                                ]!.singleton = v
-                                return { ...s }
-                            })
-                        }}
-                    />
+                    <div className='frow'>
+                        <input
+                            type='checkbox'
+                            checked={field.singleton}
+                            id={field.type + index}
+                            onChange={e => {
+                                const v = e.currentTarget.checked
+                                field.singleton = v
+                                update()
+                            }}
+                        />
+                        <label htmlFor={field.type + index}>singleton</label>
+                    </div>
                     <button
                         onClick={() => {
                             setSchema(s => {
