@@ -1,6 +1,6 @@
 import React, { FC, useRef, ElementRef, useEffect, useState } from 'react'
 
-import { C } from '@00-team/utils'
+import { C, UniqueID } from '@00-team/utils'
 
 import './test.scss'
 
@@ -56,7 +56,7 @@ const Test: FC = () => {
                             onClick={() =>
                                 setSchema(s => {
                                     s.stages.push({
-                                        uid: 'stage_1',
+                                        uid: UniqueID('stage_'),
                                         title: 'stage_1',
                                         fields: [],
                                     })
@@ -114,6 +114,7 @@ const Test: FC = () => {
                             onClick={() => {
                                 setSchema(s => {
                                     let fields = s.stages[activeStage]!.fields
+                                    let uid = UniqueID('F_' + f + '_')
                                     switch (f) {
                                         case 'int':
                                         case 'str':
@@ -121,7 +122,7 @@ const Test: FC = () => {
                                             fields.push({
                                                 title: f.toUpperCase(),
                                                 type: f,
-                                                uid: f,
+                                                uid,
                                                 min: 0,
                                                 max: 0,
                                             })
@@ -135,14 +136,14 @@ const Test: FC = () => {
                                             fields.push({
                                                 title: f.toUpperCase(),
                                                 type: f,
-                                                uid: f,
+                                                uid,
                                             })
                                             break
                                         case 'option':
                                             fields.push({
                                                 title: f.toUpperCase(),
                                                 type: f,
-                                                uid: f,
+                                                uid,
                                                 options: [],
                                                 singleton: false,
                                             })
@@ -151,7 +152,7 @@ const Test: FC = () => {
                                             fields.push({
                                                 title: f.toUpperCase(),
                                                 type: f,
-                                                uid: f,
+                                                uid,
                                                 questions: [],
                                                 answers: [],
                                             })
