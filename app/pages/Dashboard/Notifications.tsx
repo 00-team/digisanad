@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { get_messages, get_unseen_count } from 'api'
+import axios from 'axios'
 import { InfoSvg, NotificationSvg, SenderSvg, WarningSvg } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
@@ -16,6 +17,28 @@ const Notifications: FC = () => {
     const [UnseenCount, setUnseenCount] = useAtom(UnseenCountAtom)
 
     const [Open, setOpen] = useState(false)
+
+    const seenMsg = async () => {
+        try {
+            await messages?.forEach(({ message_id }) => {
+                const response = axios.patch(
+                    `/api/messages/${message_id}/`,
+                    {
+                        seened: true,
+                    },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                        },
+                    }
+                )
+
+                console.log(response)
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     useEffect(() => {
         if (!token) return
@@ -46,6 +69,10 @@ const Notifications: FC = () => {
             return
         }
     }, [])
+
+    useEffect(() => {
+        Open && seenMsg()
+    }, [Open])
 
     return (
         <div className='notifications-container'>
@@ -90,7 +117,7 @@ const NotifMessage: FC<NotifMessageProps> = ({ seen, sender, text, level }) => {
 
     return (
         <div className={`notif-container ${level}`}>
-            {seen && <div className='has-seen'></div>}
+            {!seen && <div className='has-seen'></div>}
 
             {level !== 'notification' && (
                 <div className={`notif-level ${level}`}>
