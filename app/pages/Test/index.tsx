@@ -93,20 +93,22 @@ const Test: FC = () => {
                     <button>add field</button>
                 </div>
             </div>
-            <textarea
-                ref={output}
-                onChange={e => setSchema(JSON.parse(e.currentTarget.value))}
-            >
+            <div className='output'>
+                <textarea
+                    ref={output}
+                    onChange={e => setSchema(JSON.parse(e.currentTarget.value))}
+                ></textarea>
                 <button onClick={() => {
-                    if (!output.current) return
+                    if (!output.current || !output.current.parentElement) return
+                    const div = output.current.parentElement
 
-                    if (document.fullscreenElement == output.current) {
+                    if (document.fullscreenElement == div) {
                         document.exitFullscreen()
                     } else {
-                        output.current.requestFullscreen()
+                        div.requestFullscreen()
                     }
                 }}>F</button>
-            </textarea>
+            </div>
         </div>
     )
 }

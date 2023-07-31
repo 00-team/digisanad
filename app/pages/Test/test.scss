@@ -74,17 +74,36 @@
         text-overflow: ellipsis;
     }
 
-    textarea {
+    .output {
         width: 100%;
-        max-width: 100%;
-        resize: none;
         height: 100%;
-        font-size: 18px;
-        border-radius: 5px;
-        border: 2px solid #0260e8;
-        padding: 0.5rem;
-        background: transparent;
-        color: inherit;
+        position: relative;
+
+        textarea {
+            width: 100%;
+            max-width: 100%;
+            resize: none;
+            height: 100%;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 2px solid #0260e8;
+            padding: 0.5rem;
+            background: transparent;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: 2px solid #0260e8;
+            border-bottom: 0;
+            border-right: 0;
+            border-top-left-radius: 5px;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
     }
 
     ::-webkit-scrollbar {
