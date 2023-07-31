@@ -1,4 +1,12 @@
-import React, { FC, useRef, ElementRef, useEffect, useState } from 'react'
+import React, {
+    FC,
+    useRef,
+    ElementRef,
+    useEffect,
+    useState,
+    SetStateAction,
+    Dispatch,
+} from 'react'
 
 import { C, UniqueID } from '@00-team/utils'
 
@@ -103,6 +111,15 @@ const Test: FC = () => {
                                     }}
                                     value={f.title}
                                 />
+                                {['str', 'text', 'int'].includes(f.type) && (
+                                    <MinMax
+                                        index={i}
+                                        // @ts-ignore
+                                        field={f}
+                                        stage={activeStage}
+                                        setSchema={setSchema}
+                                    />
+                                )}
                             </div>
                         ))}
                     </div>
@@ -190,6 +207,50 @@ const Test: FC = () => {
                     F
                 </button>
             </div>
+        </div>
+    )
+}
+
+type MinMaxProps = {
+    field: IntField | StrField | TextField
+    stage: number
+    index: number
+    setSchema: Dispatch<SetStateAction<SchemaData>>
+}
+
+const MinMax: FC<MinMaxProps> = ({ field, index, stage, setSchema }) => {
+    return (
+        <div className='minmax'>
+            <input
+                type='number'
+                onChange={e => {
+                    let v = parseInt(e.currentTarget.value)
+                    if (isNaN(v) || v < 0) return
+                    if (field.max && v > field.max) return
+
+                    setSchema(s => {
+                        // @ts-ignore
+                        s.stages[stage]!.fields[index]!.min = v
+                        return { ...s }
+                    })
+                }}
+                value={field.min || 0}
+            />
+            <input
+                type='number'
+                onChange={e => {
+                    let v = parseInt(e.currentTarget.value)
+                    if (isNaN(v) || v < 0) return
+                    if (field.min && v < field.min) return
+
+                    setSchema(s => {
+                        // @ts-ignore
+                        s.stages[stage]!.fields[index]!.max = v
+                        return { ...s }
+                    })
+                }}
+                value={field.max || 0}
+            />
         </div>
     )
 }

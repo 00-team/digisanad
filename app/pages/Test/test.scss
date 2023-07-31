@@ -81,6 +81,17 @@
                         font-size: 16px;
                         padding: 0.1rem 0.4rem;
                     }
+
+                    .minmax {
+                        display: flex;
+                        width: 100%;
+                        overflow: hidden;
+                        gap: 0.3rem;
+
+                        input {
+                            width: 100%;
+                        }
+                    }
                 }
             }
         }
