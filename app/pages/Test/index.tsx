@@ -22,6 +22,26 @@ const Test: FC = () => {
                 uid: 'parties',
                 fields: [
                     {
+                        title: 'question',
+                        type: 'question',
+                        uid: 'question',
+                        answers: [
+                            { uid: 'Y', display: 'Yes' },
+                            { uid: 'M', display: 'Maybe' },
+                            { uid: 'N', display: 'No' },
+                        ],
+                        questions: [
+                            {
+                                uid: 'q1',
+                                display: 'Question 1',
+                            },
+                            {
+                                uid: 'q2',
+                                display: 'Question 2',
+                            },
+                        ],
+                    },
+                    {
                         title: 'Seller',
                         type: 'user',
                         uid: 'seller',
