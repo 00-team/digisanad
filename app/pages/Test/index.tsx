@@ -96,7 +96,17 @@ const Test: FC = () => {
             <textarea
                 ref={output}
                 onChange={e => setSchema(JSON.parse(e.currentTarget.value))}
-            ></textarea>
+            >
+                <button onClick={() => {
+                    if (!output.current) return
+
+                    if (document.fullscreenElement == output.current) {
+                        document.exitFullscreen()
+                    } else {
+                        output.current.requestFullscreen()
+                    }
+                }}>F</button>
+            </textarea>
         </div>
     )
 }
