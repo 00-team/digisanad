@@ -18,6 +18,8 @@ const Test: FC = () => {
     const [schema, setSchema] = useState<SchemaData>({
         stages: [
             {
+                title: 'the parties',
+                uid: 'parties',
                 fields: [
                     {
                         title: 'Seller',
@@ -29,9 +31,21 @@ const Test: FC = () => {
                         type: 'user',
                         uid: 'buyer',
                     },
+                    {
+                        title: 'OPTION',
+                        type: 'option',
+                        uid: 'F_option_1',
+                        options: [],
+                        singleton: false,
+                    },
+                    {
+                        title: 'QUESTION',
+                        type: 'question',
+                        uid: 'F_question_1',
+                        questions: [],
+                        answers: [],
+                    },
                 ],
-                title: 'the parties',
-                uid: 'parties',
             },
             {
                 fields: [
@@ -90,37 +104,18 @@ const Test: FC = () => {
                             </div>
                         ))}
                     </div>
+
                     <h2>{schema.stages[activeStage]!.title}</h2>
 
                     <div className='fields'>
                         {schema.stages[activeStage]!.fields.map((f, i) => (
-                            <div key={i} className='field'>
-                                {f.type}
-                                <input
-                                    type='text'
-                                    onChange={e => {
-                                        let v = e.currentTarget.value
-                                        if (v.length > 64) return
-
-                                        setSchema(s => {
-                                            s.stages[activeStage]!.fields[
-                                                i
-                                            ]!.title = v
-                                            return { ...s }
-                                        })
-                                    }}
-                                    value={f.title}
-                                />
-                                {['str', 'text', 'int'].includes(f.type) && (
-                                    <MinMax
-                                        index={i}
-                                        // @ts-ignore
-                                        field={f}
-                                        stage={activeStage}
-                                        setSchema={setSchema}
-                                    />
-                                )}
-                            </div>
+                            <Field
+                                key={i}
+                                field={f}
+                                index={i}
+                                stage={activeStage}
+                                setSchema={setSchema}
+                            />
                         ))}
                     </div>
                 </div>
@@ -211,14 +206,112 @@ const Test: FC = () => {
     )
 }
 
-type MinMaxProps = {
-    field: IntField | StrField | TextField
-    stage: number
+type FieldProps = {
+    field: FieldType
     index: number
+    stage: number
     setSchema: Dispatch<SetStateAction<SchemaData>>
 }
 
-const MinMax: FC<MinMaxProps> = ({ field, index, stage, setSchema }) => {
+const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
+    const update = () => {
+        setSchema(s => ({ ...s }))
+    }
+
+    return (
+        <div className='field'>
+            <span>type: {field.type}</span>
+            <input
+                className='optinal'
+                type='checkbox'
+                checked={field.optinal}
+                onChange={e => {
+                    const v = e.currentTarget.checked
+                    field.optinal = v
+                    update()
+                }}
+            />
+            <input
+                className='field_title'
+                type='text'
+                onChange={e => {
+                    let v = e.currentTarget.value
+                    if (v.length > 128) return
+                    field.title = v
+                    update()
+                }}
+                value={field.title}
+                placeholder='title'
+            />
+            {have_minmax(field) && <MinMax field={field} update={update} />}
+            {field.type == 'option' && (
+                <>
+                    <input
+                        type='checkbox'
+                        checked={field.singleton}
+                        onChange={e => {
+                            const v = e.currentTarget.checked
+                            setSchema(s => {
+                                s.stages[stage]!.fields[
+                                    index
+                                    // @ts-ignore
+                                ]!.singleton = v
+                                return { ...s }
+                            })
+                        }}
+                    />
+                    <button
+                        onClick={() => {
+                            setSchema(s => {
+                                s.stages[
+                                    stage
+                                    // @ts-ignore
+                                ]!.fields[index]!.options.push({
+                                    uid: UniqueID(`F_option_${index}`),
+                                    display: '',
+                                })
+                                return { ...s }
+                            })
+                        }}
+                    >
+                        +option
+                    </button>
+                    {field.options.map((o, oi) => (
+                        <input
+                            type='text'
+                            value={o.uid + ' |^| ' + o.display}
+                            onChange={e => {
+                                const v = e.currentTarget.value
+                                const di = v.indexOf('|^|')
+                                if (!v || di < 1) return
+                                const uid = v.slice(0, di - 1)
+                                const display = v.slice(di + 4)
+
+                                setSchema(s => {
+                                    s.stages[
+                                        stage
+                                        // @ts-ignore
+                                    ]!.fields[index]!.options[oi] = {
+                                        uid,
+                                        display,
+                                    }
+                                    return { ...s }
+                                })
+                            }}
+                        />
+                    ))}
+                </>
+            )}
+        </div>
+    )
+}
+
+type MinMaxProps = {
+    field: FieldMinMax
+    update: () => void
+}
+
+const MinMax: FC<MinMaxProps> = ({ field, update }) => {
     return (
         <div className='minmax'>
             <input
@@ -226,13 +319,10 @@ const MinMax: FC<MinMaxProps> = ({ field, index, stage, setSchema }) => {
                 onChange={e => {
                     let v = parseInt(e.currentTarget.value)
                     if (isNaN(v) || v < 0) return
-                    if (field.max && v > field.max) return
+                    if (field.max && v > field.max) v = field.max
 
-                    setSchema(s => {
-                        // @ts-ignore
-                        s.stages[stage]!.fields[index]!.min = v
-                        return { ...s }
-                    })
+                    field.min = v
+                    update()
                 }}
                 value={field.min || 0}
             />
@@ -241,13 +331,10 @@ const MinMax: FC<MinMaxProps> = ({ field, index, stage, setSchema }) => {
                 onChange={e => {
                     let v = parseInt(e.currentTarget.value)
                     if (isNaN(v) || v < 0) return
-                    if (field.min && v < field.min) return
+                    if (field.min && v < field.min) v = field.min
 
-                    setSchema(s => {
-                        // @ts-ignore
-                        s.stages[stage]!.fields[index]!.max = v
-                        return { ...s }
-                    })
+                    field.max = v
+                    update()
                 }}
                 value={field.max || 0}
             />
@@ -327,6 +414,11 @@ let GGGG: typeof field_types[number] extends FieldType['type']
         : false
     : false = true
 console.assert(GGGG)
+
+type FieldMinMax = StrField | IntField | TextField
+function have_minmax(f: FieldType): f is FieldMinMax {
+    return ['str', 'int', 'text'].includes(f.type)
+}
 
 type Stage = BaseField & {
     fields: FieldType[]
