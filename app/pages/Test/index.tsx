@@ -225,7 +225,7 @@ const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
                 <input
                     className='optinal'
                     type='checkbox'
-                    checked={field.optinal}
+                    checked={field.optinal || false}
                     onChange={e => {
                         const v = e.currentTarget.checked
                         field.optinal = v

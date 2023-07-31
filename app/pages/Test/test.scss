@@ -63,6 +63,7 @@
                 display: flex;
                 padding: 1rem;
                 flex-wrap: wrap;
+                align-items: flex-start;
                 gap: 1rem;
 
                 .field {
@@ -90,10 +91,9 @@
                         padding: 0.1rem 0.4rem;
                     }
 
-                    .optinal {
-                        height: 100%;
-                        width: unset;
-                        aspect-ratio: 1;
+                    input[type='checkbox'] {
+                        height: 24px;
+                        width: 24px;
                         cursor: pointer;
                         accent-color: #0260e8;
                     }
