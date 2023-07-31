@@ -128,9 +128,9 @@ const NotifMessage: FC<NotifMessageProps> = ({
     }
 
     const getTime = (timestamp: number) => {
-        let offset = new Date().getTimezoneOffset()
+        let offset = Math.abs(new Date().getTimezoneOffset()) * 60
 
-        return timestamp + offset
+        return (timestamp + offset) * 1000
     }
 
     return (
