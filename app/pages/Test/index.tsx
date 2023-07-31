@@ -165,6 +165,23 @@ type FieldType =
     | QuestionField
     | TextField
 
+const field_types = [
+    'option',
+    'int',
+    'user',
+    'geo',
+    'record',
+    'date',
+    'signature',
+    'question',
+] as const
+let GGGG: typeof field_types[number] extends FieldType['type']
+    ? FieldType['type'] extends typeof field_types[number]
+        ? true
+        : false
+    : false = true
+console.assert(GGGG)
+
 type Stage = BaseField & {
     fields: FieldType[]
 }
