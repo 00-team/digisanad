@@ -94,19 +94,50 @@ const Test: FC = () => {
                                 setSchema(s => {
                                     let fields = s.stages[activeStage]!.fields
                                     switch (f) {
+                                        case 'int':
+                                        case 'str':
+                                        case 'text':
+                                            fields.push({
+                                                title: f.toUpperCase(),
+                                                type: f,
+                                                uid: f,
+                                                min: 0,
+                                                max: 0,
+                                            })
+                                            break
+
+                                        case 'geo':
+                                        case 'record':
+                                        case 'signature':
+                                        case 'date':
+                                        case 'user':
+                                            fields.push({
+                                                title: f.toUpperCase(),
+                                                type: f,
+                                                uid: f,
+                                            })
+                                            break
                                         case 'option':
                                             fields.push({
-                                                type: f,
                                                 title: f.toUpperCase(),
+                                                type: f,
                                                 uid: f,
                                                 options: [],
                                                 singleton: false,
                                             })
                                             break
+                                        case 'question':
+                                            fields.push({
+                                                title: f.toUpperCase(),
+                                                type: f,
+                                                uid: f,
+                                                questions: [],
+                                                answers: [],
+                                            })
+                                            break
                                     }
 
                                     s.stages[activeStage]!.fields = fields
-
                                     return { ...s }
                                 })
                             }}
@@ -154,16 +185,20 @@ type IntField = BaseField & {
     max?: number | null
 }
 
-type StrField = IntField & {
+type StrField = BaseField & {
     type: 'str'
+    min?: number | null
+    max?: number | null
 }
 
 type GenericField = BaseField & {
     type: 'user' | 'geo' | 'record' | 'date' | 'signature'
 }
 
-type TextField = IntField & {
+type TextField = BaseField & {
     type: 'text'
+    min?: number | null
+    max?: number | null
 }
 
 type UIDD = {
@@ -194,6 +229,8 @@ type FieldType =
 const field_types = [
     'option',
     'int',
+    'str',
+    'text',
     'user',
     'geo',
     'record',
