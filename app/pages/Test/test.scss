@@ -95,7 +95,8 @@
                         user-select: none;
                     }
 
-                    input[type='checkbox'] {
+                    input[type='checkbox'],
+                    input[type='radio'] {
                         height: 24px;
                         width: 24px;
                         cursor: pointer;
