@@ -343,6 +343,109 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                     ))}
                 </>
             )}
+            {field.type == 'question' && (
+                <>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Questions</th>
+                                {field.answers.map((a, ai) => (
+                                    <th
+                                        key={ai}
+                                        onContextMenu={e => {
+                                            if (e.shiftKey) {
+                                                e.preventDefault()
+                                                field.answers.splice(ai, 1)
+                                                update()
+                                            }
+                                        }}
+                                    >
+                                        <input
+                                            value={a.uid}
+                                            onChange={e => {
+                                                a.uid = e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                        <input
+                                            value={a.display}
+                                            onChange={e => {
+                                                a.display =
+                                                    e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </th>
+                                ))}
+                                <th
+                                    className='append'
+                                    onClick={() => {
+                                        field.answers.push({
+                                            display: 'A',
+                                            uid: 'a',
+                                        })
+                                        update()
+                                    }}
+                                >
+                                    +
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {field.questions.map((q, qi) => (
+                                <tr
+                                    key={qi}
+                                    onContextMenu={e => {
+                                        if (e.shiftKey) {
+                                            e.preventDefault()
+                                            field.questions.splice(qi, 1)
+                                            update()
+                                        }
+                                    }}
+                                >
+                                    <td className='frow'>
+                                        <input
+                                            value={q.uid}
+                                            onChange={e => {
+                                                q.uid = e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                        <input
+                                            value={q.display}
+                                            onChange={e => {
+                                                q.display =
+                                                    e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </td>
+                                    {field.answers.map((_, ai) => (
+                                        <td key={ai}>
+                                            <input type='radio' name={q.uid} />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+
+                            <tr>
+                                <td
+                                    className='append'
+                                    onClick={() => {
+                                        field.questions.push({
+                                            display: 'Q',
+                                            uid: 'q',
+                                        })
+                                        update()
+                                    }}
+                                >
+                                    +
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </>
+            )}
         </div>
     )
 }
