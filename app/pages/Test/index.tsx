@@ -348,7 +348,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Questions</th>
+                                <th style={{ width: '70%' }}>Questions</th>
                                 {field.answers.map((a, ai) => (
                                     <th
                                         key={ai}
@@ -405,6 +405,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                                 >
                                     <td className='frow'>
                                         <input
+                                            style={{ width: '30%' }}
                                             value={q.uid}
                                             onChange={e => {
                                                 q.uid = e.currentTarget.value
