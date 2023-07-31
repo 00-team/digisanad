@@ -291,31 +291,42 @@ const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
                             })
                         }}
                     >
-                        +option
+                        add an option
                     </button>
                     {field.options.map((o, oi) => (
-                        <input
-                            type='text'
-                            value={o.uid + ' |^| ' + o.display}
-                            onChange={e => {
-                                const v = e.currentTarget.value
-                                const di = v.indexOf('|^|')
-                                if (!v || di < 1) return
-                                const uid = v.slice(0, di - 1)
-                                const display = v.slice(di + 4)
-
-                                setSchema(s => {
-                                    s.stages[
-                                        stage
-                                        // @ts-ignore
-                                    ]!.fields[index]!.options[oi] = {
-                                        uid,
-                                        display,
-                                    }
-                                    return { ...s }
-                                })
-                            }}
-                        />
+                        <div className='frow'>
+                            <input
+                                name={field.uid}
+                                type={field.singleton ? 'radio' : 'checkbox'}
+                            />
+                            <input
+                                value={o.uid}
+                                placeholder='unique id'
+                                onChange={e => {
+                                    const v = e.currentTarget.value
+                                    o.uid = v
+                                    update()
+                                }}
+                            />
+                            <input
+                                value={o.display}
+                                placeholder='display'
+                                onChange={e => {
+                                    const v = e.currentTarget.value
+                                    o.display = v
+                                    update()
+                                }}
+                            />
+                            <button
+                                className='remove'
+                                onClick={() => {
+                                    field.options.splice(oi, 1)
+                                    update()
+                                }}
+                            >
+                                X
+                            </button>
+                        </div>
                     ))}
                 </>
             )}

@@ -102,6 +102,14 @@
                         accent-color: #0260e8;
                     }
 
+                    button {
+                        cursor: pointer;
+                        padding: 0.1rem 0.6rem;
+                        border-radius: 5px;
+                        font-size: 18px;
+                        border: 2px solid #0260e8;
+                    }
+
                     .minmax {
                         display: flex;
                         width: 100%;
