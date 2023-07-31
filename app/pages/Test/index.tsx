@@ -87,7 +87,33 @@ const Test: FC = () => {
                     </div>
                 </div>
                 <div className='builder'>
-                    <button>add field</button>
+                    {field_types.map((f, i) => (
+                        <button
+                            key={i}
+                            onClick={() => {
+                                setSchema(s => {
+                                    let fields = s.stages[activeStage]!.fields
+                                    switch (f) {
+                                        case 'option':
+                                            fields.push({
+                                                type: f,
+                                                title: f.toUpperCase(),
+                                                uid: f,
+                                                options: [],
+                                                singleton: false,
+                                            })
+                                            break
+                                    }
+
+                                    s.stages[activeStage]!.fields = fields
+
+                                    return { ...s }
+                                })
+                            }}
+                        >
+                            {f} field
+                        </button>
+                    ))}
                 </div>
             </div>
             <div className='output'>
