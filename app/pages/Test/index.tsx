@@ -47,12 +47,6 @@ const Test: FC = () => {
         output.current.value = JSON.stringify(schema, null, 2)
     }, [schema])
 
-    const appendStage = (stage: Stage) => {
-        setSchema(s => {
-            return { ...s, stages: [...s.stages, stage] }
-        })
-    }
-
     return (
         <div className='test-container'>
             <div className='contract-builder'>
@@ -60,10 +54,13 @@ const Test: FC = () => {
                     <div className='stages'>
                         <div
                             onClick={() =>
-                                appendStage({
-                                    uid: 'stage_1',
-                                    title: 'stage_1',
-                                    fields: [],
+                                setSchema(s => {
+                                    s.stages.push({
+                                        uid: 'stage_1',
+                                        title: 'stage_1',
+                                        fields: [],
+                                    })
+                                    return { ...s }
                                 })
                             }
                         >
@@ -98,16 +95,21 @@ const Test: FC = () => {
                     ref={output}
                     onChange={e => setSchema(JSON.parse(e.currentTarget.value))}
                 ></textarea>
-                <button onClick={() => {
-                    if (!output.current || !output.current.parentElement) return
-                    const div = output.current.parentElement
+                <button
+                    onClick={() => {
+                        if (!output.current || !output.current.parentElement)
+                            return
+                        const div = output.current.parentElement
 
-                    if (document.fullscreenElement == div) {
-                        document.exitFullscreen()
-                    } else {
-                        div.requestFullscreen()
-                    }
-                }}>F</button>
+                        if (document.fullscreenElement == div) {
+                            document.exitFullscreen()
+                        } else {
+                            div.requestFullscreen()
+                        }
+                    }}
+                >
+                    F
+                </button>
             </div>
         </div>
     )
