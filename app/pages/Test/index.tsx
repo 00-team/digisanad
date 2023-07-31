@@ -221,28 +221,30 @@ const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
     return (
         <div className='field'>
             <span>type: {field.type}</span>
-            <input
-                className='optinal'
-                type='checkbox'
-                checked={field.optinal}
-                onChange={e => {
-                    const v = e.currentTarget.checked
-                    field.optinal = v
-                    update()
-                }}
-            />
-            <input
-                className='field_title'
-                type='text'
-                onChange={e => {
-                    let v = e.currentTarget.value
-                    if (v.length > 128) return
-                    field.title = v
-                    update()
-                }}
-                value={field.title}
-                placeholder='title'
-            />
+            <div className='frow'>
+                <input
+                    className='optinal'
+                    type='checkbox'
+                    checked={field.optinal}
+                    onChange={e => {
+                        const v = e.currentTarget.checked
+                        field.optinal = v
+                        update()
+                    }}
+                />
+                <input
+                    className='field_title'
+                    type='text'
+                    onChange={e => {
+                        let v = e.currentTarget.value
+                        if (v.length > 128) return
+                        field.title = v
+                        update()
+                    }}
+                    value={field.title}
+                    placeholder='title'
+                />
+            </div>
             {have_minmax(field) && <MinMax field={field} update={update} />}
             {field.type == 'option' && (
                 <>

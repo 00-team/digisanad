@@ -74,12 +74,28 @@
                     border: 2px solid #0260e8;
                     width: 30%;
 
+                    .frow {
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        gap: 0.3rem;
+                    }
+
                     input {
+                        width: 100%;
                         border-radius: 4px;
                         background: transparent;
                         border: 1px solid #555;
                         font-size: 16px;
                         padding: 0.1rem 0.4rem;
+                    }
+
+                    .optinal {
+                        height: 100%;
+                        width: unset;
+                        aspect-ratio: 1;
+                        cursor: pointer;
+                        accent-color: #0260e8;
                     }
 
                     .minmax {
