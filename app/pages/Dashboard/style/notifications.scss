@@ -159,10 +159,11 @@
                 gap: 1vw;
             }
 
-            .sender {
+            .row {
                 display: flex;
                 align-items: center;
                 gap: 1vw;
+                margin-top: -1vh;
 
                 .holder {
                     display: flex;

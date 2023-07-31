@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
+import Admin from 'Admin'
 import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
 
@@ -54,6 +55,9 @@ const MainContent: FC = () => {
             <Route path='/login/' element={<Login />} />
             <Route path='/dashboard/' element={<Dashboard />} />
             <Route path='/test/' element={<Test />} />
+
+            {/* admin panel */}
+            <Route path='/admin/' element={<Admin />} />
         </Routes>
     )
 }
