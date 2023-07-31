@@ -129,7 +129,6 @@ const Test: FC = () => {
                                 key={i}
                                 field={f}
                                 index={i}
-                                stage={activeStage}
                                 setSchema={setSchema}
                             />
                         ))}
@@ -225,11 +224,10 @@ const Test: FC = () => {
 type FieldProps = {
     field: FieldType
     index: number
-    stage: number
     setSchema: Dispatch<SetStateAction<SchemaData>>
 }
 
-const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
+const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
     const update = () => {
         setSchema(s => ({ ...s }))
     }
@@ -279,16 +277,11 @@ const Field: FC<FieldProps> = ({ field, index, stage, setSchema }) => {
                     </div>
                     <button
                         onClick={() => {
-                            setSchema(s => {
-                                s.stages[
-                                    stage
-                                    // @ts-ignore
-                                ]!.fields[index]!.options.push({
-                                    uid: UniqueID(`F_option_${index}`),
-                                    display: '',
-                                })
-                                return { ...s }
+                            field.options.push({
+                                uid: UniqueID(`F_option_${index}_`),
+                                display: '',
                             })
+                            update()
                         }}
                     >
                         add an option
