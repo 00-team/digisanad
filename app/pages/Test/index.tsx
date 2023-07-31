@@ -32,6 +32,13 @@ const Test: FC = () => {
                         uid: 'buyer',
                     },
                     {
+                        title: 'INT',
+                        type: 'int',
+                        uid: 'F_int_1',
+                        min: 420,
+                        max: 69,
+                    },
+                    {
                         title: 'OPTION',
                         type: 'option',
                         uid: 'F_option_1',
