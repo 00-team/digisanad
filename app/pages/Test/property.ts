@@ -1,9 +1,9 @@
 import { SchemaData } from './types'
 
-const property: SchemaData = {
+export const property: SchemaData = {
     stages: [
         {
-            title: 'the parties',
+            title: 'طرفین',
             uid: 'parties',
             fields: [
                 {
@@ -78,6 +78,66 @@ const property: SchemaData = {
             title: 'مشخصات ملک',
             uid: 'prop_detail',
         },
+        {
+            uid: 'stage_1',
+            title: 'وضعیت ملک',
+            fields: [
+                {
+                    title: 'وضعیت تصرف مالک در ملک فوق',
+                    type: 'question',
+                    uid: 'F_question_1',
+                    questions: [
+                        {
+                            display: 'آیا ملک در تصرف مالک است ؟',
+                            uid: 'q1',
+                        },
+                        {
+                            display: 'آیا ملک به هر عنوان در ید شخص ثالثی است؟',
+                            uid: 'q2',
+                        },
+                    ],
+                    answers: [
+                        {
+                            display: 'بله',
+                            uid: 'yes',
+                        },
+                        {
+                            display: 'خیر',
+                            uid: 'no',
+                        },
+                    ],
+                },
+                {
+                    title: 'وضعیت اسناد مالکیت',
+                    type: 'question',
+                    uid: 'F_question_2',
+                    questions: [
+                        {
+                            display: 'اسناد مربوط به شهرداری / بخشداری',
+                            uid: 'q1',
+                        },
+                        {
+                            display: 'اسناد مربوط به وضعیت اداره مالیات',
+                            uid: 'q2',
+                        },
+                        {
+                            display:
+                                'اسناد مربوط به جهاد کشاورزی / اداره منابع طبیعی/ جنگلبانی و مراتع',
+                            uid: 'q3',
+                        },
+                    ],
+                    answers: [
+                        {
+                            display: 'دارد',
+                            uid: 'have',
+                        },
+                        {
+                            display: 'ندارد',
+                            uid: 'not_have',
+                        },
+                    ],
+                },
+            ],
+        },
     ],
 }
-export { property }
