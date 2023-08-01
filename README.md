@@ -10,43 +10,6 @@
 -   [ ] record filed should be listable / isit a single record or
         user can add multiple
 
-## User
+## resourses
 
-name:
-phone: ?
-wallet
-
-## Forms
-
-custom forms
-contract templates
-contracts
-
-## user
-
-name
-tarikh tavalod
-code mely
-addr
-code posty
-email
-wallet
-
-## Smart Contract
-
-user A
-user B
-subject
-price
-shoort
-Eekhtiarat
-duration
-price - coin
-sign
-vakil - loyer
-
-## Meeting Notes
-
--   we cant use tokens like tether and shiba because token transfer
-    cost ether gas
--   using stable diffusion and other open source AI models for sites content
+-   https://coingecko.com/ - price of coins
