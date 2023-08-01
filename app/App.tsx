@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
-import Admin from 'Admin'
 import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
 
@@ -16,6 +15,7 @@ const Home = loadable(() => import('pages/Home'))
 const Login = loadable(() => import('pages/Authenticate/Login'))
 const Register = loadable(() => import('pages/Authenticate/Register'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
+const Admin = loadable(() => import('pages/Admin'))
 const Test = loadable(() => import('pages/Test'))
 
 const App: FC = () => {
