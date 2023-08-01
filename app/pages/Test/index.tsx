@@ -353,16 +353,7 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                             <tr>
                                 <th style={{ width: '70%' }}>Questions</th>
                                 {field.answers.map((a, ai) => (
-                                    <th
-                                        key={ai}
-                                        onContextMenu={e => {
-                                            if (e.shiftKey) {
-                                                e.preventDefault()
-                                                field.answers.splice(ai, 1)
-                                                update()
-                                            }
-                                        }}
-                                    >
+                                    <th key={ai}>
                                         <input
                                             value={a.uid}
                                             onChange={e => {
@@ -445,6 +436,18 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                                 >
                                     +
                                 </td>
+                                {field.answers.map((_, ai) => (
+                                    <td
+                                        key={ai}
+                                        className='remove'
+                                        onClick={() => {
+                                            field.answers.splice(ai, 1)
+                                            update()
+                                        }}
+                                    >
+                                        X
+                                    </td>
+                                ))}
                             </tr>
                         </tbody>
                     </table>
