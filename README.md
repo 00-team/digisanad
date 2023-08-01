@@ -7,6 +7,9 @@
 -   [ ] use web3 test servers to further understand the api for
         sending transactions
 
+-   [ ] record filed should be listable / isit a single record or
+        user can add multiple
+
 ## User
 
 name:

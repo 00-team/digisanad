@@ -10,100 +10,36 @@ import React, {
 
 import { C, UniqueID } from '@00-team/utils'
 
+import { property } from './property'
 import './test.scss'
+import {
+    SchemaData,
+    have_minmax,
+    field_types,
+    FieldMinMax,
+    FieldType,
+} from './types'
 
 const Test: FC = () => {
     const output = useRef<ElementRef<'textarea'>>(null)
     const [activeStage, setActiveStage] = useState(0)
-    const [schema, setSchema] = useState<SchemaData>({
-        stages: [
-            {
-                title: 'the parties',
-                uid: 'parties',
-                fields: [
-                    {
-                        title: 'question',
-                        type: 'question',
-                        uid: 'question',
-                        answers: [
-                            { uid: 'Y', display: 'Yes' },
-                            { uid: 'M', display: 'Maybe' },
-                            { uid: 'N', display: 'No' },
-                        ],
-                        questions: [
-                            {
-                                uid: 'q1',
-                                display: 'Question 1',
-                            },
-                            {
-                                uid: 'q2',
-                                display: 'Question 2',
-                            },
-                        ],
-                    },
-                    {
-                        title: 'Seller',
-                        type: 'user',
-                        uid: 'seller',
-                    },
-                    {
-                        title: 'Buyer',
-                        type: 'user',
-                        uid: 'buyer',
-                    },
-                    {
-                        title: 'INT',
-                        type: 'int',
-                        uid: 'F_int_1',
-                        min: 420,
-                        max: 69,
-                    },
-                    {
-                        title: 'OPTION',
-                        type: 'option',
-                        uid: 'F_option_1',
-                        options: [
-                            {
-                                uid: 'F_option_31',
-                                display: '',
-                            },
-                            {
-                                uid: 'F_option_32',
-                                display: '',
-                            },
-                        ],
-                        singleton: false,
-                    },
-                    {
-                        title: 'QUESTION',
-                        type: 'question',
-                        uid: 'F_question_1',
-                        questions: [],
-                        answers: [],
-                    },
-                ],
-            },
-            {
-                fields: [
-                    {
-                        max: 6,
-                        min: 1,
-                        title: 'amount of dong',
-                        type: 'int',
-                        uid: 'dang_amount',
-                    },
-                ],
-                title: 'Property details',
-                uid: 'prop_detail',
-            },
-        ],
-    })
+    const [schema, setSchema] = useState<SchemaData>(property as SchemaData)
 
     useEffect(() => {
         if (!output.current) return
 
         output.current.value = JSON.stringify(schema, null, 2)
-    }, [schema])
+        if (!schema.stages.length) {
+            setActiveStage(0)
+            return
+        }
+
+        if (activeStage >= schema.stages.length) {
+            setActiveStage(schema.stages.length - 1)
+        } else if (activeStage < 0) {
+            setActiveStage(0)
+        }
+    }, [schema, activeStage])
 
     return (
         <div className='test-container'>
@@ -137,23 +73,50 @@ const Test: FC = () => {
                                 }
                             >
                                 <span>{s.title}</span>
+                                <button
+                                    className='remove'
+                                    onClick={() => {
+                                        setSchema(s => {
+                                            s.stages.splice(i, 1)
+                                            return { ...s }
+                                        })
+                                    }}
+                                >
+                                    X
+                                </button>
                             </div>
                         ))}
                     </div>
 
-                    <h2>{schema.stages[activeStage]!.title}</h2>
+                    {schema.stages[activeStage] && (
+                        <input
+                            className='stage_title'
+                            value={schema.stages[activeStage]!.title}
+                            onChange={e => {
+                                const v = e.currentTarget.value
+                                setSchema(s => {
+                                    s.stages[activeStage]!.title = v
+                                    return { ...s }
+                                })
+                            }}
+                        />
+                    )}
 
-                    <div className='fields'>
-                        {schema.stages[activeStage]!.fields.map((f, i) => (
-                            <Field
-                                key={i}
-                                field={f}
-                                index={i}
-                                setSchema={setSchema}
-                            />
-                        ))}
-                    </div>
+                    {schema.stages[activeStage] && (
+                        <div className='fields'>
+                            {schema.stages[activeStage]!.fields.map((f, i) => (
+                                <Field
+                                    key={i}
+                                    field={f}
+                                    index={i}
+                                    stage={activeStage}
+                                    setSchema={setSchema}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 <div className='builder'>
                     {field_types.map((f, i) => (
                         <button
@@ -244,10 +207,11 @@ const Test: FC = () => {
 type FieldProps = {
     field: FieldType
     index: number
+    stage: number
     setSchema: Dispatch<SetStateAction<SchemaData>>
 }
 
-const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
+const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
     const update = () => {
         setSchema(s => ({ ...s }))
     }
@@ -307,7 +271,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                         add an option
                     </button>
                     {field.options.map((o, oi) => (
-                        <div className='frow'>
+                        <div className='frow' key={oi}>
                             <input
                                 name={field.uid}
                                 type={field.singleton ? 'radio' : 'checkbox'}
@@ -331,6 +295,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                                 }}
                             />
                             <button
+                                style={{ borderColor: '#E20338' }}
                                 className='remove'
                                 onClick={() => {
                                     field.options.splice(oi, 1)
@@ -350,16 +315,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                             <tr>
                                 <th style={{ width: '70%' }}>Questions</th>
                                 {field.answers.map((a, ai) => (
-                                    <th
-                                        key={ai}
-                                        onContextMenu={e => {
-                                            if (e.shiftKey) {
-                                                e.preventDefault()
-                                                field.answers.splice(ai, 1)
-                                                update()
-                                            }
-                                        }}
-                                    >
+                                    <th key={ai}>
                                         <input
                                             value={a.uid}
                                             onChange={e => {
@@ -393,16 +349,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                         </thead>
                         <tbody>
                             {field.questions.map((q, qi) => (
-                                <tr
-                                    key={qi}
-                                    onContextMenu={e => {
-                                        if (e.shiftKey) {
-                                            e.preventDefault()
-                                            field.questions.splice(qi, 1)
-                                            update()
-                                        }
-                                    }}
-                                >
+                                <tr key={qi}>
                                     <td className='frow'>
                                         <input
                                             style={{ width: '30%' }}
@@ -426,6 +373,15 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                                             <input type='radio' name={q.uid} />
                                         </td>
                                     ))}
+                                    <td
+                                        className='remove'
+                                        onClick={() => {
+                                            field.questions.splice(qi, 1)
+                                            update()
+                                        }}
+                                    >
+                                        X
+                                    </td>
                                 </tr>
                             ))}
 
@@ -442,11 +398,34 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                                 >
                                     +
                                 </td>
+                                {field.answers.map((_, ai) => (
+                                    <td
+                                        key={ai}
+                                        className='remove'
+                                        onClick={() => {
+                                            field.answers.splice(ai, 1)
+                                            update()
+                                        }}
+                                    >
+                                        X
+                                    </td>
+                                ))}
                             </tr>
                         </tbody>
                     </table>
                 </>
             )}
+            <button
+                style={{ borderColor: '#E20338' }}
+                onClick={() => {
+                    setSchema(s => {
+                        s.stages[stage]!.fields.splice(index, 1)
+                        return { ...s }
+                    })
+                }}
+            >
+                DELETE
+            </button>
         </div>
     )
 }
@@ -485,92 +464,6 @@ const MinMax: FC<MinMaxProps> = ({ field, update }) => {
             />
         </div>
     )
-}
-
-type BaseField = {
-    uid: string
-    title: string
-    description?: string | null
-    optinal?: boolean
-}
-
-type IntField = BaseField & {
-    type: 'int'
-    min?: number | null
-    max?: number | null
-}
-
-type StrField = BaseField & {
-    type: 'str'
-    min?: number | null
-    max?: number | null
-}
-
-type GenericField = BaseField & {
-    type: 'user' | 'geo' | 'record' | 'date' | 'signature'
-}
-
-type TextField = BaseField & {
-    type: 'text'
-    min?: number | null
-    max?: number | null
-}
-
-type UIDD = {
-    uid: string
-    display: string
-}
-
-type QuestionField = BaseField & {
-    type: 'question'
-    answers: UIDD[]
-    questions: UIDD[]
-}
-
-type OptionFeild = BaseField & {
-    type: 'option'
-    singleton: boolean
-    options: UIDD[]
-}
-
-type FieldType =
-    | IntField
-    | StrField
-    | GenericField
-    | OptionFeild
-    | QuestionField
-    | TextField
-
-const field_types = [
-    'option',
-    'int',
-    'str',
-    'text',
-    'user',
-    'geo',
-    'record',
-    'date',
-    'signature',
-    'question',
-] as const
-let GGGG: typeof field_types[number] extends FieldType['type']
-    ? FieldType['type'] extends typeof field_types[number]
-        ? true
-        : false
-    : false = true
-console.assert(GGGG)
-
-type FieldMinMax = StrField | IntField | TextField
-function have_minmax(f: FieldType): f is FieldMinMax {
-    return ['str', 'int', 'text'].includes(f.type)
-}
-
-type Stage = BaseField & {
-    fields: FieldType[]
-}
-
-type SchemaData = {
-    stages: Stage[]
 }
 
 export default Test

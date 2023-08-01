@@ -11,6 +11,15 @@
     font-family: 'monospace';
     font-size: 18px;
 
+    input {
+        width: 100%;
+        border-radius: 4px;
+        background: transparent;
+        border: 1px solid #555;
+        font-size: 16px;
+        padding: 0.1rem 0.4rem;
+    }
+
     .contract-builder {
         width: 100%;
         height: 80%;
@@ -47,17 +56,37 @@
                     opacity: 0.5;
                     cursor: pointer;
                     text-align: center;
+                    position: relative;
+
+                    .remove {
+                        display: none;
+                        width: 24px;
+                        height: 24px;
+                        border: 2px solid #e20338;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                    }
 
                     &.active {
                         cursor: default;
                         opacity: 1;
+
+                        .remove {
+                            display: block;
+                        }
                     }
                 }
             }
 
-            h2 {
+            .stage_title {
                 text-align: center;
                 text-transform: capitalize;
+                border: 0;
+                border-bottom: 2px solid #0260e8;
+                font-size: 24px;
             }
 
             .fields {
@@ -83,15 +112,6 @@
                         align-items: center;
                         width: 100%;
                         gap: 0.3rem;
-                    }
-
-                    input {
-                        width: 100%;
-                        border-radius: 4px;
-                        background: transparent;
-                        border: 1px solid #555;
-                        font-size: 16px;
-                        padding: 0.1rem 0.4rem;
                     }
 
                     label {
@@ -136,6 +156,10 @@
                         border: 2px solid #0260e8;
                         text-align: center;
                         user-select: none;
+                    }
+
+                    .remove {
+                        border: 2px solid #e20338;
                     }
                 }
             }
