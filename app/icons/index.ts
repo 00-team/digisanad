@@ -4,6 +4,8 @@ export * from './Actions/Plus'
 export * from './Actions/Minus'
 export * from './Actions/Close'
 
+export * from './Admin/Setting'
+
 export * from './Dashboard/Address'
 export * from './Dashboard/ArrowDown'
 export * from './Dashboard/ArrowUp'
