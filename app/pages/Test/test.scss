@@ -19,7 +19,7 @@
         display: flex;
 
         .view {
-            width: 70%;
+            width: 100%;
             height: 100%;
             border-radius: 5px;
             border: 2px solid #0260e8;
@@ -29,6 +29,7 @@
             .stages {
                 width: 100%;
                 height: 20%;
+                flex-shrink: 0;
                 border-bottom: 1px solid #0260e8;
                 display: flex;
                 gap: 0.5rem;
@@ -54,18 +55,110 @@
                 }
             }
 
+            h2 {
+                text-align: center;
+                text-transform: capitalize;
+            }
+
             .fields {
                 display: flex;
-                flex-direction: column;
                 padding: 1rem;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                gap: 1rem;
+                overflow-y: auto;
+                justify-content: space-around;
+
+                .field {
+                    border-radius: 5px;
+                    padding: 0.4rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.3rem;
+                    border: 2px solid #0260e8;
+                    width: 49%;
+
+                    .frow {
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        gap: 0.3rem;
+                    }
+
+                    input {
+                        width: 100%;
+                        border-radius: 4px;
+                        background: transparent;
+                        border: 1px solid #555;
+                        font-size: 16px;
+                        padding: 0.1rem 0.4rem;
+                    }
+
+                    label {
+                        user-select: none;
+                    }
+
+                    input[type='checkbox'],
+                    input[type='radio'] {
+                        height: 24px;
+                        width: 24px;
+                        cursor: pointer;
+                        accent-color: #0260e8;
+                    }
+
+                    button {
+                        cursor: pointer;
+                        padding: 0.1rem 0.6rem;
+                        border-radius: 5px;
+                        font-size: 18px;
+                        border: 2px solid #0260e8;
+                    }
+
+                    .minmax {
+                        display: flex;
+                        width: 100%;
+                        overflow: hidden;
+                        gap: 0.3rem;
+
+                        input {
+                            width: 100%;
+                        }
+                    }
+
+                    table {
+                        text-align: center;
+                    }
+
+                    .append {
+                        width: 24px;
+                        height: 24px;
+                        cursor: pointer;
+                        border: 2px solid #0260e8;
+                        text-align: center;
+                        user-select: none;
+                    }
+                }
             }
         }
 
         .builder {
-            width: 30%;
+            width: 13%;
             height: 100%;
             border-radius: 5px;
             border: 2px solid #0260e8;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            gap: 1rem;
+
+            button {
+                cursor: pointer;
+                padding: 0.1rem 0.6rem;
+                border-radius: 5px;
+                font-size: 18px;
+                border: 2px solid #0260e8;
+            }
         }
     }
 
@@ -74,17 +167,46 @@
         text-overflow: ellipsis;
     }
 
-    textarea {
+    .output {
         width: 100%;
-        max-width: 100%;
-        resize: none;
         height: 100%;
-        font-size: 18px;
-        border-radius: 5px;
-        border: 2px solid #0260e8;
-        padding: 0.5rem;
-        background: transparent;
-        color: inherit;
+        position: relative;
+
+        textarea {
+            width: 100%;
+            max-width: 100%;
+            resize: none;
+            height: 100%;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 2px solid #0260e8;
+            padding: 0.5rem;
+            background: transparent;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: 2px solid #0260e8;
+            border-bottom: 0;
+            border-right: 0;
+            border-top-left-radius: 5px;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            bottom: 0;
+            right: 8px;
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: -8px;
+                height: 2px;
+                width: 8px;
+                background: #0260e8;
+                top: -2px;
+            }
+        }
     }
 
     ::-webkit-scrollbar {

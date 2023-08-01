@@ -2,7 +2,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, constr
 from sqlalchemy import JSON, Boolean, Column, Integer, String
 
 from .common import BaseTable
@@ -22,10 +22,14 @@ class SchemaTable(BaseTable):
 
 
 class BaseField(BaseModel):
-    uid: str = Field(title='unique id', description='unique id of the field')
-    title: str
-    description: str | None = Field(
-        None, description='optinal description of the field'
+    uid: constr(
+        max_length=128, min_length=1, strip_whitespace=True
+    ) = Field(title='unique id', description='unique id of the field')
+    title: constr(max_length=128, min_length=1, strip_whitespace=True)
+    description: (
+        constr(max_length=1024, min_length=1, strip_whitespace=True) | None
+    ) = Field(
+        None, description='optinal description of the field',
     )
     optinal: bool = False
 
