@@ -333,6 +333,7 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                                 }}
                             />
                             <button
+                                style={{ borderColor: '#E20338' }}
                                 className='remove'
                                 onClick={() => {
                                     field.options.splice(oi, 1)
@@ -395,16 +396,7 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                         </thead>
                         <tbody>
                             {field.questions.map((q, qi) => (
-                                <tr
-                                    key={qi}
-                                    onContextMenu={e => {
-                                        if (e.shiftKey) {
-                                            e.preventDefault()
-                                            field.questions.splice(qi, 1)
-                                            update()
-                                        }
-                                    }}
-                                >
+                                <tr key={qi}>
                                     <td className='frow'>
                                         <input
                                             style={{ width: '30%' }}
@@ -428,6 +420,15 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                                             <input type='radio' name={q.uid} />
                                         </td>
                                     ))}
+                                    <td
+                                        className='remove'
+                                        onClick={() => {
+                                            field.questions.splice(qi, 1)
+                                            update()
+                                        }}
+                                    >
+                                        X
+                                    </td>
                                 </tr>
                             ))}
 
