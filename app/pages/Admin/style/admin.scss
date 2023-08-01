@@ -38,6 +38,19 @@ main.admin-container {
             justify-content: space-between;
 
             padding: 1rem;
+
+            cursor: pointer;
+
+            &.setting {
+                .icon svg {
+                    transition: transform 0.5s ease-in-out;
+                }
+                &:hover {
+                    .icon svg {
+                        transform: rotate(-180deg);
+                    }
+                }
+            }
         }
     }
 }

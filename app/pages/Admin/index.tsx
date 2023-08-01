@@ -16,7 +16,7 @@ const Admin: FC = () => {
 const Sidebar: FC = () => {
     return (
         <aside className='admin-sidebar'>
-            <SidebarRow title='تنظیمات' Icon={SettingSvg} />
+            <SidebarRow title='تنظیمات' className='setting' Icon={SettingSvg} />
         </aside>
     )
 }
@@ -24,11 +24,12 @@ const Sidebar: FC = () => {
 interface SidebarRowProps {
     title: string
     Icon: Icon
+    className?: string
 }
 
-const SidebarRow: FC<SidebarRowProps> = ({ Icon, title }) => {
+const SidebarRow: FC<SidebarRowProps> = ({ Icon, title, className }) => {
     return (
-        <div className='sidebar-row title_small'>
+        <div className={`sidebar-row title_small ${className && className}`}>
             <div className='icon'>
                 <Icon size={25} />
             </div>
