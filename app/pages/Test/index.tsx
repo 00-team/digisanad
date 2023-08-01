@@ -29,7 +29,17 @@ const Test: FC = () => {
         if (!output.current) return
 
         output.current.value = JSON.stringify(schema, null, 2)
-    }, [schema])
+        if (!schema.stages.length) {
+            setActiveStage(0)
+            return
+        }
+
+        if (activeStage >= schema.stages.length) {
+            setActiveStage(schema.stages.length - 1)
+        } else if (activeStage < 0) {
+            setActiveStage(0)
+        }
+    }, [schema, activeStage])
 
     return (
         <div className='test-container'>
@@ -63,34 +73,50 @@ const Test: FC = () => {
                                 }
                             >
                                 <span>{s.title}</span>
+                                <button
+                                    className='remove'
+                                    onClick={() => {
+                                        setSchema(s => {
+                                            s.stages.splice(i, 1)
+                                            return { ...s }
+                                        })
+                                    }}
+                                >
+                                    X
+                                </button>
                             </div>
                         ))}
                     </div>
 
-                    <input
-                        className='stage_title'
-                        value={schema.stages[activeStage]!.title}
-                        onChange={e => {
-                            const v = e.currentTarget.value
-                            setSchema(s => {
-                                s.stages[activeStage]!.title = v
-                                return { ...s }
-                            })
-                        }}
-                    />
+                    {schema.stages[activeStage] && (
+                        <input
+                            className='stage_title'
+                            value={schema.stages[activeStage]!.title}
+                            onChange={e => {
+                                const v = e.currentTarget.value
+                                setSchema(s => {
+                                    s.stages[activeStage]!.title = v
+                                    return { ...s }
+                                })
+                            }}
+                        />
+                    )}
 
-                    <div className='fields'>
-                        {schema.stages[activeStage]!.fields.map((f, i) => (
-                            <Field
-                                key={i}
-                                field={f}
-                                index={i}
-                                stage={activeStage}
-                                setSchema={setSchema}
-                            />
-                        ))}
-                    </div>
+                    {schema.stages[activeStage] && (
+                        <div className='fields'>
+                            {schema.stages[activeStage]!.fields.map((f, i) => (
+                                <Field
+                                    key={i}
+                                    field={f}
+                                    index={i}
+                                    stage={activeStage}
+                                    setSchema={setSchema}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 <div className='builder'>
                     {field_types.map((f, i) => (
                         <button
