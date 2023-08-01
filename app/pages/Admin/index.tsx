@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { SettingSvg } from 'icons'
+import { ContractSvg, SettingSvg } from 'icons'
 
 import './style/admin.scss'
 
@@ -16,7 +16,18 @@ const Admin: FC = () => {
 const Sidebar: FC = () => {
     return (
         <aside className='admin-sidebar'>
-            <SidebarRow title='تنظیمات' className='setting' Icon={SettingSvg} />
+            <div className='sidebar-wrapper'>
+                <SidebarRow
+                    title='تنظیمات'
+                    className='setting'
+                    Icon={SettingSvg}
+                />
+                <SidebarRow
+                    title='قراردادها'
+                    className='contract'
+                    Icon={ContractSvg}
+                />
+            </div>
         </aside>
     )
 }
