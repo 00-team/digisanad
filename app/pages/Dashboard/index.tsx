@@ -102,20 +102,20 @@ const Dashboard: FC = () => {
     }, [])
 
     return (
-        <section className='dashboard-container'>
+        <main className='dashboard-container'>
             <Sidebar
                 SectionActive={SectionActive}
                 SectionsetActive={SectionsetActive}
             />
-            <div className='dashboard-wrapper'>
+            <aside className='dashboard-wrapper'>
                 {(() => {
                     let so = SIDEBAR_OPTIONS[SectionActive]
                     if (!so) return <></>
                     return <so.Component />
                 })()}
                 <Notifications />
-            </div>
-        </section>
+            </aside>
+        </main>
     )
 }
 
@@ -126,7 +126,7 @@ const Sidebar: FC<DashboardChildProps> = ({
     const User = useAtomValue(UserAtom)
 
     return (
-        <div className='sidebar'>
+        <aside className='sidebar'>
             <div className='avatar'>
                 <div className='title_small name-avatar'>
                     <span>
@@ -167,7 +167,7 @@ const Sidebar: FC<DashboardChildProps> = ({
                     }}
                 />
             </div>
-        </div>
+        </aside>
     )
 }
 
