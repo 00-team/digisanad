@@ -81,7 +81,7 @@ const Notifications: FC = () => {
     }, [Open])
 
     return (
-        <div className={`notifications-container ${C(Open)}`}>
+        <div className='notifications-container'>
             <button
                 className='notification-icon'
                 onClick={() => setOpen(!Open)}
