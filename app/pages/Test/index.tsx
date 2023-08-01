@@ -67,7 +67,17 @@ const Test: FC = () => {
                         ))}
                     </div>
 
-                    <h2>{schema.stages[activeStage]!.title}</h2>
+                    <input
+                        className='stage_title'
+                        value={schema.stages[activeStage]!.title}
+                        onChange={e => {
+                            const v = e.currentTarget.value
+                            setSchema(s => {
+                                s.stages[activeStage]!.title = v
+                                return { ...s }
+                            })
+                        }}
+                    />
 
                     <div className='fields'>
                         {schema.stages[activeStage]!.fields.map((f, i) => (
