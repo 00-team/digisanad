@@ -10,94 +10,20 @@ import React, {
 
 import { C, UniqueID } from '@00-team/utils'
 
+import { property } from './property'
 import './test.scss'
+import {
+    SchemaData,
+    have_minmax,
+    field_types,
+    FieldMinMax,
+    FieldType,
+} from './types'
 
 const Test: FC = () => {
     const output = useRef<ElementRef<'textarea'>>(null)
     const [activeStage, setActiveStage] = useState(0)
-    const [schema, setSchema] = useState<SchemaData>({
-        stages: [
-            {
-                title: 'the parties',
-                uid: 'parties',
-                fields: [
-                    {
-                        title: 'question',
-                        type: 'question',
-                        uid: 'question',
-                        answers: [
-                            { uid: 'Y', display: 'Yes' },
-                            { uid: 'M', display: 'Maybe' },
-                            { uid: 'N', display: 'No' },
-                        ],
-                        questions: [
-                            {
-                                uid: 'q1',
-                                display: 'Question 1',
-                            },
-                            {
-                                uid: 'q2',
-                                display: 'Question 2',
-                            },
-                        ],
-                    },
-                    {
-                        title: 'Seller',
-                        type: 'user',
-                        uid: 'seller',
-                    },
-                    {
-                        title: 'Buyer',
-                        type: 'user',
-                        uid: 'buyer',
-                    },
-                    {
-                        title: 'INT',
-                        type: 'int',
-                        uid: 'F_int_1',
-                        min: 420,
-                        max: 69,
-                    },
-                    {
-                        title: 'OPTION',
-                        type: 'option',
-                        uid: 'F_option_1',
-                        options: [
-                            {
-                                uid: 'F_option_31',
-                                display: '',
-                            },
-                            {
-                                uid: 'F_option_32',
-                                display: '',
-                            },
-                        ],
-                        singleton: false,
-                    },
-                    {
-                        title: 'QUESTION',
-                        type: 'question',
-                        uid: 'F_question_1',
-                        questions: [],
-                        answers: [],
-                    },
-                ],
-            },
-            {
-                fields: [
-                    {
-                        max: 6,
-                        min: 1,
-                        title: 'amount of dong',
-                        type: 'int',
-                        uid: 'dang_amount',
-                    },
-                ],
-                title: 'Property details',
-                uid: 'prop_detail',
-            },
-        ],
-    })
+    const [schema, setSchema] = useState<SchemaData>(property as SchemaData)
 
     useEffect(() => {
         if (!output.current) return
@@ -502,92 +428,6 @@ const MinMax: FC<MinMaxProps> = ({ field, update }) => {
             />
         </div>
     )
-}
-
-type BaseField = {
-    uid: string
-    title: string
-    description?: string | null
-    optinal?: boolean
-}
-
-type IntField = BaseField & {
-    type: 'int'
-    min?: number | null
-    max?: number | null
-}
-
-type StrField = BaseField & {
-    type: 'str'
-    min?: number | null
-    max?: number | null
-}
-
-type GenericField = BaseField & {
-    type: 'user' | 'geo' | 'record' | 'date' | 'signature'
-}
-
-type TextField = BaseField & {
-    type: 'text'
-    min?: number | null
-    max?: number | null
-}
-
-type UIDD = {
-    uid: string
-    display: string
-}
-
-type QuestionField = BaseField & {
-    type: 'question'
-    answers: UIDD[]
-    questions: UIDD[]
-}
-
-type OptionFeild = BaseField & {
-    type: 'option'
-    singleton: boolean
-    options: UIDD[]
-}
-
-type FieldType =
-    | IntField
-    | StrField
-    | GenericField
-    | OptionFeild
-    | QuestionField
-    | TextField
-
-const field_types = [
-    'option',
-    'int',
-    'str',
-    'text',
-    'user',
-    'geo',
-    'record',
-    'date',
-    'signature',
-    'question',
-] as const
-let GGGG: typeof field_types[number] extends FieldType['type']
-    ? FieldType['type'] extends typeof field_types[number]
-        ? true
-        : false
-    : false = true
-console.assert(GGGG)
-
-type FieldMinMax = StrField | IntField | TextField
-function have_minmax(f: FieldType): f is FieldMinMax {
-    return ['str', 'int', 'text'].includes(f.type)
-}
-
-type Stage = BaseField & {
-    fields: FieldType[]
-}
-
-type SchemaData = {
-    stages: Stage[]
 }
 
 export default Test
