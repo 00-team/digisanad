@@ -15,13 +15,13 @@
     .sidebar {
         width: clamp(280px, 20%, 300px);
 
-        background-color: white;
-
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: column;
         gap: 5vh;
+
+        background-color: white;
 
         padding: 3vh 0;
         padding-top: 6vh;
