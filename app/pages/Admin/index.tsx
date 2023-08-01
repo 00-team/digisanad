@@ -6,6 +6,7 @@ const Admin: FC = () => {
     return (
         <main className='admin-container'>
             <aside className='admin-sidebar'></aside>
+            <aside className='admin-wrapper'></aside>
         </main>
     )
 }
