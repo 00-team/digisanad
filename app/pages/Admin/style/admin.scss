@@ -29,5 +29,15 @@ main.admin-container {
         @media screen and (max-width: 1024px) {
             width: 100%;
         }
+
+        .sidebar-row {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 1rem;
+        }
     }
 }
