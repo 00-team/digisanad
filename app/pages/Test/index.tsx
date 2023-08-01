@@ -149,6 +149,7 @@ const Test: FC = () => {
                                 key={i}
                                 field={f}
                                 index={i}
+                                stage={activeStage}
                                 setSchema={setSchema}
                             />
                         ))}
@@ -244,10 +245,11 @@ const Test: FC = () => {
 type FieldProps = {
     field: FieldType
     index: number
+    stage: number
     setSchema: Dispatch<SetStateAction<SchemaData>>
 }
 
-const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
+const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
     const update = () => {
         setSchema(s => ({ ...s }))
     }
@@ -307,7 +309,7 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                         add an option
                     </button>
                     {field.options.map((o, oi) => (
-                        <div className='frow'>
+                        <div className='frow' key={oi}>
                             <input
                                 name={field.uid}
                                 type={field.singleton ? 'radio' : 'checkbox'}
@@ -447,6 +449,17 @@ const Field: FC<FieldProps> = ({ field, index, setSchema }) => {
                     </table>
                 </>
             )}
+            <button
+                style={{ borderColor: '#E20338' }}
+                onClick={() => {
+                    setSchema(s => {
+                        s.stages[stage]!.fields.splice(index, 1)
+                        return { ...s }
+                    })
+                }}
+            >
+                DELETE
+            </button>
         </div>
     )
 }
