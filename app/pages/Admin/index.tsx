@@ -1,13 +1,40 @@
 import React, { FC } from 'react'
 
+import { SettingSvg } from 'icons'
+
 import './style/admin.scss'
 
 const Admin: FC = () => {
     return (
         <main className='admin-container'>
-            <aside className='admin-sidebar'></aside>
+            <Sidebar />
             <aside className='admin-wrapper'></aside>
         </main>
+    )
+}
+
+const Sidebar: FC = () => {
+    return (
+        <aside className='admin-sidebar'>
+            <SidebarRow title='تنظیمات' Icon={SettingSvg} />
+        </aside>
+    )
+}
+
+interface SidebarRowProps {
+    title: string
+    Icon: Icon
+}
+
+const SidebarRow: FC<SidebarRowProps> = ({ Icon, title }) => {
+    return (
+        <div className='sidebar-row title_small'>
+            <div className='icon'>
+                <Icon size={25} />
+            </div>
+            <div className='holder'>{title}</div>
+            <div></div>
+        </div>
     )
 }
 
