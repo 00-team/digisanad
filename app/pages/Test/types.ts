@@ -5,6 +5,11 @@ type BaseField = {
     optinal?: boolean
 }
 
+type RecordField = BaseField & {
+    type: 'record'
+    plural: boolean
+}
+
 type IntField = BaseField & {
     type: 'int'
     min?: number | null
@@ -18,7 +23,7 @@ type StrField = BaseField & {
 }
 
 type GenericField = BaseField & {
-    type: 'user' | 'geo' | 'record' | 'date' | 'signature'
+    type: 'user' | 'geo' | 'date' | 'signature'
 }
 
 type TextField = BaseField & {
@@ -51,6 +56,7 @@ type FieldType =
     | OptionFeild
     | QuestionField
     | TextField
+    | RecordField
 
 const field_types = [
     'option',

@@ -139,7 +139,6 @@ const Test: FC = () => {
                                             break
 
                                         case 'geo':
-                                        case 'record':
                                         case 'signature':
                                         case 'date':
                                         case 'user':
@@ -147,6 +146,14 @@ const Test: FC = () => {
                                                 title: f.toUpperCase(),
                                                 type: f,
                                                 uid,
+                                            })
+                                            break
+                                        case 'record':
+                                            fields.push({
+                                                title: f.toUpperCase(),
+                                                type: f,
+                                                uid,
+                                                plural: false,
                                             })
                                             break
                                         case 'option':
