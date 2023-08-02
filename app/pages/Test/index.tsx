@@ -19,6 +19,7 @@ import {
     FieldMinMax,
     FieldType,
 } from './types'
+import { appendField } from './utils'
 
 const Test: FC = () => {
     const output = useRef<ElementRef<'textarea'>>(null)
@@ -123,60 +124,10 @@ const Test: FC = () => {
                             key={i}
                             onClick={() => {
                                 setSchema(s => {
-                                    let fields = s.stages[activeStage]!.fields
-                                    let uid = UniqueID('F_' + f + '_')
-                                    switch (f) {
-                                        case 'int':
-                                        case 'str':
-                                        case 'text':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                min: 0,
-                                                max: 0,
-                                            })
-                                            break
-
-                                        case 'geo':
-                                        case 'signature':
-                                        case 'date':
-                                        case 'user':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                            })
-                                            break
-                                        case 'record':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                plural: false,
-                                            })
-                                            break
-                                        case 'option':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                options: [],
-                                                singleton: false,
-                                            })
-                                            break
-                                        case 'question':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                questions: [],
-                                                answers: [],
-                                            })
-                                            break
-                                    }
-
-                                    s.stages[activeStage]!.fields = fields
+                                    appendField(
+                                        s.stages[activeStage]!.fields,
+                                        f
+                                    )
                                     return { ...s }
                                 })
                             }}
