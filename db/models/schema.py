@@ -37,7 +37,6 @@ class BaseField(BaseModel):
 class FieldTypes(str, Enum):
     USER = 'user'
     GEO = 'geo'
-    RECORD = 'record'
     DATE = 'date'
     SIGNATURE = 'signature'
 
@@ -50,6 +49,11 @@ class IntField(BaseField):
     type: Literal['int']
     min: int | None = None
     max: int | None = None
+
+
+class RecordField(BaseField):
+    type: Literal['record']
+    plural: bool = False
 
 
 class StrField(IntField):
