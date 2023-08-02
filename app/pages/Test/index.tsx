@@ -202,6 +202,20 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                 />
             </div>
             {have_minmax(field) && <MinMax field={field} update={update} />}
+            {field.type == 'record' && (
+                <div className='frow'>
+                    <input
+                        id={field.uid}
+                        type='checkbox'
+                        checked={field.plural}
+                        onChange={e => {
+                            field.plural = e.currentTarget.checked
+                            update()
+                        }}
+                    />
+                    <label htmlFor={field.uid}>Plural</label>
+                </div>
+            )}
             {field.type == 'option' && (
                 <>
                     <div className='frow'>
