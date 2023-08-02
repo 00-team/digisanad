@@ -18,6 +18,7 @@ import {
     field_types,
     FieldMinMax,
     FieldType,
+    StageType,
 } from './types'
 import { appendField } from './utils'
 
@@ -90,16 +91,9 @@ const Test: FC = () => {
                     </div>
 
                     {schema.stages[activeStage] && (
-                        <input
-                            className='stage_title'
-                            value={schema.stages[activeStage]!.title}
-                            onChange={e => {
-                                const v = e.currentTarget.value
-                                setSchema(s => {
-                                    s.stages[activeStage]!.title = v
-                                    return { ...s }
-                                })
-                            }}
+                        <Stage
+                            stage={schema.stages[activeStage]!}
+                            setSchema={setSchema}
                         />
                     )}
 
@@ -158,6 +152,60 @@ const Test: FC = () => {
                     F
                 </button>
             </div>
+        </div>
+    )
+}
+
+type StageProps = {
+    stage: StageType
+    setSchema: Dispatch<SetStateAction<SchemaData>>
+}
+
+const Stage: FC<StageProps> = ({ stage, setSchema }) => {
+    const update = () => {
+        setSchema(s => ({ ...s }))
+    }
+
+    let desc = typeof stage.description == 'string'
+
+    return (
+        <div className='stage-info'>
+            <div className='frow'>
+                <input
+                    className='stage-title'
+                    value={stage.title}
+                    onChange={e => {
+                        stage.title = e.currentTarget.value
+                        update()
+                    }}
+                />
+
+                <div
+                    className='stage-toggle-description'
+                    style={{ borderColor: desc ? '#e20338' : '#00dc7d' }}
+                    onClick={() => {
+                        if (!desc) {
+                            stage.description = ''
+                        } else {
+                            delete stage.description
+                        }
+                        update()
+                    }}
+                >
+                    {desc ? '-' : '+'}
+                </div>
+            </div>
+
+            {desc && (
+                <textarea
+                    className='stage-description'
+                    value={stage.description!}
+                    onChange={e => {
+                        stage.description = e.currentTarget.value
+                        update()
+                    }}
+                />
+            )}
         </div>
     )
 }

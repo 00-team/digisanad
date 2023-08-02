@@ -81,12 +81,51 @@
                 }
             }
 
-            .stage_title {
-                text-align: center;
-                text-transform: capitalize;
-                border: 0;
-                border-bottom: 2px solid #0260e8;
-                font-size: 24px;
+            .frow {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                gap: 0.3rem;
+            }
+
+            .stage-info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
+                padding: 1rem;
+
+                .stage-title {
+                    text-align: center;
+                    text-transform: capitalize;
+                    // border: 2px solid #0260e8;
+                    // border-radius: 5px;
+                    border: 0;
+                    font-size: 24px;
+                }
+
+                .stage-toggle-description {
+                    height: 100%;
+                    aspect-ratio: 1;
+                    border-radius: 5px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: 2px solid #00dc7d;
+                    cursor: pointer;
+                    user-select: none;
+                }
+
+                .stage-description {
+                    width: 100%;
+                    height: 100px;
+                    background: #111;
+                    border: 2px solid #0260e8;
+                    resize: none;
+                    border-radius: 5px;
+                    font-size: 18px;
+                    padding: 0.3rem;
+                    direction: rtl;
+                }
             }
 
             .fields {
@@ -106,13 +145,6 @@
                     gap: 0.3rem;
                     border: 2px solid #0260e8;
                     width: 49%;
-
-                    .frow {
-                        display: flex;
-                        align-items: center;
-                        width: 100%;
-                        gap: 0.3rem;
-                    }
 
                     label {
                         user-select: none;
