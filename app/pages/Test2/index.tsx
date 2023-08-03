@@ -39,6 +39,16 @@ const Test2: FC = () => {
             <div className='schema'>
                 <div className='pages'>
                     <span
+                        className='copy-btn'
+                        onClick={() => {
+                            navigator.clipboard.writeText(
+                                JSON.stringify(schema, null, 4)
+                            )
+                        }}
+                    >
+                        c
+                    </span>
+                    <span
                         onClick={() => {
                             schema.pages.push({ content: '' })
                             update()

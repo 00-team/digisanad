@@ -1,6 +1,7 @@
 $gap: 0.3rem;
 $color1: #782fef;
 $color2: #f375f3;
+$color3: #f375f3;
 
 .test2 {
     width: 100%;
@@ -46,6 +47,10 @@ $color2: #f375f3;
 
                 &.active {
                     border-color: $color2;
+                }
+
+                &.copy-btn {
+                    border-color: $color3;
                 }
             }
         }
