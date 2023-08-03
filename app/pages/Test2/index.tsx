@@ -58,6 +58,7 @@ const Test2: FC = () => {
                     </span>
                     {schema.pages.map((_, i) => (
                         <span
+                            key={i}
                             className={C(i == activePage)}
                             onContextMenu={e => {
                                 e.preventDefault()
