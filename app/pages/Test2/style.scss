@@ -1,5 +1,6 @@
 $gap: 0.3rem;
-$color1: #2398ab;
+$color1: #782fef;
+$color2: #f375f3;
 
 .test2 {
     width: 100%;
@@ -21,6 +22,8 @@ $color1: #2398ab;
 
     .schema {
         width: 70%;
+        display: flex;
+        flex-direction: column;
 
         .pages {
             display: flex;
@@ -30,6 +33,7 @@ $color1: #2398ab;
             padding: $gap;
 
             span {
+                flex-shrink: 0;
                 user-select: none;
                 border: 2px solid $color1;
                 border-radius: 5px;
@@ -39,11 +43,97 @@ $color1: #2398ab;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+                &.active {
+                    border-color: $color2;
+                }
+            }
+        }
+
+        .editor {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: $gap;
+            overflow: hidden;
+
+            .modes {
+                width: 100%;
+                display: flex;
+                gap: $gap * 4;
+                padding: $gap;
+                overflow: hidden;
+                flex-shrink: 0;
+
+                span {
+                    user-select: none;
+                    border: 3px solid transparent;
+                    border-bottom: 0;
+                    font-size: 24px;
+                    padding: 0 20px;
+                    border-top-left-radius: 15px;
+                    border-top-right-radius: 15px;
+                    cursor: pointer;
+                    position: relative;
+
+                    &.active {
+                        border-color: $color1;
+
+                        &::after {
+                            position: absolute;
+                            content: '';
+                            width: 1000%;
+                            height: 2px;
+                            background: $color1;
+                            bottom: 0;
+                            left: 100%;
+                        }
+
+                        &::before {
+                            position: absolute;
+                            content: '';
+                            width: 1000%;
+                            height: 2px;
+                            background: $color1;
+                            bottom: 0;
+                            right: 100%;
+                        }
+                    }
+                }
+            }
+
+            textarea {
+                padding: $gap;
+                border: 0;
+                direction: rtl;
+                font-size: 18px;
+                background: #040404;
+                width: 100%;
+                height: 100%;
+                resize: none;
             }
         }
     }
 
     .config {
         width: 30%;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 6px;
+        background: #040404;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #a400ff;
+        border: 0;
+        border-radius: 0;
+    }
+
+    ::selection {
+        color: #f2f2f2;
+        background-color: $color1;
     }
 }

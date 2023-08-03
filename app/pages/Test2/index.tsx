@@ -1,11 +1,16 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
 import './style.scss'
 
+import { SetStateAction } from 'jotai'
+
 import { property } from './property'
-import { Schema } from './types'
+import { Page, Schema } from './types'
+
+const MODES = ['edit', 'view'] as const
+type Mode = typeof MODES[number]
 
 const Test2: FC = () => {
     const [schema, setSchema] = useState<Schema>(property)
@@ -35,7 +40,7 @@ const Test2: FC = () => {
                 <div className='pages'>
                     <span
                         onClick={() => {
-                            schema.pages.push({})
+                            schema.pages.push({ content: '' })
                             update()
                         }}
                     >
@@ -45,21 +50,61 @@ const Test2: FC = () => {
                         <span
                             className={C(i == activePage)}
                             onContextMenu={e => {
+                                e.preventDefault()
                                 if (!e.shiftKey) return
 
                                 schema.pages.splice(i, 1)
                                 update()
                             }}
+                            onClick={() => setActivePage(i)}
                         >
                             {i}
                         </span>
                     ))}
                 </div>
-                <div className='editor'>
-                    <textarea></textarea>
-                </div>
+                {schema.pages[activePage] && (
+                    <Editor
+                        page={schema.pages[activePage]!}
+                        setSchema={setSchema}
+                        index={activePage}
+                    />
+                )}
             </div>
             <div className='config'></div>
+        </div>
+    )
+}
+
+type EditorProps = {
+    page: Page
+    index: number
+    setSchema: Dispatch<SetStateAction<Schema>>
+}
+
+const Editor: FC<EditorProps> = ({ page, setSchema }) => {
+    const [mode, setMode] = useState<Mode>(MODES[0])
+    const update = () => setSchema(s => ({ ...s }))
+
+    return (
+        <div className='editor'>
+            <div className='modes'>
+                {MODES.map(m => (
+                    <span
+                        key={m}
+                        className={C(mode == m)}
+                        onClick={() => setMode(m)}
+                    >
+                        {m}
+                    </span>
+                ))}
+            </div>
+            <textarea
+                value={page.content}
+                onChange={e => {
+                    page.content = e.currentTarget.value
+                    update()
+                }}
+            ></textarea>
         </div>
     )
 }

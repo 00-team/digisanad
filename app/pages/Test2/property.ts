@@ -1,5 +1,13 @@
 import { Schema } from './types'
 
 export const property: Schema = {
-    pages: [],
+    pages: [
+        {
+            content: `
+# سلام
+
+## سلام برادر
+`,
+        },
+    ],
 }
