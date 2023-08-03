@@ -1,4 +1,5 @@
 import React, {
+    createElement,
     Dispatch,
     ElementRef,
     FC,
@@ -115,7 +116,7 @@ type EditorProps = {
 }
 
 const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
-    const [mode, setMode] = useState<Mode>(MODES[0])
+    const [mode, setMode] = useState<Mode>(MODES[1])
     const update = () => setSchema(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
 
@@ -158,8 +159,43 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
                     }}
                 ></textarea>
             )}
+            {mode == 'view' && <Viewer content={page.content} />}
         </div>
     )
+}
+
+type ViewerProps = {
+    content: string
+}
+
+const Viewer: FC<ViewerProps> = ({ content }) => {
+    useEffect(() => {
+        let els = []
+
+        content.split('\n').forEach(line => {
+            let i = 0
+            let hn = 0
+
+            if (line[i] == '#') {
+                for (; line[i] == '#' && i < line.length; i++, hn++);
+            }
+
+            if (hn > 0 && hn < 5) {
+                let el = createElement('h' + hn, undefined, [])
+                els.push(el)
+            }
+
+            console.log(i, hn)
+
+            for (let i = 0; i < line.length; i++) {
+                if (content[i] == '#') {
+                    console.log(i)
+                }
+            }
+        })
+    }, [content])
+
+    return <div>{content}</div>
 }
 
 export default Test2
