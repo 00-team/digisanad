@@ -98,13 +98,15 @@ const Editor: FC<EditorProps> = ({ page, setSchema }) => {
                     </span>
                 ))}
             </div>
-            <textarea
-                value={page.content}
-                onChange={e => {
-                    page.content = e.currentTarget.value
-                    update()
-                }}
-            ></textarea>
+            {mode == 'edit' && (
+                <textarea
+                    value={page.content}
+                    onChange={e => {
+                        page.content = e.currentTarget.value
+                        update()
+                    }}
+                ></textarea>
+            )}
         </div>
     )
 }

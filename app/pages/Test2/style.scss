@@ -83,7 +83,7 @@ $color2: #f375f3;
                         &::after {
                             position: absolute;
                             content: '';
-                            width: 1000%;
+                            width: 100vw;
                             height: 2px;
                             background: $color1;
                             bottom: 0;
