@@ -1,4 +1,12 @@
-import React, { Dispatch, FC, useEffect, useState } from 'react'
+import React, {
+    Dispatch,
+    ElementRef,
+    FC,
+    MutableRefObject,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 
 import { C } from '@00-team/utils'
 
@@ -12,11 +20,14 @@ import { Page, Schema } from './types'
 const MODES = ['edit', 'view'] as const
 type Mode = typeof MODES[number]
 
+type Inserter = (text: string) => void
+
 const Test2: FC = () => {
     const [schema, setSchema] = useState<Schema>(property)
     const [activePage, setActivePage] = useState(0)
-
     const update = () => setSchema(s => ({ ...s }))
+
+    const insert = useRef<Inserter>()
 
     useEffect(() => {
         // if (!output.current) return
@@ -78,10 +89,20 @@ const Test2: FC = () => {
                         page={schema.pages[activePage]!}
                         setSchema={setSchema}
                         index={activePage}
+                        inserter={insert}
                     />
                 )}
             </div>
-            <div className='config'></div>
+            <div className='config'>
+                <button
+                    onClick={() => {
+                        if (!insert.current) return
+                        insert.current('({user_1})')
+                    }}
+                >
+                    User
+                </button>
+            </div>
         </div>
     )
 }
@@ -90,11 +111,29 @@ type EditorProps = {
     page: Page
     index: number
     setSchema: Dispatch<SetStateAction<Schema>>
+    inserter: MutableRefObject<Inserter | undefined>
 }
 
-const Editor: FC<EditorProps> = ({ page, setSchema }) => {
+const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
     const [mode, setMode] = useState<Mode>(MODES[0])
     const update = () => setSchema(s => ({ ...s }))
+    const ed = useRef<ElementRef<'textarea'>>(null)
+
+    useEffect(() => {
+        if (!ed.current) return
+
+        inserter.current = (text: string) => {
+            const td = ed.current!
+            td.value =
+                td.value.substring(0, td.selectionStart) +
+                text +
+                td.value.substring(td.selectionEnd)
+
+            td.focus()
+            page.content = td.value
+            update()
+        }
+    }, [ed])
 
     return (
         <div className='editor'>
@@ -111,6 +150,7 @@ const Editor: FC<EditorProps> = ({ page, setSchema }) => {
             </div>
             {mode == 'edit' && (
                 <textarea
+                    ref={ed}
                     value={page.content}
                     onChange={e => {
                         page.content = e.currentTarget.value

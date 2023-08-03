@@ -73,7 +73,7 @@ $color3: #fd0079;
 
                 span {
                     user-select: none;
-                    border: 3px solid transparent;
+                    border: 2px solid transparent;
                     border-bottom: 0;
                     font-size: 24px;
                     padding: 0 20px;
@@ -123,6 +123,16 @@ $color3: #fd0079;
 
     .config {
         width: 30%;
+        padding: $gap;
+
+        button {
+            user-select: none;
+            cursor: pointer;
+            font-size: 18px;
+            border: 2px solid $color1;
+            border-radius: 5px;
+            padding: $gap;
+        }
     }
 
     ::-webkit-scrollbar {
