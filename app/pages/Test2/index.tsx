@@ -3,7 +3,9 @@ import React, {
     Dispatch,
     ElementRef,
     FC,
+    Fragment,
     MutableRefObject,
+    ReactNode,
     useEffect,
     useRef,
     useState,
@@ -124,7 +126,9 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
         if (!ed.current) return
 
         inserter.current = (text: string) => {
-            const td = ed.current!
+            const td = ed.current
+            if (!td) return
+
             td.value =
                 td.value.substring(0, td.selectionStart) +
                 text +
@@ -134,7 +138,7 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
             page.content = td.value
             update()
         }
-    }, [ed])
+    }, [ed, mode])
 
     return (
         <div className='editor'>
@@ -168,34 +172,88 @@ type ViewerProps = {
     content: string
 }
 
+type TreeNode = {
+    name: string
+    props?: any
+    children: (TreeNode | string)[]
+}
+
 const Viewer: FC<ViewerProps> = ({ content }) => {
+    const [result, setResult] = useState<ReactNode>('')
+
     useEffect(() => {
-        let els = []
+        let tree: TreeNode[] = []
 
         content.split('\n').forEach(line => {
-            let i = 0
+            let node: TreeNode = { name: '', children: [] }
+
+            if (!line) {
+                tree.push({ name: 'br', children: [] })
+                return
+            }
+
+            // let i = 0
             let hn = 0
 
-            if (line[i] == '#') {
-                for (; line[i] == '#' && i < line.length; i++, hn++);
+            if (line[0] == '#') {
+                hn = line.indexOf(' ')
+                if (hn > 0 && hn < 5) {
+                    node.name = 'h' + hn
+                }
+                line = line.substring(hn + 1)
             }
 
-            if (hn > 0 && hn < 5) {
-                let el = createElement('h' + hn, undefined, [])
-                els.push(el)
-            }
+            if (!node.name) node.name = 'div'
 
-            console.log(i, hn)
+            const find = (str: string) => {
+                let s = str.indexOf('({')
+                let e = str.indexOf('})')
+                if (s < e && s != -1) {
+                    node.children.push(str.substring(0, s))
 
-            for (let i = 0; i < line.length; i++) {
-                if (content[i] == '#') {
-                    console.log(i)
+                    let uid = str.substring(s + 2, e)
+                    if (uid == 'geo') {
+                        node.children.push({
+                            name: 'div',
+                            props: { className: 'geo' },
+                            children: ['map'],
+                        })
+                    } else {
+                        node.children.push({
+                            name: 'input',
+                            props: { placeholder: 'user' },
+                            children: [uid],
+                        })
+                    }
+
+                    find(str.substring(e + 2))
+                } else {
+                    node.children.push(str)
                 }
             }
+
+            find(line)
+            tree.push(node)
         })
+
+        const toElement = (item: TreeNode | string, key = 0): ReactNode => {
+            if (typeof item == 'string') return item
+
+            let childs: undefined | ReactNode[] = undefined
+
+            if (['hr', 'br', 'input', 'img'].includes(item.name)) {
+                childs = undefined
+            } else {
+                childs = item.children.map(toElement)
+            }
+
+            return createElement(item.name, { key, ...item.props }, childs)
+        }
+
+        setResult(createElement(Fragment, undefined, tree.map(toElement)))
     }, [content])
 
-    return <div>{content}</div>
+    return <div className='viewer'>{result}</div>
 }
 
 export default Test2
