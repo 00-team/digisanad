@@ -71,10 +71,6 @@ for p in ['/', '/register/', '/login/', '/me/', '/dashboard/']:
 
 app.include_router(api.router)
 
-for route in app.routes:
-    if isinstance(route, APIRoute):
-        route.operation_id = route.name
-
 
 for route in app.routes:
     if not isinstance(route, APIRoute):
