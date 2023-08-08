@@ -8,9 +8,12 @@ function parseFields(text: string): RTPF {
 
     if (s < e && s != -1) {
         if (s > 0) result.push(['text', text.substring(0, s)])
-        result.push(['uid', text.substring(s + 2, e)])
 
-        result.push(...parseFields(text.substring(e + 2)))
+        let uid = text.substring(s + 2, e)
+        if (uid) result.push(['uid', uid])
+
+        if (text.length > e + 2)
+            result.push(...parseFields(text.substring(e + 2)))
     } else {
         if (text) result.push(['text', text])
     }

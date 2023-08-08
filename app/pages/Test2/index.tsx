@@ -26,33 +26,40 @@ type Mode = typeof MODES[number]
 
 type Inserter = (text: string) => void
 
+type State = {
+    schema: Schema
+    page: number
+    uid: string
+}
+
 const Test2: FC = () => {
-    const [schema, setSchema] = useState<Schema>(property)
-    const [activePage, setActivePage] = useState(0)
-    const update = () => setSchema(s => ({ ...s }))
+    const [state, setState] = useState<State>({
+        schema: property,
+        page: property.pages.length > 0 ? 0 : -1,
+        uid: '',
+    })
+    const update = () => setState(s => ({ ...s }))
+    const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))
 
     const insert = useRef<Inserter>()
 
     useEffect(() => {
-        // if (!output.current) return
-        //
-        // output.current.value = JSON.stringify(schema, null, 2)
-        if (!schema.pages.length) {
-            setActivePage(0)
+        if (!state.schema.pages.length) {
+            if (state.page != -1) updateState({ page: -1 })
             return
         }
 
-        if (activePage >= schema.pages.length) {
-            setActivePage(schema.pages.length - 1)
-        } else if (activePage < 0) {
-            setActivePage(0)
+        if (state.page >= state.schema.pages.length) {
+            updateState({ page: state.schema.pages.length - 1 })
+        } else if (state.page < 0) {
+            updateState({ page: 0 })
         }
-    }, [schema, activePage])
+    }, [state])
 
     const get_unique_uid = (base: string) => {
         let n = 0
         let uid = base + '_' + n
-        while (uid in schema.fields) {
+        while (uid in state.schema.fields) {
             n++
             uid = base + '_' + n
         }
@@ -67,7 +74,7 @@ const Test2: FC = () => {
                         className='copy-btn'
                         onClick={() => {
                             navigator.clipboard.writeText(
-                                JSON.stringify(schema, null, 4)
+                                JSON.stringify(state.schema, null, 4)
                             )
                         }}
                     >
@@ -75,34 +82,36 @@ const Test2: FC = () => {
                     </span>
                     <span
                         onClick={() => {
-                            schema.pages.push({ content: '' })
+                            state.schema.pages.push({ content: '' })
                             update()
                         }}
                     >
                         +
                     </span>
-                    {schema.pages.map((_, i) => (
+                    {state.schema.pages.map((_, i) => (
                         <span
                             key={i}
-                            className={C(i == activePage)}
+                            className={C(i == state.page)}
                             onContextMenu={e => {
                                 e.preventDefault()
                                 if (!e.shiftKey) return
 
-                                schema.pages.splice(i, 1)
+                                state.schema.pages.splice(i, 1)
                                 update()
                             }}
-                            onClick={() => setActivePage(i)}
+                            onClick={() =>
+                                state.page != i && updateState({ page: i })
+                            }
                         >
                             {i}
                         </span>
                     ))}
                 </div>
-                {schema.pages[activePage] && (
+                {state.schema.pages[state.page] && (
                     <Editor
-                        page={schema.pages[activePage]!}
-                        setSchema={setSchema}
-                        index={activePage}
+                        page={state.schema.pages[state.page]!}
+                        setState={setState}
+                        index={state.page}
                         inserter={insert}
                     />
                 )}
@@ -116,7 +125,7 @@ const Test2: FC = () => {
                                 if (!insert.current) return
 
                                 let uid = get_unique_uid(k)
-                                schema.fields[uid] = v
+                                state.schema.fields[uid] = v
                                 update()
                                 insert.current(`({${uid}})`)
                             }}
@@ -142,13 +151,13 @@ const Test2: FC = () => {
 type EditorProps = {
     page: Page
     index: number
-    setSchema: Dispatch<SetStateAction<Schema>>
+    setState: Dispatch<SetStateAction<State>>
     inserter: MutableRefObject<Inserter | undefined>
 }
 
-const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
+const Editor: FC<EditorProps> = ({ page, setState, inserter }) => {
     const [mode, setMode] = useState<Mode>(MODES[0])
-    const update = () => setSchema(s => ({ ...s }))
+    const update = () => setState(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
 
     useEffect(() => {
@@ -176,7 +185,9 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
 
             let text = td.value.substring(td.selectionStart, td.selectionEnd)
             if (text.indexOf('({') > -1 && text.indexOf('})') > 2) {
-                console.log(parseFields(text))
+                let res = parseFields(text).find(i => i[0] == 'uid')
+                if (!res) return
+                setState(s => ({ ...s, uid: res![1] }))
             }
         }
     }, [ed, mode])
