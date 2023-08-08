@@ -17,6 +17,7 @@ import './style.scss'
 
 import { SetStateAction } from 'jotai'
 
+import { FieldConfig } from './FieldConfig'
 import { property } from './property'
 import { Page, Schema, default_fields } from './types'
 import { parseFields } from './utils'
@@ -133,16 +134,15 @@ const Test2: FC = () => {
                             {k}
                         </button>
                     ))}
-                    <button
-                        onClick={() => {
-                            if (!insert.current) return
-                            insert.current('({user_1})')
-                        }}
-                    >
-                        User
-                    </button>
                 </div>
-                <div className='field-config'>gg</div>
+                <div className='field-config'>
+                    {state.uid in state.schema.fields && (
+                        <FieldConfig
+                            field={state.schema.fields[state.uid]!}
+                            update={update}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     )

@@ -9,58 +9,58 @@ type Schema = {
     }
 }
 
-type BaseField = {
+export type BaseField = {
     uid: string
     title: string
     description?: string | null
     optinal?: boolean
 }
 
-type RecordField = BaseField & {
+export type RecordField = BaseField & {
     type: 'record'
     plural: boolean
 }
 
-type IntField = BaseField & {
+export type IntField = BaseField & {
     type: 'int'
     min?: number | null
     max?: number | null
 }
 
-type StrField = BaseField & {
+export type StrField = BaseField & {
     type: 'str'
     min?: number | null
     max?: number | null
 }
 
-type GenericField = BaseField & {
+export type GenericField = BaseField & {
     type: 'user' | 'geo' | 'date' | 'signature'
 }
 
-type TextField = BaseField & {
+export type TextField = BaseField & {
     type: 'text'
     min?: number | null
     max?: number | null
 }
 
-type UIDD = {
+export type UIDD = {
     uid: string
     display: string
 }
 
-type QuestionField = BaseField & {
+export type QuestionField = BaseField & {
     type: 'question'
     answers: UIDD[]
     questions: UIDD[]
 }
 
-type OptionFeild = BaseField & {
+export type OptionFeild = BaseField & {
     type: 'option'
     singleton: boolean
     options: UIDD[]
 }
 
-type FieldType =
+export type FieldType =
     | IntField
     | StrField
     | GenericField
