@@ -44,7 +44,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 placeholder='description'
             ></textarea>
             {have_minmax(field) && (
-                <div className='row'>
+                <div className='row' style={{ padding: 'var(--gap)' }}>
                     <input
                         type='number'
                         value={field.min || 0}
