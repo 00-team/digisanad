@@ -189,6 +189,8 @@ $color3: #fd0079;
                     border-bottom-width: 2px;
                     padding: $gap;
                     transition: border-color 200ms ease-in-out;
+                    max-height: 50%;
+                    min-height: 10%;
 
                     &:focus {
                         border-color: $color3;

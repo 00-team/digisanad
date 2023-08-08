@@ -37,7 +37,7 @@ const Test2: FC = () => {
     const [state, setState] = useState<State>({
         schema: property,
         page: property.pages.length > 0 ? 0 : -1,
-        uid: 'user_0',
+        uid: 'int_0',
     })
     const update = () => setState(s => ({ ...s }))
     const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))

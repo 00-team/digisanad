@@ -160,4 +160,9 @@ const field_types = Object.keys(default_fields) as Array<
     keyof typeof default_fields
 >
 
-export { Schema, Page, field_types, default_fields }
+export type FieldMinMax = StrField | IntField | TextField
+function have_minmax(f: FieldType): f is FieldMinMax {
+    return ['str', 'int', 'text'].includes(f.type)
+}
+
+export { Schema, Page, field_types, default_fields, have_minmax }
