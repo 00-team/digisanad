@@ -157,13 +157,14 @@ $color3: #fd0079;
 
         .field-config-container {
             height: 50%;
-            border-top: 2px solid $color1;
+            // border-top: 2px solid $color1;
 
-            input {
+            input[type='text'] {
                 width: 100%;
                 background: transparent;
-                border: 0;
-                border-bottom: 2px solid $color1;
+                border: 0 solid $color1;
+                border-top-width: 2px;
+                border-bottom-width: 2px;
                 font-size: 18px;
                 padding: $gap;
                 transition: border-color 200ms ease-in-out;
@@ -178,6 +179,31 @@ $color3: #fd0079;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
+                font-size: 18px;
+
+                textarea {
+                    resize: vertical;
+                    background: transparent;
+                    font-size: 18px;
+                    border: 0 solid $color1;
+                    border-bottom-width: 2px;
+                    padding: $gap;
+                    transition: border-color 200ms ease-in-out;
+
+                    &:focus {
+                        border-color: $color3;
+                    }
+                }
+
+                .row {
+                    display: flex;
+                    align-items: center;
+                    gap: $gap;
+                }
+
+                label {
+                    user-select: none;
+                }
             }
         }
     }
