@@ -18,7 +18,7 @@ import './style.scss'
 import { SetStateAction } from 'jotai'
 
 import { property } from './property'
-import { Page, Schema } from './types'
+import { Page, Schema, default_fields } from './types'
 
 const MODES = ['edit', 'view'] as const
 type Mode = typeof MODES[number]
@@ -47,6 +47,16 @@ const Test2: FC = () => {
             setActivePage(0)
         }
     }, [schema, activePage])
+
+    const get_unique_uid = (base: string) => {
+        let n = 0
+        let uid = base + '_' + n
+        while (uid in schema.fields) {
+            n++
+            uid = base + '_' + n
+        }
+        return uid
+    }
 
     return (
         <div className='test2'>
@@ -98,6 +108,21 @@ const Test2: FC = () => {
             </div>
             <div className='config'>
                 <div className='fields'>
+                    {Object.entries(default_fields).map(([k, v], i) => (
+                        <button
+                            key={i}
+                            onClick={() => {
+                                if (!insert.current) return
+
+                                let uid = get_unique_uid(k)
+                                schema.fields[uid] = v
+                                update()
+                                insert.current(`({${uid}})`)
+                            }}
+                        >
+                            {k}
+                        </button>
+                    ))}
                     <button
                         onClick={() => {
                             if (!insert.current) return
@@ -107,9 +132,7 @@ const Test2: FC = () => {
                         User
                     </button>
                 </div>
-                <div className='field-config'>
-                    gg
-                </div>
+                <div className='field-config'>gg</div>
             </div>
         </div>
     )
@@ -134,12 +157,14 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
             const td = ed.current
             if (!td) return
 
+            let start = td.selectionStart
+            let end = td.selectionEnd
+
             td.value =
-                td.value.substring(0, td.selectionStart) +
-                text +
-                td.value.substring(td.selectionEnd)
+                td.value.substring(0, start) + text + td.value.substring(end)
 
             td.focus()
+            td.setSelectionRange(start, end)
             page.content = td.value
             update()
         }
