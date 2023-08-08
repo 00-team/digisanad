@@ -7,9 +7,18 @@ type FieldConfigProps = {
     update: () => void
 }
 
-const FieldConfig: FC<FieldConfigProps> = ({ field }) => {
+const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
     return (
         <div className='field-config'>
+            <input
+                type='text'
+                value={field.title}
+                onInput={e => {
+                    field.title = e.currentTarget.value
+                    update()
+                }}
+                placeholder='title'
+            />
             {field.uid} - {field.title} - {field.type}
         </div>
     )
