@@ -19,6 +19,7 @@ import { SetStateAction } from 'jotai'
 
 import { property } from './property'
 import { Page, Schema, default_fields } from './types'
+import { parseFields } from './utils'
 
 const MODES = ['edit', 'view'] as const
 type Mode = typeof MODES[number]
@@ -146,7 +147,7 @@ type EditorProps = {
 }
 
 const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
-    const [mode, setMode] = useState<Mode>(MODES[1])
+    const [mode, setMode] = useState<Mode>(MODES[0])
     const update = () => setSchema(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
 
@@ -168,6 +169,16 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
             page.content = td.value
             update()
         }
+
+        ed.current.onselect = () => {
+            const td = ed.current
+            if (!td) return
+
+            let text = td.value.substring(td.selectionStart, td.selectionEnd)
+            if (text.indexOf('({') > -1 && text.indexOf('})') > 2) {
+                console.log(parseFields(text))
+            }
+        }
     }, [ed, mode])
 
     return (
@@ -187,7 +198,7 @@ const Editor: FC<EditorProps> = ({ page, setSchema, inserter }) => {
                 <textarea
                     ref={ed}
                     value={page.content}
-                    onChange={e => {
+                    onInput={e => {
                         page.content = e.currentTarget.value
                         update()
                     }}
