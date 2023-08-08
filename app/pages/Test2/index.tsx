@@ -126,7 +126,8 @@ const Test2: FC = () => {
                                 if (!insert.current) return
 
                                 let uid = get_unique_uid(k)
-                                state.schema.fields[uid] = v
+                                v.uid = uid
+                                state.schema.fields[uid] = { ...v }
                                 update()
                                 insert.current(`({${uid}})`)
                             }}
@@ -135,7 +136,15 @@ const Test2: FC = () => {
                         </button>
                     ))}
                 </div>
-                <div className='field-config'>
+                <div className='field-config-container'>
+                    <input
+                        className='uid-input'
+                        type='text'
+                        value={state.uid}
+                        onInput={e =>
+                            updateState({ uid: e.currentTarget.value })
+                        }
+                    />
                     {state.uid in state.schema.fields && (
                         <FieldConfig
                             field={state.schema.fields[state.uid]!}

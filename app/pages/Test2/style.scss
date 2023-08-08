@@ -155,10 +155,27 @@ $color3: #fd0079;
             }
         }
 
-        .field-config {
+        .field-config-container {
             height: 50%;
-            padding: $gap;
             border-top: 2px solid $color1;
+
+            .uid-input {
+                width: 100%;
+                background: transparent;
+                border: 0;
+                border-bottom: 2px solid $color1;
+                font-size: 18px;
+                padding: $gap;
+                transition: border-color 200ms ease-in-out;
+
+                &:focus {
+                    border-color: $color3;
+                }
+            }
+
+            .field-config {
+                height: 100%;
+            }
         }
     }
 
