@@ -139,8 +139,13 @@ $color3: #fd0079;
         .fields {
             height: 50%;
             padding: $gap;
+            display: flex;
+            gap: $gap;
+            flex-wrap: wrap;
+            align-content: flex-start;
 
             button {
+                text-transform: capitalize;
                 user-select: none;
                 cursor: pointer;
                 font-size: 18px;
