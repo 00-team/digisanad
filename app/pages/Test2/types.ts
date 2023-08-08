@@ -16,9 +16,13 @@ export type BaseField = {
     optinal?: boolean
 }
 
-export type RecordField = BaseField & {
-    type: 'record'
-    plural: boolean
+export type GenericField = BaseField & {
+    type: 'geo' | 'date' | 'signature'
+}
+
+export type UserField = BaseField & {
+    type: 'user'
+    value: string
 }
 
 export type IntField = BaseField & {
@@ -33,14 +37,15 @@ export type StrField = BaseField & {
     max?: number | null
 }
 
-export type GenericField = BaseField & {
-    type: 'user' | 'geo' | 'date' | 'signature'
-}
-
 export type TextField = BaseField & {
     type: 'text'
     min?: number | null
     max?: number | null
+}
+
+export type RecordField = BaseField & {
+    type: 'record'
+    plural: boolean
 }
 
 export type UIDD = {
@@ -63,6 +68,7 @@ export type OptionFeild = BaseField & {
 export type FieldType =
     | IntField
     | StrField
+    | UserField
     | GenericField
     | OptionFeild
     | QuestionField
@@ -112,21 +118,22 @@ const default_fields: X = {
     geo: {
         type: 'geo',
         uid: '',
-        title: 'Number',
+        title: 'Geo',
         description: '',
         optinal: false,
     },
     user: {
         type: 'user',
         uid: '',
-        title: 'Number',
+        value: '',
+        title: 'User',
         description: '',
         optinal: false,
     },
     record: {
         type: 'record',
         uid: '',
-        title: 'Number',
+        title: 'Record / File',
         description: '',
         optinal: false,
         plural: false,
@@ -134,14 +141,14 @@ const default_fields: X = {
     date: {
         type: 'date',
         uid: '',
-        title: 'Number',
+        title: 'Date',
         description: '',
         optinal: false,
     },
     question: {
         type: 'question',
         uid: '',
-        title: 'Number',
+        title: 'Questions',
         description: '',
         optinal: false,
         questions: [],
@@ -150,7 +157,7 @@ const default_fields: X = {
     signature: {
         type: 'signature',
         uid: '',
-        title: 'Number',
+        title: 'Signature',
         description: '',
         optinal: false,
     },

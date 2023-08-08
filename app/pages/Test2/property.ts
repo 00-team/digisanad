@@ -19,6 +19,7 @@ export const property: Schema = {
         },
         user_0: {
             type: 'user',
+            value: '',
             uid: 'user_0',
             title: 'Number',
             description: '',
@@ -27,6 +28,7 @@ export const property: Schema = {
         user_1: {
             type: 'user',
             uid: 'user_1',
+            value: '',
             title: 'Number',
             description: '',
             optinal: false,

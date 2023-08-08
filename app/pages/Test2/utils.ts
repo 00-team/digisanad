@@ -1,7 +1,7 @@
-type RTPF = ['text' | 'uid', string][]
+type ParsedField = ['text' | 'uid', string]
 
-function parseFields(text: string): RTPF {
-    let result: RTPF = []
+function parseFields(text: string): ParsedField[] {
+    let result: ParsedField[] = []
 
     let s = text.indexOf('({')
     let e = text.indexOf('})')
@@ -21,4 +21,4 @@ function parseFields(text: string): RTPF {
     return result
 }
 
-export { parseFields }
+export { parseFields, ParsedField }

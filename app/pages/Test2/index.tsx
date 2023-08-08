@@ -2,8 +2,7 @@ import React, {
     createElement,
     Dispatch,
     ElementRef,
-    FC,
-    Fragment,
+    FC, // Fragment,
     MutableRefObject,
     ReactNode,
     useEffect,
@@ -19,8 +18,9 @@ import { SetStateAction } from 'jotai'
 
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
-import { Page, Schema, default_fields } from './types'
-import { parseFields } from './utils'
+import { Schema, default_fields } from './types'
+import { FieldType } from './types'
+import { ParsedField, parseFields } from './utils'
 
 const MODES = ['edit', 'view'] as const
 type Mode = typeof MODES[number]
@@ -110,9 +110,8 @@ const Test2: FC = () => {
                 </div>
                 {state.schema.pages[state.page] && (
                     <Editor
-                        page={state.schema.pages[state.page]!}
+                        state={state}
                         setState={setState}
-                        index={state.page}
                         inserter={insert}
                     />
                 )}
@@ -158,13 +157,12 @@ const Test2: FC = () => {
 }
 
 type EditorProps = {
-    page: Page
-    index: number
+    state: State
     setState: Dispatch<SetStateAction<State>>
     inserter: MutableRefObject<Inserter | undefined>
 }
 
-const Editor: FC<EditorProps> = ({ page, setState, inserter }) => {
+const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
     const [mode, setMode] = useState<Mode>(MODES[0])
     const update = () => setState(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
@@ -184,7 +182,7 @@ const Editor: FC<EditorProps> = ({ page, setState, inserter }) => {
 
             td.focus()
             td.setSelectionRange(start, end)
-            page.content = td.value
+            state.schema.pages[state.page]!.content = td.value
             update()
         }
 
@@ -217,39 +215,38 @@ const Editor: FC<EditorProps> = ({ page, setState, inserter }) => {
             {mode == 'edit' && (
                 <textarea
                     ref={ed}
-                    value={page.content}
+                    value={state.schema.pages[state.page]!.content}
                     onInput={e => {
-                        page.content = e.currentTarget.value
+                        state.schema.pages[state.page]!.content =
+                            e.currentTarget.value
                         update()
                     }}
                 ></textarea>
             )}
-            {mode == 'view' && <Viewer content={page.content} />}
+            {mode == 'view' && (
+                <Viewer state={state} setState={setState} inserter={inserter} />
+            )}
         </div>
     )
 }
 
-type ViewerProps = {
-    content: string
-}
-
 type TreeNode = {
     name: string
-    props?: any
-    children: (TreeNode | string)[]
+    items: ParsedField[]
 }
 
-const Viewer: FC<ViewerProps> = ({ content }) => {
+const Viewer: FC<EditorProps> = ({ state, setState }) => {
     const [result, setResult] = useState<ReactNode>('')
+    const update = () => setState(s => ({ ...s }))
 
     useEffect(() => {
         let tree: TreeNode[] = []
 
-        content.split('\n').forEach(line => {
-            let node: TreeNode = { name: '', children: [] }
+        state.schema.pages[state.page]!.content.split('\n').forEach(line => {
+            let node: TreeNode = { name: '', items: [] }
 
             if (!line) {
-                tree.push({ name: 'br', children: [] })
+                tree.push({ name: 'br', items: [] })
                 return
             }
 
@@ -266,55 +263,74 @@ const Viewer: FC<ViewerProps> = ({ content }) => {
 
             if (!node.name) node.name = 'div'
 
-            const find = (str: string) => {
-                let s = str.indexOf('({')
-                let e = str.indexOf('})')
-                if (s < e && s != -1) {
-                    node.children.push(str.substring(0, s))
-
-                    let uid = str.substring(s + 2, e)
-                    if (uid == 'geo') {
-                        node.children.push({
-                            name: 'div',
-                            props: { className: 'geo' },
-                            children: ['map'],
-                        })
-                    } else {
-                        node.children.push({
-                            name: 'input',
-                            props: { placeholder: 'user' },
-                            children: [uid],
-                        })
-                    }
-
-                    find(str.substring(e + 2))
-                } else {
-                    node.children.push(str)
-                }
-            }
-
-            find(line)
+            node.items = parseFields(line)
             tree.push(node)
         })
+        // const toElement = (item: TreeNode | string, key = 0): ReactNode => {
+        //     if (typeof item == 'string') return item
+        //
+        //     let childs: undefined | ReactNode[] = undefined
+        //
+        //     if (item.children.length) {
+        //         childs = item.children.map(toElement)
+        //     }
+        //
+        //     return createElement(item.name, { key, ...item.props }, childs)
+        // }
 
-        const toElement = (item: TreeNode | string, key = 0): ReactNode => {
-            if (typeof item == 'string') return item
+        setResult(
+            <>
+                {tree.map((n, i) =>
+                    createElement(
+                        n.name,
+                        { key: i },
+                        n.items.length
+                            ? n.items.map(f => {
+                                  if (f[0] == 'text') return f[1]
 
-            let childs: undefined | ReactNode[] = undefined
+                                  let uid = f[1]
 
-            if (['hr', 'br', 'input', 'img'].includes(item.name)) {
-                childs = undefined
-            } else {
-                childs = item.children.map(toElement)
-            }
+                                  if (!(uid in state.schema.fields)) return null
+                                  let field = state.schema.fields[uid]!
 
-            return createElement(item.name, { key, ...item.props }, childs)
-        }
-
-        setResult(createElement(Fragment, undefined, tree.map(toElement)))
-    }, [content])
+                                  return field_map[
+                                      state.schema.fields[uid]!.type
+                                      // @ts-ignore
+                                  ]({ field, update })
+                              })
+                            : undefined
+                    )
+                )}
+            </>
+        )
+    }, [state])
 
     return <div className='viewer'>{result}</div>
+}
+
+type FMF = {
+    [T in FieldType as T['type']]: FC<{ field: T; update: () => void }>
+}
+const field_map: FMF = {
+    text: () => <textarea></textarea>,
+    str: () => <></>,
+    user: ({ field, update }) => (
+        <input
+            placeholder={field.title}
+            value={field.value}
+            onInput={e => {
+                field.value = e.currentTarget.value
+                update()
+            }}
+        />
+    ),
+    geo: () => <></>,
+    int: () => <></>,
+    signature: () => <></>,
+    record: () => <></>,
+    question: () => <></>,
+    date: () => <></>,
+    option: () => <></>,
 }
 
 export default Test2
