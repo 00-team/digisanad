@@ -97,14 +97,19 @@ const Test2: FC = () => {
                 )}
             </div>
             <div className='config'>
-                <button
-                    onClick={() => {
-                        if (!insert.current) return
-                        insert.current('({user_1})')
-                    }}
-                >
-                    User
-                </button>
+                <div className='fields'>
+                    <button
+                        onClick={() => {
+                            if (!insert.current) return
+                            insert.current('({user_1})')
+                        }}
+                    >
+                        User
+                    </button>
+                </div>
+                <div className='field-config'>
+                    gg
+                </div>
             </div>
         </div>
     )

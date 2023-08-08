@@ -135,15 +135,25 @@ $color3: #fd0079;
 
     .config {
         width: 30%;
-        padding: $gap;
 
-        button {
-            user-select: none;
-            cursor: pointer;
-            font-size: 18px;
-            border: 2px solid $color1;
-            border-radius: 5px;
+        .fields {
+            height: 50%;
             padding: $gap;
+
+            button {
+                user-select: none;
+                cursor: pointer;
+                font-size: 18px;
+                border: 2px solid $color1;
+                border-radius: 5px;
+                padding: $gap;
+            }
+        }
+
+        .field-config {
+            height: 50%;
+            padding: $gap;
+            border-top: 2px solid $color1;
         }
     }
 
