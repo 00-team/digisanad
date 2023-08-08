@@ -285,18 +285,24 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
                         n.name,
                         { key: i },
                         n.items.length
-                            ? n.items.map(f => {
+                            ? n.items.map((f, fi) => {
                                   if (f[0] == 'text') return f[1]
 
                                   let uid = f[1]
 
                                   if (!(uid in state.schema.fields)) return null
                                   let field = state.schema.fields[uid]!
+                                  let FMFC =
+                                      field_map[state.schema.fields[uid]!.type]
 
-                                  return field_map[
-                                      state.schema.fields[uid]!.type
-                                      // @ts-ignore
-                                  ]({ field, update })
+                                  return (
+                                      <FMFC
+                                          key={fi}
+                                          // @ts-ignore
+                                          field={field}
+                                          update={update}
+                                      />
+                                  )
                               })
                             : undefined
                     )
