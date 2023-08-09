@@ -111,8 +111,26 @@ export const property: Schema = {
             title: 'وضعیت تصرف مالک در ملک فوق',
             description: 'پاسخ سوالات بر پایه صداقت طراحی شده است',
             optinal: false,
-            questions: [],
-            answers: [],
+            questions: [
+                {
+                    display: 'آیا ملک در تصرف مالک است؟',
+                    uid: 'q1',
+                },
+                {
+                    display: 'آیا ملک به هر عنوان در ید شخص ثالثی است؟',
+                    uid: 'q2',
+                },
+            ],
+            answers: [
+                {
+                    display: 'بله',
+                    uid: 'yes',
+                },
+                {
+                    display: 'خیر',
+                    uid: 'no',
+                },
+            ],
             value: {},
         },
     },

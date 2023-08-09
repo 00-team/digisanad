@@ -216,6 +216,19 @@ $color3: #fd0079;
                     user-select: none;
                 }
             }
+
+            table.questions {
+                .append,
+                .remove {
+                    text-align: center;
+                    cursor: pointer;
+                    background-color: #008736;
+                }
+
+                .remove {
+                    background-color: #e20338;
+                }
+            }
         }
     }
 

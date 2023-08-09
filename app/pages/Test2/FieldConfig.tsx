@@ -89,6 +89,109 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                     />
                 </div>
             )}
+            {field.type == 'question' && (
+                <table className='questions'>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '70%' }}>Questions</th>
+                            {field.answers.map((a, ai) => (
+                                <th key={ai}>
+                                    <input
+                                        value={a.uid}
+                                        onChange={e => {
+                                            a.uid = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                    <input
+                                        value={a.display}
+                                        onChange={e => {
+                                            a.display = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                </th>
+                            ))}
+                            <th
+                                className='append'
+                                onClick={() => {
+                                    field.answers.push({
+                                        display: 'A',
+                                        uid: 'a',
+                                    })
+                                    update()
+                                }}
+                            >
+                                +
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {field.questions.map((q, qi) => (
+                            <tr key={qi}>
+                                <td className='row'>
+                                    <input
+                                        style={{ width: '30%' }}
+                                        value={q.uid}
+                                        onChange={e => {
+                                            q.uid = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                    <input
+                                        value={q.display}
+                                        onChange={e => {
+                                            q.display = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                </td>
+                                {field.answers.map((_, ai) => (
+                                    <td key={ai}>
+                                        <input type='radio' name={q.uid} />
+                                    </td>
+                                ))}
+                                <td
+                                    className='remove'
+                                    onClick={() => {
+                                        field.questions.splice(qi, 1)
+                                        update()
+                                    }}
+                                >
+                                    X
+                                </td>
+                            </tr>
+                        ))}
+
+                        <tr>
+                            <td
+                                className='append'
+                                onClick={() => {
+                                    field.questions.push({
+                                        display: 'Q',
+                                        uid: 'q',
+                                    })
+                                    update()
+                                }}
+                            >
+                                +
+                            </td>
+                            {field.answers.map((_, ai) => (
+                                <td
+                                    key={ai}
+                                    className='remove'
+                                    onClick={() => {
+                                        field.answers.splice(ai, 1)
+                                        update()
+                                    }}
+                                >
+                                    X
+                                </td>
+                            ))}
+                        </tr>
+                    </tbody>
+                </table>
+            )}
         </div>
     )
 }
