@@ -18,7 +18,14 @@ import { SetStateAction } from 'jotai'
 
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
-import { Schema, default_fields, TextField, GeoField, StrField } from './types'
+import {
+    Schema,
+    default_fields,
+    TextField,
+    GeoField,
+    StrField,
+    QuestionField,
+} from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
 
@@ -388,6 +395,37 @@ const StrFC: FieldProps<StrField> = ({ field, update }) => {
     )
 }
 
+const QuestionFC: FieldProps<QuestionField> = ({ field }) => {
+    return (
+        <table className='question-field'>
+            <thead>
+                <tr>
+                    <th>{field.title}</th>
+                    {field.answers.map((a, ai) => (
+                        <th key={ai}>{a.display}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {field.questions.map((q, qi) => (
+                    <tr key={qi}>
+                        <td>{q.display}</td>
+                        {field.answers.map((a, ai) => (
+                            <td key={ai}>
+                                <input
+                                    type='radio'
+                                    name={q.uid}
+                                    title={a.display}
+                                />
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    )
+}
+
 const field_map: FMF = {
     text: TextFC,
     str: StrFC,
@@ -405,7 +443,7 @@ const field_map: FMF = {
     int: () => <></>,
     signature: () => <></>,
     record: () => <></>,
-    question: () => <></>,
+    question: QuestionFC,
     date: () => <></>,
     option: () => <></>,
 }

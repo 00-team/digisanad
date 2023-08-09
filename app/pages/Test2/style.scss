@@ -145,6 +145,18 @@ $color3: #fd0079;
                         border-color: $color3;
                     }
                 }
+
+                .question-field {
+                    width: 100%;
+                    border: 1px solid $color1;
+                    border-spacing: 0;
+
+                    td,
+                    th {
+                        text-align: center;
+                        border: 1px solid $color1;
+                    }
+                }
             }
         }
     }
