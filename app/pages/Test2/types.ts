@@ -16,8 +16,22 @@ export type BaseField = {
     optinal?: boolean
 }
 
-export type GenericField = BaseField & {
-    type: 'geo' | 'date' | 'signature'
+export type GeoField = BaseField & {
+    type: 'geo'
+    value: {
+        latitude: number
+        longitude: number
+    }
+}
+
+export type DateField = BaseField & {
+    type: 'date'
+    value: number
+}
+
+export type SignatureField = BaseField & {
+    type: 'signature'
+    value: string
 }
 
 export type UserField = BaseField & {
@@ -29,23 +43,27 @@ export type IntField = BaseField & {
     type: 'int'
     min?: number | null
     max?: number | null
+    value: number
 }
 
 export type StrField = BaseField & {
     type: 'str'
     min?: number | null
     max?: number | null
+    value: string
 }
 
 export type TextField = BaseField & {
     type: 'text'
     min?: number | null
     max?: number | null
+    value: string
 }
 
 export type RecordField = BaseField & {
     type: 'record'
     plural: boolean
+    value: string[]
 }
 
 export type UIDD = {
@@ -57,19 +75,25 @@ export type QuestionField = BaseField & {
     type: 'question'
     answers: UIDD[]
     questions: UIDD[]
+    value: {
+        [key: string]: string
+    }
 }
 
 export type OptionFeild = BaseField & {
     type: 'option'
     singleton: boolean
     options: UIDD[]
+    value: string[]
 }
 
 export type FieldType =
     | IntField
     | StrField
     | UserField
-    | GenericField
+    | GeoField
+    | DateField
+    | SignatureField
     | OptionFeild
     | QuestionField
     | TextField
@@ -87,6 +111,7 @@ const default_fields: X = {
         optinal: false,
         singleton: false,
         description: '',
+        value: []
     },
     int: {
         type: 'int',
@@ -96,6 +121,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
+        value: 0
     },
     str: {
         type: 'str',
@@ -105,6 +131,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
+        value: ''
     },
     text: {
         type: 'text',
@@ -114,6 +141,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
+        value: ''
     },
     geo: {
         type: 'geo',
@@ -121,6 +149,10 @@ const default_fields: X = {
         title: 'Geo',
         description: '',
         optinal: false,
+        value: {
+            latitude: 0,
+            longitude: 0
+        }
     },
     user: {
         type: 'user',
@@ -129,6 +161,7 @@ const default_fields: X = {
         title: 'User',
         description: '',
         optinal: false,
+        
     },
     record: {
         type: 'record',
@@ -137,6 +170,7 @@ const default_fields: X = {
         description: '',
         optinal: false,
         plural: false,
+        value: []
     },
     date: {
         type: 'date',
@@ -144,6 +178,7 @@ const default_fields: X = {
         title: 'Date',
         description: '',
         optinal: false,
+        value: 0
     },
     question: {
         type: 'question',
@@ -153,6 +188,7 @@ const default_fields: X = {
         optinal: false,
         questions: [],
         answers: [],
+        value: {}
     },
     signature: {
         type: 'signature',
@@ -160,6 +196,7 @@ const default_fields: X = {
         title: 'Signature',
         description: '',
         optinal: false,
+        value: ''
     },
 }
 

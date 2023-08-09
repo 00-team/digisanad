@@ -16,6 +16,7 @@ export const property: Schema = {
             optinal: false,
             singleton: false,
             description: '',
+            value: [],
         },
         user_0: {
             type: 'user',
@@ -39,6 +40,10 @@ export const property: Schema = {
             title: 'Number',
             description: '',
             optinal: false,
+            value: {
+                latitude: 0,
+                longitude: 0,
+            },
         },
         int_0: {
             type: 'int',
@@ -48,6 +53,7 @@ export const property: Schema = {
             optinal: false,
             max: -1,
             min: 3,
+            value: 0,
         },
     },
 }
