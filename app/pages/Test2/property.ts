@@ -183,7 +183,7 @@ export const property: Schema = {
             title: 'محل نگه داری عکس اسناد فوق',
             description: '',
             optinal: false,
-            plural: false,
+            plural: true,
             value: [],
         },
     },

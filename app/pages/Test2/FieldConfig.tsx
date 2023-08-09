@@ -43,6 +43,20 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 }}
                 placeholder='description'
             ></textarea>
+            {field.type == 'record' && (
+                <div className='row'>
+                    <input
+                        id='fc_plural'
+                        type='checkbox'
+                        checked={field.plural}
+                        onChange={e => {
+                            field.plural = e.currentTarget.checked
+                            update()
+                        }}
+                    />
+                    <label htmlFor='fc_plural'>Plural</label>
+                </div>
+            )}
             {have_minmax(field) && (
                 <div className='row' style={{ padding: 'var(--gap)' }}>
                     <input
