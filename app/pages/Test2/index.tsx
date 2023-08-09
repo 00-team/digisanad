@@ -18,7 +18,7 @@ import { SetStateAction } from 'jotai'
 
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
-import { Schema, default_fields, TextField, GeoField } from './types'
+import { Schema, default_fields, TextField, GeoField, StrField } from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
 
@@ -368,9 +368,24 @@ const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
     )
 }
 
+const StrFC: FieldProps<StrField> = ({ field, update }) => {
+    return (
+        <input
+            placeholder={field.title}
+            value={field.value}
+            onInput={e => {
+                field.value = e.currentTarget.value
+                update()
+            }}
+            max={field.max || undefined}
+            min={field.min || undefined}
+        />
+    )
+}
+
 const field_map: FMF = {
     text: TextFC,
-    str: () => <></>,
+    str: StrFC,
     user: ({ field, update }) => (
         <input
             placeholder={field.title}
