@@ -44,7 +44,7 @@ type State = {
 const Test2: FC = () => {
     const [state, setState] = useState<State>({
         schema: property,
-        page: property.pages.length > 0 ? 0 : -1,
+        page: property.pages.length - 1,
         uid: 'question_0',
     })
     const update = () => setState(s => ({ ...s }))
@@ -431,7 +431,7 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
                             <td key={ai}>
                                 <input
                                     type='radio'
-                                    name={q.uid}
+                                    name={field.uid + q.uid}
                                     title={a.display}
                                     checked={field.value[q.uid] == a.uid}
                                     onChange={e => {

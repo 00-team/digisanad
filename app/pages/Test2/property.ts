@@ -7,7 +7,8 @@ export const property: Schema = {
                 '# قرارداد بیع\nخرید و فروش ملک\n\n## مشخصات طرفین\nفروشنده ملک: ({user_0})\nخریدار:     ({user_1})\n\n## مورد معامله\n\nمیزان دانگ: ({int_1})\nپلاک ثبتی اصلی: ({str_0})\nپلاک ثبتی فرعی: ({str_1})\nبخش ثبتی: ({str_2})\nشهر مورد ثبت ملک: ({str_3})\nکدپستی ملک: ({str_4})\n---\nواقع در آدرس: ({text_0})\nکاربر گرامی شما می توانید موقعیت مکانی ملک خود را بر روی نقشه ثبت نمایید:\n({geo_1})',
         },
         {
-            content: '## وضعیت ملک\n({question_0})',
+            content:
+                '## وضعیت ملک\n({question_0})\n\n## وضعیت اسناد مالکیت\n({question_1})\n\nمحل نگه داری عکس اسناد فوق\n({record_0})',
         },
     ],
     fields: {
@@ -135,9 +136,55 @@ export const property: Schema = {
                 },
             ],
             value: {
-                q1: 'no',
+                q1: 'yes',
                 q2: 'yes',
             },
+        },
+        question_1: {
+            type: 'question',
+            uid: 'question_1',
+            title: 'وضعیت اسناد مالکیت',
+            description: '',
+            optinal: false,
+            questions: [
+                {
+                    display: 'اسناد مربوط به شهرداری / بخشداری',
+                    uid: 'q1',
+                },
+                {
+                    display: 'اسناد مربوط به وضعیت اداره مالیات',
+                    uid: 'q2',
+                },
+                {
+                    display:
+                        'اسناد مربوط به جهاد کشاورزی / اداره منابع طبیعی/ جنگلبانی و مراتع',
+                    uid: 'q3',
+                },
+            ],
+            answers: [
+                {
+                    display: 'دارد',
+                    uid: 'have',
+                },
+                {
+                    display: 'ندارد',
+                    uid: 'not_have',
+                },
+            ],
+            value: {
+                q1: 'have',
+                q2: 'have',
+                q3: 'have',
+            },
+        },
+        record_0: {
+            type: 'record',
+            uid: 'record_0',
+            title: 'محل نگه داری عکس اسناد فوق',
+            description: '',
+            optinal: false,
+            plural: false,
+            value: [],
         },
     },
 }
