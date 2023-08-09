@@ -126,6 +126,10 @@ $color3: #fd0079;
                 padding: 0 1rem;
                 overflow-y: auto;
 
+                .field-wrapper {
+                    all: unset;
+                }
+
                 hr {
                     border: 1px solid $color1;
                     margin: $gap * 2 0;

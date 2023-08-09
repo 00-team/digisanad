@@ -335,12 +335,21 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
                                       field_map[state.schema.fields[uid]!.type]
 
                                   return (
-                                      <FMFC
-                                          key={fi}
-                                          // @ts-ignore
-                                          field={field}
-                                          update={update}
-                                      />
+                                      <span
+                                          className='field-wrapper'
+                                          onContextMenu={e => {
+                                              e.preventDefault()
+                                              state.uid = uid
+                                              update()
+                                          }}
+                                      >
+                                          <FMFC
+                                              key={fi}
+                                              // @ts-ignore
+                                              field={field}
+                                              update={update}
+                                          />
+                                      </span>
                                   )
                               })
                             : undefined
