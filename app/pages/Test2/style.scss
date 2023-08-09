@@ -140,6 +140,7 @@ $color3: #fd0079;
                 .text-field {
                     border: 2px solid $color1;
                     transition: border-color 200ms ease-in-out;
+                    resize: vertical;
 
                     &:focus {
                         border-color: $color3;
