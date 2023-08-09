@@ -9,7 +9,7 @@ from api.models import IDModel, OkModel
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, SchemaData, UserModel
+from db.models import GeneralModel, MessageLevel, UserModel
 from db.schema import schema_add
 from deps import admin_required
 from shared.tools import utc_now
@@ -53,54 +53,12 @@ async def add_message(request: Request, body: MessageAddBody):
 class SchemaAddBody(BaseModel):
     title: str
     description: str = None
-    data: SchemaData
+    data: dict
 
     class Config:
         json_schema_extra = {'example': {
             'title': 'property contract',
-            'data': {
-                'stages': [
-                    {
-                        'title': 'the parties',
-                        'uid': 'parties',
-                        'fields': [
-                            {
-                                'uid': 'seller',
-                                'title': 'Seller',
-                                'type': 'user'
-                            },
-                            {
-                                'uid': 'buyer',
-                                'title': 'Buyer',
-                                'type': 'user'
-                            },
-                        ]
-                    },
-                    {
-                        'title': 'Property details',
-                        'uid': 'prop_detail',
-                        'fields': [
-                            {
-                                'uid': 'dang_amount',
-                                'title': 'amount of dong',
-                                'type': 'int',
-                                'min': 1,
-                                'max': 6
-                            },
-                            {
-                                'title': 'Original registration plate',
-                                'uid': 'org_reg_plate',
-                                'type': 'str'
-                            },
-                            {
-                                'title': 'Sub registration plate',
-                                'uid': 'sub_reg_plate',
-                                'type': 'str'
-                            },
-                        ]
-                    }
-                ]
-            }
+            'data': {}
         }}
 
 

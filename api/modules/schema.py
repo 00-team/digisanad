@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Request
 
-from db.models import SchemaData, SchemaModel, SchemaTable, UserModel
+from db.models import SchemaModel, SchemaTable, UserModel
 from deps import user_required
 
 router = APIRouter(
