@@ -412,7 +412,7 @@ const IntFC: FieldProps<IntField> = ({ field, update }) => {
     )
 }
 
-const QuestionFC: FieldProps<QuestionField> = ({ field }) => {
+const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
     return (
         <table className='question-field'>
             <thead>
@@ -433,6 +433,13 @@ const QuestionFC: FieldProps<QuestionField> = ({ field }) => {
                                     type='radio'
                                     name={q.uid}
                                     title={a.display}
+                                    checked={field.value[q.uid] == a.uid}
+                                    onChange={e => {
+                                        if (e.currentTarget.checked) {
+                                            field.value[q.uid] = a.uid
+                                            update()
+                                        }
+                                    }}
                                 />
                             </td>
                         ))}
