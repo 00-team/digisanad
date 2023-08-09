@@ -157,6 +157,12 @@ $color3: #fd0079;
                         border: 1px solid $color1;
                     }
                 }
+
+                .record-field {
+                    direction: ltr;
+                    display: flex;
+                    flex-direction: column;
+                }
             }
         }
     }

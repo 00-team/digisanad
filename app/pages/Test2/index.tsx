@@ -26,6 +26,7 @@ import {
     StrField,
     QuestionField,
     IntField,
+    RecordField,
 } from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
@@ -450,6 +451,18 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
     )
 }
 
+const RecordFC: FieldProps<RecordField> = ({ field }) => {
+    return (
+        <div className='record-field'>
+            <span>
+                TODO: if the span is plural append more files and such ...
+            </span>
+            <span>plural: {`${field.plural}`}</span>
+            <input type='file' disabled />
+        </div>
+    )
+}
+
 const field_map: FMF = {
     text: TextFC,
     str: StrFC,
@@ -466,7 +479,7 @@ const field_map: FMF = {
     geo: GeoFC,
     int: IntFC,
     signature: () => <></>,
-    record: () => <></>,
+    record: RecordFC,
     question: QuestionFC,
     date: () => <></>,
     option: () => <></>,
