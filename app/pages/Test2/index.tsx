@@ -27,6 +27,7 @@ import {
     QuestionField,
     IntField,
     RecordField,
+    OptionFeild,
 } from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
@@ -463,6 +464,44 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     )
 }
 
+const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
+    return (
+        <ul>
+            {field.options.map((o, i) => (
+                <li key={i}>
+                    <input
+                        type={field.singleton ? 'radio' : 'checkbox'}
+                        name={field.uid}
+                        id={field.uid + o.uid}
+                        checked={field.value.includes(o.uid)}
+                        onChange={e => {
+                            let checked = e.currentTarget.checked
+
+                            if (field.singleton) {
+                                if (checked) {
+                                    field.value = [o.uid]
+                                    update()
+                                }
+                            } else {
+                                field.value = field.value.filter(
+                                    v => v != o.uid
+                                )
+
+                                if (checked) {
+                                    field.value.push(o.uid)
+                                }
+
+                                update()
+                            }
+                        }}
+                    />
+                    <label htmlFor={field.uid + o.uid}>{o.display}</label>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
 const field_map: FMF = {
     text: TextFC,
     str: StrFC,
@@ -478,11 +517,11 @@ const field_map: FMF = {
     ),
     geo: GeoFC,
     int: IntFC,
-    signature: () => <></>,
+    signature: () => <span>signature drawer ...</span>,
     record: RecordFC,
     question: QuestionFC,
-    date: () => <></>,
-    option: () => <></>,
+    date: () => <span>date picker ...</span>,
+    option: OptionFC,
 }
 
 export default Test2
