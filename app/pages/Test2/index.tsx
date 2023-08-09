@@ -265,6 +265,11 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
                 return
             }
 
+            if (line == '---') {
+                tree.push({ name: 'hr', items: [] })
+                return
+            }
+
             // let i = 0
             let hn = 0
 

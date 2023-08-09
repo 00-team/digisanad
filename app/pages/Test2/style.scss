@@ -124,6 +124,12 @@ $color3: #fd0079;
                 font-size: 16px;
                 direction: rtl;
                 padding: 0 1rem;
+                overflow-y: auto;
+
+                hr {
+                    border: 1px solid $color1;
+                    margin: $gap * 2 0;
+                }
 
                 .geo-field {
                     width: 500px;
