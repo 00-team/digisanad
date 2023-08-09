@@ -137,6 +137,11 @@ $color3: #fd0079;
                     background: green;
                 }
 
+                a {
+                    text-decoration: underline $color1;
+                    color: $color3;
+                }
+
                 .text-field {
                     border: 2px solid $color1;
                     transition: border-color 200ms ease-in-out;

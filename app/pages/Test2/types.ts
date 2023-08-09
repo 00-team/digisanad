@@ -60,6 +60,11 @@ export type TextField = BaseField & {
     value: string
 }
 
+export type LinkField = BaseField & {
+    type: 'link'
+    url: string
+}
+
 export type RecordField = BaseField & {
     type: 'record'
     plural: boolean
@@ -94,6 +99,7 @@ export type FieldType =
     | GeoField
     | DateField
     | SignatureField
+    | LinkField
     | OptionFeild
     | QuestionField
     | TextField
@@ -103,6 +109,12 @@ type X = {
     [T in FieldType as T['type']]: T
 }
 const default_fields: X = {
+    link: {
+        type: 'link',
+        uid: '',
+        title: 'Lonk',
+        url: 'https://example.com',
+    },
     option: {
         type: 'option',
         uid: '',
@@ -111,7 +123,7 @@ const default_fields: X = {
         optinal: false,
         singleton: false,
         description: '',
-        value: []
+        value: [],
     },
     int: {
         type: 'int',
@@ -121,7 +133,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
-        value: 0
+        value: 0,
     },
     str: {
         type: 'str',
@@ -131,7 +143,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
-        value: ''
+        value: '',
     },
     text: {
         type: 'text',
@@ -141,7 +153,7 @@ const default_fields: X = {
         optinal: false,
         max: null,
         min: null,
-        value: ''
+        value: '',
     },
     geo: {
         type: 'geo',
@@ -151,8 +163,8 @@ const default_fields: X = {
         optinal: false,
         value: {
             latitude: 0,
-            longitude: 0
-        }
+            longitude: 0,
+        },
     },
     user: {
         type: 'user',
@@ -161,7 +173,6 @@ const default_fields: X = {
         title: 'User',
         description: '',
         optinal: false,
-        
     },
     record: {
         type: 'record',
@@ -170,7 +181,7 @@ const default_fields: X = {
         description: '',
         optinal: false,
         plural: false,
-        value: []
+        value: [],
     },
     date: {
         type: 'date',
@@ -178,7 +189,7 @@ const default_fields: X = {
         title: 'Date',
         description: '',
         optinal: false,
-        value: 0
+        value: 0,
     },
     question: {
         type: 'question',
@@ -188,7 +199,7 @@ const default_fields: X = {
         optinal: false,
         questions: [],
         answers: [],
-        value: {}
+        value: {},
     },
     signature: {
         type: 'signature',
@@ -196,7 +207,7 @@ const default_fields: X = {
         title: 'Signature',
         description: '',
         optinal: false,
-        value: ''
+        value: '',
     },
 }
 

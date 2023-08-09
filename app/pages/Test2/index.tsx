@@ -35,7 +35,7 @@ import { ParsedField, parseFields } from './utils'
 const MODES = ['edit', 'view'] as const
 type Mode = typeof MODES[number]
 
-type Inserter = (text: string) => void
+type Inserter = (arg: string | ((text: string) => string)) => void
 
 type State = {
     schema: Schema
@@ -195,12 +195,21 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
     useEffect(() => {
         if (!ed.current) return
 
-        inserter.current = (text: string) => {
+        inserter.current = arg => {
             const td = ed.current
             if (!td) return
 
             let start = td.selectionStart
             let end = td.selectionEnd
+
+            let selected = td.value.substring(start, end)
+            let text = ''
+
+            if (typeof arg == 'string') {
+                text = arg
+            } else {
+                text = arg(selected)
+            }
 
             td.value =
                 td.value.substring(0, start) + text + td.value.substring(end)
@@ -503,6 +512,11 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
 }
 
 const field_map: FMF = {
+    link: ({ field }) => (
+        <a href={field.url} title={field.title}>
+            {field.description}
+        </a>
+    ),
     text: TextFC,
     str: StrFC,
     user: ({ field, update }) => (

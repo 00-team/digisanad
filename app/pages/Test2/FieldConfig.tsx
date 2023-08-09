@@ -57,6 +57,17 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                     <label htmlFor='fc_plural'>Plural</label>
                 </div>
             )}
+            {field.type == 'link' && (
+                <input
+                    type='text'
+                    value={field.url}
+                    onInput={e => {
+                        field.url = e.currentTarget.value
+                        update()
+                    }}
+                    placeholder='url'
+                />
+            )}
             {have_minmax(field) && (
                 <div className='row' style={{ padding: 'var(--gap)' }}>
                     <input
