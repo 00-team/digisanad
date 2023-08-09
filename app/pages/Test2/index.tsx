@@ -25,6 +25,7 @@ import {
     GeoField,
     StrField,
     QuestionField,
+    IntField,
 } from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
@@ -395,6 +396,22 @@ const StrFC: FieldProps<StrField> = ({ field, update }) => {
     )
 }
 
+const IntFC: FieldProps<IntField> = ({ field, update }) => {
+    return (
+        <input
+            type='number'
+            placeholder={field.title}
+            value={field.value}
+            onInput={e => {
+                field.value = parseInt(e.currentTarget.value)
+                update()
+            }}
+            max={field.max || undefined}
+            min={field.min || undefined}
+        />
+    )
+}
+
 const QuestionFC: FieldProps<QuestionField> = ({ field }) => {
     return (
         <table className='question-field'>
@@ -440,7 +457,7 @@ const field_map: FMF = {
         />
     ),
     geo: GeoFC,
-    int: () => <></>,
+    int: IntFC,
     signature: () => <></>,
     record: () => <></>,
     question: QuestionFC,

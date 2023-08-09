@@ -30,9 +30,9 @@ export const property: Schema = {
             title: 'Number',
             description: '',
             optinal: false,
-            max: null,
-            min: null,
-            value: 0,
+            max: 6,
+            min: 1,
+            value: 1,
         },
         str_0: {
             type: 'str',
