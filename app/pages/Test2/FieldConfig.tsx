@@ -103,6 +103,71 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                     />
                 </div>
             )}
+            {field.type == 'option' && (
+                <>
+                    <div className='row'>
+                        <input
+                            type='checkbox'
+                            checked={field.singleton}
+                            id='fc_singleton'
+                            onChange={e => {
+                                const v = e.currentTarget.checked
+                                field.singleton = v
+                                update()
+                            }}
+                        />
+                        <label htmlFor='fc_singleton'>singleton</label>
+                    </div>
+                    <button
+                        onClick={() => {
+                            field.options.push({
+                                uid: 'o' + field.options.length,
+                                display: '',
+                            })
+                            update()
+                        }}
+                    >
+                        add an option
+                    </button>
+                    {field.options.map((o, oi) => (
+                        <div className='row' key={oi}>
+                            <input
+                                name={field.uid}
+                                type={field.singleton ? 'radio' : 'checkbox'}
+                            />
+                            <input
+                                value={o.uid}
+                                placeholder='unique id'
+                                onChange={e => {
+                                    const v = e.currentTarget.value
+                                    o.uid = v
+                                    update()
+                                }}
+                            />
+                            <input
+                                value={o.display}
+                                placeholder='display'
+                                onChange={e => {
+                                    const v = e.currentTarget.value
+                                    o.display = v
+                                    update()
+                                }}
+                            />
+                            <button
+                                style={{ borderColor: '#E20338' }}
+                                className='remove'
+                                onClick={() => {
+                                    field.options.splice(oi, 1)
+                                    update()
+                                }}
+                            >
+                                X
+                            </button>
+                        </div>
+                    ))}
+                </>
+            )}
+
             {field.type == 'question' && (
                 <table className='questions'>
                     <thead>
