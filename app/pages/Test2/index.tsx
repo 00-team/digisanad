@@ -18,7 +18,7 @@ import { SetStateAction } from 'jotai'
 
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
-import { Schema, default_fields } from './types'
+import { Schema, default_fields, TextField, GeoField } from './types'
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
 
@@ -178,7 +178,7 @@ type EditorProps = {
 }
 
 const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
-    const [mode, setMode] = useState<Mode>(MODES[0])
+    const [mode, setMode] = useState<Mode>(MODES[1])
     const update = () => setState(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
 
@@ -332,8 +332,44 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
 type FMF = {
     [T in FieldType as T['type']]: FC<{ field: T; update: () => void }>
 }
+
+type FieldProps<T> = FC<{
+    field: T
+    update: () => void
+}>
+
+const TextFC: FieldProps<TextField> = ({ field, update }) => {
+    return (
+        <textarea
+            className='text-field'
+            value={field.value}
+            onInput={e => {
+                field.value = e.currentTarget.value
+                update()
+            }}
+        ></textarea>
+    )
+}
+
+const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
+    return (
+        <div
+            className='geo-field'
+            onMouseDown={e => {
+                field.value.latitude = e.clientX - e.currentTarget.offsetLeft
+                field.value.longitude = e.clientY - e.currentTarget.offsetTop
+                update()
+            }}
+        >
+            lat: {field.value.latitude}
+            <br />
+            lng: {field.value.longitude}
+        </div>
+    )
+}
+
 const field_map: FMF = {
-    text: () => <textarea></textarea>,
+    text: TextFC,
     str: () => <></>,
     user: ({ field, update }) => (
         <input
@@ -345,7 +381,7 @@ const field_map: FMF = {
             }}
         />
     ),
-    geo: () => <></>,
+    geo: GeoFC,
     int: () => <></>,
     signature: () => <></>,
     record: () => <></>,

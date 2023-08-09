@@ -125,10 +125,19 @@ $color3: #fd0079;
                 direction: rtl;
                 padding: 0 1rem;
 
-                .geo {
+                .geo-field {
                     width: 500px;
                     height: 200px;
                     background: green;
+                }
+
+                .text-field {
+                    border: 2px solid $color1;
+                    transition: border-color 200ms ease-in-out;
+
+                    &:focus {
+                        border-color: $color3;
+                    }
                 }
             }
         }
