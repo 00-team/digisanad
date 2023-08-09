@@ -10,6 +10,10 @@ export const property: Schema = {
             content:
                 '## وضعیت ملک\n({question_0})\n\n## وضعیت اسناد مالکیت\n({question_1})\n\nمحل نگه داری عکس اسناد فوق\n({record_0})',
         },
+        {
+            content:
+                '## شرط ضمن عقد\n232 ق م شروط ذیل باطل است:\n1. شرطی که انجام آن غیر مقدور باشد.\n2. شرطی که در آن نفع و فایده نباشد.\n3. شرطی که نامشروع باشد.\n\n233 ق م شروط ذیل باطل و موجب بطلان عقد است:\n1. شرط خلاف مقتضای عقد.\n2. شرط مجهولی که جهل به آن موجب جهل به عوضین شود.\n\n({option_0})',
+        },
     ],
     fields: {
         user_0: {
@@ -184,6 +188,16 @@ export const property: Schema = {
             description: '',
             optinal: false,
             plural: true,
+            value: [],
+        },
+        option_0: {
+            type: 'option',
+            uid: 'option_0',
+            title: 'شرط ضمن عقد را انتخاب نمایید',
+            options: [],
+            optinal: false,
+            singleton: false,
+            description: '',
             value: [],
         },
     },
