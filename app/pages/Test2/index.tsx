@@ -124,9 +124,24 @@ const Test2: FC = () => {
                             onClick={() => {
                                 if (!insert.current) return
 
+                                Object.keys(state.schema.fields).forEach(u => {
+                                    let exists = state.schema.pages.find(p => {
+                                        return (
+                                            p.content.indexOf(`({${u}})`) != -1
+                                        )
+                                    })
+
+                                    if (!exists) {
+                                        console.info(u + ' was not found')
+                                        delete state.schema.fields[u]
+                                    }
+                                })
+
                                 let uid = get_unique_uid(k)
                                 v.uid = uid
+
                                 state.schema.fields[uid] = { ...v }
+
                                 update()
                                 insert.current(`({${uid}})`)
                             }}
