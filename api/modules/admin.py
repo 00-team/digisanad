@@ -9,9 +9,11 @@ from api.models import IDModel, OkModel
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, SchemaTable, UserModel
+from db.models import GeneralModel, MessageLevel, SchemaModel, SchemaTable
+from db.models import UserModel
 from db.schema import schema_add, schema_delete, schema_get, schema_update
 from deps import admin_required
+from shared import settings, sqlx
 from shared.errors import bad_id, no_change
 from shared.tools import utc_now
 
@@ -49,6 +51,31 @@ async def add_message(request: Request, body: MessageAddBody):
     )
 
     return {'id': message_id}
+
+
+@router.get('/schemas/', response_model=list[SchemaModel])
+async def get_schemas(request: Request, page: int = 0):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_SCHEMA)
+
+    rows = await sqlx.fetch_all(
+        f'''
+        SELECT * FROM schemas
+        ORDER BY schema_id DESC
+        LIMIT {settings.page_size} OFFSET :skip
+        ''',
+        {
+            'skip': page * settings.page_size,
+        }
+    )
+
+    result = []
+    for row in rows:
+        args = row._asdict()
+        args['data'] = json.loads(args['data'])
+        result.append(SchemaModel(**args))
+
+    return result
 
 
 class SchemaAddBody(BaseModel):
