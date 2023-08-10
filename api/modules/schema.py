@@ -1,8 +1,10 @@
 
 
+import json
+
 from fastapi import APIRouter, Request
 
-from db.models import SchemaModel, SchemaTable, UserModel
+from db.models import SchemaModel, UserModel
 from deps import user_required
 from shared import settings, sqlx
 
@@ -23,7 +25,7 @@ async def get_schemas(request: Request, page: int = 0, mine: bool = False):
 
     rows = await sqlx.fetch_all(
         f'''
-        SELECT * FROM schemas WHERE creator = :creator
+        SELECT * FROM schemas WHERE creator = :creator AND draft is false
         ORDER BY schema_id DESC
         LIMIT {settings.page_size} OFFSET :skip
         ''',
@@ -33,4 +35,10 @@ async def get_schemas(request: Request, page: int = 0, mine: bool = False):
         }
     )
 
-    return [SchemaModel(**r) for r in rows]
+    result = []
+    for row in rows:
+        args = row._asdict()
+        args['data'] = json.loads(args['data'])
+        result.append(SchemaModel(**args))
+
+    return result
