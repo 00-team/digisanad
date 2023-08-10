@@ -3,15 +3,16 @@
 import json
 
 from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 from api.models import IDModel, OkModel
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, UserModel
-from db.schema import schema_add
+from db.models import GeneralModel, MessageLevel, SchemaTable, UserModel
+from db.schema import schema_add, schema_delete, schema_get, schema_update
 from deps import admin_required
+from shared.errors import bad_id, no_change
 from shared.tools import utc_now
 
 router = APIRouter(
@@ -35,10 +36,10 @@ class MessageAddBody(BaseModel):
     level: MessageLevel = MessageLevel.INFO
 
 
-@router.post('/message/', response_model=IDModel)
+@router.post('/messages/', response_model=IDModel)
 async def add_message(request: Request, body: MessageAddBody):
     user: UserModel = request.state.user
-    user.admin_assert(AP.C_MESSAGE)
+    user.admin_assert(AP.A_MESSAGE)
 
     message_id = await message_add(
         text=body.text,
@@ -62,17 +63,74 @@ class SchemaAddBody(BaseModel):
         }}
 
 
-@router.post('/schema/', response_model=IDModel)
+@router.post('/schemas/', response_model=IDModel)
 async def add_schema(request: Request, body: SchemaAddBody):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.A_SCHEMA)
+
+    schema_id = await schema_add(
+        title=body.title,
+        description=body.description,
+        data=body.data,
+    )
+
+    return {'id': schema_id}
+
+
+class SchemaUpdateBody(BaseModel):
+    title: constr(min_length=1) = None
+    description: str = None
+    data: dict = None
+    draft: bool = None
+
+
+@router.patch(
+    '/schemas/{schema_id}/', response_model=OkModel,
+    openapi_extra={'errors': [no_change, bad_id]}
+)
+async def update_schema(
+    request: Request, schema_id: int, body: SchemaUpdateBody
+):
     user: UserModel = request.state.user
     user.admin_assert(AP.C_SCHEMA)
 
-    print(json.dumps(body.data.dict(), indent=2))
+    change = False
+    patch = {}
 
-    # schema_id = await schema_add(
-    #     title=body.title,
-    #     description=body.description,
-    #     data=body.data
-    # )
+    schema = await schema_get(SchemaTable.schema_id == schema_id)
+    if schema is None:
+        raise bad_id('Schema', schema_id, id=schema_id)
 
-    return {'id': 12}
+    if body.title and body.title != schema.title:
+        patch['title'] = body.title
+        change = True
+
+    if body.draft is not None and body.draft != schema.draft:
+        patch['draft'] = body.draft
+        change = True
+
+    if body.data is not None:
+        patch['data'] = body.data
+        change = True
+
+    if body.description is not None:
+        patch['description'] = body.description or None
+        change = True
+
+    if not change:
+        raise no_change
+
+    await schema_update(
+        SchemaTable.schema_id == schema_id,
+        **patch
+    )
+
+    return {'ok': True}
+
+
+@router.delete('/schemas/{schema_id}/', response_model=OkModel)
+async def delete_schema(request: Request, schema_id: int):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.D_SCHEMA)
+
+    return {'ok': await schema_delete(schema_id)}
