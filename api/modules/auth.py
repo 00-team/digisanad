@@ -1,15 +1,16 @@
 
 from fastapi import APIRouter, Response
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, conlist, constr, validator
 
-from api.models.auth import RegisterBody
 from api.verification import Action, verify_verification
 from db.models import UserModel, UserTable
 from db.user import user_add, user_get, user_update
 from deps import rate_limit
 from shared.errors import account_exists, bad_verification, register_required
+from shared.jdate import jdate, jdatetime
 from shared.tools import new_token
-from shared.validators import PhoneNumber, VerificationCode
+from shared.validators import NationalID, PhoneNumber, PostalCode
+from shared.validators import VerificationCode
 
 router = APIRouter(
     prefix='/auth',
@@ -21,6 +22,48 @@ router = APIRouter(
 class RegisterResponse(BaseModel):
     user_id: int
     token: str
+
+
+class RegisterBody(BaseModel):
+    phone: PhoneNumber
+    code: VerificationCode
+    first_name: str
+    last_name: str
+    birth_date: conlist(int, max_length=3, min_length=3)
+    national_id: NationalID
+    postal_code: PostalCode
+    address: constr(strip_whitespace=True, max_length=2048)
+    email: EmailStr
+
+    class Config:
+        json_schema_extra = {'example': {
+            'phone': '09223334444',
+            'code': '99999',
+            'first_name': 'Harold',
+            'last_name': 'Krabs',
+            'birth_date': [1369, 7, 7],
+            'national_id': '1234567890',
+            'postal_code': '1234567890',
+            'address': 'krusty krabs',
+            'email': 'mr.krabs@gmail.com'
+        }}
+
+    @validator('birth_date')
+    def v_birth_date(cls, value):
+        try:
+            date = jdate(*value)
+        except Exception:
+            raise ValueError('invalid birth date')
+
+        year = jdatetime.now().year
+
+        if date.year > year - 18:
+            raise ValueError('too young')
+
+        if date.year < year - 150:
+            raise ValueError('too old')
+
+        return value
 
 
 @router.post(
