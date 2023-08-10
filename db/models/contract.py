@@ -16,7 +16,7 @@ class ContractTable(BaseTable):
         index=True, autoincrement=True
     )
     creator = Column(
-        'user_id', Integer,
+        Integer,
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True
     )
