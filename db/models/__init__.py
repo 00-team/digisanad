@@ -1,4 +1,6 @@
 from .common import BaseCoin, BaseTable, NetworkType, metadata, model_dict
+from .contract import ContractModel, ContractStage, ContractTable
+from .contract import ContractUserModel, ContractUserTable
 from .general import GeneralCoin, GeneralModel, GeneralTable
 from .message import MessageLevel, MessageModel, MessageTable
 from .record import RecordModel, RecordTable
@@ -9,6 +11,8 @@ from .wallet import WalletAccount, WalletCoin, WalletModel, WalletTable
 
 __all__ = [
     'BaseTable', 'metadata', 'NetworkType', 'BaseCoin', 'model_dict',
+    'ContractModel', 'ContractStage', 'ContractTable',
+    'ContractUserModel', 'ContractUserTable',
     'GeneralTable', 'GeneralCoin', 'GeneralModel',
     'MessageTable', 'MessageModel', 'MessageLevel',
     'RecordTable', 'RecordModel',
