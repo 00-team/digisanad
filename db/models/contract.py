@@ -2,7 +2,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from sqlalchemy import JSON, Column, ForeignKey, Integer, String
+from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
 
 from .common import BaseTable
 from .user import UserTable
@@ -22,6 +22,8 @@ class ContractTable(BaseTable):
     )
     stage = Column(String, nullable=False, server_default='draft')
     data = Column(JSON, nullable=False, server_default='{}')
+    start_date = Column(Integer, nullable=False, server_default=text('0'))
+    finish_date = Column(Integer, nullable=False, server_default=text('0'))
 
 
 class ContractUserTable(BaseTable):
@@ -57,3 +59,5 @@ class ContractModel(BaseModel):
     creator: int
     stage: ContractStage
     data: dict
+    start_date: int
+    finish_date: int
