@@ -5,7 +5,6 @@ import json
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 
-from api.models import IDModel, OkModel
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
@@ -15,6 +14,7 @@ from db.schema import schema_add, schema_delete, schema_get, schema_update
 from deps import admin_required
 from shared import settings, sqlx
 from shared.errors import bad_id, no_change
+from shared.models import IDModel, OkModel
 from shared.tools import utc_now
 
 router = APIRouter(
