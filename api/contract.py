@@ -1,5 +1,6 @@
 
 import json
+from sqlite3 import IntegrityError
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
@@ -11,7 +12,7 @@ from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_id, forbidden
+from shared.errors import bad_id
 from shared.models import IDModel, OkModel
 from shared.tools import random_string, utc_now
 
@@ -79,7 +80,7 @@ async def create(request: Request, body: CreateBody):
 
 @router.get(
     '/{contract_id}/parties/', response_model=list[UserPublic],
-    openapi_extra={'errors': [bad_id, forbidden]}
+    openapi_extra={'errors': [bad_id]}
 )
 async def contract_parties(request: Request, contract_id: int):
     user: UserModel = request.state.user
@@ -105,3 +106,41 @@ async def contract_parties(request: Request, contract_id: int):
     users.pop(-1, None)
 
     return list(users.values())
+
+
+async def contract_join(user_id: int, id_pepper: str) -> bool:
+    if id_pepper.find(':') == -1:
+        return False
+
+    contract_id, pepper = id_pepper.split(':')
+
+    try:
+        contract_id = int(contract_id)
+    except Exception:
+        return False
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+        ContractTable.pepper == pepper,
+    )
+    if contract is None:
+        return False
+
+    if contract.disable_invites:
+        return False
+
+    try:
+        await contract_user_add(contract_id, user_id)
+        return True
+    except IntegrityError:
+        return False
+
+
+@router.get(
+    '/join/{id_pepper}/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id]}
+)
+async def join_contract(request: Request, id_pepper: str):
+    user: UserModel = request.state.user
+
+    return {'ok': await contract_join(user.user_id, id_pepper)}
