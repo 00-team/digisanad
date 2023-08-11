@@ -3,7 +3,8 @@ from sqlalchemy import delete, insert, select, update
 
 from shared import sqlx
 
-from .models import ContractModel, ContractTable, ContractUserTable
+from .models import ContractModel, ContractTable, ContractUserModel
+from .models import ContractUserTable
 
 
 async def contract_get(*where) -> ContractModel | None:
@@ -34,6 +35,17 @@ async def contract_user_add(contract_id: int, user_id: int) -> int:
         'user': user_id,
         'contract': contract_id
     })
+
+
+async def contract_user_get(contract_id: int, user_id: int) -> int:
+    row = await sqlx.fetch_one(select(ContractUserTable).where(
+        ContractUserTable.user == user_id,
+        ContractUserTable.contract == contract_id
+    ))
+    if row is None:
+        return None
+
+    return ContractUserModel(**row)
 
 
 async def contract_user_delete(*where) -> int:
