@@ -6,7 +6,7 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
 from db.contract import contract_add, contract_get, contract_user_add
-from db.contract import contract_user_delete, contract_user_get
+from db.contract import contract_user_delete
 from db.models import ContractModel, ContractStage, ContractTable
 from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
@@ -113,10 +113,6 @@ async def contract_parties(request: Request, contract_id: int):
     if contract is None:
         raise bad_id('Contract', contract_id, id=contract_id)
 
-    if contract.creator != user.user_id:
-        if not (await contract_user_get(contract_id, user.user_id)):
-            raise bad_id('Contract', contract_id, id=contract_id)
-
     rows = await sqlx.fetch_all(
         f'''
         SELECT * FROM {ContractUserTable.__tablename__}
@@ -126,6 +122,9 @@ async def contract_parties(request: Request, contract_id: int):
     )
 
     user_ids = set((r[2] for r in rows))
+    if contract.creator != user.user_id and user.user_id not in user_ids:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
     users = await user_public(user_ids)
     users.pop(-1, None)
 
@@ -160,11 +159,35 @@ async def contract_join(user_id: int, id_pepper: str) -> bool:
         return False
 
 
-@router.get(
-    '/join/{id_pepper}/', response_model=OkModel,
-    openapi_extra={'errors': [bad_id]}
-)
-async def join_contract(request: Request, id_pepper: str):
+@router.get('/{contract_id}/join/{pepper}/', response_model=OkModel)
+async def join(request: Request, contract_id: int, pepper: str):
     user: UserModel = request.state.user
 
-    return {'ok': await contract_join(user.user_id, id_pepper)}
+    return {
+        'ok': await contract_join(user.user_id, f'{contract_id}:{pepper}')
+    }
+
+
+@router.delete(
+    '/{contract_id}/remove/{user_id}/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, closed_contract]}
+)
+async def remove_user(request: Request, contract_id: int, user_id: int):
+    user: UserModel = request.state.user
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+        ContractTable.creator == user.user_id
+    )
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    if contract.stage != ContractStage.DRAFT:
+        raise closed_contract
+
+    return {
+        'ok': bool(await contract_user_delete(
+            ContractUserTable.contract == contract_id,
+            ContractUserTable.user == user_id,
+        ))
+    }
