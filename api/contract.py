@@ -12,7 +12,7 @@ from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_id, closed_contract, no_change
+from shared.errors import bad_args, bad_id, closed_contract, no_change
 from shared.models import IDModel, OkModel
 from shared.tools import random_string, utc_now
 
@@ -170,10 +170,13 @@ async def join(request: Request, contract_id: int, pepper: str):
 
 @router.delete(
     '/{contract_id}/remove/{user_id}/', response_model=OkModel,
-    openapi_extra={'errors': [bad_id, closed_contract]}
+    openapi_extra={'errors': [bad_id, closed_contract, bad_args]}
 )
 async def remove_user(request: Request, contract_id: int, user_id: int):
     user: UserModel = request.state.user
+
+    if user.user_id == user_id:
+        raise bad_args
 
     contract = await contract_get(
         ContractTable.contract_id == contract_id,
