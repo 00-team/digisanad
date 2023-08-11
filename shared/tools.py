@@ -1,4 +1,5 @@
 
+import string
 from datetime import datetime
 from hashlib import sha3_512
 from random import choices
@@ -14,6 +15,12 @@ def utc_now(as_datetime: bool = False) -> int | datetime:
         return now
 
     return int(now.timestamp())
+
+
+def random_string(len=8) -> str:
+    return ''.join(
+        choices(string.ascii_letters + string.digits, k=len)
+    )
 
 
 def get_random_code() -> str:
