@@ -4,15 +4,16 @@ import json
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
-from db.contract import contract_add, contract_user_add
+from db.contract import contract_add, contract_get, contract_user_add
+from db.contract import contract_user_delete, contract_user_get
 from db.models import ContractModel, ContractStage, ContractTable
 from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_id
+from shared.errors import bad_id, forbidden
 from shared.models import IDModel, OkModel
-from shared.tools import utc_now
+from shared.tools import random_string, utc_now
 
 router = APIRouter(
     prefix='/contracts',
@@ -67,9 +68,40 @@ async def create(request: Request, body: CreateBody):
         stage=ContractStage.DRAFT,
         data=body.data,
         start_date=utc_now(),
-        finish_date=0
+        finish_date=0,
+        pepper=random_string()
     )
 
     await contract_user_add(contract_id, user.user_id)
 
     return {'id': contract_id}
+
+
+@router.get(
+    '/{contract_id}/parties/', response_model=list[UserPublic],
+    openapi_extra={'errors': [bad_id, forbidden]}
+)
+async def contract_parties(request: Request, contract_id: int):
+    user: UserModel = request.state.user
+
+    contract = await contract_get(ContractTable.contract_id == contract_id)
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    if contract.creator != user.user_id:
+        if not (await contract_user_get(contract_id, user.user_id)):
+            raise bad_id('Contract', contract_id, id=contract_id)
+
+    rows = await sqlx.fetch_all(
+        f'''
+        SELECT * FROM {ContractUserTable.__tablename__}
+        WHERE contract = :contract_id
+        ''',
+        {'contract_id': contract_id},
+    )
+
+    user_ids = set((r[2] for r in rows))
+    users = await user_public(user_ids)
+    users.pop(-1, None)
+
+    return list(users.values())
