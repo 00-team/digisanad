@@ -47,7 +47,9 @@ class ContractUserTable(BaseTable):
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True
     )
-    key = UniqueConstraint('contract', 'user')
+    __table_args__ = (
+        UniqueConstraint('contract', 'user'),
+    )
 
 
 class ContractUserModel(BaseModel):
