@@ -36,6 +36,7 @@ class MessageAddBody(BaseModel):
     receiver: int
     text: str
     level: MessageLevel = MessageLevel.INFO
+    data: dict = {}
 
 
 @router.post('/messages/', response_model=IDModel)
@@ -47,7 +48,8 @@ async def add_message(request: Request, body: MessageAddBody):
         text=body.text,
         receiver=body.receiver,
         timestamp=utc_now(),
-        level=body.level
+        level=body.level,
+        data=body.data
     )
 
     return {'id': message_id}
