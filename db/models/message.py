@@ -3,7 +3,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import JSON, Boolean, Column, Integer, String
 from sqlalchemy import text as _text
 
 from .common import BaseTable
@@ -27,6 +27,7 @@ class MessageTable(BaseTable):
     )
     timestamp = Column(Integer, nullable=False, server_default=_text('0'))
     level = Column(String, nullable=False, server_default='info')
+    data = Column(JSON, nullable=False, server_default='{}')
 
 
 class MessageLevel(str, Enum):
@@ -43,3 +44,4 @@ class MessageModel(BaseModel):
     receiver: int
     timestamp: int
     level: MessageLevel
+    data: dict
