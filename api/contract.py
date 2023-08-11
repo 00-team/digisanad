@@ -12,7 +12,7 @@ from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_id
+from shared.errors import bad_id, closed_contract, no_change
 from shared.models import IDModel, OkModel
 from shared.tools import random_string, utc_now
 
@@ -78,6 +78,30 @@ async def create(request: Request, body: CreateBody):
     return {'id': contract_id}
 
 
+class UpdateBody(BaseModel):
+    data: dict = None
+    disable_invites: bool = None
+    stage: ContractStage = None
+
+
+@router.patch(
+    '/{contract_id}/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, no_change]}
+)
+async def update(request: Request, contract_id: int, body: UpdateBody):
+    user: UserModel = request.state.user
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+        ContractTable.creator == user.user_id
+    )
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    if contract.stage != ContractStage.DRAFT:
+        raise closed_contract
+
+
 @router.get(
     '/{contract_id}/parties/', response_model=list[UserPublic],
     openapi_extra={'errors': [bad_id]}
@@ -126,7 +150,7 @@ async def contract_join(user_id: int, id_pepper: str) -> bool:
     if contract is None:
         return False
 
-    if contract.disable_invites:
+    if contract.disable_invites or contract.stage != ContractStage.DRAFT:
         return False
 
     try:
