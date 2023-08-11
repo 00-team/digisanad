@@ -5,8 +5,8 @@ from sqlite3 import IntegrityError
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
-from db.contract import contract_add, contract_get, contract_user_add
-from db.contract import contract_user_delete
+from db.contract import contract_add, contract_get, contract_update
+from db.contract import contract_user_add, contract_user_delete
 from db.models import ContractModel, ContractStage, ContractTable
 from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
@@ -90,6 +90,8 @@ class UpdateBody(BaseModel):
 )
 async def update(request: Request, contract_id: int, body: UpdateBody):
     user: UserModel = request.state.user
+    change = False
+    patch = {}
 
     contract = await contract_get(
         ContractTable.contract_id == contract_id,
@@ -100,6 +102,35 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
 
     if contract.stage != ContractStage.DRAFT:
         raise closed_contract
+
+    if (
+        body.disable_invites is not None and
+        body.disable_invites != contract.disable_invites
+    ):
+        change = True
+        patch['disable_invites'] = body.disable_invites
+
+    if body.stage and body.stage != contract.stage:
+        change = True
+        patch['stage'] = body.stage
+        patch['disable_invites'] = True
+
+        if body.stage == ContractStage.DONE:
+            patch['finish_date'] = utc_now()
+
+    if body.data is not None:
+        change = True
+        patch['data'] = body.data
+
+    if change is False:
+        raise no_change
+
+    await contract_update(
+        ContractTable.contract_id == contract_id,
+        **patch
+    )
+
+    return {'ok': True}
 
 
 @router.get(
