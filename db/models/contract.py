@@ -2,7 +2,8 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from sqlalchemy import JSON, Column, ForeignKey, Integer, String, text
+from sqlalchemy import JSON, Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import UniqueConstraint, text
 
 from .common import BaseTable
 from .user import UserTable
@@ -24,6 +25,12 @@ class ContractTable(BaseTable):
     data = Column(JSON, nullable=False, server_default='{}')
     start_date = Column(Integer, nullable=False, server_default=text('0'))
     finish_date = Column(Integer, nullable=False, server_default=text('0'))
+    pepper = Column(String, nullable=False)
+    disable_invites = Column(
+        Boolean,
+        nullable=False,
+        server_default=text('false')
+    )
 
 
 class ContractUserTable(BaseTable):
@@ -40,6 +47,7 @@ class ContractUserTable(BaseTable):
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True
     )
+    key = UniqueConstraint('contract', 'user')
 
 
 class ContractUserModel(BaseModel):
@@ -61,3 +69,5 @@ class ContractModel(BaseModel):
     data: dict
     start_date: int
     finish_date: int
+    pepper: str
+    disable_invites: bool
