@@ -216,7 +216,7 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
                 td.value.substring(0, start) + text + td.value.substring(end)
 
             td.focus()
-            td.setSelectionRange(start, end)
+            td.setSelectionRange(start, start + text.length)
             state.schema.pages[state.page]!.content = td.value
             update()
         }
