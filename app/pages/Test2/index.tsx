@@ -32,7 +32,7 @@ import {
 import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
 
-const MODES = ['edit', 'view'] as const
+const MODES = ['edit', 'view', 'schema'] as const
 type Mode = typeof MODES[number]
 
 type Inserter = (arg: string | ((text: string) => string)) => void
@@ -191,6 +191,7 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
     const [mode, setMode] = useState<Mode>(MODES[1])
     const update = () => setState(s => ({ ...s }))
     const ed = useRef<ElementRef<'textarea'>>(null)
+    const output = useRef<ElementRef<'textarea'>>(null)
 
     useEffect(() => {
         if (!ed.current) return
@@ -233,6 +234,12 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
         }
     }, [ed, mode])
 
+    useEffect(() => {
+        if (!output.current) return
+
+        output.current.value = JSON.stringify(state, null, 2)
+    }, [output, state, mode])
+
     return (
         <div className='editor'>
             <div className='modes'>
@@ -259,6 +266,17 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
             )}
             {mode == 'view' && (
                 <Viewer state={state} setState={setState} inserter={inserter} />
+            )}
+            {mode == 'schema' && (
+                <textarea
+                    ref={output}
+                    style={{ direction: 'ltr' }}
+                    onInput={e => {
+                        try {
+                            setState(JSON.parse(e.currentTarget.value))
+                        } catch {}
+                    }}
+                ></textarea>
             )}
         </div>
     )
