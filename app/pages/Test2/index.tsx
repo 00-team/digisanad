@@ -237,7 +237,12 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
     useEffect(() => {
         if (!output.current) return
 
+        let start = output.current.selectionStart
+        let end = output.current.selectionEnd
+
         output.current.value = JSON.stringify(state, null, 2)
+
+        output.current.setSelectionRange(start, end)
     }, [output, state, mode])
 
     return (
