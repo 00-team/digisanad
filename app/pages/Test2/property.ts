@@ -26,6 +26,7 @@ export const property: Schema = {
     fields: {
         user_0: {
             type: 'user',
+            display: '',
             value: '',
             uid: 'user_0',
             title: 'Number',
@@ -34,6 +35,7 @@ export const property: Schema = {
         },
         user_1: {
             type: 'user',
+            display: '',
             uid: 'user_1',
             value: '',
             title: 'Number',
@@ -42,6 +44,7 @@ export const property: Schema = {
         },
         int_1: {
             type: 'int',
+            display: '',
             uid: 'int_1',
             title: 'Number',
             description: '',
@@ -52,6 +55,7 @@ export const property: Schema = {
         },
         str_0: {
             type: 'str',
+            display: '',
             uid: 'str_0',
             title: 'String',
             description: '',
@@ -62,6 +66,7 @@ export const property: Schema = {
         },
         str_1: {
             type: 'str',
+            display: '',
             uid: 'str_1',
             title: 'String',
             description: '',
@@ -72,6 +77,7 @@ export const property: Schema = {
         },
         str_2: {
             type: 'str',
+            display: '',
             uid: 'str_2',
             title: 'String',
             description: '',
@@ -82,6 +88,7 @@ export const property: Schema = {
         },
         str_3: {
             type: 'str',
+            display: '',
             uid: 'str_3',
             title: 'String',
             description: '',
@@ -92,6 +99,7 @@ export const property: Schema = {
         },
         str_4: {
             type: 'str',
+            display: '',
             uid: 'str_4',
             title: 'String',
             description: '',
@@ -102,6 +110,7 @@ export const property: Schema = {
         },
         text_0: {
             type: 'text',
+            display: '',
             uid: 'text_0',
             title: 'Text',
             description: '',
@@ -112,6 +121,7 @@ export const property: Schema = {
         },
         geo_1: {
             type: 'geo',
+            display: '',
             uid: 'geo_1',
             title: 'Geo',
             description: '',
@@ -123,6 +133,7 @@ export const property: Schema = {
         },
         question_0: {
             type: 'question',
+            display: '',
             uid: 'question_0',
             title: 'وضعیت تصرف مالک در ملک فوق',
             description: 'پاسخ سوالات بر پایه صداقت طراحی شده است',
@@ -154,6 +165,7 @@ export const property: Schema = {
         },
         question_1: {
             type: 'question',
+            display: '',
             uid: 'question_1',
             title: 'وضعیت اسناد مالکیت',
             description: '',
@@ -191,6 +203,7 @@ export const property: Schema = {
         },
         record_0: {
             type: 'record',
+            display: '',
             uid: 'record_0',
             title: 'محل نگه داری عکس اسناد فوق',
             description: '',
@@ -200,6 +213,7 @@ export const property: Schema = {
         },
         option_0: {
             type: 'option',
+            display: '',
             uid: 'option_0',
             title: 'شرط ضمن عقد را انتخاب نمایید',
             options: [
@@ -226,6 +240,7 @@ export const property: Schema = {
         },
         text_1: {
             type: 'text',
+            display: '',
             uid: 'text_1',
             title: 'Text',
             description: '',
@@ -236,6 +251,7 @@ export const property: Schema = {
         },
         user_2: {
             type: 'user',
+            display: '',
             uid: 'user_2',
             value: '',
             title: 'User',
@@ -244,6 +260,7 @@ export const property: Schema = {
         },
         text_2: {
             type: 'text',
+            display: '',
             uid: 'text_2',
             title: 'Text',
             description: '',
@@ -254,6 +271,7 @@ export const property: Schema = {
         },
         date_0: {
             type: 'date',
+            display: '',
             uid: 'date_0',
             title: 'Date',
             description: '',
@@ -262,6 +280,7 @@ export const property: Schema = {
         },
         user_3: {
             type: 'user',
+            display: '',
             uid: 'user_3',
             value: '',
             title: 'User',
@@ -270,6 +289,7 @@ export const property: Schema = {
         },
         int_0: {
             type: 'int',
+            display: '',
             uid: 'int_0',
             title: 'Number',
             description: '',
@@ -280,6 +300,7 @@ export const property: Schema = {
         },
         int_2: {
             type: 'int',
+            display: '',
             uid: 'int_2',
             title: 'Number',
             description: '',
@@ -290,6 +311,7 @@ export const property: Schema = {
         },
         str_5: {
             type: 'str',
+            display: '',
             uid: 'str_5',
             title: 'String',
             description: '',
@@ -300,6 +322,7 @@ export const property: Schema = {
         },
         user_4: {
             type: 'user',
+            display: '',
             uid: 'user_4',
             value: '',
             title: 'User',
@@ -308,6 +331,7 @@ export const property: Schema = {
         },
         text_3: {
             type: 'text',
+            display: '',
             uid: 'text_3',
             title: 'Text',
             description: '',
@@ -318,6 +342,7 @@ export const property: Schema = {
         },
         text_4: {
             type: 'text',
+            display: '',
             uid: 'text_4',
             title: 'Text',
             description: '',
@@ -328,6 +353,7 @@ export const property: Schema = {
         },
         text_5: {
             type: 'text',
+            display: '',
             uid: 'text_5',
             title: 'Text',
             description: '',
