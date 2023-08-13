@@ -3,17 +3,15 @@ $color1: #782fef;
 $color2: #f375f3;
 $color3: #fd0079;
 
-.test2 {
-    --gap: #{$gap};
+main.contract-container {
+    display: flex;
+
     width: 100%;
     height: 100vh;
+
+    color: white;
+
     overflow: hidden;
-    display: flex;
-    gap: $gap;
-    padding: $gap;
-    background: #040404;
-    color: #f2f2f2;
-    font-family: monospace;
 
     .schema,
     .config {
