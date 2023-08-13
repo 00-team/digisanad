@@ -188,11 +188,12 @@ main.contract-container {
         flex-direction: column;
         gap: 5vh;
 
-        padding: 3vh 0;
-        padding-top: 6vh;
+        padding-top: 5vh;
 
         background-color: white;
         color: black;
+
+        overflow-y: auto;
 
         h2.sidebar-title {
             display: flex;
@@ -270,6 +271,17 @@ main.contract-container {
                     cursor: pointer;
 
                     width: 49%;
+
+                    transition: all 0.3s ease-in-out;
+
+                    &:hover {
+                        color: white;
+                        background-color: black;
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        width: 100%;
+                    }
                 }
             }
         }
