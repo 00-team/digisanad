@@ -79,7 +79,7 @@ const Test2: FC = () => {
 
     return (
         <main className='contract-container'>
-            <aside className='schema'>
+            <aside className='contract-wrapper'>
                 <div className='pages'>
                     <span
                         className='copy-btn'
@@ -126,7 +126,7 @@ const Test2: FC = () => {
                     />
                 )}
             </aside>
-            <aside className='config'>
+            <aside className='contract-sidebar'>
                 <div className='fields'>
                     {Object.entries(default_fields).map(([k, v], i) => (
                         <button
