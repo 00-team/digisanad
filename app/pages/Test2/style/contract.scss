@@ -302,6 +302,13 @@ main.contract-container {
 
                     width: 49%;
 
+                    transition: all 0.3s ease-in-out;
+
+                    &:hover {
+                        color: white;
+                        background-color: black;
+                    }
+
                     @media screen and (max-width: 1024px) {
                         width: 100%;
                     }
