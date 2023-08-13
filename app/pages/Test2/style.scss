@@ -255,16 +255,21 @@ main.contract-container {
                 flex-wrap: wrap;
                 align-content: flex-start;
 
-                button {
-                    text-transform: capitalize;
-                    user-select: none;
-                    cursor: pointer;
-                    font-size: 18px;
-                    border: 2px solid $color1;
+                button.field {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5vw;
+
+                    padding: 0.5rem 1rem;
+
+                    border: 1px solid black;
                     border-radius: 5px;
-                    padding: $gap;
 
                     color: black;
+                    cursor: pointer;
+
+                    width: 49%;
                 }
             }
         }
