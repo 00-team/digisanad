@@ -171,6 +171,7 @@ const Test2: FC = () => {
                                     insert.current(`({${uid}})`)
                                 }}
                             >
+                                {v.Icon && <v.Icon size={20} />}
                                 {v.display}
                             </button>
                         ))}
