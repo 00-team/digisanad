@@ -2,7 +2,7 @@ import React, {
     createElement,
     Dispatch,
     ElementRef,
-    FC, // Fragment,
+    FC,
     MutableRefObject,
     ReactNode,
     useEffect,
@@ -19,17 +19,17 @@ import { SetStateAction } from 'jotai'
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
 import {
-    Schema,
     default_fields,
-    TextField,
+    FieldType,
     GeoField,
-    StrField,
-    QuestionField,
     IntField,
-    RecordField,
     OptionFeild,
+    QuestionField,
+    RecordField,
+    Schema,
+    StrField,
+    TextField,
 } from './types'
-import { FieldType } from './types'
 import { ParsedField, parseFields } from './utils'
 
 const MODES = ['edit', 'view', 'schema'] as const
@@ -78,8 +78,8 @@ const Test2: FC = () => {
     }
 
     return (
-        <div className='test2'>
-            <div className='schema'>
+        <main className='contract-container'>
+            <aside className='schema'>
                 <div className='pages'>
                     <span
                         className='copy-btn'
@@ -125,8 +125,8 @@ const Test2: FC = () => {
                         inserter={insert}
                     />
                 )}
-            </div>
-            <div className='config'>
+            </aside>
+            <aside className='config'>
                 <div className='fields'>
                     {Object.entries(default_fields).map(([k, v], i) => (
                         <button
@@ -176,8 +176,8 @@ const Test2: FC = () => {
                         />
                     )}
                 </div>
-            </div>
-        </div>
+            </aside>
+        </main>
     )
 }
 
