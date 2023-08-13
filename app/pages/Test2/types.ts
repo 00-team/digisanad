@@ -12,6 +12,7 @@ type Schema = {
 export type BaseField = {
     uid: string
     title: string
+    display: string
     description?: string | null
     optinal?: boolean
 }
@@ -111,12 +112,14 @@ type X = {
 const default_fields: X = {
     link: {
         type: 'link',
+        display: 'لینک',
         uid: '',
         title: 'Lonk',
         url: 'https://example.com',
     },
     option: {
         type: 'option',
+        display: 'انتخابی',
         uid: '',
         title: 'Option',
         options: [],
@@ -127,6 +130,7 @@ const default_fields: X = {
     },
     int: {
         type: 'int',
+        display: 'عدد',
         uid: '',
         title: 'Number',
         description: '',
@@ -137,6 +141,7 @@ const default_fields: X = {
     },
     str: {
         type: 'str',
+        display: 'متن',
         uid: '',
         title: 'String',
         description: '',
@@ -147,6 +152,7 @@ const default_fields: X = {
     },
     text: {
         type: 'text',
+        display: 'متن چند خطی',
         uid: '',
         title: 'Text',
         description: '',
@@ -157,6 +163,7 @@ const default_fields: X = {
     },
     geo: {
         type: 'geo',
+        display: 'نقشه',
         uid: '',
         title: 'Geo',
         description: '',
@@ -168,6 +175,7 @@ const default_fields: X = {
     },
     user: {
         type: 'user',
+        display: 'کاربر',
         uid: '',
         value: '',
         title: 'User',
@@ -176,6 +184,7 @@ const default_fields: X = {
     },
     record: {
         type: 'record',
+        display: 'ضمیمه',
         uid: '',
         title: 'Record / File',
         description: '',
@@ -185,6 +194,7 @@ const default_fields: X = {
     },
     date: {
         type: 'date',
+        display: 'تاریخ',
         uid: '',
         title: 'Date',
         description: '',
@@ -193,6 +203,7 @@ const default_fields: X = {
     },
     question: {
         type: 'question',
+        display: 'سوال',
         uid: '',
         title: 'Questions',
         description: '',
@@ -203,6 +214,7 @@ const default_fields: X = {
     },
     signature: {
         type: 'signature',
+        display: 'امضا دیجیتال',
         uid: '',
         title: 'Signature',
         description: '',
