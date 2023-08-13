@@ -13,6 +13,7 @@ import React, {
 import { C } from '@00-team/utils'
 
 import './style.scss'
+import { PlusSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -127,38 +128,53 @@ const Test2: FC = () => {
                 )}
             </aside>
             <aside className='contract-sidebar'>
-                <div className='fields'>
-                    {Object.entries(default_fields).map(([k, v], i) => (
-                        <button
-                            key={i}
-                            onClick={() => {
-                                if (!insert.current) return
+                <h2 className='sidebar-title title'>تنظیمات قرارداد</h2>
+                <div className='fields-wrapper'>
+                    <h3 className='fields-title title_small'>
+                        <PlusSvg size={25} />
+                        <span>افزودن به قرارداد</span>
+                    </h3>
+                    <div className='fields'>
+                        {Object.entries(default_fields).map(([k, v], i) => (
+                            <button
+                                className='field title_smaller'
+                                key={i}
+                                onClick={() => {
+                                    if (!insert.current) return
 
-                                Object.keys(state.schema.fields).forEach(u => {
-                                    let exists = state.schema.pages.find(p => {
-                                        return (
-                                            p.content.indexOf(`({${u}})`) != -1
-                                        )
-                                    })
+                                    Object.keys(state.schema.fields).forEach(
+                                        u => {
+                                            let exists =
+                                                state.schema.pages.find(p => {
+                                                    return (
+                                                        p.content.indexOf(
+                                                            `({${u}})`
+                                                        ) != -1
+                                                    )
+                                                })
 
-                                    if (!exists) {
-                                        console.info(u + ' was not found')
-                                        delete state.schema.fields[u]
-                                    }
-                                })
+                                            if (!exists) {
+                                                console.info(
+                                                    u + ' was not found'
+                                                )
+                                                delete state.schema.fields[u]
+                                            }
+                                        }
+                                    )
 
-                                let uid = get_unique_uid(k)
-                                v.uid = uid
+                                    let uid = get_unique_uid(k)
+                                    v.uid = uid
 
-                                state.schema.fields[uid] = { ...v }
+                                    state.schema.fields[uid] = { ...v }
 
-                                update()
-                                insert.current(`({${uid}})`)
-                            }}
-                        >
-                            {k}
-                        </button>
-                    ))}
+                                    update()
+                                    insert.current(`({${uid}})`)
+                                }}
+                            >
+                                {v.display}
+                            </button>
+                        ))}
+                    </div>
                 </div>
                 <div className='field-config-container'>
                     <input
