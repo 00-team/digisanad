@@ -20,10 +20,22 @@ main.contract-container {
         height: 100%;
     }
 
-    .schema {
-        width: 70%;
+    aside.contract-wrapper {
+        flex: 1 0;
+        height: 100%;
+
         display: flex;
         flex-direction: column;
+
+        position: relative;
+        isolation: isolate;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+        direction: ltr;
+
+        background-color: var(--sixty-percent);
+        color: black;
 
         .pages {
             display: flex;
@@ -175,8 +187,17 @@ main.contract-container {
         }
     }
 
-    .config {
-        width: 30%;
+    aside.contract-sidebar {
+        width: clamp(280px, 20%, 300px);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 5vh;
+        padding: 3vh 0;
+        padding-top: 6vh;
+
+        background-color: blue;
 
         .fields {
             height: 20%;
