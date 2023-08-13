@@ -12,8 +12,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import './style.scss'
-import { PlusSvg } from 'icons'
+import { CopySvg, PlusSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -32,6 +31,8 @@ import {
     TextField,
 } from './types'
 import { ParsedField, parseFields } from './utils'
+
+import './style/contract.scss'
 
 const MODES = ['edit', 'view', 'schema'] as const
 type Mode = typeof MODES[number]
@@ -81,29 +82,34 @@ const Test2: FC = () => {
     return (
         <main className='contract-container'>
             <aside className='contract-wrapper'>
-                <div className='pages'>
-                    <span
-                        className='copy-btn'
+                <div className='contract-pages'>
+                    <button
+                        className='copy-btn cta-btn title_smaller'
                         onClick={() => {
                             navigator.clipboard.writeText(
                                 JSON.stringify(state.schema, null, 4)
                             )
                         }}
                     >
-                        c
-                    </span>
-                    <span
+                        <CopySvg size={25} />
+                        کپی کردن
+                    </button>
+                    <button
+                        className='add-btn cta-btn title_smaller'
                         onClick={() => {
                             state.schema.pages.push({ content: '' })
                             update()
                         }}
                     >
-                        +
-                    </span>
+                        <PlusSvg size={25} />
+                        اضافه کردن
+                    </button>
                     {state.schema.pages.map((_, i) => (
-                        <span
+                        <button
                             key={i}
-                            className={C(i == state.page)}
+                            className={`${C(
+                                i == state.page
+                            )} pager title_smaller`}
                             onContextMenu={e => {
                                 e.preventDefault()
                                 if (!e.shiftKey) return
@@ -116,7 +122,7 @@ const Test2: FC = () => {
                             }
                         >
                             {i}
-                        </span>
+                        </button>
                     ))}
                 </div>
                 {state.schema.pages[state.page] && (
