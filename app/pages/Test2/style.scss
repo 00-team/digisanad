@@ -9,16 +9,9 @@ main.contract-container {
     width: 100%;
     height: 100vh;
 
-    color: white;
-
     overflow: hidden;
 
-    .schema,
-    .config {
-        border: 2px solid $color1;
-        border-radius: 5px;
-        height: 100%;
-    }
+    color: black;
 
     aside.contract-wrapper {
         flex: 1 0;
@@ -188,33 +181,91 @@ main.contract-container {
     }
 
     aside.contract-sidebar {
-        width: clamp(280px, 20%, 300px);
+        width: clamp(280px, 20%, 350px);
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: column;
         gap: 5vh;
+
         padding: 3vh 0;
         padding-top: 6vh;
 
-        background-color: blue;
+        background-color: white;
+        color: black;
 
-        .fields {
-            height: 20%;
-            padding: $gap;
+        h2.sidebar-title {
             display: flex;
-            gap: $gap;
-            flex-wrap: wrap;
-            align-content: flex-start;
+            align-items: center;
+            justify-content: center;
 
-            button {
-                text-transform: capitalize;
-                user-select: none;
-                cursor: pointer;
-                font-size: 18px;
-                border: 2px solid $color1;
-                border-radius: 5px;
+            width: 100%;
+
+            padding-bottom: 30px;
+
+            position: relative;
+            isolation: isolate;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                width: 80%;
+                height: 1px;
+                background-image: linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0),
+                    black,
+                    rgba(0, 0, 0, 0)
+                );
+            }
+        }
+
+        .fields-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+
+            direction: rtl;
+
+            h3.fields-title {
+                display: flex;
+                align-items: center;
+
+                gap: 0.5vw;
+
+                span {
+                    white-space: nowrap;
+                }
+
+                &::after {
+                    content: '';
+                    width: 35%;
+                    height: 2px;
+                    margin-right: auto;
+                    background-color: black;
+                }
+            }
+
+            .fields {
+                height: 20%;
                 padding: $gap;
+                display: flex;
+                gap: $gap;
+                flex-wrap: wrap;
+                align-content: flex-start;
+
+                button {
+                    text-transform: capitalize;
+                    user-select: none;
+                    cursor: pointer;
+                    font-size: 18px;
+                    border: 2px solid $color1;
+                    border-radius: 5px;
+                    padding: $gap;
+
+                    color: black;
+                }
             }
         }
 
@@ -225,6 +276,7 @@ main.contract-container {
             input {
                 width: 100%;
                 background: transparent;
+                color: black;
                 border: 2px solid $color1;
                 font-size: 18px;
                 padding: $gap;
@@ -262,6 +314,8 @@ main.contract-container {
                     transition: border-color 200ms ease-in-out;
                     max-height: 50%;
                     min-height: 10%;
+
+                    color: black;
 
                     &:focus {
                         border-color: $color3;
