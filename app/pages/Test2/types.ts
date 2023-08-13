@@ -1,3 +1,17 @@
+import {
+    CallenderSvg,
+    FileSvg,
+    LinkSvg,
+    MapSvg,
+    NumberSvg,
+    OptionSvg,
+    PersonSvg,
+    QuestionSvg,
+    SignatureSvg,
+    TextareaSvg,
+    TextSvg,
+} from 'icons'
+
 type Page = {
     content: string
 }
@@ -13,6 +27,7 @@ export type BaseField = {
     uid: string
     title: string
     display: string
+    Icon: Icon | null
     description?: string | null
     optinal?: boolean
 }
@@ -113,6 +128,7 @@ const default_fields: X = {
     link: {
         type: 'link',
         display: 'لینک',
+        Icon: LinkSvg,
         uid: '',
         title: 'Lonk',
         url: 'https://example.com',
@@ -120,6 +136,7 @@ const default_fields: X = {
     option: {
         type: 'option',
         display: 'انتخابی',
+        Icon: OptionSvg,
         uid: '',
         title: 'Option',
         options: [],
@@ -131,6 +148,7 @@ const default_fields: X = {
     int: {
         type: 'int',
         display: 'عدد',
+        Icon: NumberSvg,
         uid: '',
         title: 'Number',
         description: '',
@@ -142,6 +160,7 @@ const default_fields: X = {
     str: {
         type: 'str',
         display: 'متن',
+        Icon: TextSvg,
         uid: '',
         title: 'String',
         description: '',
@@ -153,6 +172,7 @@ const default_fields: X = {
     text: {
         type: 'text',
         display: 'متن چند خطی',
+        Icon: TextareaSvg,
         uid: '',
         title: 'Text',
         description: '',
@@ -163,6 +183,7 @@ const default_fields: X = {
     },
     geo: {
         type: 'geo',
+        Icon: MapSvg,
         display: 'نقشه',
         uid: '',
         title: 'Geo',
@@ -176,6 +197,7 @@ const default_fields: X = {
     user: {
         type: 'user',
         display: 'کاربر',
+        Icon: PersonSvg,
         uid: '',
         value: '',
         title: 'User',
@@ -185,6 +207,7 @@ const default_fields: X = {
     record: {
         type: 'record',
         display: 'ضمیمه',
+        Icon: FileSvg,
         uid: '',
         title: 'Record / File',
         description: '',
@@ -195,6 +218,7 @@ const default_fields: X = {
     date: {
         type: 'date',
         display: 'تاریخ',
+        Icon: CallenderSvg,
         uid: '',
         title: 'Date',
         description: '',
@@ -204,6 +228,7 @@ const default_fields: X = {
     question: {
         type: 'question',
         display: 'سوال',
+        Icon: QuestionSvg,
         uid: '',
         title: 'Questions',
         description: '',
@@ -214,6 +239,7 @@ const default_fields: X = {
     },
     signature: {
         type: 'signature',
+        Icon: SignatureSvg,
         display: 'امضا دیجیتال',
         uid: '',
         title: 'Signature',
