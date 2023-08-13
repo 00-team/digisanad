@@ -29,7 +29,7 @@ export type BaseField = {
     display: string
     Icon: Icon | null
     description?: string | null
-    optinal?: boolean
+    optional?: boolean
 }
 
 export type GeoField = BaseField & {
@@ -140,7 +140,7 @@ const default_fields: X = {
         uid: '',
         title: 'Option',
         options: [],
-        optinal: false,
+        optional: false,
         singleton: false,
         description: '',
         value: [],
@@ -152,7 +152,7 @@ const default_fields: X = {
         uid: '',
         title: 'Number',
         description: '',
-        optinal: false,
+        optional: false,
         max: null,
         min: null,
         value: 0,
@@ -164,7 +164,7 @@ const default_fields: X = {
         uid: '',
         title: 'String',
         description: '',
-        optinal: false,
+        optional: false,
         max: null,
         min: null,
         value: '',
@@ -176,7 +176,7 @@ const default_fields: X = {
         uid: '',
         title: 'Text',
         description: '',
-        optinal: false,
+        optional: false,
         max: null,
         min: null,
         value: '',
@@ -188,7 +188,7 @@ const default_fields: X = {
         uid: '',
         title: 'Geo',
         description: '',
-        optinal: false,
+        optional: false,
         value: {
             latitude: 0,
             longitude: 0,
@@ -202,7 +202,7 @@ const default_fields: X = {
         value: '',
         title: 'User',
         description: '',
-        optinal: false,
+        optional: false,
     },
     record: {
         type: 'record',
@@ -211,7 +211,7 @@ const default_fields: X = {
         uid: '',
         title: 'Record / File',
         description: '',
-        optinal: false,
+        optional: false,
         plural: false,
         value: [],
     },
@@ -222,7 +222,7 @@ const default_fields: X = {
         uid: '',
         title: 'Date',
         description: '',
-        optinal: false,
+        optional: false,
         value: 0,
     },
     question: {
@@ -232,7 +232,7 @@ const default_fields: X = {
         uid: '',
         title: 'Questions',
         description: '',
-        optinal: false,
+        optional: false,
         questions: [],
         answers: [],
         value: {},
@@ -244,7 +244,7 @@ const default_fields: X = {
         uid: '',
         title: 'Signature',
         description: '',
-        optinal: false,
+        optional: false,
         value: '',
     },
 }
