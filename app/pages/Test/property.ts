@@ -19,6 +19,8 @@ export const property: SchemaData = {
             ],
         },
         {
+            title: 'مشخصات ملک',
+            uid: 'prop_detail',
             fields: [
                 {
                     max: 6,
@@ -75,11 +77,9 @@ export const property: SchemaData = {
                     uid: 'F_geo_1',
                 },
             ],
-            title: 'مشخصات ملک',
-            uid: 'prop_detail',
         },
         {
-            uid: 'stage_1',
+            uid: 'prop_status',
             title: 'وضعیت ملک',
             fields: [
                 {
@@ -137,7 +137,20 @@ export const property: SchemaData = {
                         },
                     ],
                 },
+                {
+                    title: 'RECORD',
+                    type: 'record',
+                    uid: 'field_record_2',
+                    plural: true,
+                },
             ],
+        },
+        {
+            uid: 'stage__1',
+            title: 'شرط ضمن عقد',
+            fields: [],
+            description:
+                '232 ق م: شروط ذیل باطل است:\n1. شرطی که انجام آن غیر مقدور باشد.\n2. شرطی که در آن نفع و فایده نباشد.\n3. شرطی که نامشروع باشد.\n\n233 ق م: شروط ذیل باطل و موجب بطلان عقد است:\n1. شرط خلاف مقتضای عقد.\n2. شرط مجهولی که جهل به آن موجب جهل به عوضین شود.',
         },
     ],
 }

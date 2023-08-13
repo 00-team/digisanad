@@ -18,7 +18,9 @@ import {
     field_types,
     FieldMinMax,
     FieldType,
+    StageType,
 } from './types'
+import { appendField } from './utils'
 
 const Test: FC = () => {
     const output = useRef<ElementRef<'textarea'>>(null)
@@ -89,16 +91,9 @@ const Test: FC = () => {
                     </div>
 
                     {schema.stages[activeStage] && (
-                        <input
-                            className='stage_title'
-                            value={schema.stages[activeStage]!.title}
-                            onChange={e => {
-                                const v = e.currentTarget.value
-                                setSchema(s => {
-                                    s.stages[activeStage]!.title = v
-                                    return { ...s }
-                                })
-                            }}
+                        <Stage
+                            stage={schema.stages[activeStage]!}
+                            setSchema={setSchema}
                         />
                     )}
 
@@ -123,53 +118,10 @@ const Test: FC = () => {
                             key={i}
                             onClick={() => {
                                 setSchema(s => {
-                                    let fields = s.stages[activeStage]!.fields
-                                    let uid = UniqueID('F_' + f + '_')
-                                    switch (f) {
-                                        case 'int':
-                                        case 'str':
-                                        case 'text':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                min: 0,
-                                                max: 0,
-                                            })
-                                            break
-
-                                        case 'geo':
-                                        case 'record':
-                                        case 'signature':
-                                        case 'date':
-                                        case 'user':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                            })
-                                            break
-                                        case 'option':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                options: [],
-                                                singleton: false,
-                                            })
-                                            break
-                                        case 'question':
-                                            fields.push({
-                                                title: f.toUpperCase(),
-                                                type: f,
-                                                uid,
-                                                questions: [],
-                                                answers: [],
-                                            })
-                                            break
-                                    }
-
-                                    s.stages[activeStage]!.fields = fields
+                                    appendField(
+                                        s.stages[activeStage]!.fields,
+                                        f
+                                    )
                                     return { ...s }
                                 })
                             }}
@@ -200,6 +152,60 @@ const Test: FC = () => {
                     F
                 </button>
             </div>
+        </div>
+    )
+}
+
+type StageProps = {
+    stage: StageType
+    setSchema: Dispatch<SetStateAction<SchemaData>>
+}
+
+const Stage: FC<StageProps> = ({ stage, setSchema }) => {
+    const update = () => {
+        setSchema(s => ({ ...s }))
+    }
+
+    let desc = typeof stage.description == 'string'
+
+    return (
+        <div className='stage-info'>
+            <div className='frow'>
+                <input
+                    className='stage-title'
+                    value={stage.title}
+                    onChange={e => {
+                        stage.title = e.currentTarget.value
+                        update()
+                    }}
+                />
+
+                <div
+                    className='stage-toggle-description'
+                    style={{ borderColor: desc ? '#e20338' : '#00dc7d' }}
+                    onClick={() => {
+                        if (!desc) {
+                            stage.description = ''
+                        } else {
+                            delete stage.description
+                        }
+                        update()
+                    }}
+                >
+                    {desc ? '-' : '+'}
+                </div>
+            </div>
+
+            {desc && (
+                <textarea
+                    className='stage-description'
+                    value={stage.description!}
+                    onChange={e => {
+                        stage.description = e.currentTarget.value
+                        update()
+                    }}
+                />
+            )}
         </div>
     )
 }
@@ -244,6 +250,20 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
                 />
             </div>
             {have_minmax(field) && <MinMax field={field} update={update} />}
+            {field.type == 'record' && (
+                <div className='frow'>
+                    <input
+                        id={field.uid}
+                        type='checkbox'
+                        checked={field.plural}
+                        onChange={e => {
+                            field.plural = e.currentTarget.checked
+                            update()
+                        }}
+                    />
+                    <label htmlFor={field.uid}>Plural</label>
+                </div>
+            )}
             {field.type == 'option' && (
                 <>
                     <div className='frow'>

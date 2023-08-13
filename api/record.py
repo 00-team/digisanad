@@ -8,12 +8,12 @@ import magic
 from fastapi import APIRouter, Form, Request, UploadFile
 from pydantic import BaseModel
 
-from api.models import OkModel
 from db.models import RecordModel, RecordTable, UserModel
 from db.record import record_add, record_delete, record_get
 from deps import user_required
 from shared import settings, sqlx
 from shared.errors import bad_file, bad_id
+from shared.models import OkModel
 from shared.tools import utc_now
 
 router = APIRouter(

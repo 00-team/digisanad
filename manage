@@ -37,7 +37,6 @@ tag)
 
 delete_all_tags)
     echo "Not Now"
-    # git tag | grep <pattern> | xargs -n 1 -i% git push origin :refs/tags/%
-    # git tag | xargs -n 1 -i% sh -c 'git push origin :% && git tag -d %'
+    git tag | xargs -n 1 -i% sh -c 'git push origin :% && git tag -d %'
     ;;
 esac

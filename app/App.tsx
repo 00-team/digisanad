@@ -17,6 +17,7 @@ const Register = loadable(() => import('pages/Authenticate/Register'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
 const Test = loadable(() => import('pages/Test'))
+const Test2 = loadable(() => import('pages/Test2'))
 
 const App: FC = () => {
     global.ReactAlert = useAlert()
@@ -55,6 +56,7 @@ const MainContent: FC = () => {
             <Route path='/login/' element={<Login />} />
             <Route path='/dashboard/' element={<Dashboard />} />
             <Route path='/test/' element={<Test />} />
+            <Route path='/test2/' element={<Test2 />} />
 
             {/* admin panel */}
             <Route path='/admin/' element={<Admin />} />

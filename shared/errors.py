@@ -124,6 +124,12 @@ bad_file = Error(
     'invalid or unknown file',
     400
 )
+closed_contract = Error(
+    40014,
+    'Closed Contract',
+    'this contract is closed.',
+    400
+)
 
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
@@ -132,7 +138,7 @@ all_errors = [
     forbidden, bad_verification,
     no_change, bad_id, bad_auth, rate_limited,
     bad_args, register_required, account_exists,
-    bad_balance, bad_file,
+    bad_balance, bad_file, closed_contract,
 
     database_error
 ]

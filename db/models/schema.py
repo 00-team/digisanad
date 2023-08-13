@@ -1,9 +1,7 @@
 
-from enum import Enum
-from typing import Literal
 
-from pydantic import BaseModel, Field, constr
-from sqlalchemy import JSON, Boolean, Column, Integer, String
+from pydantic import BaseModel
+from sqlalchemy import JSON, Boolean, Column, Integer, String, text
 
 from .common import BaseTable
 
@@ -19,77 +17,7 @@ class SchemaTable(BaseTable):
     title = Column(String, nullable=False)
     description = Column(String)
     data = Column(JSON, nullable=False, server_default='{}')
-
-
-class BaseField(BaseModel):
-    uid: constr(
-        max_length=128, min_length=1, strip_whitespace=True
-    ) = Field(title='unique id', description='unique id of the field')
-    title: constr(max_length=128, min_length=1, strip_whitespace=True)
-    description: (
-        constr(max_length=1024, min_length=1, strip_whitespace=True) | None
-    ) = Field(
-        None, description='optinal description of the field',
-    )
-    optinal: bool = False
-
-
-class FieldTypes(str, Enum):
-    USER = 'user'
-    GEO = 'geo'
-    RECORD = 'record'
-    DATE = 'date'
-    SIGNATURE = 'signature'
-
-
-class GenericField(BaseField):
-    type: FieldTypes
-
-
-class IntField(BaseField):
-    type: Literal['int']
-    min: int | None = None
-    max: int | None = None
-
-
-class StrField(IntField):
-    type: Literal['str']
-
-
-class TextField(IntField):
-    type: Literal['text']
-
-
-class UIDD(BaseModel):
-    '''unique id & display'''
-    uid: str
-    display: str
-
-
-class QuestionField(BaseField):
-    type: Literal['question']
-    answers: list[UIDD]
-    questions: list[UIDD]
-
-
-class OptionField(BaseField):
-    type: Literal['option']
-    singleton: bool = False
-    options: list[UIDD]
-
-
-Field = (
-    GenericField | IntField | StrField | OptionField |
-    TextField | QuestionField
-)
-
-
-class Stage(BaseField):
-    fields: list[Field]
-
-
-class SchemaData(BaseModel):
-    stages: list[Stage]
+    creator = Column(Integer, nullable=False, server_default=text('-1'))
 
 
 class SchemaModel(BaseModel):
@@ -97,4 +25,5 @@ class SchemaModel(BaseModel):
     draft: bool
     title: str
     description: str | None = None
-    data: SchemaData
+    data: dict
+    creator: int

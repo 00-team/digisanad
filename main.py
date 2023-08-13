@@ -2,14 +2,14 @@
 
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 import api
 import shared.logger
 from deps import get_ip
-from shared import redis, settings, sqlx, w3
+from shared import redis, settings, sqlx
 from shared.errors import Error, all_errors
 
 index_path = settings.base_dir / 'static/dist/index.html'
@@ -60,20 +60,21 @@ async def rapidoc():
     primary-color="#ff8800" nav-text-color="#eee" font-size="largest"
     allow-spec-url-load="false" allow-spec-file-load="false"
     show-method-in-nav-bar="as-colored-block" response-area-height="500px"
-    show-header="false" /></body> </html>''')
+    show-header="false" /></body></html>''')
 
 
 async def index():
     return HTMLResponse(INDEX_HTML)
 
-for p in ['/', '/register/', '/login/', '/me/', '/dashboard/']:
+for p in ['/', '/register/', '/login/', '/dashboard/{_:path}']:
     app.add_api_route(p, index, include_in_schema=False)
 
 app.include_router(api.router)
 
-for route in app.routes:
-    if isinstance(route, APIRoute):
-        route.operation_id = route.name
+
+@app.get('/jc/{id_pepper}/', include_in_schema=False)
+async def join_contract(id_pepper: str):
+    return RedirectResponse(f'/dashboard/join_contract/{id_pepper}/')
 
 
 for route in app.routes:
