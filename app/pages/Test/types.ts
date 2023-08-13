@@ -2,7 +2,7 @@ type BaseField = {
     uid: string
     title: string
     description?: string | null
-    optinal?: boolean
+    optional?: boolean
 }
 
 type RecordField = BaseField & {

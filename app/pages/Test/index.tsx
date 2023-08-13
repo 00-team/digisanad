@@ -1,11 +1,11 @@
 import React, {
-    FC,
-    useRef,
-    ElementRef,
-    useEffect,
-    useState,
-    SetStateAction,
     Dispatch,
+    ElementRef,
+    FC,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState,
 } from 'react'
 
 import { C, UniqueID } from '@00-team/utils'
@@ -13,11 +13,11 @@ import { C, UniqueID } from '@00-team/utils'
 import { property } from './property'
 import './test.scss'
 import {
-    SchemaData,
-    have_minmax,
-    field_types,
     FieldMinMax,
     FieldType,
+    field_types,
+    have_minmax,
+    SchemaData,
     StageType,
 } from './types'
 import { appendField } from './utils'
@@ -227,12 +227,12 @@ const Field: FC<FieldProps> = ({ field, stage, index, setSchema }) => {
             <span>type: {field.type}</span>
             <div className='frow'>
                 <input
-                    className='optinal'
+                    className='optional'
                     type='checkbox'
-                    checked={field.optinal || false}
+                    checked={field.optional || false}
                     onChange={e => {
                         const v = e.currentTarget.checked
-                        field.optinal = v
+                        field.optional = v
                         update()
                     }}
                 />

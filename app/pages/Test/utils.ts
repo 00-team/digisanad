@@ -4,7 +4,7 @@ import { FieldType } from './types'
 
 function appendField(fields: FieldType[], type: FieldType['type']) {
     let title = type.toUpperCase()
-    let uid = UniqueID('field', type)
+    let uid = UniqueID('field')
 
     switch (type) {
         case 'int':
