@@ -18,13 +18,13 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 <input
                     id='fc_optinal'
                     type='checkbox'
-                    checked={field.optinal}
+                    checked={field.optional}
                     onChange={e => {
-                        field.optinal = e.currentTarget.checked
+                        field.optional = e.currentTarget.checked
                         update()
                     }}
                 />
-                <label htmlFor='fc_optinal'>Optinal</label>
+                <label htmlFor='fc_optinal'>optional</label>
             </div>
             <input
                 type='text'
