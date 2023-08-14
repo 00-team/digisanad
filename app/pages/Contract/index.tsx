@@ -188,20 +188,22 @@ const Contract: FC = () => {
                         <SettingSvg size={25} />
                         تنظیمات ورودی
                     </h3>
-                    <input
-                        className='uid-input'
-                        type='text'
-                        value={state.uid}
-                        onInput={e =>
-                            updateState({ uid: e.currentTarget.value })
-                        }
-                    />
-                    {state.uid in state.schema.fields && (
-                        <FieldConfig
-                            field={state.schema.fields[state.uid]!}
-                            update={update}
+                    <div className='fields-wrapper'>
+                        <input
+                            className='uid-input title_smaller'
+                            type='text'
+                            value={state.uid}
+                            onInput={e =>
+                                updateState({ uid: e.currentTarget.value })
+                            }
                         />
-                    )}
+                        {state.uid in state.schema.fields && (
+                            <FieldConfig
+                                field={state.schema.fields[state.uid]!}
+                                update={update}
+                            />
+                        )}
+                    </div>
                 </div>
             </aside>
         </main>
