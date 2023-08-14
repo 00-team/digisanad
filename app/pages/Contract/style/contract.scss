@@ -216,7 +216,7 @@ main.contract-container {
         align-items: center;
         justify-content: flex-start;
         flex-direction: column;
-        gap: 5vh;
+        gap: 4vh;
 
         padding-top: 5vh;
 
@@ -274,7 +274,7 @@ main.contract-container {
         .fields-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 2vh;
+            gap: 1vh;
 
             direction: rtl;
 
@@ -319,7 +319,7 @@ main.contract-container {
         .field-config-container {
             display: flex;
             flex-direction: column;
-            gap: 2vh;
+            gap: 1vh;
 
             width: 100%;
 
@@ -411,6 +411,27 @@ main.contract-container {
                         gap: 0.5vh;
 
                         margin-top: 1vh;
+                    }
+
+                    .numbers-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1vh;
+
+                        margin-top: 1vh;
+
+                        .input-number-wrapper {
+                            display: flex;
+                            width: 100%;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            .holder {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.5vw;
+                            }
+                        }
                     }
                 }
 
