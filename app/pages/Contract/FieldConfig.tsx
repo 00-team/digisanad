@@ -1,14 +1,6 @@
 import React, { FC } from 'react'
 
-import {
-    IdSvg,
-    MaximumSvg,
-    MinimunSvg,
-    MinusSvg,
-    PlusSvg,
-    QuestionSvg,
-    TypeSvg,
-} from 'icons'
+import { IdSvg, MaximumSvg, MinimunSvg, QuestionSvg, TypeSvg } from 'icons'
 
 import { FieldType, have_minmax } from './types'
 
@@ -102,42 +94,15 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
             )}
             {have_minmax(field) && (
                 <div className='numbers-wrapper'>
-                    <div className='input-number-wrapper'>
-                        <div className='holder title_smaller'>
-                            <MinimunSvg size={25} />
-                            حداقل:
-                        </div>
-                        <div className='data'>
-                            <input
-                                type='number'
-                                value={field.min || 0}
-                                className='input-max input-number'
-                                onInput={e => {
-                                    field.min = parseInt(e.currentTarget.value)
-                                    field.max = field.max || -1
-                                    if (field.min < 0) field.min = 0
-                                    if (field.max > 0 && field.min > field.max)
-                                        field.min = field.max
-
-                                    update()
-                                }}
-                                placeholder='حداقل ورودی'
-                                title='حداقل ورودی'
-                            />
-                        </div>
-                    </div>
-                    <div className='input-number-wrapper'>
-                        <div className='holder title_smaller'>
+                    <div className='input-number-wrapper title_smaller'>
+                        <div className='holder'>
                             <MaximumSvg size={25} />
                             حداکثر:
                         </div>
                         <div className='data'>
-                            <div className='input-plus'>
-                                {' '}
-                                <PlusSvg size={25} />{' '}
-                            </div>
                             <input
                                 type='number'
+                                inputMode='numeric'
                                 value={field.max || -1}
                                 className='input-max input-number'
                                 onInput={e => {
@@ -167,10 +132,31 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                 placeholder='حداقل ورودی'
                                 title='حداقل ورودی'
                             />
-                            <div className='input-minus'>
-                                {' '}
-                                <MinusSvg size={25} />{' '}
-                            </div>
+                        </div>
+                    </div>
+                    <div className='input-number-wrapper title_smaller'>
+                        <div className='holder'>
+                            <MinimunSvg size={25} />
+                            حداقل:
+                        </div>
+                        <div className='data'>
+                            <input
+                                type='number'
+                                inputMode='numeric'
+                                value={field.min || 0}
+                                className='input-max input-number'
+                                onInput={e => {
+                                    field.min = parseInt(e.currentTarget.value)
+                                    field.max = field.max || -1
+                                    if (field.min < 0) field.min = 0
+                                    if (field.max > 0 && field.min > field.max)
+                                        field.min = field.max
+
+                                    update()
+                                }}
+                                placeholder='حداقل ورودی'
+                                title='حداقل ورودی'
+                            />
                         </div>
                     </div>
                 </div>
