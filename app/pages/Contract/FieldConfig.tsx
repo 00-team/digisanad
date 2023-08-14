@@ -26,7 +26,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 </div>
                 <div className='data'>{field.uid}</div>
             </div>
-            <div className='config-row title_smaller'>
+            <div className='config-row optional title_smaller'>
                 <label className='holder' htmlFor='fc_optinal'>
                     <QuestionSvg size={25} />
                     اختیاری
