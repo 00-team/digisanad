@@ -1,0 +1,414 @@
+$gap: 0.3rem;
+$color1: #782fef;
+$color2: #f375f3;
+$color3: #fd0079;
+
+main.contract-container {
+    display: flex;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+
+    color: black;
+
+    aside.contract-wrapper {
+        flex: 1 0;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        position: relative;
+        isolation: isolate;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+        direction: ltr;
+
+        background-color: var(--sixty-percent);
+        color: black;
+
+        .contract-pages {
+            display: flex;
+            gap: 1vw;
+
+            width: 100%;
+
+            padding: 2rem 1rem;
+            padding-bottom: 0;
+
+            direction: rtl;
+
+            overflow-x: auto;
+
+            .cta-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5vw;
+
+                padding: 0.5rem 1rem;
+
+                color: black;
+                border: 1px solid black;
+                border-radius: 5px;
+
+                cursor: pointer;
+
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    color: white;
+                    background-color: black;
+                }
+            }
+
+            .pager {
+                display: grid;
+                place-items: center;
+
+                cursor: pointer;
+
+                border: 1px solid black;
+                border-radius: 5px;
+
+                width: 30px;
+                aspect-ratio: 1/1;
+
+                color: black;
+
+                user-select: none;
+
+                transition: all 0.3s ease-in-out;
+                &.active {
+                    color: white;
+                    background-color: black;
+                }
+            }
+        }
+
+        .editor {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: $gap;
+            overflow: hidden;
+
+            .modes {
+                width: 100%;
+                display: flex;
+                gap: $gap * 4;
+                padding: $gap;
+                overflow: hidden;
+                flex-shrink: 0;
+
+                span {
+                    user-select: none;
+                    border: 2px solid transparent;
+                    border-bottom: 0;
+                    font-size: 24px;
+                    padding: 0 20px;
+                    border-top-left-radius: 15px;
+                    border-top-right-radius: 15px;
+                    cursor: pointer;
+                    position: relative;
+
+                    &.active {
+                        border-color: $color1;
+
+                        &::after {
+                            position: absolute;
+                            content: '';
+                            width: 100vw;
+                            height: 2px;
+                            background: $color1;
+                            bottom: 0;
+                            left: 100%;
+                        }
+
+                        &::before {
+                            position: absolute;
+                            content: '';
+                            width: 1000%;
+                            height: 2px;
+                            background: $color1;
+                            bottom: 0;
+                            right: 100%;
+                        }
+                    }
+                }
+            }
+
+            textarea {
+                padding: $gap;
+                border: 0;
+                direction: rtl;
+                font-size: 18px;
+                background: #040404;
+                width: 100%;
+                height: 100%;
+                resize: none;
+            }
+
+            .viewer {
+                font-size: 16px;
+                direction: rtl;
+                padding: 0 1rem;
+                overflow-y: auto;
+
+                .field-wrapper {
+                    all: unset;
+                }
+
+                hr {
+                    border: 1px solid $color1;
+                    margin: $gap * 2 0;
+                }
+
+                .geo-field {
+                    width: 500px;
+                    height: 200px;
+                    background: green;
+                }
+
+                a {
+                    text-decoration: underline $color1;
+                    color: $color3;
+                }
+
+                .text-field {
+                    border: 2px solid $color1;
+                    transition: border-color 200ms ease-in-out;
+                    resize: vertical;
+
+                    &:focus {
+                        border-color: $color3;
+                    }
+                }
+
+                .question-field {
+                    width: 100%;
+                    border: 1px solid $color1;
+                    border-spacing: 0;
+
+                    td,
+                    th {
+                        text-align: center;
+                        border: 1px solid $color1;
+                    }
+                }
+
+                .record-field {
+                    direction: ltr;
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+
+    aside.contract-sidebar {
+        width: clamp(280px, 20%, 350px);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 5vh;
+
+        padding-top: 5vh;
+
+        background-color: white;
+        color: black;
+
+        overflow-y: auto;
+
+        h2.sidebar-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+
+            padding-bottom: 30px;
+
+            position: relative;
+            isolation: isolate;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                width: 80%;
+                height: 1px;
+                background-image: linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0),
+                    black,
+                    rgba(0, 0, 0, 0)
+                );
+            }
+        }
+
+        .fields-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+
+            direction: rtl;
+
+            h3.fields-title {
+                display: flex;
+                align-items: center;
+
+                gap: 0.5vw;
+
+                span {
+                    white-space: nowrap;
+                }
+
+                &::after {
+                    content: '';
+                    width: 35%;
+                    height: 2px;
+                    margin-right: auto;
+                    background-color: black;
+                }
+            }
+
+            .fields {
+                height: 20%;
+                padding: $gap;
+                display: flex;
+                gap: $gap;
+                flex-wrap: wrap;
+                align-content: flex-start;
+
+                button.field {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5vw;
+
+                    padding: 0.5rem 1rem;
+
+                    border: 1px solid black;
+                    border-radius: 5px;
+
+                    color: black;
+                    cursor: pointer;
+
+                    width: 49%;
+
+                    transition: all 0.3s ease-in-out;
+
+                    &:hover {
+                        color: white;
+                        background-color: black;
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        .field-config-container {
+            height: 80%;
+            // border-top: 2px solid $color1;
+
+            input {
+                width: 100%;
+                background: transparent;
+                color: black;
+                border: 2px solid $color1;
+                font-size: 18px;
+                padding: $gap;
+                transition: border-color 200ms ease-in-out;
+
+                &:focus {
+                    border-color: $color3;
+                }
+            }
+
+            input[type='text'] {
+                border-width: 0;
+                border-top-width: 2px;
+                border-bottom-width: 2px;
+            }
+
+            input[type='checkbox'] {
+                width: unset;
+            }
+
+            .field-config {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                font-size: 18px;
+
+                textarea {
+                    resize: vertical;
+                    background: transparent;
+                    font-size: 18px;
+                    border: 0 solid $color1;
+                    border-bottom-width: 2px;
+                    padding: $gap;
+                    transition: border-color 200ms ease-in-out;
+                    max-height: 50%;
+                    min-height: 10%;
+
+                    color: black;
+
+                    &:focus {
+                        border-color: $color3;
+                    }
+                }
+
+                .row {
+                    display: flex;
+                    align-items: center;
+                    gap: $gap;
+                }
+
+                label {
+                    user-select: none;
+                }
+            }
+
+            table.questions {
+                .append,
+                .remove {
+                    text-align: center;
+                    cursor: pointer;
+                    background-color: #008736;
+                }
+
+                .remove {
+                    background-color: #e20338;
+                }
+            }
+        }
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 6px;
+        background: #040404;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #a400ff;
+        border: 0;
+        border-radius: 0;
+    }
+
+    ::selection {
+        color: #f2f2f2;
+        background-color: $color1;
+    }
+}
