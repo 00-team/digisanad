@@ -1,6 +1,14 @@
 import React, { FC } from 'react'
 
-import { IdSvg, MinusSvg, PlusSvg, QuestionSvg, TypeSvg } from 'icons'
+import {
+    IdSvg,
+    MaximumSvg,
+    MinimunSvg,
+    MinusSvg,
+    PlusSvg,
+    QuestionSvg,
+    TypeSvg,
+} from 'icons'
 
 import { FieldType, have_minmax } from './types'
 
@@ -95,59 +103,74 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
             {have_minmax(field) && (
                 <div className='numbers-wrapper'>
                     <div className='input-number-wrapper'>
-                        <input
-                            type='number'
-                            value={field.min || 0}
-                            className='input-max input-number'
-                            onInput={e => {
-                                field.min = parseInt(e.currentTarget.value)
-                                field.max = field.max || -1
-                                if (field.min < 0) field.min = 0
-                                if (field.max > 0 && field.min > field.max)
-                                    field.min = field.max
+                        <div className='holder title_smaller'>
+                            <MinimunSvg size={25} />
+                            حداقل:
+                        </div>
+                        <div className='data'>
+                            <input
+                                type='number'
+                                value={field.min || 0}
+                                className='input-max input-number'
+                                onInput={e => {
+                                    field.min = parseInt(e.currentTarget.value)
+                                    field.max = field.max || -1
+                                    if (field.min < 0) field.min = 0
+                                    if (field.max > 0 && field.min > field.max)
+                                        field.min = field.max
 
-                                update()
-                            }}
-                            placeholder='حداقل ورودی'
-                            title='حداقل ورودی'
-                        />
+                                    update()
+                                }}
+                                placeholder='حداقل ورودی'
+                                title='حداقل ورودی'
+                            />
+                        </div>
                     </div>
                     <div className='input-number-wrapper'>
-                        <div className='input-plus'>
-                            {' '}
-                            <PlusSvg size={25} />{' '}
+                        <div className='holder title_smaller'>
+                            <MaximumSvg size={25} />
+                            حداکثر:
                         </div>
-                        <input
-                            type='number'
-                            value={field.max || -1}
-                            className='input-max input-number'
-                            onInput={e => {
-                                field.min = field.min || 0
-                                field.max = field.max || -1
+                        <div className='data'>
+                            <div className='input-plus'>
+                                {' '}
+                                <PlusSvg size={25} />{' '}
+                            </div>
+                            <input
+                                type='number'
+                                value={field.max || -1}
+                                className='input-max input-number'
+                                onInput={e => {
+                                    field.min = field.min || 0
+                                    field.max = field.max || -1
 
-                                let new_value = parseInt(e.currentTarget.value)
-                                let dir = field.max < new_value ? 'up' : 'down'
+                                    let new_value = parseInt(
+                                        e.currentTarget.value
+                                    )
+                                    let dir =
+                                        field.max < new_value ? 'up' : 'down'
 
-                                if (new_value == 0) {
-                                    if (dir == 'up') field.max = 1
-                                    else field.max = -1
-                                } else {
-                                    field.max = new_value
-                                }
+                                    if (new_value == 0) {
+                                        if (dir == 'up') field.max = 1
+                                        else field.max = -1
+                                    } else {
+                                        field.max = new_value
+                                    }
 
-                                if (field.max < field.min) {
-                                    if (dir == 'down') field.max = -1
-                                    else field.max = field.min
-                                }
+                                    if (field.max < field.min) {
+                                        if (dir == 'down') field.max = -1
+                                        else field.max = field.min
+                                    }
 
-                                update()
-                            }}
-                            placeholder='حداقل ورودی'
-                            title='حداقل ورودی'
-                        />
-                        <div className='input-minus'>
-                            {' '}
-                            <MinusSvg size={25} />{' '}
+                                    update()
+                                }}
+                                placeholder='حداقل ورودی'
+                                title='حداقل ورودی'
+                            />
+                            <div className='input-minus'>
+                                {' '}
+                                <MinusSvg size={25} />{' '}
+                            </div>
                         </div>
                     </div>
                 </div>
