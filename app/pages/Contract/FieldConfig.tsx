@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
 
+import { IdSvg, QuestionSvg, TypeSvg } from 'icons'
+
 import { FieldType, have_minmax } from './types'
 
 type FieldConfigProps = {
@@ -10,11 +12,25 @@ type FieldConfigProps = {
 const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
     return (
         <div className='field-config'>
-            <div className='row' style={{ justifyContent: 'space-around' }}>
-                <span>type: {field.type}</span>
-                <span>uid: {field.uid}</span>
+            <div className='config-row title_smaller'>
+                <div className='holder'>
+                    <TypeSvg size={25} />
+                    نوع :
+                </div>
+                <div className='data'>{field.type}</div>
             </div>
-            <div className='row'>
+            <div className='config-row title_smaller'>
+                <div className='holder'>
+                    <IdSvg size={25} />
+                    شناسه :
+                </div>
+                <div className='data'>{field.uid}</div>
+            </div>
+            <div className='config-row title_smaller'>
+                <label className='holder' htmlFor='fc_optinal'>
+                    <QuestionSvg size={25} />
+                    اختیاری
+                </label>
                 <input
                     id='fc_optinal'
                     type='checkbox'
@@ -24,7 +40,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                         update()
                     }}
                 />
-                <label htmlFor='fc_optinal'>optional</label>
             </div>
             <input
                 type='text'
