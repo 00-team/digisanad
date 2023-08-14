@@ -384,6 +384,12 @@ main.contract-container {
                         gap: 0.5vw;
                     }
 
+                    &.optional {
+                        label {
+                            cursor: pointer;
+                        }
+                    }
+
                     label {
                         width: 100%;
                     }
