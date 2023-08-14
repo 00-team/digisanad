@@ -431,6 +431,15 @@ main.contract-container {
                                 align-items: center;
                                 gap: 0.5vw;
                             }
+                            .data {
+                                input {
+                                    width: 150px;
+
+                                    text-align: center;
+
+                                    direction: ltr;
+                                }
+                            }
                         }
                     }
                 }
