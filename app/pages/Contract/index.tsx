@@ -12,7 +12,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import { CopySvg, PlusSvg } from 'icons'
+import { CopySvg, PlusSvg, SettingSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -136,7 +136,7 @@ const Contract: FC = () => {
             <aside className='contract-sidebar'>
                 <h2 className='sidebar-title title'>تنظیمات قرارداد</h2>
                 <div className='fields-wrapper'>
-                    <h3 className='fields-title title_small'>
+                    <h3 className='fields-title sidebar-section title_small'>
                         <PlusSvg size={25} />
                         <span>افزودن به قرارداد</span>
                     </h3>
@@ -184,6 +184,10 @@ const Contract: FC = () => {
                     </div>
                 </div>
                 <div className='field-config-container'>
+                    <h3 className='config-title sidebar-section title_small'>
+                        <SettingSvg size={25} />
+                        تنظیمات ورودی
+                    </h3>
                     <input
                         className='uid-input'
                         type='text'
