@@ -5,7 +5,7 @@ export const MaximumSvg: Icon = ({ size, ...attr }) => {
         <svg
             stroke='currentColor'
             fill='currentColor'
-            stroke-width='0'
+            strokeWidth='0'
             viewBox='0 0 256 256'
             height={size}
             width={size}
