@@ -282,10 +282,12 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
                 {MODES.map(m => (
                     <span
                         key={m}
-                        className={C(mode == m)}
+                        className={`${C(mode == m)} title_small`}
                         onClick={() => setMode(m)}
                     >
-                        {m}
+                        {m === 'edit' && 'ویرایش'}
+                        {m === 'schema' && 'نقشه'}
+                        {m === 'view' && 'نتیجه'}
                     </span>
                 ))}
             </div>
