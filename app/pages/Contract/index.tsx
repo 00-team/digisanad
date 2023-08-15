@@ -16,6 +16,8 @@ import { CopySvg, PlusSvg, SettingSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
+import { DatePicker } from 'components'
+
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
 import {
@@ -388,6 +390,7 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
 
                                   return (
                                       <span
+                                          key={fi}
                                           className='field-wrapper'
                                           onContextMenu={e => {
                                               e.preventDefault()
@@ -595,7 +598,7 @@ const field_map: FMF = {
     signature: () => <span>signature drawer ...</span>,
     record: RecordFC,
     question: QuestionFC,
-    date: () => <span>date picker ...</span>,
+    date: () => <DatePicker />,
     option: OptionFC,
 }
 
