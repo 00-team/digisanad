@@ -123,14 +123,14 @@ main.contract-container {
                     position: relative;
 
                     &.active {
-                        border-color: $color1;
+                        border-color: black;
 
                         &::after {
                             position: absolute;
                             content: '';
                             width: 100vw;
                             height: 2px;
-                            background: $color1;
+                            background: black;
                             bottom: 0;
                             right: 100%;
                         }
@@ -140,7 +140,7 @@ main.contract-container {
                             content: '';
                             width: 1000%;
                             height: 2px;
-                            background: $color1;
+                            background: black;
                             bottom: 0;
                             left: 100%;
                         }
@@ -188,8 +188,8 @@ main.contract-container {
                 }
 
                 hr {
-                    border: 1px solid $color1;
-                    margin: $gap * 2 0;
+                    border: 1px solid black;
+                    margin: 2vh 0;
                 }
 
                 .geo-field {
@@ -199,8 +199,8 @@ main.contract-container {
                 }
 
                 a {
-                    text-decoration: underline $color1;
-                    color: $color3;
+                    text-decoration: underline blue;
+                    color: blue;
                 }
 
                 .question-field {
@@ -225,7 +225,7 @@ main.contract-container {
     }
 
     aside.contract-sidebar {
-        width: clamp(280px, 20%, 350px);
+        width: clamp(280px, 20%, 400px);
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -355,7 +355,7 @@ main.contract-container {
                     display: flex;
                     flex-direction: column;
 
-                    gap: 1vh;
+                    gap: 2vh;
 
                     input[type='checkbox'] {
                         display: flex;
@@ -416,6 +416,15 @@ main.contract-container {
                         label {
                             width: 100%;
                         }
+                    }
+
+                    .add-option {
+                        padding: 1rem 2rem;
+
+                        background-color: var(--ten-percent);
+                        color: white;
+
+                        border-radius: 5px;
                     }
 
                     .input-wrapper {
