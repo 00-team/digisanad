@@ -149,6 +149,9 @@ main.contract-container {
                 direction: rtl;
                 font-size: 18px;
 
+                background-color: white;
+                color: black;
+
                 width: 100%;
                 height: 100%;
                 resize: none;
@@ -164,6 +167,16 @@ main.contract-container {
 
                 .field-wrapper {
                     all: unset;
+                    display: inline-block;
+
+                    input {
+                        background-color: white;
+                        border-bottom: 1px solid black;
+                        color: black;
+                    }
+                    input[type='number'] {
+                        text-align: center;
+                    }
                 }
 
                 hr {
