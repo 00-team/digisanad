@@ -143,11 +143,12 @@ main.contract-container {
             }
 
             textarea {
-                padding: $gap;
+                padding: 0.5rem;
                 border: 0;
+
                 direction: rtl;
                 font-size: 18px;
-                background: #040404;
+
                 width: 100%;
                 height: 100%;
                 resize: none;
@@ -156,8 +157,10 @@ main.contract-container {
             .viewer {
                 font-size: 16px;
                 direction: rtl;
-                padding: 0 1rem;
+                padding: 1rem;
                 overflow-y: auto;
+
+                font-family: 'iranSans';
 
                 .field-wrapper {
                     all: unset;
@@ -177,16 +180,6 @@ main.contract-container {
                 a {
                     text-decoration: underline $color1;
                     color: $color3;
-                }
-
-                .text-field {
-                    border: 2px solid $color1;
-                    transition: border-color 200ms ease-in-out;
-                    resize: vertical;
-
-                    &:focus {
-                        border-color: $color3;
-                    }
                 }
 
                 .question-field {
@@ -458,22 +451,5 @@ main.contract-container {
                 }
             }
         }
-    }
-
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 6px;
-        background: #040404;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #a400ff;
-        border: 0;
-        border-radius: 0;
-    }
-
-    ::selection {
-        color: #f2f2f2;
-        background-color: $color1;
     }
 }
