@@ -99,20 +99,26 @@ main.contract-container {
 
             .modes {
                 width: 100%;
+
                 display: flex;
-                gap: $gap * 4;
-                padding: $gap;
-                overflow: hidden;
+                gap: 1vw;
+
+                padding: 0.5rem;
+
                 flex-shrink: 0;
+
+                overflow: hidden;
+                direction: rtl;
 
                 span {
                     user-select: none;
                     border: 2px solid transparent;
                     border-bottom: 0;
-                    font-size: 24px;
-                    padding: 0 20px;
+                    padding: 0.5em 1em;
+
                     border-top-left-radius: 15px;
                     border-top-right-radius: 15px;
+
                     cursor: pointer;
                     position: relative;
 
@@ -126,7 +132,7 @@ main.contract-container {
                             height: 2px;
                             background: $color1;
                             bottom: 0;
-                            left: 100%;
+                            right: 100%;
                         }
 
                         &::before {
@@ -136,7 +142,7 @@ main.contract-container {
                             height: 2px;
                             background: $color1;
                             bottom: 0;
-                            right: 100%;
+                            left: 100%;
                         }
                     }
                 }
@@ -159,8 +165,6 @@ main.contract-container {
                 width: 100%;
                 height: 100%;
                 resize: none;
-
-                width: clamp(0px, 100%, 500px);
             }
 
             .viewer {
