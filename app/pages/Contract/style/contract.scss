@@ -427,6 +427,33 @@ main.contract-container {
                         border-radius: 5px;
                     }
 
+                    .option-row {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+
+                        gap: 1vw;
+
+                        .inputs-wrapper {
+                            flex: 1;
+                        }
+                        .remove {
+                            height: 100%;
+
+                            display: grid;
+                            place-items: center;
+
+                            color: var(--alert-error);
+
+                            svg {
+                                transition: rotate 0.35s ease-in-out;
+                            }
+                            &:hover svg {
+                                rotate: 90deg;
+                            }
+                        }
+                    }
+
                     .input-wrapper {
                         width: 100%;
                         display: flex;
