@@ -291,6 +291,7 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
             </div>
             {mode == 'edit' && (
                 <textarea
+                    className='editor-container title_smaller'
                     ref={ed}
                     value={state.schema.pages[state.page]!.content}
                     onInput={e => {
@@ -414,7 +415,7 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
         )
     }, [state])
 
-    return <div className='viewer'>{result}</div>
+    return <div className='viewer title_small'>{result}</div>
 }
 
 type FMF = {
@@ -429,8 +430,10 @@ type FieldProps<T> = FC<{
 const TextFC: FieldProps<TextField> = ({ field, update }) => {
     return (
         <textarea
-            className='text-field'
+            className='text-field title_smaller'
             value={field.value}
+            rows={10}
+            cols={50}
             onInput={e => {
                 field.value = e.currentTarget.value
                 update()
