@@ -1,6 +1,13 @@
 import React, { FC } from 'react'
 
-import { IdSvg, MaximumSvg, MinimunSvg, QuestionSvg, TypeSvg } from 'icons'
+import {
+    CloseSvg,
+    IdSvg,
+    MaximumSvg,
+    MinimunSvg,
+    QuestionSvg,
+    TypeSvg,
+} from 'icons'
 
 import { FieldType, have_minmax } from './types'
 
@@ -196,29 +203,41 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                     </button>
 
                     {field.options.map((o, oi) => (
-                        <div className='row' key={oi}>
-                            <input
+                        <div className='option-row' key={oi}>
+                            {/* <input
                                 name={field.uid}
                                 type={field.singleton ? 'radio' : 'checkbox'}
-                            />
-                            <input
-                                value={o.uid}
-                                placeholder='unique id'
-                                onChange={e => {
-                                    const v = e.currentTarget.value
-                                    o.uid = v
-                                    update()
-                                }}
-                            />
-                            <input
-                                value={o.display}
-                                placeholder='display'
-                                onChange={e => {
-                                    const v = e.currentTarget.value
-                                    o.display = v
-                                    update()
-                                }}
-                            />
+                            /> */}
+                            <div className='inputs-wrapper'>
+                                <div className='input-wrapper'>
+                                    <h4 className='input-title title_smaller'>
+                                        عنوان ورودی
+                                    </h4>
+                                    <input
+                                        value={o.uid}
+                                        placeholder='unique id'
+                                        onChange={e => {
+                                            const v = e.currentTarget.value
+                                            o.uid = v
+                                            update()
+                                        }}
+                                    />
+                                </div>
+                                <div className='input-wrapper'>
+                                    <h4 className='input-title title_smaller'>
+                                        توضیحات ورودی
+                                    </h4>
+                                    <input
+                                        value={o.display}
+                                        placeholder='display'
+                                        onChange={e => {
+                                            const v = e.currentTarget.value
+                                            o.display = v
+                                            update()
+                                        }}
+                                    />
+                                </div>
+                            </div>
                             <button
                                 className='remove'
                                 onClick={() => {
@@ -226,7 +245,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                     update()
                                 }}
                             >
-                                X
+                                <CloseSvg size={25} />
                             </button>
                         </div>
                     ))}
