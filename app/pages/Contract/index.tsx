@@ -123,7 +123,7 @@ const Contract: FC = () => {
                                 state.page != i && updateState({ page: i })
                             }
                         >
-                            {i}
+                            {i + 1}
                         </button>
                     ))}
                 </div>
