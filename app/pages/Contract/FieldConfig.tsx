@@ -163,20 +163,27 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
             )}
             {field.type == 'option' && (
                 <>
-                    <div className='row'>
-                        <input
-                            type='checkbox'
-                            checked={field.singleton}
-                            id='fc_singleton'
-                            onChange={e => {
-                                const v = e.currentTarget.checked
-                                field.singleton = v
-                                update()
-                            }}
-                        />
-                        <label htmlFor='fc_singleton'>singleton</label>
+                    <div className='config-row'>
+                        <div className='holder'>
+                            <QuestionSvg size={25} />
+                            <label htmlFor='fc_singleton'>تک گزینه ای</label>
+                        </div>
+                        <div className='data'>
+                            <input
+                                type='checkbox'
+                                checked={field.singleton}
+                                id='fc_singleton'
+                                onChange={e => {
+                                    const v = e.currentTarget.checked
+                                    field.singleton = v
+                                    update()
+                                }}
+                            />
+                        </div>
                     </div>
+
                     <button
+                        className='add-option title_smaller'
                         onClick={() => {
                             field.options.push({
                                 uid: 'o' + field.options.length,
@@ -185,8 +192,9 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             update()
                         }}
                     >
-                        add an option
+                        اضافه شرط
                     </button>
+
                     {field.options.map((o, oi) => (
                         <div className='row' key={oi}>
                             <input
@@ -212,7 +220,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                 }}
                             />
                             <button
-                                style={{ borderColor: '#E20338' }}
                                 className='remove'
                                 onClick={() => {
                                     field.options.splice(oi, 1)
