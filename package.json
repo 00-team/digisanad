@@ -11,6 +11,7 @@
         "@00-team/react-alert": "^2.0.0",
         "@00-team/utils": "^1.1.2",
         "@loadable/component": "^5.15.2",
+        "@react-shamsi/datepicker": "^0.1.0",
         "axios": "^1.2.2",
         "jotai": "^1.12.1",
         "react": "^18.2.0",
