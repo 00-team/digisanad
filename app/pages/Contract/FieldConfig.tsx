@@ -258,6 +258,18 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                         <h3 className='questions-header title_small container-row-header'>
                             سطر ها
                         </h3>
+                        <button
+                            className='add-question add-btn title_smaller'
+                            onClick={() => {
+                                field.questions.push({
+                                    uid: 'عنوان...',
+                                    display: 'توضیح...',
+                                })
+                                update()
+                            }}
+                        >
+                            اضافه سطر
+                        </button>
                         {field.questions.map((q, qi) => (
                             <Fragment key={qi}>
                                 <div className='question-wrapper input-wrapper '>
@@ -315,6 +327,18 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                         <h3 className='questions-header title_small container-row-header'>
                             ستون ها
                         </h3>
+                        <button
+                            className='add-question add-btn title_smaller'
+                            onClick={() => {
+                                field.answers.push({
+                                    uid: 'عنوان...',
+                                    display: 'توضیح...',
+                                })
+                                update()
+                            }}
+                        >
+                            اضافه سطون
+                        </button>
                         {field.answers.map((a, ai) => (
                             <Fragment key={ai}>
                                 <div className='answer-wrapper input-wrapper'>
