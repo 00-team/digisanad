@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 
 import {
     CloseSvg,
@@ -254,14 +254,13 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
 
             {field.type == 'question' && (
                 <div className='questions-container'>
-                    <div className='questions-wrapper'>
-                        <h3 className='questions-header title_small'>سطر ها</h3>
+                    <div className='questions-wrapper container-row'>
+                        <h3 className='questions-header title_small container-row-header'>
+                            سطر ها
+                        </h3>
                         {field.questions.map((q, qi) => (
-                            <>
-                                <div
-                                    key={qi}
-                                    className='question-wrapper input-wrapper'
-                                >
+                            <Fragment key={qi}>
+                                <div className='question-wrapper input-wrapper '>
                                     <h4 className='title_smaller'>
                                         عنوان سوال
                                     </h4>
@@ -275,7 +274,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                     />
                                 </div>
                                 <div
-                                    key={qi}
                                     className='question-wrapper input-wrapper'
                                     style={{ marginTop: '-1vh' }}
                                 >
@@ -290,7 +288,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                         }}
                                     />
                                 </div>
-                            </>
+                            </Fragment>
                             // <tr key={qi}>
                             //     <td className='row'>
 
@@ -312,30 +310,49 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             // </tr>
                         ))}
                     </div>
-                    <div className='answers-wrapper'></div>
+
+                    <div className='answers-wrapper container-row'>
+                        <h3 className='questions-header title_small container-row-header'>
+                            ستون ها
+                        </h3>
+                        {field.answers.map((a, ai) => (
+                            <Fragment key={ai}>
+                                <div className='answer-wrapper input-wrapper'>
+                                    <h4 className='title_smaller'>
+                                        عنوان جواب
+                                    </h4>
+                                    <input
+                                        value={a.uid}
+                                        onChange={e => {
+                                            a.uid = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                </div>
+                                <div
+                                    className='answer-wrapper input-wrapper'
+                                    style={{ marginTop: '-1vh' }}
+                                >
+                                    <h4 className='title_smaller'>
+                                        توضیحات جواب
+                                    </h4>
+                                    <input
+                                        value={a.display}
+                                        onChange={e => {
+                                            a.display = e.currentTarget.value
+                                            update()
+                                        }}
+                                    />
+                                </div>
+                            </Fragment>
+                        ))}
+                    </div>
                 </div>
                 // <table className='questions'>
                 //     <thead>
                 //         <tr>
                 //             <th style={{ width: '70%' }}>Questions</th>
-                //             {field.answers.map((a, ai) => (
-                //                 <th key={ai}>
-                //                     <input
-                //                         value={a.uid}
-                //                         onChange={e => {
-                //                             a.uid = e.currentTarget.value
-                //                             update()
-                //                         }}
-                //                     />
-                //                     <input
-                //                         value={a.display}
-                //                         onChange={e => {
-                //                             a.display = e.currentTarget.value
-                //                             update()
-                //                         }}
-                //                     />
-                //                 </th>
-                //             ))}
+
                 //             <th
                 //                 className='append'
                 //                 onClick={() => {
@@ -353,23 +370,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 //     <tbody>
                 //         {field.questions.map((q, qi) => (
                 //             <tr key={qi}>
-                //                 <td className='row'>
-                //                     <input
-                //                         style={{ width: '30%' }}
-                //                         value={q.uid}
-                //                         onChange={e => {
-                //                             q.uid = e.currentTarget.value
-                //                             update()
-                //                         }}
-                //                     />
-                //                     <input
-                //                         value={q.display}
-                //                         onChange={e => {
-                //                             q.display = e.currentTarget.value
-                //                             update()
-                //                         }}
-                //                     />
-                //                 </td>
                 //                 {field.answers.map((_, ai) => (
                 //                     <td key={ai}>
                 //                         <input type='radio' name={q.uid} />
