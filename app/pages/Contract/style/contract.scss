@@ -232,7 +232,7 @@ main.contract-container {
         flex-direction: column;
         gap: 4vh;
 
-        padding-top: 5vh;
+        padding: 5vh 0 2.5vh 0;
 
         background-color: white;
         color: black;
@@ -462,6 +462,10 @@ main.contract-container {
 
                         margin-top: 1vh;
 
+                        h4 {
+                            font-family: 'iranBold';
+                        }
+
                         textarea {
                             background-color: white;
                             border: 1px solid;
@@ -477,6 +481,13 @@ main.contract-container {
 
                         margin-top: 1vh;
 
+                        .add-btn {
+                            padding: 1rem 2rem;
+                            background-color: var(--ten-percent);
+                            color: white;
+                            border-radius: 5px;
+                        }
+
                         .container-row {
                             display: flex;
                             flex-direction: column;
@@ -487,6 +498,8 @@ main.contract-container {
 
                                 display: flex;
                                 align-items: center;
+
+                                margin-bottom: -1vh;
 
                                 position: relative;
                                 isolation: isolate;
