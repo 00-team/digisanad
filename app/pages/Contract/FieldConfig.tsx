@@ -204,10 +204,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
 
                     {field.options.map((o, oi) => (
                         <div className='option-row' key={oi}>
-                            {/* <input
-                                name={field.uid}
-                                type={field.singleton ? 'radio' : 'checkbox'}
-                            /> */}
                             <div className='inputs-wrapper'>
                                 <div className='input-wrapper'>
                                     <h4 className='input-title title_smaller'>
@@ -373,26 +369,6 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                         ))}
                     </div>
                 </div>
-                // <tr key={qi}>
-                //     {field.answers.map((_, ai) => (
-                //         <td key={ai}>
-                //             <input type='radio' name={q.uid} />
-                //         </td>
-                //     ))}
-
-                // </tr>
-
-                //     <td
-                //         key={ai}
-                //         className='remove'
-                //         onClick={() => {
-                //             field.answers.splice(ai, 1)
-                //             update()
-                //         }}
-                //     >
-                //         X
-                //     </td>
-                // ))}
             )}
         </div>
     )
