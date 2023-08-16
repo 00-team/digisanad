@@ -473,16 +473,16 @@ main.contract-container {
                         width: 100%;
                         display: flex;
                         flex-direction: column;
-                        gap: 2vh;
+                        gap: 4vh;
 
                         margin-top: 1vh;
 
-                        .questions-wrapper {
+                        .container-row {
                             display: flex;
                             flex-direction: column;
                             gap: 2vh;
 
-                            .questions-header {
+                            .container-row-header {
                                 width: 100%;
 
                                 display: flex;
