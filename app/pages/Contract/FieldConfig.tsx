@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react'
+import React, { FC } from 'react'
 
 import {
     CloseSvg,
@@ -271,60 +271,50 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             اضافه سطر
                         </button>
                         {field.questions.map((q, qi) => (
-                            <Fragment key={qi}>
-                                <div className='question-wrapper input-wrapper '>
-                                    <h4 className='title_smaller'>
-                                        عنوان سوال
-                                    </h4>
-                                    <input
-                                        className='title_smaller'
-                                        value={q.uid}
-                                        onChange={e => {
-                                            q.uid = e.currentTarget.value
-                                            update()
-                                        }}
-                                    />
-                                </div>
-                                <div
-                                    className='question-wrapper input-wrapper'
-                                    style={{ marginTop: '-1vh' }}
-                                >
-                                    <h4 className='title_smaller'>
-                                        توضیحات سوال
-                                    </h4>
-                                    <input
-                                        value={q.display}
-                                        onChange={e => {
-                                            q.display = e.currentTarget.value
-                                            update()
-                                        }}
-                                    />
-                                </div>
-                            </Fragment>
-                            // <tr key={qi}>
-                            //     <td className='row'>
+                            <div className='question-wrapper option-row'>
+                                <div className='inputs-wrapper'>
+                                    <div className='input-wrapper'>
+                                        <h4 className='title_smaller'>
+                                            عنوان سوال
+                                        </h4>
+                                        <input
+                                            className='title_smaller'
+                                            value={q.uid}
+                                            onChange={e => {
+                                                q.uid = e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </div>
 
-                            //     </td>
-                            //     {field.answers.map((_, ai) => (
-                            //         <td key={ai}>
-                            //             <input type='radio' name={q.uid} />
-                            //         </td>
-                            //     ))}
-                            //     <td
-                            //         className='remove'
-                            //         onClick={() => {
-                            //             field.questions.splice(qi, 1)
-                            //             update()
-                            //         }}
-                            //     >
-                            //         X
-                            //     </td>
-                            // </tr>
+                                    <div className='question-wrapper input-wrapper'>
+                                        <h4 className='title_smaller'>
+                                            توضیحات سوال
+                                        </h4>
+                                        <input
+                                            value={q.display}
+                                            onChange={e => {
+                                                q.display =
+                                                    e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                    className='remove'
+                                    onClick={() => {
+                                        field.questions.splice(qi, 1)
+                                        update()
+                                    }}
+                                >
+                                    <CloseSvg size={25} />
+                                </button>
+                            </div>
                         ))}
                     </div>
-
-                    <div className='answers-wrapper container-row'>
-                        <h3 className='questions-header title_small container-row-header'>
+                    <div className='container-row'>
+                        <h3 className='title_small container-row-header'>
                             ستون ها
                         </h3>
                         <button
@@ -337,108 +327,72 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                 update()
                             }}
                         >
-                            اضافه سطون
+                            اضافه ستون
                         </button>
                         {field.answers.map((a, ai) => (
-                            <Fragment key={ai}>
-                                <div className='answer-wrapper input-wrapper'>
-                                    <h4 className='title_smaller'>
-                                        عنوان جواب
-                                    </h4>
-                                    <input
-                                        value={a.uid}
-                                        onChange={e => {
-                                            a.uid = e.currentTarget.value
-                                            update()
-                                        }}
-                                    />
+                            <div className='question-wrapper option-row'>
+                                <div className='inputs-wrapper'>
+                                    <div className='input-wrapper'>
+                                        <h4 className='title_smaller'>
+                                            عنوان جواب
+                                        </h4>
+                                        <input
+                                            className='title_smaller'
+                                            value={a.uid}
+                                            onChange={e => {
+                                                a.uid = e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className='question-wrapper input-wrapper'>
+                                        <h4 className='title_smaller'>
+                                            توضیحات جواب
+                                        </h4>
+                                        <input
+                                            value={a.display}
+                                            onChange={e => {
+                                                a.display =
+                                                    e.currentTarget.value
+                                                update()
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                                <div
-                                    className='answer-wrapper input-wrapper'
-                                    style={{ marginTop: '-1vh' }}
+                                <button
+                                    className='remove'
+                                    onClick={() => {
+                                        field.answers.splice(ai, 1)
+                                        update()
+                                    }}
                                 >
-                                    <h4 className='title_smaller'>
-                                        توضیحات جواب
-                                    </h4>
-                                    <input
-                                        value={a.display}
-                                        onChange={e => {
-                                            a.display = e.currentTarget.value
-                                            update()
-                                        }}
-                                    />
-                                </div>
-                            </Fragment>
+                                    <CloseSvg size={25} />
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </div>
-                // <table className='questions'>
-                //     <thead>
-                //         <tr>
-                //             <th style={{ width: '70%' }}>Questions</th>
+                // <tr key={qi}>
+                //     {field.answers.map((_, ai) => (
+                //         <td key={ai}>
+                //             <input type='radio' name={q.uid} />
+                //         </td>
+                //     ))}
 
-                //             <th
-                //                 className='append'
-                //                 onClick={() => {
-                //                     field.answers.push({
-                //                         display: 'A',
-                //                         uid: 'a',
-                //                     })
-                //                     update()
-                //                 }}
-                //             >
-                //                 +
-                //             </th>
-                //         </tr>
-                //     </thead>
-                //     <tbody>
-                //         {field.questions.map((q, qi) => (
-                //             <tr key={qi}>
-                //                 {field.answers.map((_, ai) => (
-                //                     <td key={ai}>
-                //                         <input type='radio' name={q.uid} />
-                //                     </td>
-                //                 ))}
-                //                 <td
-                //                     className='remove'
-                //                     onClick={() => {
-                //                         field.questions.splice(qi, 1)
-                //                         update()
-                //                     }}
-                //                 >
-                //                     X
-                //                 </td>
-                //             </tr>
-                //         ))}
+                // </tr>
 
-                //         <tr>
-                //             <td
-                //                 className='append'
-                //                 onClick={() => {
-                //                     field.questions.push({
-                //                         display: 'Q',
-                //                         uid: 'q',
-                //                     })
-                //                     update()
-                //                 }}
-                //             >
-                //                 +
-                //             </td>
-                //             {field.answers.map((_, ai) => (
-                //                 <td
-                //                     key={ai}
-                //                     className='remove'
-                //                     onClick={() => {
-                //                         field.answers.splice(ai, 1)
-                //                         update()
-                //                     }}
-                //                 >
-                //                     X
-                //                 </td>
-                //             ))}
-                //         </tr>
-                //     </tbody>
-                // </table>
+                //     <td
+                //         key={ai}
+                //         className='remove'
+                //         onClick={() => {
+                //             field.answers.splice(ai, 1)
+                //             update()
+                //         }}
+                //     >
+                //         X
+                //     </td>
+                // ))}
             )}
         </div>
     )
