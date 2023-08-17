@@ -532,16 +532,22 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
 }
 
 const RecordFC: FieldProps<RecordField> = ({ field }) => {
-    const [preview, setpreview] = useState('')
+    const [preview, setpreview] = useState([''])
 
     const readURL = (input: ChangeEvent<HTMLInputElement>) => {
-        if (input.target.files && input.target.files[0]) {
+        if (!input.target.files) return
+
+        if (input.target.files.length <= 1) {
+            if (!input.target.files[0]) return
+
             var reader = new FileReader()
 
             reader.onload = function (e) {
-                return setpreview(e.target!.result!.toString())
+                return setpreview([...preview, e.target!.result!.toString()])
             }
             reader.readAsDataURL(input.target.files[0])
+        } else {
+            Array.from(input.target.files).map(e => console.log(e))
         }
     }
 
@@ -551,28 +557,40 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
 
     return (
         <div className='record-container'>
-            {preview === '' ? (
-                <label htmlFor='record-input' className='record-field'>
+            <div className='record-field'>
+                {preview.length <= 1 ? (
                     <div className='record-empty'>
                         <ArrowDownSvg size={40} />
                         <h4 className='title_smaller'>
                             فایل خود را اینجا بارگذاری کنید
                         </h4>
                     </div>
-
-                    <input
-                        id='record-input'
-                        onChange={e => readURL(e)}
-                        type='file'
-                        multiple={field.plural}
-                        accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
-                    />
-                </label>
-            ) : (
-                <div className='files-container'>
-                    <img src={preview} alt='' />
-                </div>
-            )}
+                ) : (
+                    <div className='files-container'>
+                        {preview.map(file => {
+                            if (!file) return
+                            return (
+                                <img
+                                    src={file}
+                                    loading={'lazy'}
+                                    decoding={'async'}
+                                    alt=''
+                                />
+                            )
+                        })}
+                    </div>
+                )}
+            </div>
+            <label htmlFor='record-input' className='add-file title_small'>
+                اضافه کردن فایل
+            </label>
+            <input
+                id='record-input'
+                onChange={e => readURL(e)}
+                type='file'
+                multiple={field.plural}
+                accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
+            />
         </div>
     )
 }
