@@ -558,8 +558,10 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                 var reader = new FileReader()
 
                 reader.onload = function (e) {
-                    console.log(e.target!.result!.toString())
-                    setpreview([...preview, e.target!.result!.toString()])
+                    setpreview(previews => [
+                        ...previews,
+                        e.target!.result!.toString(),
+                    ])
                 }
                 reader.readAsDataURL(file)
 
@@ -586,6 +588,7 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                             if (!file) return
                             return (
                                 <div
+                                    key={index}
                                     className='img-container'
                                     onClick={() => {
                                         setpreview(previews =>
@@ -596,7 +599,6 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                                     }}
                                 >
                                     <img
-                                        key={index}
                                         src={file}
                                         loading={'lazy'}
                                         decoding={'async'}
