@@ -216,9 +216,22 @@ main.contract-container {
                 }
 
                 .record-field {
-                    direction: ltr;
                     display: flex;
-                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+
+                    width: 100%;
+                    height: 300px;
+
+                    background-color: white;
+
+                    cursor: pointer;
+                    direction: ltr;
+
+                    input {
+                        display: none;
+                    }
                 }
             }
         }
