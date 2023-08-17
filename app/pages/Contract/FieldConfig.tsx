@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 
 import {
     CloseSvg,
+    FileSvg,
     IdSvg,
     MaximumSvg,
     MinimunSvg,
@@ -75,17 +76,22 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
             </div>
 
             {field.type == 'record' && (
-                <div className='row'>
-                    <input
-                        id='fc_plural'
-                        type='checkbox'
-                        checked={field.plural}
-                        onChange={e => {
-                            field.plural = e.currentTarget.checked
-                            update()
-                        }}
-                    />
-                    <label htmlFor='fc_plural'>Plural</label>
+                <div className='config-row'>
+                    <label htmlFor='fc_plural' className='holder title_smaller'>
+                        <FileSvg size={25} />
+                        چند فایلی
+                    </label>
+                    <div className='data'>
+                        <input
+                            id='fc_plural'
+                            type='checkbox'
+                            checked={field.plural}
+                            onChange={e => {
+                                field.plural = e.currentTarget.checked
+                                update()
+                            }}
+                        />
+                    </div>
                 </div>
             )}
             {field.type == 'link' && (
