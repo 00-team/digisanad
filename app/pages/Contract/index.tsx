@@ -13,7 +13,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import { ArrowDownSvg, CopySvg, PlusSvg, SettingSvg } from 'icons'
+import { ArrowDownSvg, CloseSvg, CopySvg, PlusSvg, SettingSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -585,13 +585,18 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                         {preview.map((file, index) => {
                             if (!file) return
                             return (
-                                <img
-                                    key={index}
-                                    src={file}
-                                    loading={'lazy'}
-                                    decoding={'async'}
-                                    alt=''
-                                />
+                                <div className='img-container'>
+                                    <img
+                                        key={index}
+                                        src={file}
+                                        loading={'lazy'}
+                                        decoding={'async'}
+                                        alt=''
+                                    />
+                                    <div className='remove-img'>
+                                        <CloseSvg size={30} />
+                                    </div>
+                                </div>
                             )
                         })}
                     </div>
