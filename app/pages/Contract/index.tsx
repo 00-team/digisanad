@@ -585,7 +585,16 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                         {preview.map((file, index) => {
                             if (!file) return
                             return (
-                                <div className='img-container'>
+                                <div
+                                    className='img-container'
+                                    onClick={() => {
+                                        setpreview(previews =>
+                                            previews.filter(preview => {
+                                                return preview !== file
+                                            })
+                                        )
+                                    }}
+                                >
                                     <img
                                         key={index}
                                         src={file}
