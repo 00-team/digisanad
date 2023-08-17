@@ -13,7 +13,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import { CopySvg, PlusSvg, SettingSvg } from 'icons'
+import { ArrowDownSvg, CopySvg, PlusSvg, SettingSvg } from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -551,6 +551,17 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
 
     return (
         <label htmlFor='record-input' className='record-field'>
+            {preview === '' ? (
+                <div className='record-empty'>
+                    <ArrowDownSvg size={40} />
+                    <h4 className='title_smaller'>
+                        فایل خود را اینجا بارگذاری کنید
+                    </h4>
+                </div>
+            ) : (
+                <img src={preview} alt='' />
+            )}
+
             <input
                 id='record-input'
                 onChange={e => readURL(e)}
