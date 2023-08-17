@@ -292,6 +292,7 @@ main.contract-container {
 
                         .img-container {
                             height: 100%;
+                            flex-shrink: 0;
 
                             position: relative;
                             isolation: isolate;
