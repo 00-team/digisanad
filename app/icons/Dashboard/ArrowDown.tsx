@@ -11,7 +11,7 @@ export const ArrowDownSvg: Icon = ({ size, ...attr }) => {
             height={size}
             width={size}
             xmlns='http://www.w3.org/2000/svg'
-            style={{ transform: `rotate(180deg)` }}
+            style={{ rotate: '180deg' }}
             {...attr}
         >
             <path d='M8 0.5l-7.5 7.5h4.5v8h6v-8h4.5z'></path>
