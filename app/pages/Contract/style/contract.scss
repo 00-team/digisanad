@@ -280,6 +280,16 @@ main.contract-container {
                         padding: 1rem;
                         overflow-x: auto;
 
+                        &::-webkit-scrollbar {
+                            width: 1px;
+                            background: var(--sixty-percent);
+                        }
+                        &::-webkit-scrollbar-thumb {
+                            background-color: var(--ten-percent);
+                            border: 5px solid var(--sixty-percent);
+                            border-radius: 20px;
+                        }
+
                         img {
                             height: 100%;
                             border-radius: 5px;

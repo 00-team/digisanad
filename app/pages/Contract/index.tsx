@@ -532,10 +532,14 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
 }
 
 const RecordFC: FieldProps<RecordField> = ({ field }) => {
-    const [preview, setpreview] = useState([''])
+    const [preview, setpreview] = useState<string[]>([''])
+
+    useEffect(() => {
+        console.log(preview)
+    }, [preview])
 
     const readURL = (input: ChangeEvent<HTMLInputElement>) => {
-        if (field.plural && preview.length >= 2)
+        if (!field.plural && preview.length >= 2)
             return ReactAlert.error('ورودی بیشتر از یک فایل مجاز نیست!')
 
         if (!input.target.files) return
@@ -550,7 +554,17 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
             }
             reader.readAsDataURL(input.target.files[0])
         } else {
-            Array.from(input.target.files).map(e => console.log(e))
+            Array.from(input.target.files).map(file => {
+                var reader = new FileReader()
+
+                reader.onload = function (e) {
+                    console.log(e.target!.result!.toString())
+                    setpreview([...preview, e.target!.result!.toString()])
+                }
+                reader.readAsDataURL(file)
+
+                return
+            })
         }
 
         return
@@ -568,10 +582,11 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                     </div>
                 ) : (
                     <div className='files-container'>
-                        {preview.map(file => {
+                        {preview.map((file, index) => {
                             if (!file) return
                             return (
                                 <img
+                                    key={index}
                                     src={file}
                                     loading={'lazy'}
                                     decoding={'async'}
