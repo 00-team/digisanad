@@ -535,6 +535,9 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     const [preview, setpreview] = useState([''])
 
     const readURL = (input: ChangeEvent<HTMLInputElement>) => {
+        if (field.plural && preview.length >= 2)
+            return ReactAlert.error('ورودی بیشتر از یک فایل مجاز نیست!')
+
         if (!input.target.files) return
 
         if (input.target.files.length <= 1) {
@@ -549,11 +552,9 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
         } else {
             Array.from(input.target.files).map(e => console.log(e))
         }
-    }
 
-    useEffect(() => {
-        console.log(preview)
-    }, [preview])
+        return
+    }
 
     return (
         <div className='record-container'>
