@@ -1,4 +1,5 @@
 import React, {
+    ChangeEvent,
     createElement,
     Dispatch,
     ElementRef,
@@ -531,14 +532,33 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
 }
 
 const RecordFC: FieldProps<RecordField> = ({ field }) => {
+    const [preview, setpreview] = useState('')
+
+    const readURL = (input: ChangeEvent<HTMLInputElement>) => {
+        if (input.target.files && input.target.files[0]) {
+            var reader = new FileReader()
+
+            reader.onload = function (e) {
+                return setpreview(e.target!.result!.toString())
+            }
+            reader.readAsDataURL(input.target.files[0])
+        }
+    }
+
+    useEffect(() => {
+        console.log(preview)
+    }, [preview])
+
     return (
-        <div className='record-field'>
+        <label htmlFor='record-input' className='record-field'>
             <input
+                id='record-input'
+                onChange={e => readURL(e)}
                 type='file'
                 multiple={field.plural}
                 accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
             />
-        </div>
+        </label>
     )
 }
 
