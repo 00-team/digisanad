@@ -550,26 +550,30 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     }, [preview])
 
     return (
-        <label htmlFor='record-input' className='record-field'>
+        <div className='record-container'>
             {preview === '' ? (
-                <div className='record-empty'>
-                    <ArrowDownSvg size={40} />
-                    <h4 className='title_smaller'>
-                        فایل خود را اینجا بارگذاری کنید
-                    </h4>
-                </div>
-            ) : (
-                <img src={preview} alt='' />
-            )}
+                <label htmlFor='record-input' className='record-field'>
+                    <div className='record-empty'>
+                        <ArrowDownSvg size={40} />
+                        <h4 className='title_smaller'>
+                            فایل خود را اینجا بارگذاری کنید
+                        </h4>
+                    </div>
 
-            <input
-                id='record-input'
-                onChange={e => readURL(e)}
-                type='file'
-                multiple={field.plural}
-                accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
-            />
-        </label>
+                    <input
+                        id='record-input'
+                        onChange={e => readURL(e)}
+                        type='file'
+                        multiple={field.plural}
+                        accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
+                    />
+                </label>
+            ) : (
+                <div className='files-container'>
+                    <img src={preview} alt='' />
+                </div>
+            )}
+        </div>
     )
 }
 
