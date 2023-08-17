@@ -533,11 +533,11 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
 const RecordFC: FieldProps<RecordField> = ({ field }) => {
     return (
         <div className='record-field'>
-            <span>
-                TODO: if the span is plural append more files and such ...
-            </span>
-            <span>plural: {`${field.plural}`}</span>
-            <input type='file' disabled />
+            <input
+                type='file'
+                multiple={field.plural}
+                accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
+            />
         </div>
     )
 }
