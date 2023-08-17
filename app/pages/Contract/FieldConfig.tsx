@@ -273,7 +273,10 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             اضافه سطر
                         </button>
                         {field.questions.map((q, qi) => (
-                            <div className='question-wrapper option-row'>
+                            <div
+                                className='question-wrapper option-row'
+                                key={qi}
+                            >
                                 <div className='inputs-wrapper'>
                                     <div className='input-wrapper'>
                                         <h4 className='title_smaller'>
@@ -332,7 +335,10 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             اضافه ستون
                         </button>
                         {field.answers.map((a, ai) => (
-                            <div className='question-wrapper option-row'>
+                            <div
+                                className='question-wrapper option-row'
+                                key={ai}
+                            >
                                 <div className='inputs-wrapper'>
                                     <div className='input-wrapper'>
                                         <h4 className='title_smaller'>
