@@ -1,7 +1,4 @@
 $gap: 0.3rem;
-$color1: #782fef;
-$color2: #f375f3;
-$color3: #fd0079;
 
 main.contract-container {
     display: flex;
@@ -205,13 +202,13 @@ main.contract-container {
 
                 .question-field {
                     width: 100%;
-                    border: 1px solid $color1;
+                    border: 1px solid black;
                     border-spacing: 0;
 
                     td,
                     th {
                         text-align: center;
-                        border: 1px solid $color1;
+                        border: 1px solid black;
                     }
                 }
 
