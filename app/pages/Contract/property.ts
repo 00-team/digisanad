@@ -20,7 +20,7 @@ export const property: Schema = {
         },
         {
             content:
-                'کاربر گرامی بر روی این گزینه کلیک نمایید و از امکانات موتور جستجو استفاده نمایید.\n\nDigiSanad ابزاری نوین',
+                'کاربر گرامی بر روی این گزینه کلیک نمایید و از امکانات موتور جستجو استفاده نمایید.\n\nDigiSanad ابزاری نوین\n\n({signature_0})',
         },
     ],
     fields: {
@@ -387,6 +387,16 @@ export const property: Schema = {
             max: null,
             min: null,
             value: '',
+        },
+        signature_0: {
+            type: 'signature',
+            display: 'امضا دیجیتال',
+            uid: 'signature_0',
+            title: 'Signature',
+            description: '',
+            optional: false,
+            value: '',
+            Icon: null,
         },
     },
 }

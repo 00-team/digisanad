@@ -642,62 +642,95 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     )
 }
 
+type SignatureState = {
+    px: number
+    py: number
+    cx: number
+    cy: number
+    draw: boolean
+    context: CanvasRenderingContext2D
+}
+
+var n = 0
+
 const SignatureDrawer: FieldProps<SignatureField> = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-
-    interface signatureType {
-        cords: { x: number; y: number }
-        isDragging: boolean
-    }
-
-    const [Signature, setSignature] = useState<signatureType>({
-        cords: { x: 0, y: 0 },
-        isDragging: false,
+    const state = useRef<SignatureState>({
+        px: 0,
+        py: 0,
+        cx: 0,
+        cy: 0,
+        draw: false,
+        context: {} as CanvasRenderingContext2D,
     })
-
-    const drawLine = (x2: number, y2: number) => {
-        if (!canvasRef.current || !Signature.isDragging) return
-
-        const canvas = canvasRef.current
-        const context = canvas.getContext('2d')
-
-        if (!context) return
-
-        context.beginPath()
-        context.strokeStyle = 'black'
-        context.lineWidth = 1
-        context.moveTo(Signature.cords.x, Signature.cords.y)
-        context.lineTo(x2, y2)
-        context.stroke()
-        context.closePath()
-
-        setSignature({ ...Signature, cords: { x: x2, y: y2 } })
-    }
 
     return (
         <div className='signature-container'>
             <canvas
-                ref={canvasRef}
+                width={500}
+                height={450}
+                ref={e => {
+                    if (!e) return
+                    state.current.context = e.getContext('2d')!
+                }}
                 className='signature-wrapper'
-                onMouseDown={() =>
-                    setSignature({ ...Signature, isDragging: true })
-                }
-                onMouseUp={() =>
-                    setSignature({ ...Signature, isDragging: false })
-                }
-                onMouseMove={e => {
-                    if (!Signature.isDragging) return
+                onMouseDown={e => {
+                    state.current.px = state.current.cx
+                    state.current.py = state.current.cy
 
-                    drawLine(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
+                    state.current.cx = e.clientX - e.currentTarget.offsetLeft
+                    state.current.cy = e.clientY - e.currentTarget.offsetTop
+
+                    console.log(state.current.cx, state.current.cy)
+
+                    state.current.context.beginPath()
+                    state.current.context.fillStyle = 'black'
+                    state.current.context.fillRect(
+                        state.current.cx,
+                        state.current.cy,
+                        2,
+                        2
+                    )
+                    state.current.context.closePath()
+
+                    state.current.draw = true
+                }}
+                onMouseUp={() => {
+                    state.current.draw = false
+                }}
+                onMouseOut={() => {
+                    state.current.draw = false
+                }}
+                onMouseMove={e => {
+                    n++
+                    if (!state.current.draw || n < 70) return
+                    n = 0
+
+                    state.current.px = state.current.cx
+                    state.current.py = state.current.cy
+
+                    state.current.cx = e.clientX - e.currentTarget.offsetLeft
+                    state.current.cy = e.clientY - e.currentTarget.offsetTop
+
+                    state.current.context.beginPath()
+                    state.current.context.moveTo(
+                        state.current.px,
+                        state.current.py
+                    )
+                    state.current.context.lineTo(
+                        state.current.cx,
+                        state.current.cy
+                    )
+                    state.current.context.strokeStyle = 'black'
+                    state.current.context.lineWidth = 2
+                    state.current.context.stroke()
+                    state.current.context.closePath()
                 }}
             ></canvas>
             <div className='confirm-wrapper'>
                 <div
                     className='remove'
                     onClick={() => {
-                        canvasRef!
-                            .current!.getContext('2d')!
-                            .clearRect(0, 0, innerWidth, innerHeight)
+                        state.current.context.clearRect(0, 0, 500, 450)
                     }}
                 >
                     <CloseSvg size={25} />
