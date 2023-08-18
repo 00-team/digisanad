@@ -30,6 +30,7 @@ import {
     QuestionField,
     RecordField,
     Schema,
+    SignatureField,
     StrField,
     TextField,
 } from './types'
@@ -634,6 +635,11 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     )
 }
 
+const SignatureDrawer: FieldProps<SignatureField> = ({ field }) => {
+    console.log(field)
+    return <div className='signature-container'></div>
+}
+
 const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
     return (
         <ul>
@@ -692,10 +698,10 @@ const field_map: FMF = {
     ),
     geo: GeoFC,
     int: IntFC,
-    signature: () => <span>signature drawer ...</span>,
+    signature: SignatureDrawer,
     record: RecordFC,
     question: QuestionFC,
-    date: () => <DatePicker />,
+    date: DatePicker,
     option: OptionFC,
 }
 
