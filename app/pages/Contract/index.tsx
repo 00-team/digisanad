@@ -677,10 +677,8 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                     state.current.px = state.current.cx
                     state.current.py = state.current.cy
 
-                    state.current.cx = e.clientX - e.currentTarget.offsetLeft
-                    state.current.cy = e.clientY - e.currentTarget.offsetTop
-
-                    console.log(state.current.cx, state.current.cy)
+                    state.current.cx = e.nativeEvent.offsetX
+                    state.current.cy = e.nativeEvent.offsetY
 
                     state.current.context.beginPath()
                     state.current.context.fillStyle = 'black'
@@ -702,14 +700,14 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                 }}
                 onMouseMove={e => {
                     n++
-                    if (!state.current.draw || n < 70) return
+                    if (!state.current.draw || n < 8) return
                     n = 0
 
                     state.current.px = state.current.cx
                     state.current.py = state.current.cy
 
-                    state.current.cx = e.clientX - e.currentTarget.offsetLeft
-                    state.current.cy = e.clientY - e.currentTarget.offsetTop
+                    state.current.cx = e.nativeEvent.offsetX
+                    state.current.cy = e.nativeEvent.offsetY
 
                     state.current.context.beginPath()
                     state.current.context.moveTo(
