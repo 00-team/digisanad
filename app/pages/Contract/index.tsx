@@ -655,10 +655,6 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
         isDragging: false,
     })
 
-    useEffect(() => {
-        console.log(Signature.cords)
-    }, [Signature])
-
     const drawLine = (x2: number, y2: number) => {
         if (!canvasRef.current || !Signature.isDragging) return
 
@@ -673,7 +669,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
         context.moveTo(Signature.cords.x, Signature.cords.y)
         context.lineTo(x2, y2)
         context.stroke()
-        // context.closePath()
+        context.closePath()
 
         setSignature({ ...Signature, cords: { x: x2, y: y2 } })
     }
