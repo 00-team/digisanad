@@ -45,7 +45,7 @@ import { ParsedField, parseFields } from './utils'
 
 import './style/contract.scss'
 
-const pdfImg = require('../../static/Contract/pdf.png')
+import pdfImg from 'static/Contract/pdf.png'
 
 const MODES = ['edit', 'view', 'schema'] as const
 type Mode = typeof MODES[number]
