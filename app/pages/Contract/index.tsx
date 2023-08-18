@@ -13,7 +13,14 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import { ArrowDownSvg, CloseSvg, CopySvg, PlusSvg, SettingSvg } from 'icons'
+import {
+    ArrowDownSvg,
+    CheckSvg,
+    CloseSvg,
+    CopySvg,
+    PlusSvg,
+    SettingSvg,
+} from 'icons'
 
 import { SetStateAction } from 'jotai'
 
@@ -635,9 +642,76 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     )
 }
 
-const SignatureDrawer: FieldProps<SignatureField> = ({ field }) => {
-    console.log(field)
-    return <div className='signature-container'></div>
+const SignatureDrawer: FieldProps<SignatureField> = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+
+    interface signatureType {
+        cords: { x: number; y: number }
+        isDragging: boolean
+    }
+
+    const [Signature, setSignature] = useState<signatureType>({
+        cords: { x: 0, y: 0 },
+        isDragging: false,
+    })
+
+    useEffect(() => {
+        console.log(Signature.cords)
+    }, [Signature])
+
+    const drawLine = (x2: number, y2: number) => {
+        if (!canvasRef.current || !Signature.isDragging) return
+
+        const canvas = canvasRef.current
+        const context = canvas.getContext('2d')
+
+        if (!context) return
+
+        context.beginPath()
+        context.strokeStyle = 'black'
+        context.lineWidth = 1
+        context.moveTo(Signature.cords.x, Signature.cords.y)
+        context.lineTo(x2, y2)
+        context.stroke()
+        // context.closePath()
+
+        setSignature({ ...Signature, cords: { x: x2, y: y2 } })
+    }
+
+    return (
+        <div className='signature-container'>
+            <canvas
+                ref={canvasRef}
+                className='signature-wrapper'
+                onMouseDown={() =>
+                    setSignature({ ...Signature, isDragging: true })
+                }
+                onMouseUp={() =>
+                    setSignature({ ...Signature, isDragging: false })
+                }
+                onMouseMove={e => {
+                    if (!Signature.isDragging) return
+
+                    drawLine(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
+                }}
+            ></canvas>
+            <div className='confirm-wrapper'>
+                <div
+                    className='remove'
+                    onClick={() => {
+                        canvasRef!
+                            .current!.getContext('2d')!
+                            .clearRect(0, 0, innerWidth, innerHeight)
+                    }}
+                >
+                    <CloseSvg size={25} />
+                </div>
+                <div className='confirm'>
+                    <CheckSvg size={25} />
+                </div>
+            </div>
+        </div>
+    )
 }
 
 const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
