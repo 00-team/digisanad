@@ -37,6 +37,8 @@ import { ParsedField, parseFields } from './utils'
 
 import './style/contract.scss'
 
+const pdfImg = require('../../static/Contract/pdf.png')
+
 const MODES = ['edit', 'view', 'schema'] as const
 type Mode = typeof MODES[number]
 
@@ -534,10 +536,6 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
 const RecordFC: FieldProps<RecordField> = ({ field }) => {
     const [preview, setpreview] = useState<string[]>([''])
 
-    useEffect(() => {
-        console.log(preview)
-    }, [preview])
-
     const readURL = (input: ChangeEvent<HTMLInputElement>) => {
         if (!field.plural && preview.length >= 2)
             return ReactAlert.error('ورودی بیشتر از یک فایل مجاز نیست!')
@@ -586,6 +584,11 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                     <div className='files-container'>
                         {preview.map((file, index) => {
                             if (!file) return
+
+                            const acceptedTypes = ['png', 'jpg', 'jpeg', 'gif']
+
+                            const fileType = file.split('/')[1]!.split(';')[0]
+
                             return (
                                 <div
                                     key={index}
@@ -599,7 +602,11 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                                     }}
                                 >
                                     <img
-                                        src={file}
+                                        src={
+                                            acceptedTypes.includes(fileType!)
+                                                ? file
+                                                : pdfImg
+                                        }
                                         loading={'lazy'}
                                         decoding={'async'}
                                         alt=''
