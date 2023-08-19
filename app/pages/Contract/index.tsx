@@ -456,7 +456,7 @@ const TextFC: FieldProps<TextField> = ({ field, update }) => {
     )
 }
 
-const GeoFC: FieldProps<GeoField> = () => {
+const GeoFC: FieldProps<GeoField> = ({ field }) => {
     return (
         <div className='geo-container'>
             <MapContainer
@@ -470,7 +470,7 @@ const GeoFC: FieldProps<GeoField> = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <CustomMap />
+                <CustomMap optional={field.optional} />
             </MapContainer>
         </div>
     )
