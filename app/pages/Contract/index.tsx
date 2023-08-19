@@ -700,7 +700,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                 }}
                 onMouseMove={e => {
                     n++
-                    if (!state.current.draw || n < 8) return
+                    if (!state.current.draw || n < 5) return
                     n = 0
 
                     state.current.px = state.current.cx
