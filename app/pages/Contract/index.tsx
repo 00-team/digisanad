@@ -13,6 +13,8 @@ import React, {
 
 import { C } from '@00-team/utils'
 
+import NeshanMap, { NeshanMapRef } from '@neshan-maps-platform/react-openlayers'
+import '@neshan-maps-platform/react-openlayers/dist/style.css'
 import {
     ArrowDownSvg,
     CheckSvg,
@@ -21,6 +23,7 @@ import {
     PlusSvg,
     SettingSvg,
 } from 'icons'
+import 'ol/ol.css'
 
 import { SetStateAction } from 'jotai'
 
@@ -455,19 +458,24 @@ const TextFC: FieldProps<TextField> = ({ field, update }) => {
     )
 }
 
-const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
+const GeoFC: FieldProps<GeoField> = () => {
+    const mapRef = useRef<NeshanMapRef | null>(null)
+
+    useEffect(() => {
+        if (!mapRef.current) return
+
+        console.log(mapRef.current)
+    }, [mapRef])
+
     return (
-        <div
-            className='geo-field'
-            onMouseDown={e => {
-                field.value.latitude = e.clientX - e.currentTarget.offsetLeft
-                field.value.longitude = e.clientY - e.currentTarget.offsetTop
-                update()
-            }}
-        >
-            lat: {field.value.latitude}
-            <br />
-            lng: {field.value.longitude}
+        <div className='geo-container'>
+            <NeshanMap
+                defaultType='neshan'
+                traffic={false}
+                center={{ latitude: 35.699756, longitude: 51.338076 }}
+                zoom={11}
+                mapKey='web.3bcd3484ebfe40bcb4409e15b12fa063'
+            ></NeshanMap>
         </div>
     )
 }
