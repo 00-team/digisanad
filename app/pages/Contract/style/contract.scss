@@ -189,12 +189,6 @@ main.contract-container {
                     margin: 2vh 0;
                 }
 
-                .geo-field {
-                    width: 500px;
-                    height: 200px;
-                    background: green;
-                }
-
                 a {
                     text-decoration: underline blue;
                     color: blue;
@@ -271,6 +265,12 @@ main.contract-container {
                             background-color: var(--alert-error);
                         }
                     }
+                }
+
+                .geo-container {
+                    width: 700px;
+                    border-radius: 5px;
+                    overflow: hidden;
                 }
 
                 .record-container {
