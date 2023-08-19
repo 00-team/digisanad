@@ -13,8 +13,6 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import NeshanMap, { NeshanMapRef } from '@neshan-maps-platform/react-openlayers'
-import '@neshan-maps-platform/react-openlayers/dist/style.css'
 import {
     ArrowDownSvg,
     CheckSvg,
@@ -23,11 +21,11 @@ import {
     PlusSvg,
     SettingSvg,
 } from 'icons'
-import 'ol/ol.css'
+import { MapContainer, TileLayer } from 'react-leaflet'
 
 import { SetStateAction } from 'jotai'
 
-import { DatePicker } from 'components'
+import { CustomMap, DatePicker } from 'components'
 
 import { FieldConfig } from './FieldConfig'
 import { property } from './property'
@@ -459,23 +457,21 @@ const TextFC: FieldProps<TextField> = ({ field, update }) => {
 }
 
 const GeoFC: FieldProps<GeoField> = () => {
-    const mapRef = useRef<NeshanMapRef | null>(null)
-
-    useEffect(() => {
-        if (!mapRef.current) return
-
-        console.log(mapRef.current)
-    }, [mapRef])
-
     return (
         <div className='geo-container'>
-            <NeshanMap
-                defaultType='neshan'
-                traffic={false}
-                center={{ latitude: 35.699756, longitude: 51.338076 }}
-                zoom={11}
-                mapKey='web.3bcd3484ebfe40bcb4409e15b12fa063'
-            ></NeshanMap>
+            <MapContainer
+                style={{ width: '100%', height: '100%' }}
+                center={[35.698587185965124, 51.33724353174251]}
+                zoom={14}
+                scrollWheelZoom={false}
+                attributionControl
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                />
+                <CustomMap />
+            </MapContainer>
         </div>
     )
 }
