@@ -1,14 +1,20 @@
 import React, { FC, useState } from 'react'
 
 import { LatLngExpression } from 'leaflet'
+import { BaseField } from 'pages/Contract/types'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
 
-export const CustomMap: FC = () => {
+interface CustomMapProps extends Pick<BaseField, 'optional'> {}
+
+export const CustomMap: FC<CustomMapProps> = ({ optional }) => {
     const [position, setPosition] = useState<LatLngExpression | null>(null)
 
     const map = useMapEvents({
         click(e) {
             setPosition({ ...e.latlng })
+        },
+        contextmenu() {
+            optional ? setPosition(null) : null
         },
         locationfound(e) {
             map.flyTo(e.latlng, map.getZoom())
