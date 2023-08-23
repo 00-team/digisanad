@@ -1,16 +1,18 @@
 import React, { FC } from 'react'
 
 import { ContractSvg, SettingSvg } from 'icons'
+import { Outlet } from 'react-router-dom'
 
 import './style/admin.scss'
 
 const Admin: FC = () => {
-    return (
-        <main className='admin-container'>
-            <Sidebar />
-            <aside className='admin-wrapper'></aside>
-        </main>
-    )
+    return <Outlet />
+    // return (
+    //     <main className='admin-container'>
+    //         <Sidebar />
+    //         <aside className='admin-wrapper'></aside>
+    //     </main>
+    // )
 }
 
 const Sidebar: FC = () => {
@@ -31,6 +33,7 @@ const Sidebar: FC = () => {
         </aside>
     )
 }
+Sidebar
 
 interface SidebarRowProps {
     title: string

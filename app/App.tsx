@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
 import axios from 'axios'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useMatch } from 'react-router-dom'
 
 // import { Login } from 'pages/Authenticate/Login'
 import Footer from 'components/layout/Footer'
@@ -20,6 +20,8 @@ const Test = loadable(() => import('pages/Test'))
 const Contract = loadable(() => import('pages/Contract'))
 
 const App: FC = () => {
+    const isAdmin = useMatch('/admin/*')
+
     global.ReactAlert = useAlert()
     global.HandleError = error => {
         let msg = 'Error'
@@ -43,7 +45,7 @@ const App: FC = () => {
     return (
         <>
             <MainContent />
-            <Footer />
+            {!isAdmin && <Footer />}
         </>
     )
 }
@@ -56,10 +58,10 @@ const MainContent: FC = () => {
             <Route path='/login/' element={<Login />} />
             <Route path='/dashboard/' element={<Dashboard />} />
             <Route path='/test/' element={<Test />} />
-            <Route path='/contract/' element={<Contract />} />
 
-            {/* admin panel */}
-            <Route path='/admin/' element={<Admin />} />
+            <Route path='/admin/' element={<Admin />}>
+                <Route path='schema/' element={<Contract />} />
+            </Route>
         </Routes>
     )
 }
