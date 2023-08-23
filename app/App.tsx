@@ -16,7 +16,6 @@ const Login = loadable(() => import('pages/Authenticate/Login'))
 const Register = loadable(() => import('pages/Authenticate/Register'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
-const Test = loadable(() => import('pages/Test'))
 const Contract = loadable(() => import('pages/Contract'))
 
 const App: FC = () => {
@@ -57,7 +56,6 @@ const MainContent: FC = () => {
             <Route path='/register/' element={<Register />} />
             <Route path='/login/' element={<Login />} />
             <Route path='/dashboard/' element={<Dashboard />} />
-            <Route path='/test/' element={<Test />} />
 
             <Route path='/admin/' element={<Admin />}>
                 <Route path='schema/' element={<Contract />} />

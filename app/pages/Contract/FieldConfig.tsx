@@ -49,31 +49,21 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                     }}
                 />
             </div>
-            <div className='input-wrapper'>
-                <h4 className='input-title title_smaller'>عنوان وروردی</h4>
-                <input
-                    type='text'
-                    value={field.title}
-                    className='title_smaller'
-                    onInput={e => {
-                        field.title = e.currentTarget.value
-                        update()
-                    }}
-                    placeholder='عنوان وروردی'
-                />
-            </div>
-            <div className='input-wrapper'>
-                <h4 className='input-title title_smaller'>توضیحات وروردی</h4>
-                <textarea
-                    value={field.description || ''}
-                    onInput={e => {
-                        field.description = e.currentTarget.value
-                        update()
-                    }}
-                    placeholder='توضیحات وروردی'
-                    className='title_smaller'
-                ></textarea>
-            </div>
+            {'title' in field && (
+                <div className='input-wrapper'>
+                    <h4 className='input-title title_smaller'>عنوان وروردی</h4>
+                    <input
+                        type='text'
+                        value={field.title || ''}
+                        className='title_smaller'
+                        onInput={e => {
+                            field.title = e.currentTarget.value
+                            update()
+                        }}
+                        placeholder='عنوان وروردی'
+                    />
+                </div>
+            )}
 
             {field.type == 'record' && (
                 <div className='config-row'>
@@ -95,15 +85,32 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                 </div>
             )}
             {field.type == 'link' && (
-                <input
-                    type='text'
-                    value={field.url}
-                    onInput={e => {
-                        field.url = e.currentTarget.value
-                        update()
-                    }}
-                    placeholder='url'
-                />
+                <>
+                    <div className='input-wrapper'>
+                        <h4 className='input-title title_smaller'>
+                            توضیحات وروردی
+                        </h4>
+                        <textarea
+                            value={field.text || ''}
+                            onInput={e => {
+                                field.text = e.currentTarget.value
+                                update()
+                            }}
+                            placeholder='توضیحات وروردی'
+                            className='title_smaller'
+                        ></textarea>
+                    </div>
+
+                    <input
+                        type='text'
+                        value={field.url || ''}
+                        onInput={e => {
+                            field.url = e.currentTarget.value
+                            update()
+                        }}
+                        placeholder='url'
+                    />
+                </>
             )}
             {have_minmax(field) && (
                 <div className='numbers-wrapper'>
@@ -280,7 +287,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                 <div className='inputs-wrapper'>
                                     <div className='input-wrapper'>
                                         <h4 className='title_smaller'>
-                                            عنوان سوال
+                                            شناسه سوال
                                         </h4>
                                         <input
                                             className='title_smaller'
@@ -294,7 +301,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
 
                                     <div className='question-wrapper input-wrapper'>
                                         <h4 className='title_smaller'>
-                                            توضیحات سوال
+                                            عنوان سوال
                                         </h4>
                                         <input
                                             value={q.display}
@@ -326,8 +333,8 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                             className='add-question add-btn title_smaller'
                             onClick={() => {
                                 field.answers.push({
-                                    uid: 'عنوان...',
-                                    display: 'توضیح...',
+                                    uid: 'A0',
+                                    display: 'عنوان...',
                                 })
                                 update()
                             }}
@@ -342,7 +349,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
                                 <div className='inputs-wrapper'>
                                     <div className='input-wrapper'>
                                         <h4 className='title_smaller'>
-                                            عنوان جواب
+                                            شناسه جواب
                                         </h4>
                                         <input
                                             className='title_smaller'
@@ -356,7 +363,7 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
 
                                     <div className='question-wrapper input-wrapper'>
                                         <h4 className='title_smaller'>
-                                            توضیحات جواب
+                                            عنوان جواب
                                         </h4>
                                         <input
                                             value={a.display}

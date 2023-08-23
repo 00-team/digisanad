@@ -41,6 +41,7 @@ import {
     SignatureField,
     StrField,
     TextField,
+    default_view_props,
 } from './types'
 import { ParsedField, parseFields } from './utils'
 
@@ -155,46 +156,56 @@ const Contract: FC = () => {
                         <span>افزودن به قرارداد</span>
                     </h3>
                     <div className='fields'>
-                        {Object.entries(default_fields).map(([k, v], i) => (
-                            <button
-                                className='field title_smaller'
-                                key={i}
-                                onClick={() => {
-                                    if (!insert.current) return
+                        {Object.entries(default_fields).map(([k, v], i) => {
+                            const dvp = default_view_props[v.type]
+                            return (
+                                <button
+                                    className='field title_smaller'
+                                    key={i}
+                                    onClick={() => {
+                                        if (!insert.current) return
 
-                                    Object.keys(state.schema.fields).forEach(
-                                        u => {
-                                            let exists =
-                                                state.schema.pages.find(p => {
-                                                    return (
-                                                        p.content.indexOf(
-                                                            `({${u}})`
-                                                        ) != -1
-                                                    )
-                                                })
+                                        // Object.keys(
+                                        //     state.schema.fields
+                                        // ).forEach(u => {
+                                        //     let exists =
+                                        //         state.schema.pages.find(p => {
+                                        //             return (
+                                        //                 p.content.indexOf(
+                                        //                     `({${u}})`
+                                        //                 ) != -1
+                                        //             )
+                                        //         })
+                                        //
+                                        //     if (!exists) {
+                                        //         console.info(
+                                        //             u + ' was not found'
+                                        //         )
+                                        //         delete state.schema.fields[u]
+                                        //     }
+                                        // })
 
-                                            if (!exists) {
-                                                console.info(
-                                                    u + ' was not found'
-                                                )
-                                                delete state.schema.fields[u]
-                                            }
+                                        let uid = get_unique_uid(k)
+                                        v.uid = uid
+
+                                        if (v.type == 'link') {
+                                            insert.current(s => {
+                                                v.text = s
+                                                return `({${uid}})`
+                                            })
+                                        } else {
+                                            insert.current(`({${uid}})`)
                                         }
-                                    )
 
-                                    let uid = get_unique_uid(k)
-                                    v.uid = uid
-
-                                    state.schema.fields[uid] = { ...v }
-
-                                    update()
-                                    insert.current(`({${uid}})`)
-                                }}
-                            >
-                                {v.Icon && <v.Icon size={20} />}
-                                {v.display}
-                            </button>
-                        ))}
+                                        state.schema.fields[uid] = { ...v }
+                                        update()
+                                    }}
+                                >
+                                    {<dvp.Icon size={20} />}
+                                    {dvp.display}
+                                </button>
+                            )
+                        })}
                     </div>
                 </div>
                 <div className='field-config-container'>
@@ -479,7 +490,7 @@ const GeoFC: FieldProps<GeoField> = ({ field }) => {
 const StrFC: FieldProps<StrField> = ({ field, update }) => {
     return (
         <input
-            placeholder={field.title}
+            placeholder={field.placeholder}
             value={field.value}
             onInput={e => {
                 field.value = e.currentTarget.value
@@ -495,7 +506,7 @@ const IntFC: FieldProps<IntField> = ({ field, update }) => {
     return (
         <input
             type='number'
-            placeholder={field.title}
+            placeholder={field.placeholder}
             value={field.value}
             onInput={e => {
                 field.value = parseInt(e.currentTarget.value)
@@ -786,14 +797,14 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
 const field_map: FMF = {
     link: ({ field }) => (
         <a href={field.url} title={field.title}>
-            {field.description}
+            {field.text}
         </a>
     ),
     text: TextFC,
     str: StrFC,
     user: ({ field, update }) => (
         <input
-            placeholder={field.title}
+            placeholder={'User Field'}
             value={field.value}
             onInput={e => {
                 field.value = e.currentTarget.value

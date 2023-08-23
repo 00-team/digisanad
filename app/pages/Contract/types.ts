@@ -23,12 +23,15 @@ type Schema = {
     }
 }
 
+export type FieldViewProps = {
+    display: string
+    Icon: Icon
+}
+
 export type BaseField = {
     uid: string
-    title: string
-    display: string
-    Icon: Icon | null
-    description?: string | null
+    // title: string
+    // description?: string | null
     optional?: boolean
 }
 
@@ -57,6 +60,7 @@ export type UserField = BaseField & {
 
 export type IntField = BaseField & {
     type: 'int'
+    placeholder?: string
     min?: number | null
     max?: number | null
     value: number
@@ -64,6 +68,7 @@ export type IntField = BaseField & {
 
 export type StrField = BaseField & {
     type: 'str'
+    placeholder?: string
     min?: number | null
     max?: number | null
     value: string
@@ -71,6 +76,7 @@ export type StrField = BaseField & {
 
 export type TextField = BaseField & {
     type: 'text'
+    placeholder?: string
     min?: number | null
     max?: number | null
     value: string
@@ -78,6 +84,8 @@ export type TextField = BaseField & {
 
 export type LinkField = BaseField & {
     type: 'link'
+    title?: string
+    text: string
     url: string
 }
 
@@ -94,6 +102,7 @@ export type UIDD = {
 
 export type QuestionField = BaseField & {
     type: 'question'
+    title: string
     answers: UIDD[]
     questions: UIDD[]
     value: {
@@ -103,6 +112,7 @@ export type QuestionField = BaseField & {
 
 export type OptionFeild = BaseField & {
     type: 'option'
+    title: string
     singleton: boolean
     options: UIDD[]
     value: string[]
@@ -127,31 +137,23 @@ type X = {
 const default_fields: X = {
     link: {
         type: 'link',
-        display: 'لینک',
-        Icon: LinkSvg,
         uid: '',
+        text: '...',
         title: 'Lonk',
         url: 'https://example.com',
     },
     option: {
         type: 'option',
-        display: 'انتخابی',
-        Icon: OptionSvg,
+        title: '',
         uid: '',
-        title: 'Option',
         options: [],
         optional: false,
         singleton: false,
-        description: '',
         value: [],
     },
     int: {
         type: 'int',
-        display: 'عدد',
-        Icon: NumberSvg,
         uid: '',
-        title: 'Number',
-        description: '',
         optional: false,
         max: null,
         min: null,
@@ -159,23 +161,16 @@ const default_fields: X = {
     },
     str: {
         type: 'str',
-        display: 'متن',
-        Icon: TextSvg,
         uid: '',
-        title: 'String',
-        description: '',
         optional: false,
         max: null,
         min: null,
         value: '',
+        placeholder: 'string',
     },
     text: {
         type: 'text',
-        display: 'متن چند خطی',
-        Icon: TextareaSvg,
         uid: '',
-        title: 'Text',
-        description: '',
         optional: false,
         max: null,
         min: null,
@@ -183,11 +178,7 @@ const default_fields: X = {
     },
     geo: {
         type: 'geo',
-        Icon: MapSvg,
-        display: 'نقشه',
         uid: '',
-        title: 'Geo',
-        description: '',
         optional: false,
         value: {
             latitude: 0,
@@ -196,42 +187,29 @@ const default_fields: X = {
     },
     user: {
         type: 'user',
-        display: 'کاربر',
-        Icon: PersonSvg,
         uid: '',
         value: '',
-        title: 'User',
-        description: '',
+
         optional: false,
     },
     record: {
         type: 'record',
-        display: 'ضمیمه',
-        Icon: FileSvg,
         uid: '',
-        title: 'Record / File',
-        description: '',
         optional: false,
         plural: false,
         value: [],
     },
     date: {
         type: 'date',
-        display: 'تاریخ',
-        Icon: CallenderSvg,
         uid: '',
-        title: 'Date',
-        description: '',
+
         optional: false,
         value: 0,
     },
     question: {
         type: 'question',
-        display: 'سوال',
-        Icon: QuestionSvg,
         uid: '',
-        title: 'Questions',
-        description: '',
+        title: 'Qu?',
         optional: false,
         questions: [],
         answers: [],
@@ -239,13 +217,60 @@ const default_fields: X = {
     },
     signature: {
         type: 'signature',
-        Icon: SignatureSvg,
-        display: 'امضا دیجیتال',
         uid: '',
-        title: 'Signature',
-        description: '',
         optional: false,
         value: '',
+    },
+}
+
+type FMD = {
+    [T in FieldType as T['type']]: FieldViewProps
+}
+
+const default_view_props: FMD = {
+    link: {
+        display: 'لینک',
+        Icon: LinkSvg,
+    },
+    option: {
+        display: 'انتخابی',
+        Icon: OptionSvg,
+    },
+    int: {
+        display: 'عدد',
+        Icon: NumberSvg,
+    },
+    str: {
+        display: 'متن',
+        Icon: TextSvg,
+    },
+    text: {
+        display: 'متن چند خطی',
+        Icon: TextareaSvg,
+    },
+    geo: {
+        Icon: MapSvg,
+        display: 'نقشه',
+    },
+    user: {
+        display: 'کاربر',
+        Icon: PersonSvg,
+    },
+    record: {
+        display: 'ضمیمه',
+        Icon: FileSvg,
+    },
+    date: {
+        display: 'تاریخ',
+        Icon: CallenderSvg,
+    },
+    question: {
+        display: 'سوال',
+        Icon: QuestionSvg,
+    },
+    signature: {
+        Icon: SignatureSvg,
+        display: 'امضا دیجیتال',
     },
 }
 
@@ -258,4 +283,11 @@ function have_minmax(f: FieldType): f is FieldMinMax {
     return ['str', 'int', 'text'].includes(f.type)
 }
 
-export { Schema, Page, field_types, default_fields, have_minmax }
+export {
+    Schema,
+    Page,
+    field_types,
+    default_fields,
+    have_minmax,
+    default_view_props,
+}
