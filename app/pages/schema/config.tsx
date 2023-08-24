@@ -12,12 +12,12 @@ import {
 
 import { FieldType, have_minmax } from './types'
 
-type FieldConfigProps = {
+type ConfigProps = {
     field: FieldType
     update: () => void
 }
 
-const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
+const Config: FC<ConfigProps> = ({ field, update }) => {
     return (
         <div className='field-config'>
             <div className='config-row title_smaller'>
@@ -393,4 +393,4 @@ const FieldConfig: FC<FieldConfigProps> = ({ field, update }) => {
     )
 }
 
-export { FieldConfig }
+export { Config }

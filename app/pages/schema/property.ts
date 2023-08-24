@@ -1,6 +1,6 @@
-import { Schema } from './types'
+import { SchemaData } from './types'
 
-export const property: Schema = {
+export const property: SchemaData = {
     pages: [
         {
             content:

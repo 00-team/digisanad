@@ -25,9 +25,10 @@ import { MapContainer, TileLayer } from 'react-leaflet'
 
 import { SetStateAction } from 'jotai'
 
-import { CustomMap, DatePicker } from 'components'
+import { DatePicker } from 'components'
 
-import { FieldConfig } from './FieldConfig'
+import { Config } from './config'
+import { CustomMap } from './map'
 import { property } from './property'
 import {
     default_fields,
@@ -37,7 +38,7 @@ import {
     OptionFeild,
     QuestionField,
     RecordField,
-    Schema,
+    SchemaData,
     SignatureField,
     StrField,
     TextField,
@@ -55,12 +56,12 @@ type Mode = typeof MODES[number]
 type Inserter = (arg: string | ((text: string) => string)) => void
 
 type State = {
-    schema: Schema
+    schema: SchemaData
     page: number
     uid: string
 }
 
-const Contract: FC = () => {
+const Schema: FC = () => {
     const [state, setState] = useState<State>({
         schema: property,
         page: property.pages.length - 1,
@@ -223,7 +224,7 @@ const Contract: FC = () => {
                             }
                         />
                         {state.uid in state.schema.fields && (
-                            <FieldConfig
+                            <Config
                                 field={state.schema.fields[state.uid]!}
                                 update={update}
                             />
@@ -821,4 +822,4 @@ const field_map: FMF = {
     option: OptionFC,
 }
 
-export default Contract
+export default Schema

@@ -16,7 +16,7 @@ const Login = loadable(() => import('pages/Authenticate/Login'))
 const Register = loadable(() => import('pages/Authenticate/Register'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
-const Contract = loadable(() => import('pages/Contract'))
+const Schema = loadable(() => import('pages/schema'))
 
 const App: FC = () => {
     const isAdmin = useMatch('/admin/*')
@@ -58,7 +58,7 @@ const MainContent: FC = () => {
             <Route path='/dashboard/' element={<Dashboard />} />
 
             <Route path='/admin/' element={<Admin />}>
-                <Route path='schema/' element={<Contract />} />
+                <Route path='schema/' element={<Schema />} />
             </Route>
         </Routes>
     )

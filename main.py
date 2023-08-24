@@ -12,12 +12,6 @@ from deps import get_ip
 from shared import redis, settings, sqlx
 from shared.errors import Error, all_errors
 
-index_path = settings.base_dir / 'static/dist/index.html'
-INDEX_HTML = 'index.html not found :/'
-if index_path.is_file():
-    with open(index_path, 'r') as f:
-        INDEX_HTML = f.read()
-
 app = FastAPI(
     title='DigiSanad',
     version='0.0.1',
@@ -64,9 +58,17 @@ async def rapidoc():
 
 
 async def index():
-    return HTMLResponse(INDEX_HTML)
+    index_path = settings.base_dir / 'static/dist/index.html'
+    if index_path.is_file():
+        with open(index_path, 'r') as f:
+            return HTMLResponse(f.read())
 
-for p in ['/', '/register/', '/login/', '/dashboard/{_:path}']:
+    return HTMLResponse('index.html not found :/')
+
+for p in [
+    '/', '/register/', '/login/',
+    '/dashboard/{_:path}', '/admin/{_:path}'
+]:
     app.add_api_route(p, index, include_in_schema=False)
 
 app.include_router(api.router)

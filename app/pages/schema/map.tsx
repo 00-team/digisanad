@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react'
 
 import { LatLngExpression } from 'leaflet'
-import { BaseField } from 'pages/Contract/types'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
+
+import { BaseField } from './types'
 
 interface CustomMapProps extends Pick<BaseField, 'optional'> {}
 
