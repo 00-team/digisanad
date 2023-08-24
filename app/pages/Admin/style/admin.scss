@@ -8,12 +8,9 @@ main.admin-container {
 
     overflow: hidden;
 
-    @media screen and (max-width: 1024px) {
-        display: inline-block;
-    }
-
     aside.admin-sidebar {
         width: clamp(280px, 20%, 300px);
+        box-shadow: 20px 1px 15px -23px black inset;
 
         flex-shrink: 0;
 

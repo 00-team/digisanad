@@ -85,18 +85,13 @@ const Schema: FC = () => {
         }
     }, [state])
 
-    const get_unique_uid = (base: string) => {
-        let n = 0
-        let uid = base + '_' + n
-        while (uid in state.schema.fields) {
-            n++
-            uid = base + '_' + n
-        }
-        return uid
-    }
-
     return (
         <main className='contract-container'>
+            <Sidebar
+                inserter={insert.current}
+                state={state}
+                setState={setState}
+            />
             <aside className='contract-wrapper'>
                 <div className='contract-pages'>
                     <button
@@ -108,7 +103,7 @@ const Schema: FC = () => {
                         }}
                     >
                         <CopySvg size={25} />
-                        کپی کردن
+                        ذخیره
                     </button>
                     <button
                         className='add-btn cta-btn title_smaller'
@@ -118,7 +113,7 @@ const Schema: FC = () => {
                         }}
                     >
                         <PlusSvg size={25} />
-                        اضافه کردن
+                        صفحه جدید
                     </button>
                     {state.schema.pages.map((_, i) => (
                         <button
@@ -149,90 +144,113 @@ const Schema: FC = () => {
                     />
                 )}
             </aside>
-            <aside className='contract-sidebar'>
-                <h2 className='sidebar-title title'>تنظیمات قرارداد</h2>
-                <div className='fields-wrapper'>
-                    <h3 className='fields-title sidebar-section title_small'>
-                        <PlusSvg size={25} />
-                        <span>افزودن به قرارداد</span>
-                    </h3>
-                    <div className='fields'>
-                        {Object.entries(default_fields).map(([k, v], i) => {
-                            const dvp = default_view_props[v.type]
-                            return (
-                                <button
-                                    className='field title_smaller'
-                                    key={i}
-                                    onClick={() => {
-                                        if (!insert.current) return
-
-                                        // Object.keys(
-                                        //     state.schema.fields
-                                        // ).forEach(u => {
-                                        //     let exists =
-                                        //         state.schema.pages.find(p => {
-                                        //             return (
-                                        //                 p.content.indexOf(
-                                        //                     `({${u}})`
-                                        //                 ) != -1
-                                        //             )
-                                        //         })
-                                        //
-                                        //     if (!exists) {
-                                        //         console.info(
-                                        //             u + ' was not found'
-                                        //         )
-                                        //         delete state.schema.fields[u]
-                                        //     }
-                                        // })
-
-                                        let uid = get_unique_uid(k)
-                                        v.uid = uid
-
-                                        if (v.type == 'link') {
-                                            insert.current(s => {
-                                                v.text = s
-                                                return `({${uid}})`
-                                            })
-                                        } else {
-                                            insert.current(`({${uid}})`)
-                                        }
-
-                                        state.schema.fields[uid] = { ...v }
-                                        update()
-                                    }}
-                                >
-                                    {<dvp.Icon size={20} />}
-                                    {dvp.display}
-                                </button>
-                            )
-                        })}
-                    </div>
-                </div>
-                <div className='field-config-container'>
-                    <h3 className='config-title sidebar-section title_small'>
-                        <SettingSvg size={25} />
-                        تنظیمات ورودی
-                    </h3>
-                    <div className='fields-wrapper'>
-                        <input
-                            className='uid-input title_smaller'
-                            type='text'
-                            value={state.uid}
-                            onInput={e =>
-                                updateState({ uid: e.currentTarget.value })
-                            }
-                        />
-                        {state.uid in state.schema.fields && (
-                            <Config
-                                field={state.schema.fields[state.uid]!}
-                                update={update}
-                            />
-                        )}
-                    </div>
-                </div>
-            </aside>
         </main>
+    )
+}
+
+type SidebarProps = {
+    inserter?: Inserter
+    state: State
+    setState: Dispatch<SetStateAction<State>>
+}
+
+const Sidebar: FC<SidebarProps> = ({ inserter, state, setState }) => {
+    const update = () => setState(s => ({ ...s }))
+
+    const insert_field = (field: FieldType) => {
+        if (!inserter) return
+        // Object.keys(
+        //     state.schema.fields
+        // ).forEach(u => {
+        //     let exists =
+        //         state.schema.pages.find(p => {
+        //             return (
+        //                 p.content.indexOf(
+        //                     `({${u}})`
+        //                 ) != -1
+        //             )
+        //         })
+        //
+        //     if (!exists) {
+        //         console.info(
+        //             u + ' was not found'
+        //         )
+        //         delete state.schema.fields[u]
+        //     }
+        // })
+
+        let n = 0
+        let uid = field.type + '_' + n
+        while (uid in state.schema.fields) {
+            n++
+            uid = field.type + '_' + n
+        }
+
+        field.uid = uid
+
+        if (field.type == 'link') {
+            inserter(s => {
+                field.text = s
+                return `({${uid}})`
+            })
+        } else {
+            inserter(`({${uid}})`)
+        }
+
+        state.schema.fields[uid] = { ...field }
+        update()
+    }
+
+    return (
+        <aside className='contract-sidebar'>
+            <h2 className='sidebar-title title'>تنظیمات قرارداد</h2>
+            <div className='fields-wrapper'>
+                <h3 className='fields-title sidebar-section title_small'>
+                    <PlusSvg size={25} />
+                    <span>افزودن به قرارداد</span>
+                </h3>
+                <div className='fields'>
+                    {Object.values(default_fields).map((field, i) => {
+                        const { display, Icon } = default_view_props[field.type]
+                        return (
+                            <button
+                                key={i}
+                                className='field title_smaller'
+                                onClick={() => insert_field(field)}
+                            >
+                                <Icon size={20} />
+                                {display}
+                            </button>
+                        )
+                    })}
+                </div>
+            </div>
+            <div className='field-config-container'>
+                <h3 className='config-title sidebar-section title_small'>
+                    <SettingSvg size={25} />
+                    تنظیمات ورودی
+                </h3>
+                <div className='fields-wrapper'>
+                    <input
+                        className='uid-input title_smaller'
+                        type='text'
+                        value={state.uid}
+                        onInput={e =>
+                            setState(s => ({
+                                ...s,
+                                uid: e.currentTarget.value,
+                            }))
+                        }
+                    />
+                    {state.uid in state.schema.fields && (
+                        <Config
+                            field={state.schema.fields[state.uid]!}
+                            update={update}
+                        />
+                    )}
+                </div>
+            </div>
+        </aside>
     )
 }
 
@@ -332,8 +350,8 @@ const Editor: FC<EditorProps> = ({ state, setState, inserter }) => {
             )}
             {mode == 'schema' && (
                 <textarea
+                    className='output'
                     ref={output}
-                    style={{ direction: 'ltr' }}
                     onInput={e => {
                         try {
                             setState(JSON.parse(e.currentTarget.value))

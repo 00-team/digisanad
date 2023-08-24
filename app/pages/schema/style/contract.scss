@@ -10,11 +10,6 @@ main.contract-container {
 
     color: black;
 
-    @media screen and (max-width: 768px) {
-        flex-direction: column-reverse;
-        height: auto;
-    }
-
     aside.contract-wrapper {
         flex: 1 0;
         height: 100%;
@@ -164,6 +159,19 @@ main.contract-container {
                 background-color: white;
                 color: black;
 
+                width: 100%;
+                height: 100%;
+                resize: none;
+            }
+
+            .output {
+                font-size: 18px;
+                font-family: monospace;
+                padding: 0.5rem;
+                border: 0;
+                direction: ltr;
+                background-color: #040404;
+                color: #f2f2f2;
                 width: 100%;
                 height: 100%;
                 resize: none;
