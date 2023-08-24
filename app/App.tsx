@@ -59,6 +59,7 @@ const MainContent: FC = () => {
 
             <Route path='/admin/' element={<Admin />}>
                 <Route path='schema/' element={<Schema />} />
+                <Route path='*' element={<span>not found</span>} />
             </Route>
         </Routes>
     )
