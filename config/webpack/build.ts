@@ -23,7 +23,9 @@ const BuildConfig: Configuration = {
     },
     plugins: [
         ...Base.plugins!,
-        new CssExtract(),
+        new CssExtract({
+            filename: '[name].[contenthash].css',
+        }),
         new Compression({ exclude: /\.(html)$/ }),
         Html,
     ],
