@@ -15,7 +15,7 @@ class SchemaTable(BaseTable):
     )
     draft = Column(Boolean, nullable=False, server_default='true')
     title = Column(String, nullable=False)
-    description = Column(String)
+    description = Column(String, nullable=False, server_default='')
     data = Column(JSON, nullable=False, server_default='{}')
     creator = Column(Integer, nullable=False, server_default=text('-1'))
 
@@ -38,6 +38,6 @@ class SchemaModel(BaseModel):
     schema_id: int
     draft: bool
     title: str
-    description: str | None = None
+    description: str = ''
     data: SchemaData
     creator: int

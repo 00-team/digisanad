@@ -1,9 +1,4 @@
-export * from './Actions/Edit'
-export * from './Actions/Send'
-export * from './Actions/Plus'
-export * from './Actions/Minus'
-export * from './Actions/Close'
-
+export * from './actions'
 export * from './Admin/Setting'
 
 export * from './Dashboard/Address'

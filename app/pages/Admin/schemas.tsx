@@ -39,9 +39,9 @@ const SchemaList: FC = () => {
         const response = await axios.post(
             '/api/admins/schemas/',
             {
-                title: 'new schema',
+                title: 'قرارداد جدید',
                 data: {
-                    pages: [],
+                    pages: [{ content: '# قرارداد جدید' }],
                     fields: {},
                 },
             },

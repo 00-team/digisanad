@@ -1,6 +1,6 @@
 
 
-import json
+from typing import ClassVar
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
@@ -55,7 +55,11 @@ async def add_message(request: Request, body: MessageAddBody):
     return {'id': message_id}
 
 
-@router.get('/schemas/', response_model=list[SchemaModel])
+class SchemaModelNoData(SchemaModel):
+    data: ClassVar
+
+
+@router.get('/schemas/', response_model=list[SchemaModelNoData])
 async def get_schemas(request: Request, page: int = 0):
     user: UserModel = request.state.user
     user.admin_assert(AP.V_SCHEMA)
@@ -73,16 +77,33 @@ async def get_schemas(request: Request, page: int = 0):
 
     result = []
     for row in rows:
-        args = row._asdict()
-        args['data'] = json.loads(args['data'])
-        result.append(SchemaModel(**args))
+        result.append(SchemaModelNoData(**row))
 
     return result
 
 
+@router.get(
+    '/schemas/{schema_id}/', response_model=SchemaModel,
+    openapi_extra={'errors': [bad_id]}
+)
+async def get_schema(request: Request, schema_id: int):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_SCHEMA)
+
+    schema = await schema_get(SchemaTable.schema_id == schema_id)
+    if schema is None:
+        raise bad_id('Schema', schema_id, id=schema_id)
+
+    # args = schema._asdict()
+    # args['data'] = json.loads(args['data'])
+    # result.append(SchemaModel(**args))
+
+    return schema
+
+
 class SchemaAddBody(BaseModel):
     title: str
-    description: str = None
+    description: str = ''
     data: SchemaData
 
 
@@ -137,7 +158,7 @@ async def update_schema(
         change = True
 
     if body.description is not None:
-        patch['description'] = body.description or None
+        patch['description'] = body.description
         change = True
 
     if not change:

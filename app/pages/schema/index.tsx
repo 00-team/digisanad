@@ -13,6 +13,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
+import axios from 'axios'
 import {
     ArrowDownSvg,
     CheckSvg,
@@ -20,16 +21,18 @@ import {
     CopySvg,
     PlusSvg,
     SettingSvg,
+    FileSvg,
 } from 'icons'
 import { MapContainer, TileLayer } from 'react-leaflet'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { SetStateAction } from 'jotai'
+import { SetStateAction, useAtomValue } from 'jotai'
+import { TokenAtom } from 'state'
 
 import { DatePicker } from 'components'
 
 import { Config } from './config'
 import { CustomMap } from './map'
-import { property } from './property'
 import {
     default_fields,
     FieldType,
@@ -56,21 +59,64 @@ type Mode = typeof MODES[number]
 type Inserter = (arg: string | ((text: string) => string)) => void
 
 type State = {
+    title: string
+    draft: boolean
+    description: string
     schema: SchemaData
     page: number
     uid: string
 }
 
+const default_schema: SchemaData = {
+    pages: [],
+    fields: {},
+}
+
 const Schema: FC = () => {
+    const { schema_id } = useParams()
+    const navigate = useNavigate()
+
+    const token = useAtomValue(TokenAtom)
+
     const [state, setState] = useState<State>({
-        schema: property,
-        page: property.pages.length - 1,
+        title: '',
+        description: '',
+        draft: true,
+        schema: default_schema,
+        page: -1,
         uid: 'question_0',
     })
     const update = () => setState(s => ({ ...s }))
     const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))
 
     const insert = useRef<Inserter>()
+
+    const fetch_schema = async () => {
+        const response = await axios.get(`/api/admins/schemas/${schema_id}/`, {
+            headers: { Authorization: 'Bearer ' + token },
+        })
+
+        if (response.status != 200) {
+            return navigate('/admin/schemas/')
+        }
+
+        setState({
+            title: response.data.title,
+            description: response.data.description,
+            draft: response.data.draft,
+            schema: response.data.data,
+            page: 0,
+            uid: '',
+        })
+    }
+
+    useEffect(() => {
+        if (!schema_id) return navigate('/admin/schemas/')
+        let sid = parseInt(schema_id)
+        if (isNaN(sid)) return navigate('/admin/schemas/')
+
+        fetch_schema()
+    }, [schema_id])
 
     useEffect(() => {
         if (!state.schema.pages.length) {
@@ -96,14 +142,36 @@ const Schema: FC = () => {
                 <div className='contract-pages'>
                     <button
                         className='copy-btn cta-btn title_smaller'
-                        onClick={() => {
-                            navigator.clipboard.writeText(
-                                JSON.stringify(state.schema, null, 4)
+                        onClick={async () => {
+                            const response = await axios.patch(
+                                `/api/admins/schemas/${schema_id}/`,
+                                {
+                                    data: state.schema,
+                                    draft: state.draft,
+                                    title: state.title,
+                                    description: state.description,
+                                },
+                                {
+                                    headers: {
+                                        Authorization: 'Bearer ' + token,
+                                    },
+                                }
                             )
+                            console.log('save ok:', response.data.ok)
                         }}
                     >
                         <CopySvg size={25} />
                         ذخیره
+                    </button>
+                    <button
+                        className='add-btn cta-btn title_smaller'
+                        onClick={() => {
+                            state.draft = !state.draft
+                            update()
+                        }}
+                    >
+                        <FileSvg size={25} />
+                        وضعیت: {state.draft ? 'در حال تکمیل' : 'تکمیل'}
                     </button>
                     <button
                         className='add-btn cta-btn title_smaller'
@@ -374,6 +442,7 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
 
     useEffect(() => {
         let tree: TreeNode[] = []
+        let title_was_parsed = false
 
         state.schema.pages[state.page]!.content.split('\n').forEach(line => {
             let node: TreeNode = { name: '', items: [] }
@@ -393,10 +462,15 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
 
             if (line[0] == '#') {
                 hn = line.indexOf(' ')
-                if (hn > 0 && hn < 5) {
+                line = line.substring(hn + 1)
+                if (hn == 1 && !title_was_parsed) {
+                    state.title = line
+                    update()
+                    title_was_parsed = true
+                    node.name = 'h1'
+                } else if (hn > 1 && hn < 5) {
                     node.name = 'h' + hn
                 }
-                line = line.substring(hn + 1)
             }
 
             if (!node.name) node.name = 'div'
@@ -404,17 +478,6 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
             node.items = parseFields(line)
             tree.push(node)
         })
-        // const toElement = (item: TreeNode | string, key = 0): ReactNode => {
-        //     if (typeof item == 'string') return item
-        //
-        //     let childs: undefined | ReactNode[] = undefined
-        //
-        //     if (item.children.length) {
-        //         childs = item.children.map(toElement)
-        //     }
-        //
-        //     return createElement(item.name, { key, ...item.props }, childs)
-        // }
 
         setResult(
             <>
