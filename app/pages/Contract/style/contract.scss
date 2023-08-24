@@ -10,6 +10,11 @@ main.contract-container {
 
     color: black;
 
+    @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+        height: auto;
+    }
+
     aside.contract-wrapper {
         flex: 1 0;
         height: 100%;
@@ -443,6 +448,10 @@ main.contract-container {
         color: black;
 
         overflow-y: auto;
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
 
         h2.sidebar-title {
             display: flex;
