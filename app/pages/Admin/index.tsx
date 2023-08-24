@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { ContractSvg, SettingSvg } from 'icons'
+import { ContractSvg, MenuIcon, SettingSvg } from 'icons'
 import { Link } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ const Sidebar: FC = () => {
     return (
         <aside className={'admin-sidebar' + C(close, 'close')}>
             <button onClick={() => setClose(s => !s)}>
-                {close ? 'open' : 'close'}
+                <MenuIcon size='24' />
             </button>
             <div className='sidebar-wrapper'>
                 <SidebarRow

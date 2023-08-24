@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Menu: Icon = ({ size, ...attr }) => (
+export const MenuIcon: Icon = ({ size, ...attr }) => (
     <svg
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
