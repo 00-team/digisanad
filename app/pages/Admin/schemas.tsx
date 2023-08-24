@@ -40,13 +40,12 @@ const SchemaList: FC = () => {
             '/api/admins/schemas/',
             {
                 title: 'new schema',
-                data: {},
-            },
-            {
-                headers: {
-                    Authorization: 'Bearer ' + token,
+                data: {
+                    pages: [],
+                    fields: {},
                 },
-            }
+            },
+            { headers: { Authorization: 'Bearer ' + token } }
         )
         navigate('/admin/schema/' + response.data.id)
     }

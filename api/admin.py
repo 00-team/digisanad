@@ -8,8 +8,8 @@ from pydantic import BaseModel, constr
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, SchemaModel, SchemaTable
-from db.models import UserModel
+from db.models import GeneralModel, MessageLevel, SchemaData, SchemaModel
+from db.models import SchemaTable, UserModel
 from db.schema import schema_add, schema_delete, schema_get, schema_update
 from deps import admin_required
 from shared import settings, sqlx
@@ -83,13 +83,7 @@ async def get_schemas(request: Request, page: int = 0):
 class SchemaAddBody(BaseModel):
     title: str
     description: str = None
-    data: dict
-
-    class Config:
-        json_schema_extra = {'example': {
-            'title': 'property contract',
-            'data': {}
-        }}
+    data: SchemaData
 
 
 @router.post('/schemas/', response_model=IDModel)
@@ -100,7 +94,7 @@ async def add_schema(request: Request, body: SchemaAddBody):
     schema_id = await schema_add(
         title=body.title,
         description=body.description,
-        data=body.data,
+        data=body.data.dict(),
     )
 
     return {'id': schema_id}
