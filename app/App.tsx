@@ -17,6 +17,7 @@ const Register = loadable(() => import('pages/Authenticate/Register'))
 const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
 const Schema = loadable(() => import('pages/schema'))
+const SchemaList = loadable(() => import('pages/Admin/schemas'))
 
 const App: FC = () => {
     const isAdmin = useMatch('/admin/*')
@@ -58,7 +59,9 @@ const MainContent: FC = () => {
             <Route path='/dashboard/' element={<Dashboard />} />
 
             <Route path='/admin/' element={<Admin />}>
-                <Route path='schema/' element={<Schema />} />
+                <Route path='schema/:schema_id' element={<Schema />} />
+                <Route path='schemas/' element={<SchemaList />} />
+                <Route path='schemas/:pid' element={<SchemaList />} />
                 <Route path='*' element={<span>not found</span>} />
             </Route>
         </Routes>

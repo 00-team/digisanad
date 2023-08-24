@@ -12,9 +12,8 @@ const Admin: FC = () => {
     return (
         <main className='admin-container'>
             <Sidebar />
-            <aside className='admin-wrapper'>
-                <Outlet />
-            </aside>
+            <Outlet />
+            {/*<aside className='admin-wrapper'> </aside>*/}
         </main>
     )
 }
@@ -24,7 +23,9 @@ const Sidebar: FC = () => {
 
     return (
         <aside className={'admin-sidebar' + C(close, 'close')}>
-            <button onClick={() => setClose(s => !s)}>XXX</button>
+            <button onClick={() => setClose(s => !s)}>
+                {close ? 'open' : 'close'}
+            </button>
             <div className='sidebar-wrapper'>
                 <SidebarRow
                     title='تنظیمات'
@@ -35,15 +36,15 @@ const Sidebar: FC = () => {
                 <SidebarRow
                     title='قالب قرارداد ها'
                     className='contract'
-                    href='schema/'
+                    href='schemas/'
                     Icon={ContractSvg}
                 />
-                <SidebarRow
+                {/*<SidebarRow
                     title='قراردادها'
                     className='contract'
                     href='contract/'
                     Icon={ContractSvg}
-                />
+                />*/}
             </div>
         </aside>
     )
