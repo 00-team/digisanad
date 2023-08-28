@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { ContractIcon, MenuIcon, SettingIcon } from 'icons'
+import { CloudIcon, ContractIcon, MenuIcon, SettingIcon } from 'icons'
 import { Link } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 
@@ -39,12 +39,12 @@ const Sidebar: FC = () => {
                     href='schemas/'
                     Icon={ContractIcon}
                 />
-                {/*<SidebarRow
-                    title='قراردادها'
-                    className='contract'
-                    href='contract/'
-                    Icon={ContractIcon}
-                />*/}
+                <SidebarRow
+                    title='داشبورد'
+                    className='dashboard'
+                    href='/dashboard/'
+                    Icon={CloudIcon}
+                />
             </div>
         </aside>
     )
