@@ -7,11 +7,22 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { TokenAtom } from 'state'
 
+import './style/contract.scss'
+
 const CSMAP = {
     draft: 'در حال تکمیل',
     action: 'در حال انجام',
     done: 'انجام شده',
 } as const
+
+type SchemaModel = {
+    schema_id: number
+    draft: boolean
+    title: string
+    description: string
+    data: SchemaData
+    creator: number
+}
 
 type ContractModel = {
     contract_id: number
@@ -100,10 +111,13 @@ const Contract: FC = () => {
 
     if (state.contract_id == -1) return <></>
 
-    if (state.need_schema)
-        return <SelectSchema state={state} setState={setState} />
+    // if (state.need_schema)
+    //     return <SelectSchema state={state} setState={setState} />
+    SelectSchema
 
-    return <div></div>
+    console.log(state)
+
+    return <div>{state.title}</div>
 }
 
 type CommonProps = {
@@ -111,13 +125,11 @@ type CommonProps = {
     setState: Dispatch<SetStateAction<State>>
 }
 
-const SelectSchema: FC<CommonProps> = ({ state }) => {
-    console.log(state)
-
+const SelectSchema: FC<CommonProps> = ({ setState }) => {
     const token = useAtomValue(TokenAtom)
-
     const [page, setPage] = useState(0)
-    const [schemas, setSchemas] = useState<SchemaData[]>([])
+    const [max_page, setMaxPage] = useState(-1)
+    const [schemas, setSchemas] = useState<SchemaModel[]>([])
 
     const fetch_schemas = async (page: number) => {
         try {
@@ -125,19 +137,61 @@ const SelectSchema: FC<CommonProps> = ({ state }) => {
                 headers: { Authorization: 'Bearer ' + token },
             })
 
-            console.log(response.data)
+            if (page && !response.data.length) {
+                setPage(page - 1)
+                setMaxPage(page - 1)
+                return
+            }
+
+            setSchemas(response.data)
         } catch {}
     }
-
-    schemas
-    setSchemas
-    setPage
 
     useEffect(() => {
         fetch_schemas(page)
     }, [page])
 
-    return <div>select an schema</div>
+    return (
+        <div className='schema-list'>
+            <h1 className='title'>قالب قرار خود را انتخاب کنید</h1>
+            <div className='schemas'>
+                {schemas.map(s => (
+                    <div className='schema' key={s.schema_id}>
+                        <h2 className='title'>{s.title}</h2>
+                        <p>{s.description}</p>
+                        <button
+                            onClick={() =>
+                                setState(ss => ({
+                                    ...ss,
+                                    data: s.data,
+                                    title: s.title,
+                                    need_schema: false,
+                                }))
+                            }
+                        >
+                            انتخاب
+                        </button>
+                    </div>
+                ))}
+            </div>
+            <div className='actions'>
+                <div className='pagination'>
+                    <button
+                        disabled={max_page == page}
+                        onClick={() => setPage(s => s + 1)}
+                    >
+                        صفحه بعدی
+                    </button>
+                    <button
+                        disabled={page == 0}
+                        onClick={() => setPage(s => Math.max(0, s - 1))}
+                    >
+                        صفحه قبلی
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export { Contract }
