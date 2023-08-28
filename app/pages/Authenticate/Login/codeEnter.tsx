@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 import axios from 'axios'
-import { CodeSvg, GoBack } from 'icons'
+import { CodeIcon, GoBack } from 'icons'
 
 import { useAtom } from 'jotai'
 import { LoginAtom } from 'state'
@@ -34,7 +34,7 @@ const CodeEnter: FC = () => {
             <div className='input-wrapper title'>
                 <div className='placeholder'>
                     <div className='icon'>
-                        <CodeSvg size={25} />
+                        <CodeIcon size={25} />
                     </div>
                     <div className='holder'>کد تایید</div>
                 </div>

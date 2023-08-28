@@ -1,89 +1,129 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, ReactNode } from 'react'
 
 import { C } from '@00-team/utils'
 
 import { user_get_me } from 'api'
 import {
-    ArrowDownSvg,
-    ArrowUpSvg,
-    ContractSvg,
-    GlobeSvg,
-    PersonSvg,
-    SendSvg,
-    TransactionSvg,
-    WalletSvg,
+    ArrowDownIcon,
+    ArrowUpIcon,
+    ContractIcon,
+    GlobeIcon, // PersonIcon,
+    ProfileIcon,
+    SendIcon,
+    ToolIcon,
+    TransactionIcon,
+    WalletIcon,
 } from 'icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom'
 
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
-import Contracts from './Contracts'
-import { Deposit } from './Deposit'
-import MyInfo from './MyInfo'
+// import Contracts from './Contracts'
+// import { Deposit } from './Deposit'
+// import MyInfo from './MyInfo'
 import Notifications from './Notifications'
-import Transactions from './Transactions'
-import Wallet from './Wallet'
-import Withdraw from './Withdraw'
 
+// import Transactions from './Transactions'
+// import Wallet from './Wallet'
+// import Withdraw from './Withdraw'
 import './style/dashboard.scss'
 
 const OPTIONS_BASE_DELAY = 1
 const ADDED_DELAY = 0.1
 
-interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
+// interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
+//     title: string
+//     Icon: Icon
+//     Component: FC
+//     style?: React.CSSProperties
+//     active?: boolean
+//     id: string
+// }
+
+type SidebarLinkModel = {
+    link: string
     title: string
-    Icon: Icon
-    Component: FC
-    style?: React.CSSProperties
-    active?: boolean
-    id: string
+    icon: ReactNode
 }
 
-const SIDEBAR_OPTIONS: OptionsProps[] = [
-    { title: 'اطلاعات من', Icon: PersonSvg, Component: MyInfo, id: 'info' },
+const SIDEBAR_LINKS: SidebarLinkModel[] = [
     {
+        link: 'info',
+        title: 'اطلاعات من',
+        // icon: <PersonIcon />,
+        icon: <ProfileIcon />,
+    },
+    {
+        link: 'contracts',
         title: 'قرارداد های من',
-        Icon: ContractSvg,
-        Component: Contracts,
-        id: 'contracts',
+        icon: <ContractIcon />,
     },
     {
+        link: 'transactins',
         title: 'تراکنش های من',
-        Icon: TransactionSvg,
-        Component: Transactions,
-        id: 'transactins',
+        icon: <TransactionIcon />,
     },
     {
+        link: 'wallet',
         title: 'کیف پول',
-        Icon: WalletSvg,
-        Component: Wallet,
-        id: 'wallet',
+        icon: <WalletIcon />,
     },
     {
+        link: 'deposit',
         title: 'افزایش موجودی',
-        Icon: ArrowUpSvg,
-        Component: Deposit,
-        id: 'deposit',
+        icon: <ArrowUpIcon />,
     },
     {
+        link: 'withdraw',
         title: 'برداشت موجودی',
-        Icon: ArrowDownSvg,
-        Component: Withdraw,
-        id: 'withdraw',
+        icon: <ArrowDownIcon />,
+    },
+    {
+        link: '/',
+        title: 'رفتن به سایت',
+        icon: <GlobeIcon />,
     },
 ]
 
-interface DashboardChildProps {
-    SectionActive: number
-    SectionsetActive: (index: number) => void
-}
+// const SIDEBAR_OPTIONS: OptionsProps[] = [
+//     { title: 'اطلاعات من', Icon: PersonIcon, Component: MyInfo, id: 'info' },
+//     {
+//         title: 'قرارداد های من',
+//         Icon: ContractIcon,
+//         Component: Contracts,
+//         id: 'contracts',
+//     },
+//     {
+//         title: 'تراکنش های من',
+//         Icon: TransactionIcon,
+//         Component: Transactions,
+//         id: 'transactins',
+//     },
+//     {
+//         title: 'کیف پول',
+//         Icon: WalletIcon,
+//         Component: Wallet,
+//         id: 'wallet',
+//     },
+//     {
+//         title: 'افزایش موجودی',
+//         Icon: ArrowUpIcon,
+//         Component: Deposit,
+//         id: 'deposit',
+//     },
+//     {
+//         title: 'برداشت موجودی',
+//         Icon: ArrowDownIcon,
+//         Component: Withdraw,
+//         id: 'withdraw',
+//     },
+// ]
 
 const Dashboard: FC = () => {
-    const [SectionActive, SectionsetActive] = useState(0)
-    const [_, setUser] = useAtom(UserAtom)
+    const setUser = useSetAtom(UserAtom)
     const [token, setToken] = useAtom(TokenAtom)
 
     const navigate = useNavigate()
@@ -103,26 +143,21 @@ const Dashboard: FC = () => {
 
     return (
         <main className='dashboard-container'>
-            <Sidebar
-                SectionActive={SectionActive}
-                SectionsetActive={SectionsetActive}
-            />
+            <Sidebar />
             <aside className='dashboard-wrapper'>
-                {(() => {
+                <Outlet />
+                {/*(() => {
                     let so = SIDEBAR_OPTIONS[SectionActive]
                     if (!so) return <></>
                     return <so.Component />
-                })()}
+                })()*/}
                 <Notifications />
             </aside>
         </main>
     )
 }
 
-const Sidebar: FC<DashboardChildProps> = ({
-    SectionActive,
-    SectionsetActive,
-}) => {
+const Sidebar: FC = ({}) => {
     const user = useAtomValue(UserAtom)
 
     return (
@@ -135,48 +170,44 @@ const Sidebar: FC<DashboardChildProps> = ({
                 </div>
             </div>
             <div className='sidebar-wrapper title_small'>
-                {SIDEBAR_OPTIONS.map(({ title, Icon, id }, index) => (
-                    <SidebarColumn
-                        key={index}
-                        title={title}
-                        Icon={Icon}
-                        active={SectionActive === index}
-                        id={id}
-                        style={{
-                            animationDelay: `${
-                                OPTIONS_BASE_DELAY + ADDED_DELAY * index
-                            }s`,
-                        }}
-                        onClick={() => SectionsetActive(index)}
+                {SIDEBAR_LINKS.map((args, i) => (
+                    <SidebarLink
+                        {...args}
+                        key={i}
+                        // style={{
+                        //     animationDelay: `${
+                        //         OPTIONS_BASE_DELAY + ADDED_DELAY * index
+                        //     }s`,
+                        // }}
+                        // onClick={() => SectionsetActive(index)}
                     />
                 ))}
                 {user.admin && (
-                    <SidebarColumn
-                        title='x'
-                        Icon={GlobeSvg}
-                        active={false}
-                        id={'x'}
-                        style={{
-                            animationDelay: `${
-                                OPTIONS_BASE_DELAY + ADDED_DELAY * 12
-                            }s`,
-                        }}
-                        onClick={() => SectionsetActive(1)}
+                    <SidebarLink
+                        link='/admin/'
+                        title='پنل مدریت'
+                        icon={<ToolIcon />}
+                        // style={{
+                        //     animationDelay: `${
+                        //         OPTIONS_BASE_DELAY +
+                        //         ADDED_DELAY * SIDEBAR_OPTIONS.length
+                        //     }s`,
+                        // }}
+                        // onClick={() => SectionsetActive(1)}
                     />
                 )}
-                <GotoSiteColumn
+                {/*<GotoSiteColumn
                     style={{
                         animationDelay: `${
                             OPTIONS_BASE_DELAY +
                             ADDED_DELAY * (SIDEBAR_OPTIONS.length + 1)
                         }s`,
                     }}
-                />
+                />*/}
                 <LogoutButton
                     style={{
                         animationDelay: `${
-                            OPTIONS_BASE_DELAY +
-                            ADDED_DELAY * (SIDEBAR_OPTIONS.length + 2)
+                            OPTIONS_BASE_DELAY + ADDED_DELAY * (2 + 2)
                         }s`,
                     }}
                 />
@@ -185,47 +216,42 @@ const Sidebar: FC<DashboardChildProps> = ({
     )
 }
 
-const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
+// const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
+//     return (
+//         <Link to='/' className='column-wrapper goto ' style={style}>
+//             <div className='column'>
+//                 <div className='holder-icon icon'>
+//                     {' '}
+//                     <GlobeIcon size={25} />{' '}
+//                 </div>
+//                 <div className='holder-text '>رفتن به سایت</div>
+//             </div>
+//             <div className='send-icon icon'>
+//                 <SendIcon size={25} />
+//             </div>
+//         </Link>
+//     )
+// }
+// GotoSiteColumn
+
+const SidebarLink: FC<SidebarLinkModel> = ({ title, icon, link }) => {
+    const active = !!useMatch(link)
+
     return (
-        <Link to='/' className='column-wrapper goto ' style={style}>
-            <div className='column'>
-                <div className='holder-icon icon'>
-                    {' '}
-                    <GlobeSvg size={25} />{' '}
-                </div>
-                <div className='holder-text '>رفتن به سایت</div>
-            </div>
-            <div className='send-icon icon'>
-                <SendSvg size={25} />
-            </div>
-        </Link>
-    )
-}
-const SidebarColumn: FC<Omit<OptionsProps, 'Component'>> = ({
-    title,
-    Icon,
-    style,
-    active,
-    id,
-    ...attr
-}) => {
-    return (
-        <a
-            // href={innerWidth <= 1024 ? `#${id}` : ''}
+        <Link
+            to={link}
             className={`column-wrapper ${C(active)}`}
-            style={style}
-            {...attr}
+            // style={style}
+            // {...attr}
         >
             <div className='column'>
-                <div className='holder-icon icon'>
-                    <Icon size={23} />
-                </div>
+                <div className='holder-icon icon'>{icon}</div>
                 <div className='holder-text '>{title}</div>
             </div>
             <div className='send-icon icon'>
-                <SendSvg size={25} />
+                <SendIcon size={25} />
             </div>
-        </a>
+        </Link>
     )
 }
 

@@ -1,15 +1,15 @@
 import {
-    CallenderSvg,
-    FileSvg,
-    LinkSvg,
-    MapSvg,
-    NumberSvg,
-    OptionSvg,
-    PersonSvg,
-    QuestionSvg,
-    SignatureSvg,
-    TextareaSvg,
-    TextSvg,
+    CallenderIcon,
+    FileIcon,
+    LinkIcon,
+    MapIcon,
+    NumberIcon,
+    OptionIcon,
+    PersonIcon,
+    QuestionIcon,
+    SignatureIcon,
+    TextareaIcon,
+    TextIcon,
 } from 'icons'
 
 type Page = {
@@ -230,46 +230,46 @@ type FMD = {
 const default_view_props: FMD = {
     link: {
         display: 'لینک',
-        Icon: LinkSvg,
+        Icon: LinkIcon,
     },
     option: {
         display: 'انتخابی',
-        Icon: OptionSvg,
+        Icon: OptionIcon,
     },
     int: {
         display: 'عدد',
-        Icon: NumberSvg,
+        Icon: NumberIcon,
     },
     str: {
         display: 'متن',
-        Icon: TextSvg,
+        Icon: TextIcon,
     },
     text: {
         display: 'متن چند خطی',
-        Icon: TextareaSvg,
+        Icon: TextareaIcon,
     },
     geo: {
-        Icon: MapSvg,
+        Icon: MapIcon,
         display: 'نقشه',
     },
     user: {
         display: 'کاربر',
-        Icon: PersonSvg,
+        Icon: PersonIcon,
     },
     record: {
         display: 'ضمیمه',
-        Icon: FileSvg,
+        Icon: FileIcon,
     },
     date: {
         display: 'تاریخ',
-        Icon: CallenderSvg,
+        Icon: CallenderIcon,
     },
     question: {
         display: 'سوال',
-        Icon: QuestionSvg,
+        Icon: QuestionIcon,
     },
     signature: {
-        Icon: SignatureSvg,
+        Icon: SignatureIcon,
         display: 'امضا دیجیتال',
     },
 }

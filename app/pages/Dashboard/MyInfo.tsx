@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
 
 import {
-    AddressSvg,
-    CallenderSvg,
-    EmailSvg,
-    NationalIdSvg,
-    PersonSvg,
-    PhoneSvg2,
+    AddressIcon,
+    CallenderIcon,
+    EmailIcon,
+    NationalIdIcon,
+    PersonIcon,
+    PhoneIcon2,
 } from 'icons'
-import { PostalCodeSvg } from 'icons'
+import { PostalCodeIcon } from 'icons'
 
 import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
@@ -25,43 +25,43 @@ const MyInfo: FC = () => {
             <div className='myinfo-wrapper'>
                 <div className='rows'>
                     <Row
-                        Svg={PersonSvg}
+                        Icon={PersonIcon}
                         data={User.first_name + ' ' + User.last_name}
                         className={'nickname'}
                         holder={'نام کاربری'}
                     />
                     <Row
-                        Svg={PhoneSvg2}
+                        Icon={PhoneIcon2}
                         data={User.phone}
                         className={'phone'}
                         holder={'تلفن همراه'}
                     />
                     <Row
-                        Svg={NationalIdSvg}
+                        Icon={NationalIdIcon}
                         data={User.national_id}
                         className={'national-id'}
                         holder={'کد ملی'}
                     />
                     <Row
-                        Svg={CallenderSvg}
+                        Icon={CallenderIcon}
                         data={User.birth_date}
                         className={'birth-date'}
                         holder={'تاریخ تولد '}
                     />
                     <Row
-                        Svg={EmailSvg}
+                        Icon={EmailIcon}
                         data={User.email}
                         className={'email'}
                         holder={'پست الکترونیکی'}
                     />
                     <Row
-                        Svg={AddressSvg}
+                        Icon={AddressIcon}
                         data={User.address}
                         className={'address title_small'}
                         holder={'نشانی محل سکونت '}
                     />
                     <Row
-                        Svg={PostalCodeSvg}
+                        Icon={PostalCodeIcon}
                         data={User.postal_code}
                         className={'postal-code '}
                         holder={'کد پستی'}
@@ -73,18 +73,18 @@ const MyInfo: FC = () => {
 }
 
 interface RowProps {
-    Svg: Icon
+    Icon: Icon
     holder: string
     data: any
     className?: string
 }
 
-const Row: FC<RowProps> = ({ data, holder, Svg, className }) => {
+const Row: FC<RowProps> = ({ data, holder, Icon, className }) => {
     return (
         <div className={`row title ${className && className}`}>
             <div className='nickname-title title  row-title'>
                 <div className='icon'>
-                    <Svg size={25} />
+                    <Icon size={25} />
                 </div>
                 {holder}
             </div>

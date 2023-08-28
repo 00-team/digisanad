@@ -2,7 +2,7 @@ import React, { CSSProperties, FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { SendSvg } from 'icons'
+import { SendIcon } from 'icons'
 import { useNavigate } from 'react-router-dom'
 
 import { useSetAtom } from 'jotai'
@@ -127,7 +127,7 @@ const LogoutButton: FC<LogoutButtonProps> = ({ style }) => {
                 <div className='holder-text'> خروج</div>
             </div>
             <div className='send-icon icon'>
-                <SendSvg />
+                <SendIcon />
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { CloseFillSvg, PhoneSvg } from 'icons'
+import { CloseFillIcon, PhoneIcon } from 'icons'
 import { Link } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
@@ -12,7 +12,7 @@ const PhoneNumber: FC = () => {
         <div className='input-wrapper title'>
             <div className='placeholder'>
                 <div className='icon'>
-                    <PhoneSvg size={25} />
+                    <PhoneIcon size={25} />
                 </div>
                 <div className='holder'>شماره تلفن </div>
             </div>
@@ -34,7 +34,7 @@ const PhoneNumber: FC = () => {
                     className='icon'
                     onClick={() => setLogin({ ...Login, phone: '' })}
                 >
-                    <CloseFillSvg size={25} />
+                    <CloseFillIcon size={25} />
                 </div>
             </div>
             <Link to={'/register'} className='goto-register title_small'>

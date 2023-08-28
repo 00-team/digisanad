@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react'
 
 import { get_wallet } from 'api'
-import { CoinSvg, UnknownSvg, WalletSvg } from 'icons'
+import { CoinIcon, UnknownIcon, WalletIcon } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { TokenAtom, WalletAtom } from 'state'
@@ -45,7 +45,7 @@ const Withdraw: FC = () => {
             <div className='withdraw-wrapper'>
                 <div className='current-container'>
                     <div className='wallet-icon'>
-                        <WalletSvg size={35} />
+                        <WalletIcon size={35} />
                     </div>
                     <div className='wallet-data title'>
                         <div className='holder'>موجودی شما:</div>
@@ -55,7 +55,7 @@ const Withdraw: FC = () => {
                 <div className='wallet-options'>
                     <div className='wallet-option title_smaller'>
                         <h3 className=' option-title'>
-                            <WalletSvg size={25} />
+                            <WalletIcon size={25} />
                             <div className='holder'>آدرس کیف پول مقصد</div>
                         </h3>
                         <input
@@ -66,7 +66,7 @@ const Withdraw: FC = () => {
                     </div>
                     <div className='wallet-option coin-options title_smaller'>
                         <h3 className=' option-title'>
-                            <UnknownSvg size={25} />
+                            <UnknownIcon size={25} />
                             <div className='holder'>کوین برداشتی</div>
                         </h3>
                         <Select
@@ -84,7 +84,7 @@ const Withdraw: FC = () => {
                     </div>
                     <div className='wallet-option coin-options title_smaller'>
                         <h3 className=' option-title'>
-                            <UnknownSvg size={25} />
+                            <UnknownIcon size={25} />
                             <div className='holder'>شبکه</div>
                         </h3>
                         <Select
@@ -102,7 +102,7 @@ const Withdraw: FC = () => {
                     </div>
                     <div className='wallet-option title_smaller'>
                         <h3 className=' option-title'>
-                            <CoinSvg size={25} />
+                            <CoinIcon size={25} />
                             <div className='holder'>مقدار برداشتی</div>
                         </h3>
                         <input

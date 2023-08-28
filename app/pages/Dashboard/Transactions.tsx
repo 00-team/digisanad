@@ -1,6 +1,6 @@
 import React, { FC, HTMLAttributes } from 'react'
 
-import { CallenderSvg, CoinSvg, UnknownSvg } from 'icons'
+import { CallenderIcon, CoinIcon, UnknownIcon } from 'icons'
 
 import './style/transactions.scss'
 
@@ -40,7 +40,7 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, ...attr }) => {
                 <div className='row title_small'>
                     <div className='holder-wrapper'>
                         <div className='icon'>
-                            <CallenderSvg size={25} />
+                            <CallenderIcon size={25} />
                         </div>
                         <div className='holder '>تاریخ</div>
                     </div>
@@ -49,7 +49,7 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, ...attr }) => {
                 <div className='row title_small'>
                     <div className='holder-wrapper'>
                         <div className='icon'>
-                            <CoinSvg size={25} />
+                            <CoinIcon size={25} />
                         </div>
                         <div className='holder '>مقدار</div>
                     </div>
@@ -58,7 +58,7 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, ...attr }) => {
                 <div className='row title_small'>
                     <div className='holder-wrapper'>
                         <div className='icon'>
-                            <UnknownSvg size={25} />
+                            <UnknownIcon size={25} />
                         </div>
                         <div className='holder '>کوین</div>
                     </div>

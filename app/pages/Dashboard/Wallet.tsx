@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react'
 
 import { get_wallet } from 'api'
-import { CoinSvg } from 'icons'
+import { CoinIcon } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { Networks_List, TokenAtom, WalletAtom } from 'state'
@@ -42,7 +42,7 @@ const Wallet: FC = () => {
             <div className='wallet-wrapper'>
                 <div className='rows'>
                     {/* <Row
-                        Svg={CoinSvg}
+                        Icon={CoinIcon}
                         data={wallet.coins.in_wallet.toLocaleString()}
                         holder={'مقدار اتریوم'}
                     /> */}
@@ -51,7 +51,7 @@ const Wallet: FC = () => {
                         return (
                             <Row
                                 key={index}
-                                Svg={coinAddr.logo}
+                                Icon={coinAddr.logo}
                                 data={
                                     <input
                                         className='addr'
@@ -68,7 +68,7 @@ const Wallet: FC = () => {
                             <Row
                                 key={index}
                                 holder={coin.name}
-                                Svg={CoinSvg}
+                                Icon={CoinIcon}
                                 data={coin.in_wallet}
                             />
                         )
@@ -80,18 +80,18 @@ const Wallet: FC = () => {
 }
 
 interface RowProps {
-    Svg: Icon
+    Icon: Icon
     holder: string
     data: React.ReactNode
     className?: string
 }
 
-const Row: FC<RowProps> = ({ data, holder, Svg, className }) => {
+const Row: FC<RowProps> = ({ data, holder, Icon, className }) => {
     return (
         <div className={`row title ${className && className}`}>
             <div className='nickname-title title  row-title'>
                 <div className='icon'>
-                    <Svg size={25} />
+                    <Icon size={25} />
                 </div>
                 {holder}
             </div>

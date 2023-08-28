@@ -5,11 +5,11 @@ import { C } from '@00-team/utils'
 import { get_messages, get_unseen_count } from 'api'
 import axios from 'axios'
 import {
-    CallenderSvg,
-    InfoSvg,
-    NotificationSvg,
-    SenderSvg,
-    WarningSvg,
+    CallenderIcon,
+    InfoIcon,
+    NotificationIcon,
+    SenderIcon,
+    WarningIcon,
 } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
@@ -26,7 +26,7 @@ const Notifications: FC = () => {
 
     const seenMsg = async () => {
         try {
-            await messages?.forEach(({ message_id }) => {
+            messages?.forEach(({ message_id }) => {
                 const response = axios.patch(
                     `/api/messages/${message_id}/`,
                     {
@@ -91,7 +91,7 @@ const Notifications: FC = () => {
                         {UnseenCount?.count}
                     </span>
                 )}
-                <NotificationSvg size={innerWidth >= 1024 ? 40 : 30} />
+                <NotificationIcon size={innerWidth >= 1024 ? 40 : 30} />
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
                 {messages?.map((message, index) => {
@@ -139,9 +139,9 @@ const NotifMessage: FC<NotifMessageProps> = ({
 
             {level !== 'notification' && (
                 <div className={`notif-level ${level}`}>
-                    {level === 'info' && <InfoSvg fill='#5199ff' size={30} />}
+                    {level === 'info' && <InfoIcon fill='#5199ff' size={30} />}
                     {level === 'urgent' && (
-                        <WarningSvg fill='#e20338' size={30} />
+                        <WarningIcon fill='#e20338' size={30} />
                     )}
                     <p className='title_small'>{levels_title[level]}</p>
                 </div>
@@ -149,14 +149,14 @@ const NotifMessage: FC<NotifMessageProps> = ({
 
             <div className='row sender title_smaller'>
                 <div className='holder'>
-                    <SenderSvg size={20} />
+                    <SenderIcon size={20} />
                     فرستنده:
                 </div>
                 <p className='data '>{getSender()}</p>
             </div>
             <div className='row sent-time title_smaller'>
                 <div className='holder'>
-                    <CallenderSvg size={20} />
+                    <CallenderIcon size={20} />
                     زمان ارسال:
                 </div>
                 <p className='data '>

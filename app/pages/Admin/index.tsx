@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { ContractSvg, MenuIcon, SettingSvg } from 'icons'
+import { ContractIcon, MenuIcon, SettingIcon } from 'icons'
 import { Link } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 
@@ -30,20 +30,20 @@ const Sidebar: FC = () => {
                 <SidebarRow
                     title='تنظیمات'
                     className='setting'
-                    Icon={SettingSvg}
+                    Icon={SettingIcon}
                     href='settings/'
                 />
                 <SidebarRow
                     title='قالب قرارداد ها'
                     className='contract'
                     href='schemas/'
-                    Icon={ContractSvg}
+                    Icon={ContractIcon}
                 />
                 {/*<SidebarRow
                     title='قراردادها'
                     className='contract'
                     href='contract/'
-                    Icon={ContractSvg}
+                    Icon={ContractIcon}
                 />*/}
             </div>
         </aside>

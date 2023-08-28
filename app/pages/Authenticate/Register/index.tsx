@@ -3,15 +3,15 @@ import React, { FC, useEffect, useState } from 'react'
 import { user_get_me } from 'api'
 import axios from 'axios'
 import {
-    AddressSvg,
-    CallenderSvg,
-    CodeSvg,
-    EmailSvg,
+    AddressIcon,
+    CallenderIcon,
+    CodeIcon,
+    EmailIcon,
     GoBack,
-    NationalIdSvg,
-    PersonSvg,
+    NationalIdIcon,
+    PersonIcon,
 } from 'icons'
-import { PostalCodeSvg } from 'icons'
+import { PostalCodeIcon } from 'icons'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
@@ -221,7 +221,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PersonSvg size={25} />
+                                    <PersonIcon size={25} />
                                 </div>
                                 <div className='holder-data'>نام</div>
                             </div>
@@ -239,7 +239,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PersonSvg />
+                                    <PersonIcon />
                                 </div>
                                 <div className='holder-data'>نام خانوادگی</div>
                             </div>
@@ -257,7 +257,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PersonSvg />
+                                    <PersonIcon />
                                 </div>
                                 <div className='holder-data'>تلفن همراه </div>
                             </div>
@@ -274,7 +274,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <EmailSvg size={25} />
+                                    <EmailIcon size={25} />
                                 </div>
                                 <div className='holder-data'>
                                     پست الکترونیکی{' '}
@@ -297,7 +297,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <NationalIdSvg size={25} />
+                                    <NationalIdIcon size={25} />
                                 </div>
                                 <div className='holder-data'>کد ملی </div>
                             </div>
@@ -317,7 +317,7 @@ const Register: FC = () => {
                         <div className='input-wrapper birthday'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <CallenderSvg size={25} />
+                                    <CallenderIcon size={25} />
                                 </div>
                                 <div className='holder-data'>تاریخ تولد</div>
                             </div>
@@ -424,7 +424,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <AddressSvg size={25} />
+                                    <AddressIcon size={25} />
                                 </div>
                                 <div className='holder-data'>
                                     نشانی محل سکونت{' '}
@@ -449,7 +449,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <PostalCodeSvg size={25} />
+                                    <PostalCodeIcon size={25} />
                                 </div>
                                 <div className='holder-data'>کد پستی</div>
                             </div>
@@ -473,7 +473,7 @@ const Register: FC = () => {
                         <div className='input-wrapper'>
                             <div className='holder title_small'>
                                 <div className='holder-icon icon'>
-                                    <CodeSvg size={25} />
+                                    <CodeIcon size={25} />
                                 </div>
                                 <div className='holder-data'>کد تایید</div>
                             </div>

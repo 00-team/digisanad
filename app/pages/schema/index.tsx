@@ -15,13 +15,13 @@ import { C } from '@00-team/utils'
 
 import axios from 'axios'
 import {
-    ArrowDownSvg,
-    CheckSvg,
-    CloseSvg,
-    CopySvg,
-    PlusSvg,
-    SettingSvg,
-    FileSvg,
+    ArrowDownIcon,
+    CheckIcon,
+    CloseIcon,
+    CopyIcon,
+    PlusIcon,
+    SettingIcon,
+    FileIcon,
 } from 'icons'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -160,7 +160,7 @@ const Schema: FC = () => {
                             console.log('save ok:', response.data.ok)
                         }}
                     >
-                        <CopySvg size={25} />
+                        <CopyIcon size={25} />
                         ذخیره
                     </button>
                     <button
@@ -170,7 +170,7 @@ const Schema: FC = () => {
                             update()
                         }}
                     >
-                        <FileSvg size={25} />
+                        <FileIcon size={25} />
                         وضعیت: {state.draft ? 'در حال تکمیل' : 'تکمیل'}
                     </button>
                     <button
@@ -180,7 +180,7 @@ const Schema: FC = () => {
                             update()
                         }}
                     >
-                        <PlusSvg size={25} />
+                        <PlusIcon size={25} />
                         صفحه جدید
                     </button>
                     {state.schema.pages.map((_, i) => (
@@ -274,7 +274,7 @@ const Sidebar: FC<SidebarProps> = ({ inserter, state, setState }) => {
             <h2 className='sidebar-title title'>تنظیمات قرارداد</h2>
             <div className='fields-wrapper'>
                 <h3 className='fields-title sidebar-section title_small'>
-                    <PlusSvg size={25} />
+                    <PlusIcon size={25} />
                     <span>افزودن به قرارداد</span>
                 </h3>
                 <div className='fields'>
@@ -295,7 +295,7 @@ const Sidebar: FC<SidebarProps> = ({ inserter, state, setState }) => {
             </div>
             <div className='field-config-container'>
                 <h3 className='config-title sidebar-section title_small'>
-                    <SettingSvg size={25} />
+                    <SettingIcon size={25} />
                     تنظیمات ورودی
                 </h3>
                 <div className='fields-wrapper'>
@@ -680,7 +680,7 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
             <div className='record-field'>
                 {preview.length <= 1 ? (
                     <div className='record-empty'>
-                        <ArrowDownSvg size={40} />
+                        <ArrowDownIcon size={40} />
                         <h4 className='title_smaller'>
                             فایل خود را اینجا بارگذاری کنید
                         </h4>
@@ -717,7 +717,7 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                                         alt=''
                                     />
                                     <div className='remove-img'>
-                                        <CloseSvg size={30} />
+                                        <CloseIcon size={30} />
                                     </div>
                                 </div>
                             )
@@ -828,10 +828,10 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                         state.current.context.clearRect(0, 0, 500, 450)
                     }}
                 >
-                    <CloseSvg size={25} />
+                    <CloseIcon size={25} />
                 </div>
                 <div className='confirm'>
-                    <CheckSvg size={25} />
+                    <CheckIcon size={25} />
                 </div>
             </div>
         </div>

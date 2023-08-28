@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { BitcoinSvg, EthereumSvg, UnknownSvg } from 'icons'
+import { BitcoinIcon, EthereumIcon, UnknownIcon } from 'icons'
 
 type NetworkTypes = 'eth' | 'btc' | 'xtz'
 type Networks = {
@@ -13,15 +13,15 @@ type Networks = {
 const Networks_List: Networks = {
     eth: {
         name: 'اتریوم',
-        logo: EthereumSvg,
+        logo: EthereumIcon,
     },
     btc: {
         name: 'بیتکوین',
-        logo: BitcoinSvg,
+        logo: BitcoinIcon,
     },
     xtz: {
         name: 'تزوس',
-        logo: UnknownSvg,
+        logo: UnknownIcon,
     },
 } as const
 

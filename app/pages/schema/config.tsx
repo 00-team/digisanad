@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
 
 import {
-    CloseSvg,
-    FileSvg,
-    IdSvg,
-    MaximumSvg,
-    MinimunSvg,
-    QuestionSvg,
-    TypeSvg,
+    CloseIcon,
+    FileIcon,
+    IdIcon,
+    MaximumIcon,
+    MinimunIcon,
+    QuestionIcon,
+    TypeIcon,
 } from 'icons'
 
 import { FieldType, have_minmax } from './types'
@@ -22,21 +22,21 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
         <div className='field-config'>
             <div className='config-row title_smaller'>
                 <div className='holder'>
-                    <TypeSvg size={25} />
+                    <TypeIcon size={25} />
                     نوع :
                 </div>
                 <div className='data'>{field.type}</div>
             </div>
             <div className='config-row title_smaller'>
                 <div className='holder'>
-                    <IdSvg size={25} />
+                    <IdIcon size={25} />
                     شناسه :
                 </div>
                 <div className='data'>{field.uid}</div>
             </div>
             <div className='config-row optional title_smaller'>
                 <label className='holder' htmlFor='fc_optinal'>
-                    <QuestionSvg size={25} />
+                    <QuestionIcon size={25} />
                     اختیاری
                 </label>
                 <input
@@ -68,7 +68,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
             {field.type == 'record' && (
                 <div className='config-row'>
                     <label htmlFor='fc_plural' className='holder title_smaller'>
-                        <FileSvg size={25} />
+                        <FileIcon size={25} />
                         چند فایلی
                     </label>
                     <div className='data'>
@@ -116,7 +116,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                 <div className='numbers-wrapper'>
                     <div className='input-number-wrapper title_smaller'>
                         <div className='holder'>
-                            <MaximumSvg size={25} />
+                            <MaximumIcon size={25} />
                             حداکثر:
                         </div>
                         <div className='data'>
@@ -156,7 +156,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                     </div>
                     <div className='input-number-wrapper title_smaller'>
                         <div className='holder'>
-                            <MinimunSvg size={25} />
+                            <MinimunIcon size={25} />
                             حداقل:
                         </div>
                         <div className='data'>
@@ -185,7 +185,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                 <>
                     <div className='config-row'>
                         <div className='holder'>
-                            <QuestionSvg size={25} />
+                            <QuestionIcon size={25} />
                             <label htmlFor='fc_singleton'>تک گزینه ای</label>
                         </div>
                         <div className='data'>
@@ -254,7 +254,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                                     update()
                                 }}
                             >
-                                <CloseSvg size={25} />
+                                <CloseIcon size={25} />
                             </button>
                         </div>
                     ))}
@@ -320,7 +320,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                                         update()
                                     }}
                                 >
-                                    <CloseSvg size={25} />
+                                    <CloseIcon size={25} />
                                 </button>
                             </div>
                         ))}
@@ -382,7 +382,7 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                                         update()
                                     }}
                                 >
-                                    <CloseSvg size={25} />
+                                    <CloseIcon size={25} />
                                 </button>
                             </div>
                         ))}
