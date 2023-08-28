@@ -75,7 +75,6 @@ const default_schema: SchemaData = {
 const Schema: FC = () => {
     const { schema_id } = useParams()
     const navigate = useNavigate()
-
     const token = useAtomValue(TokenAtom)
 
     const [state, setState] = useState<State>({
@@ -464,8 +463,10 @@ const Viewer: FC<EditorProps> = ({ state, setState }) => {
                 hn = line.indexOf(' ')
                 line = line.substring(hn + 1)
                 if (hn == 1 && !title_was_parsed) {
-                    state.title = line
-                    update()
+                    if (state.title != line) {
+                        state.title = line
+                        update()
+                    }
                     title_was_parsed = true
                     node.name = 'h1'
                 } else if (hn > 1 && hn < 5) {
