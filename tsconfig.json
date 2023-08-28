@@ -2,7 +2,7 @@
     "compilerOptions": {
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        "target": "es5",
+        "target": "ES2020",
         "downlevelIteration": true,
         "module": "CommonJS",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],

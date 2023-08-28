@@ -8,11 +8,10 @@ import {
     PersonSvg,
     PhoneSvg2,
 } from 'icons'
+import { PostalCodeSvg } from 'icons'
 
 import { useAtomValue } from 'jotai'
 import { UserAtom } from 'state'
-
-import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import './style/myinfo.scss'
 

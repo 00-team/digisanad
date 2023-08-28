@@ -20,7 +20,7 @@ const Schema = loadable(() => import('pages/schema'))
 const SchemaList = loadable(() => import('pages/Admin/schemas'))
 
 const App: FC = () => {
-    const isAdmin = useMatch('/admin/*')
+    const hideFooter = !!(useMatch('/admin/*') || useMatch('/dashboard/*'))
 
     global.ReactAlert = useAlert()
     global.HandleError = error => {
@@ -45,7 +45,7 @@ const App: FC = () => {
     return (
         <>
             <MainContent />
-            {!isAdmin && <Footer />}
+            {!hideFooter && <Footer />}
         </>
     )
 }
@@ -56,13 +56,15 @@ const MainContent: FC = () => {
             <Route index element={<Home />} />
             <Route path='/register/' element={<Register />} />
             <Route path='/login/' element={<Login />} />
+
             <Route path='/dashboard/' element={<Dashboard />} />
 
             <Route path='/admin/' element={<Admin />}>
+                <Route index element={<SchemaList />} />
                 <Route path='schema/:schema_id' element={<Schema />} />
                 <Route path='schemas/' element={<SchemaList />} />
                 <Route path='schemas/:pid' element={<SchemaList />} />
-                <Route path='*' element={<span>not found</span>} />
+                <Route path='*' element={<SchemaList />} />
             </Route>
         </Routes>
     )

@@ -11,12 +11,11 @@ import {
     NationalIdSvg,
     PersonSvg,
 } from 'icons'
+import { PostalCodeSvg } from 'icons'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
 import { LoginAtom, TokenAtom, UserAtom } from 'state'
-
-import PostalCodeSvg from 'icons/Dashboard/PostalCode'
 
 import Clouds from '../../../components/Clouds'
 import { Submit } from 'components'

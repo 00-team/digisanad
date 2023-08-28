@@ -123,14 +123,14 @@ const Sidebar: FC<DashboardChildProps> = ({
     SectionActive,
     SectionsetActive,
 }) => {
-    const User = useAtomValue(UserAtom)
+    const user = useAtomValue(UserAtom)
 
     return (
         <aside className='sidebar'>
             <div className='avatar'>
                 <div className='title_small name-avatar'>
                     <span>
-                        {User.first_name + ' ' + User.last_name || '---'}
+                        {user.first_name + ' ' + user.last_name || '---'}
                     </span>
                 </div>
             </div>
@@ -150,6 +150,20 @@ const Sidebar: FC<DashboardChildProps> = ({
                         onClick={() => SectionsetActive(index)}
                     />
                 ))}
+                {user.admin && (
+                    <SidebarColumn
+                        title='x'
+                        Icon={GlobeSvg}
+                        active={false}
+                        id={'x'}
+                        style={{
+                            animationDelay: `${
+                                OPTIONS_BASE_DELAY + ADDED_DELAY * 12
+                            }s`,
+                        }}
+                        onClick={() => SectionsetActive(1)}
+                    />
+                )}
                 <GotoSiteColumn
                     style={{
                         animationDelay: `${

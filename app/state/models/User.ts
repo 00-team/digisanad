@@ -8,6 +8,7 @@ interface User {
     address: string
     postal_code: string
     user_id: number | null
+    admin: string
 }
 
 export { User as UserModel }
