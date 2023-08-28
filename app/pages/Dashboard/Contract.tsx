@@ -1,11 +1,15 @@
 import React, { Dispatch, SetStateAction, FC, useEffect, useState } from 'react'
 
+import { C } from '@00-team/utils'
+
 import axios from 'axios'
+import { CopyIcon } from 'icons'
 import { SchemaData } from 'pages/schema/types'
+import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
-import { TokenAtom } from 'state'
+import { TokenAtom, UserAtom } from 'state'
 
 import './style/contract.scss'
 
@@ -49,10 +53,18 @@ type State = ContractModel & {
     need_schema: boolean
 }
 
+type SaveData = {
+    data: SchemaData
+    stage: keyof typeof CSMAP
+    title: string
+    disable_invites: boolean
+}
+
 const Contract: FC = () => {
     const { contract_id } = useParams()
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
+    const me = useAtomValue(UserAtom)
 
     const [state, setState] = useState<State>({
         title: '',
@@ -71,7 +83,7 @@ const Contract: FC = () => {
         disable_invites: true,
         need_schema: true,
     })
-    const update = () => setState(s => ({ ...s }))
+    // const update = () => setState(s => ({ ...s }))
     const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))
 
     const fetch_contract = async () => {
@@ -98,26 +110,158 @@ const Contract: FC = () => {
         }
     }
 
+    const fetch_parties = async () => {
+        try {
+            const response = await axios.get(
+                `/api/contracts/${contract_id}/parties/`,
+                {
+                    headers: { Authorization: 'Bearer ' + token },
+                }
+            )
+
+            updateState({ parties: response.data })
+        } catch {}
+    }
+
+    const remove_user = async (user_id: number): Promise<boolean> => {
+        try {
+            const response = await axios.delete(
+                `/api/contracts/${contract_id}/remove/${user_id}/`,
+                {
+                    headers: { Authorization: 'Bearer ' + token },
+                }
+            )
+
+            return response.data.ok
+        } catch {}
+
+        return false
+    }
+
+    const save_contract = async (data: Partial<SaveData>) => {
+        await axios.patch(`/api/contracts/${contract_id}/`, data, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        })
+    }
+
     useEffect(() => {
         if (!contract_id) return navigate('/dashboard/contracts/')
         let cid = parseInt(contract_id)
         if (isNaN(cid)) return navigate('/dashboard/contracts/')
 
         fetch_contract()
+        fetch_parties()
     }, [contract_id])
-
-    update
-    state
 
     if (state.contract_id == -1) return <></>
 
-    // if (state.need_schema)
-    //     return <SelectSchema state={state} setState={setState} />
-    SelectSchema
+    if (state.need_schema)
+        return <SelectSchema state={state} setState={setState} />
 
-    console.log(state)
+    return (
+        <div className='contract-container'>
+            <div className='head'>
+                <h1 className='title'>{state.title}</h1>
+                <div className='actions'>
+                    {state.data.pages.map((_, i) => (
+                        <button
+                            key={i}
+                            className={`${C(
+                                i == state.page
+                            )} pager title_smaller`}
+                            onClick={() =>
+                                state.page != i && updateState({ page: i })
+                            }
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                    <button
+                        className='copy-btn cta-btn title_smaller'
+                        onClick={() => save_contract({ data: state.data })}
+                    >
+                        <CopyIcon size={25} />
+                        ذخیره
+                    </button>
+                </div>
+            </div>
+            <div className='inner-wrapper'>
+                <div className='viewer-wrapper'>
+                    <Viewer
+                        page={state.page}
+                        schema={state.data}
+                        setUID={() => {}}
+                        setSchema={data =>
+                            setState(s => ({
+                                ...s,
+                                data: { ...s.data, ...data },
+                            }))
+                        }
+                    />
+                </div>
 
-    return <div>{state.title}</div>
+                <div className='parties'>
+                    <div className='users'>
+                        {state.parties.map((user, i) => (
+                            <div key={i}>
+                                <span>
+                                    {user.first_name} {user.last_name}
+                                </span>
+                                {state.creator == me.user_id &&
+                                    user.user_id != me.user_id && (
+                                        <button
+                                            onClick={() => {
+                                                remove_user(user.user_id).then(
+                                                    ok => {
+                                                        if (ok) fetch_parties()
+                                                    }
+                                                )
+                                            }}
+                                        >
+                                            X
+                                        </button>
+                                    )}
+                            </div>
+                        ))}
+                    </div>
+                    <div className='config'>
+                        <button
+                            className='toggle-invites'
+                            style={{
+                                '--color': state.disable_invites
+                                    ? 'red'
+                                    : 'green',
+                            }}
+                            onClick={() => {
+                                setState(s => {
+                                    save_contract({
+                                        disable_invites: !s.disable_invites,
+                                    }).then(() => fetch_contract())
+                                    return {
+                                        ...s,
+                                        disable_invites: !s.disable_invites,
+                                    }
+                                })
+                            }}
+                        >
+                            دعوت: {state.disable_invites ? 'غیرفعال' : 'فعال'}
+                        </button>
+                        <div className='link'>
+                            <input
+                                value={location.origin + '/jc/' + state.pepper}
+                                onChange={() => {}}
+                            />
+                            <button>
+                                <CopyIcon />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 type CommonProps = {

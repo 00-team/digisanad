@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react'
 
 import { user_get_me } from 'api'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
 import { LoginAtom, TokenAtom, UserAtom } from 'state'
@@ -18,6 +18,7 @@ import './style/login.scss'
 const PHONE_VALIDATOR = new RegExp(/^09[0-9]{9}$/)
 
 const Login: FC = () => {
+    const [searchParams] = useSearchParams()
     const [user, setUser] = useAtom(UserAtom)
     const [Login, setLogin] = useAtom(LoginAtom)
     const [token, setToken] = useAtom(TokenAtom)
@@ -25,8 +26,10 @@ const Login: FC = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        let next = searchParams.get('next') || '/'
+
         if (user.user_id) {
-            navigate('/dashboard/')
+            navigate(next)
             return
         }
 
@@ -36,7 +39,7 @@ const Login: FC = () => {
                     setToken('')
                 } else {
                     setUser(data)
-                    navigate('/dashboard/')
+                    navigate(next)
                 }
             })
         }
@@ -70,6 +73,7 @@ const Login: FC = () => {
     }
 
     const codeSubmit = async () => {
+        let next = searchParams.get('next') || '/'
         const code_input = document.querySelector(
             'input#code'
         ) as HTMLInputElement
@@ -95,7 +99,7 @@ const Login: FC = () => {
                     user_id: data.user_id,
                 })
                 setToken(data.token)
-                navigate('/dashboard')
+                navigate(next)
             } else {
                 ReactAlert.error('Invalid login!')
             }

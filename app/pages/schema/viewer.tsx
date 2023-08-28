@@ -27,6 +27,8 @@ import {
 import { ParsedField } from './utils'
 import { parseFields } from './utils'
 
+import './style/viewer.scss'
+
 import pdfImg from 'static/Contract/pdf.png'
 
 type TreeNode = {
@@ -132,7 +134,7 @@ const Viewer: FC<ViewerProps> = ({ schema, page, setSchema, setUID }) => {
         setResult(elements)
     }, [schema, page])
 
-    return <div className='viewer title_small'>{result}</div>
+    return <div className='schema-viewer title_small'>{result}</div>
 }
 
 type FMF = {
@@ -349,6 +351,8 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
     )
 }
 
+const COLORS = ['black', 'red', 'blue', 'green', 'yellow'] as const
+
 type SignatureState = {
     px: number
     py: number
@@ -356,9 +360,9 @@ type SignatureState = {
     cy: number
     draw: boolean
     context: CanvasRenderingContext2D
+    move_count: number
+    color: typeof COLORS[number]
 }
-
-var n = 0
 
 const SignatureDrawer: FieldProps<SignatureField> = () => {
     const state = useRef<SignatureState>({
@@ -367,7 +371,9 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
         cx: 0,
         cy: 0,
         draw: false,
+        move_count: 0,
         context: {} as CanvasRenderingContext2D,
+        color: COLORS[0],
     })
 
     return (
@@ -388,7 +394,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                     state.current.cy = e.nativeEvent.offsetY
 
                     state.current.context.beginPath()
-                    state.current.context.fillStyle = 'black'
+                    state.current.context.fillStyle = state.current.color
                     state.current.context.fillRect(
                         state.current.cx,
                         state.current.cy,
@@ -405,10 +411,24 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                 onMouseOut={() => {
                     state.current.draw = false
                 }}
+                onWheel={e => {
+                    let idx = COLORS.indexOf(state.current.color)
+
+                    if (e.deltaY > 0) idx++
+                    else idx--
+
+                    if (idx >= COLORS.length) idx = 0
+                    else if (idx < 0) idx = COLORS.length - 1
+
+                    state.current.color = COLORS[idx]!
+                }}
                 onMouseMove={e => {
-                    n++
-                    if (!state.current.draw || n < 5) return
-                    n = 0
+                    // if (!state.current.draw) return
+
+                    state.current.move_count++
+                    if (!state.current.draw || state.current.move_count < 8)
+                        return
+                    state.current.move_count = 0
 
                     state.current.px = state.current.cx
                     state.current.py = state.current.cy
@@ -425,7 +445,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                         state.current.cx,
                         state.current.cy
                     )
-                    state.current.context.strokeStyle = 'black'
+                    state.current.context.strokeStyle = state.current.color
                     state.current.context.lineWidth = 2
                     state.current.context.stroke()
                     state.current.context.closePath()

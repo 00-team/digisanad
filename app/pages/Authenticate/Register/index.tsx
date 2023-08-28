@@ -12,7 +12,7 @@ import {
     PersonIcon,
 } from 'icons'
 import { PostalCodeIcon } from 'icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
 import { LoginAtom, TokenAtom, UserAtom } from 'state'
@@ -24,6 +24,7 @@ import { Timer } from 'components/common/Timer'
 import './style/register.scss'
 
 const Register: FC = () => {
+    const [searchParams] = useSearchParams()
     const [Login, setLogin] = useAtom(LoginAtom)
     const [user, setUser] = useAtom(UserAtom)
     const [token, setToken] = useAtom(TokenAtom)
@@ -46,8 +47,10 @@ const Register: FC = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        let next = searchParams.get('next') || '/'
+
         if (user.user_id) {
-            navigate('/dashboard/')
+            navigate(next)
             return
         }
 
@@ -57,7 +60,7 @@ const Register: FC = () => {
                     setToken('')
                 } else {
                     setUser(data)
-                    navigate('/dashboard/')
+                    navigate(next)
                 }
             })
         }
@@ -162,6 +165,8 @@ const Register: FC = () => {
         //
 
         const sendRequest = async () => {
+            let next = searchParams.get('next') || '/'
+
             try {
                 let send_data = {
                     phone: Data.phone,
@@ -194,7 +199,7 @@ const Register: FC = () => {
                     ...send_data,
                 })
                 setToken(response.data.token)
-                navigate('/dashboard')
+                navigate(next)
             } catch (error) {
                 console.log(error)
                 HandleError(error)

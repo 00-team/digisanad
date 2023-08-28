@@ -74,6 +74,6 @@ logging.config.dictConfig({
     },
     'root': {
         'handlers': ['term', 'file'],
-        'level': 'DEBUG'
+        'level': 'INFO'
     },
 })

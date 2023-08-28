@@ -123,7 +123,7 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
     if contract.stage != ContractStage.DRAFT:
         raise closed_contract
 
-    if 'stage' in patch:
+    if body.stage and body.stage != contract.stage:
         patch['disable_invites'] = True
 
         if body.stage == ContractStage.DONE:

@@ -134,12 +134,15 @@ const Dashboard: FC = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!token) return navigate('/login/')
+        if (!token) {
+            navigate('/login/?next=' + location.pathname)
+            return
+        }
 
         user_get_me(token).then(data => {
             if (data === null) {
                 setToken('')
-                navigate('/login/')
+                navigate('/login/' + location.pathname)
             } else {
                 setUser(data)
             }
