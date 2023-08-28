@@ -1,13 +1,13 @@
 
-import json
 from sqlite3 import IntegrityError
 from typing import ClassVar
 
 from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 from db.contract import contract_add, contract_get, contract_update
 from db.contract import contract_user_add, contract_user_delete
+from db.contract import contract_user_get
 from db.models import ContractModel, ContractStage, ContractTable
 from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
@@ -55,7 +55,27 @@ async def get_contracts(request: Request, page: int = 0):
     return [ContractModelNoData(**r) for r in rows]
 
 
+@router.get(
+    '/{contract_id}/', response_model=ContractModel,
+    openapi_extra={'errors': [bad_id]}
+)
+async def get(request: Request, contract_id: int):
+    user: UserModel = request.state.user
+
+    if not (await contract_user_get(contract_id, user.user_id)):
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+    )
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    return contract
+
+
 class CreateBody(BaseModel):
+    title: constr(max_length=256)
     data: dict
 
 
@@ -66,6 +86,7 @@ async def create(request: Request, body: CreateBody):
     contract_id = await contract_add(
         creator=user.user_id,
         stage=ContractStage.DRAFT,
+        title=body.title,
         data=body.data,
         start_date=utc_now(),
         finish_date=0,
@@ -78,6 +99,7 @@ async def create(request: Request, body: CreateBody):
 
 
 class UpdateBody(BaseModel):
+    title: str = None
     data: dict = None
     disable_invites: bool = None
     stage: ContractStage = None
@@ -89,8 +111,7 @@ class UpdateBody(BaseModel):
 )
 async def update(request: Request, contract_id: int, body: UpdateBody):
     user: UserModel = request.state.user
-    change = False
-    patch = {}
+    patch = body.model_dump(exclude_defaults=True)
 
     contract = await contract_get(
         ContractTable.contract_id == contract_id,
@@ -102,26 +123,13 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
     if contract.stage != ContractStage.DRAFT:
         raise closed_contract
 
-    if (
-        body.disable_invites is not None and
-        body.disable_invites != contract.disable_invites
-    ):
-        change = True
-        patch['disable_invites'] = body.disable_invites
-
-    if body.stage and body.stage != contract.stage:
-        change = True
-        patch['stage'] = body.stage
+    if 'stage' in patch:
         patch['disable_invites'] = True
 
         if body.stage == ContractStage.DONE:
             patch['finish_date'] = utc_now()
 
-    if body.data is not None:
-        change = True
-        patch['data'] = body.data
-
-    if change is False:
+    if not patch:
         raise no_change
 
     await contract_update(

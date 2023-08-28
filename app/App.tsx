@@ -6,6 +6,7 @@ import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
 
 import {
+    Contract,
     Contracts,
     Deposit,
     MyInfo,
@@ -66,6 +67,9 @@ const App: FC = () => {
             <Route path='/dashboard/' element={<Dashboard />}>
                 <Route index element={<MyInfo />} />
                 <Route path='contracts' element={<Contracts />} />
+                <Route path='contracts/:pid' element={<Contracts />} />
+                <Route path='contract/:contract_id' element={<Contract />} />
+
                 <Route path='transactions' element={<Transactions />} />
                 <Route path='wallet' element={<Wallet />} />
                 <Route path='deposit' element={<Deposit />} />

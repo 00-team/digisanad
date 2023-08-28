@@ -29,6 +29,7 @@ import { Notifications } from './Notifications'
 import './style/dashboard.scss'
 
 export { Contracts } from './Contracts'
+export { Contract } from './Contract'
 export { Deposit } from './Deposit'
 export { MyInfo } from './MyInfo'
 export { Transactions } from './Transactions'

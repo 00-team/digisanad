@@ -30,7 +30,7 @@ class ContractTable(BaseTable):
     disable_invites = Column(
         Boolean,
         nullable=False,
-        server_default=text('false')
+        server_default=text('true')
     )
 
 
