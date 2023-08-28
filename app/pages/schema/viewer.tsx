@@ -14,7 +14,7 @@ import { MapContainer, TileLayer } from 'react-leaflet'
 import { DatePicker } from 'components'
 
 import { CustomMap } from './map'
-import { FieldType, SchemaData, TextField } from './types'
+import { FieldType, SchemaData, TextField, UserField } from './types'
 import {
     GeoField,
     IntField,
@@ -506,6 +506,15 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
     )
 }
 
+const UserFC: FieldProps<UserField> = () => {
+    return (
+        <select>
+            <option>user 1</option>
+            <option>user 2</option>
+        </select>
+    )
+}
+
 const field_map: FMF = {
     link: ({ field }) => (
         <a href={field.url} title={field.title}>
@@ -514,16 +523,7 @@ const field_map: FMF = {
     ),
     text: TextFC,
     str: StrFC,
-    user: ({ field, update }) => (
-        <input
-            placeholder={'User Field'}
-            value={field.value}
-            onInput={e => {
-                field.value = e.currentTarget.value
-                update()
-            }}
-        />
-    ),
+    user: UserFC,
     geo: GeoFC,
     int: IntFC,
     signature: SignatureDrawer,
