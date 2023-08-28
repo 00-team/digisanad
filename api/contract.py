@@ -1,6 +1,7 @@
 
 import json
 from sqlite3 import IntegrityError
+from typing import ClassVar
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
@@ -23,7 +24,11 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=list[ContractModel])
+class ContractModelNoData(ContractModel):
+    data: ClassVar
+
+
+@router.get('/', response_model=list[ContractModelNoData])
 async def get_contracts(request: Request, page: int = 0):
     user: UserModel = request.state.user
 
@@ -47,13 +52,7 @@ async def get_contracts(request: Request, page: int = 0):
         WHERE contract_id in {cids}
     ''')
 
-    result = []
-    for row in rows:
-        args = row._asdict()
-        args['data'] = json.loads(args['data'])
-        result.append(ContractModel(**args))
-
-    return result
+    return [ContractModelNoData(**r) for r in rows]
 
 
 class CreateBody(BaseModel):

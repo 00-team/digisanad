@@ -21,6 +21,7 @@ class ContractTable(BaseTable):
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
         nullable=False, index=True
     )
+    title = Column(String, nullable=False)
     stage = Column(String, nullable=False, server_default='draft')
     data = Column(JSON, nullable=False, server_default='{}')
     start_date = Column(Integer, nullable=False, server_default=text('0'))
@@ -67,6 +68,7 @@ class ContractStage(str, Enum):
 class ContractModel(BaseModel):
     contract_id: int
     creator: int
+    title: str
     stage: ContractStage
     data: dict
     start_date: int
