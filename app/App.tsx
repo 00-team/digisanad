@@ -3,7 +3,16 @@ import React, { FC } from 'react'
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
 import axios from 'axios'
-import { Route, Routes, useMatch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+
+import {
+    Contracts,
+    Deposit,
+    MyInfo,
+    Transactions,
+    Wallet,
+    Withdraw,
+} from 'pages/Dashboard'
 
 // import { Login } from 'pages/Authenticate/Login'
 import Footer from 'components/layout/Footer'
@@ -20,8 +29,6 @@ const Schema = loadable(() => import('pages/schema'))
 const SchemaList = loadable(() => import('pages/Admin/schemas'))
 
 const App: FC = () => {
-    const hideFooter = !!(useMatch('/admin/*') || useMatch('/dashboard/*'))
-
     global.ReactAlert = useAlert()
     global.HandleError = error => {
         let msg = 'Error'
@@ -43,21 +50,28 @@ const App: FC = () => {
     }
 
     return (
-        <>
-            <MainContent />
-            {!hideFooter && <Footer />}
-        </>
-    )
-}
-
-const MainContent: FC = () => {
-    return (
         <Routes>
-            <Route index element={<Home />} />
+            <Route
+                index
+                element={
+                    <>
+                        <Home />
+                        <Footer />
+                    </>
+                }
+            />
             <Route path='/register/' element={<Register />} />
             <Route path='/login/' element={<Login />} />
 
-            <Route path='/dashboard/' element={<Dashboard />} />
+            <Route path='/dashboard/' element={<Dashboard />}>
+                <Route index element={<MyInfo />} />
+                <Route path='contracts' element={<Contracts />} />
+                <Route path='transactions' element={<Transactions />} />
+                <Route path='wallet' element={<Wallet />} />
+                <Route path='deposit' element={<Deposit />} />
+                <Route path='withdraw' element={<Withdraw />} />
+                <Route path='*' element={<MyInfo />} />
+            </Route>
 
             <Route path='/admin/' element={<Admin />}>
                 <Route index element={<SchemaList />} />
@@ -69,5 +83,4 @@ const MainContent: FC = () => {
         </Routes>
     )
 }
-
 export default App

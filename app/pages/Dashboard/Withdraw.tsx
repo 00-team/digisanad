@@ -121,4 +121,4 @@ const Withdraw: FC = () => {
     )
 }
 
-export default Withdraw
+export { Withdraw }

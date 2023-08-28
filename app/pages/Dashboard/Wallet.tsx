@@ -100,4 +100,4 @@ const Row: FC<RowProps> = ({ data, holder, Icon, className }) => {
     )
 }
 
-export default Wallet
+export { Wallet }

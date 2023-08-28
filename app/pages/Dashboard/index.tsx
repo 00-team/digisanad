@@ -14,22 +14,26 @@ import {
     TransactionIcon,
     WalletIcon,
 } from 'icons'
-import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
-// import Contracts from './Contracts'
-// import { Deposit } from './Deposit'
-// import MyInfo from './MyInfo'
-import Notifications from './Notifications'
+import { Notifications } from './Notifications'
 
 // import Transactions from './Transactions'
 // import Wallet from './Wallet'
 // import Withdraw from './Withdraw'
 import './style/dashboard.scss'
+
+export { Contracts } from './Contracts'
+export { Deposit } from './Deposit'
+export { MyInfo } from './MyInfo'
+export { Transactions } from './Transactions'
+export { Wallet } from './Wallet'
+export { Withdraw } from './Withdraw'
 
 const OPTIONS_BASE_DELAY = 1
 const ADDED_DELAY = 0.1
@@ -51,7 +55,7 @@ type SidebarLinkModel = {
 
 const SIDEBAR_LINKS: SidebarLinkModel[] = [
     {
-        link: 'info',
+        link: '',
         title: 'اطلاعات من',
         // icon: <PersonIcon />,
         icon: <ProfileIcon />,
@@ -171,43 +175,21 @@ const Sidebar: FC = ({}) => {
             </div>
             <div className='sidebar-wrapper title_small'>
                 {SIDEBAR_LINKS.map((args, i) => (
-                    <SidebarLink
-                        {...args}
-                        key={i}
-                        // style={{
-                        //     animationDelay: `${
-                        //         OPTIONS_BASE_DELAY + ADDED_DELAY * index
-                        //     }s`,
-                        // }}
-                        // onClick={() => SectionsetActive(index)}
-                    />
+                    <SidebarLink {...args} key={i} idx={i} />
                 ))}
                 {user.admin && (
                     <SidebarLink
                         link='/admin/'
                         title='پنل مدریت'
                         icon={<ToolIcon />}
-                        // style={{
-                        //     animationDelay: `${
-                        //         OPTIONS_BASE_DELAY +
-                        //         ADDED_DELAY * SIDEBAR_OPTIONS.length
-                        //     }s`,
-                        // }}
-                        // onClick={() => SectionsetActive(1)}
+                        idx={SIDEBAR_LINKS.length}
                     />
                 )}
-                {/*<GotoSiteColumn
-                    style={{
-                        animationDelay: `${
-                            OPTIONS_BASE_DELAY +
-                            ADDED_DELAY * (SIDEBAR_OPTIONS.length + 1)
-                        }s`,
-                    }}
-                />*/}
                 <LogoutButton
                     style={{
                         animationDelay: `${
-                            OPTIONS_BASE_DELAY + ADDED_DELAY * (2 + 2)
+                            OPTIONS_BASE_DELAY +
+                            ADDED_DELAY * (SIDEBAR_LINKS.length + 1)
                         }s`,
                     }}
                 />
@@ -216,33 +198,19 @@ const Sidebar: FC = ({}) => {
     )
 }
 
-// const GotoSiteColumn: FC<Partial<OptionsProps>> = ({ style }) => {
-//     return (
-//         <Link to='/' className='column-wrapper goto ' style={style}>
-//             <div className='column'>
-//                 <div className='holder-icon icon'>
-//                     {' '}
-//                     <GlobeIcon size={25} />{' '}
-//                 </div>
-//                 <div className='holder-text '>رفتن به سایت</div>
-//             </div>
-//             <div className='send-icon icon'>
-//                 <SendIcon size={25} />
-//             </div>
-//         </Link>
-//     )
-// }
-// GotoSiteColumn
+type SidebarLinkProps = SidebarLinkModel & {
+    idx?: number
+}
 
-const SidebarLink: FC<SidebarLinkModel> = ({ title, icon, link }) => {
-    const active = !!useMatch(link)
+const SidebarLink: FC<SidebarLinkProps> = ({ title, icon, link, idx = 0 }) => {
+    // const active = !!useMatch(link)
+    const active = false
 
     return (
         <Link
             to={link}
             className={`column-wrapper ${C(active)}`}
-            // style={style}
-            // {...attr}
+            style={{ '--idx': idx }}
         >
             <div className='column'>
                 <div className='holder-icon icon'>{icon}</div>

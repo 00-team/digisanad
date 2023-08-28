@@ -169,4 +169,4 @@ const NotifMessage: FC<NotifMessageProps> = ({
     )
 }
 
-export default Notifications
+export { Notifications }

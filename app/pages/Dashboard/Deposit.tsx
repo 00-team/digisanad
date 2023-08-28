@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import './style/deposit.scss'
 
-export const Deposit: FC = () => {
+const Deposit: FC = () => {
     return (
         <section className='deposit-container'>
             <h2 className='section-header section_title'>افزایش موجودی</h2>
@@ -17,3 +17,5 @@ export const Deposit: FC = () => {
         </section>
     )
 }
+
+export { Deposit }

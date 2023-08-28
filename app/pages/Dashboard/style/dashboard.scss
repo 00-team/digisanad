@@ -139,6 +139,8 @@
                 animation: column-slide-in 0.8s
                     cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
 
+                animation-delay: calc(700ms + 100ms * var(--idx));
+
                 &.goto {
                     color: unset;
                     text-decoration: none;

@@ -70,4 +70,4 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, ...attr }) => {
     )
 }
 
-export default Transactions
+export { Transactions }
