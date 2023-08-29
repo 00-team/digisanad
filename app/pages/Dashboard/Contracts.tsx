@@ -56,8 +56,6 @@ const Contracts: FC = () => {
         fetch_contracts()
     }, [page])
 
-    useEffect(() => console.log(state), [state])
-
     return (
         <section className='contract-list'>
             <div className='contracts'>

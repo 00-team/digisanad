@@ -99,3 +99,21 @@ export const MinusIcon: Icon = ({ size = '24', ...attr }) => (
         <path d='M5 11h14v2H5z'></path>
     </svg>
 )
+
+export const RemoveIcon: Icon = ({ size = '24', ...attr }) => (
+    <svg
+        xmlns='http://www.w3.org/2000/svg'
+        width={size}
+        height={size}
+        viewBox='0 0 24 24'
+        fill='none'
+        stroke='currentColor'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        {...attr}
+    >
+        <line x1='18' y1='6' x2='6' y2='18'></line>
+        <line x1='6' y1='6' x2='18' y2='18'></line>
+    </svg>
+)

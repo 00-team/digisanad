@@ -39,7 +39,7 @@ const UserAtom = atom(
 
                 set(User, { ...user, ...response.data })
             } catch (error) {
-                console.log(error)
+                HandleError(error)
             }
         } else if (args === 'clear') {
             set(User, DEFUALT_USER)

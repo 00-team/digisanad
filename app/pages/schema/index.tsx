@@ -132,7 +132,11 @@ const Schema: FC = () => {
                                     },
                                 }
                             )
-                            console.log('save ok:', response.data.ok)
+                            if (response.data.ok) {
+                                ReactAlert.success('قالب با موفقیت ذخیره شد.')
+                            } else {
+                                ReactAlert.error('خطا درهنگام ذخیره قالب')
+                            }
                         }}
                     >
                         <CopyIcon size={25} />

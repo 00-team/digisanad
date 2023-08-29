@@ -170,13 +170,22 @@
                 flex-direction: column;
                 overflow-y: auto;
                 height: 100%;
-                gap: 1rem;
+                padding: 0.2rem 1rem;
 
-                > div {
+                .user {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     padding: 0.3rem;
+                    border-bottom: 1px solid var(--sixty-percent);
+
+                    .fullname {
+                        font-size: 18px;
+                    }
+
+                    .remove {
+                        color: var(--alert-error);
+                    }
                 }
             }
 

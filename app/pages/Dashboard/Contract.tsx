@@ -1,10 +1,17 @@
-import React, { Dispatch, SetStateAction, FC, useEffect, useState } from 'react'
+import React, {
+    Dispatch,
+    SetStateAction,
+    FC,
+    useEffect,
+    useState,
+    useRef,
+} from 'react'
 
 import { C } from '@00-team/utils'
 
 import axios from 'axios'
-import { CopyIcon } from 'icons'
-import { SchemaData } from 'pages/schema/types'
+import { CopyIcon, RemoveIcon } from 'icons'
+import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -39,16 +46,9 @@ type ContractModel = {
     disable_invites: boolean
 }
 
-type Parties = {
-    user_id: number
-    phone: string
-    first_name: string
-    last_name: string
-}[]
-
 type State = ContractModel & {
     data: SchemaData
-    parties: Parties
+    parties: UserPublic[]
     page: number
     need_schema: boolean
 }
@@ -65,6 +65,7 @@ const Contract: FC = () => {
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
     const me = useAtomValue(UserAtom)
+    const join_link = useRef<HTMLInputElement>(null)
 
     const [state, setState] = useState<State>({
         title: '',
@@ -120,7 +121,9 @@ const Contract: FC = () => {
             )
 
             updateState({ parties: response.data })
-        } catch {}
+        } catch (error) {
+            HandleError(error)
+        }
     }
 
     const remove_user = async (user_id: number): Promise<boolean> => {
@@ -133,17 +136,23 @@ const Contract: FC = () => {
             )
 
             return response.data.ok
-        } catch {}
+        } catch (error) {
+            HandleError(error)
+        }
 
         return false
     }
 
     const save_contract = async (data: Partial<SaveData>) => {
-        await axios.patch(`/api/contracts/${contract_id}/`, data, {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        })
+        try {
+            await axios.patch(`/api/contracts/${contract_id}/`, data, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
+        } catch (error) {
+            HandleError(error)
+        }
     }
 
     useEffect(() => {
@@ -190,6 +199,7 @@ const Contract: FC = () => {
             <div className='inner-wrapper'>
                 <div className='viewer-wrapper'>
                     <Viewer
+                        users={state.parties}
                         page={state.page}
                         schema={state.data}
                         setUID={() => {}}
@@ -205,13 +215,14 @@ const Contract: FC = () => {
                 <div className='parties'>
                     <div className='users'>
                         {state.parties.map((user, i) => (
-                            <div key={i}>
-                                <span>
+                            <div className='user' key={i}>
+                                <span className='fullname'>
                                     {user.first_name} {user.last_name}
                                 </span>
                                 {state.creator == me.user_id &&
                                     user.user_id != me.user_id && (
                                         <button
+                                            className='remove'
                                             onClick={() => {
                                                 remove_user(user.user_id).then(
                                                     ok => {
@@ -220,7 +231,7 @@ const Contract: FC = () => {
                                                 )
                                             }}
                                         >
-                                            X
+                                            <RemoveIcon />
                                         </button>
                                     )}
                             </div>
@@ -234,6 +245,7 @@ const Contract: FC = () => {
                                     ? 'red'
                                     : 'green',
                             }}
+                            disabled={state.creator != me.user_id}
                             onClick={() => {
                                 setState(s => {
                                     save_contract({
@@ -250,10 +262,22 @@ const Contract: FC = () => {
                         </button>
                         <div className='link'>
                             <input
+                                ref={join_link}
                                 value={`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
                                 onChange={() => {}}
                             />
-                            <button>
+                            <button
+                                onClick={() => {
+                                    if (!join_link.current) return
+
+                                    join_link.current.select()
+                                    join_link.current.setSelectionRange(0, 9999)
+
+                                    navigator.clipboard.writeText(
+                                        join_link.current.value
+                                    )
+                                }}
+                            >
                                 <CopyIcon />
                             </button>
                         </div>

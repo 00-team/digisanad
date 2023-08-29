@@ -65,7 +65,7 @@ const Login: FC = () => {
                     ReactAlert.error('Error while authenticating!')
                 }
             } catch (error) {
-                console.log(error)
+                HandleError(error)
             }
         } else {
             ReactAlert.error('شماره تلفن خود را به درستی وارد کنید.')

@@ -16,6 +16,13 @@ type Page = {
     content: string
 }
 
+type UserPublic = {
+    user_id: number
+    phone: string
+    first_name: string
+    last_name: string
+}
+
 type SchemaData = {
     pages: Page[]
     fields: {
@@ -286,6 +293,7 @@ function have_minmax(f: FieldType): f is FieldMinMax {
 export {
     SchemaData,
     Page,
+    UserPublic,
     field_types,
     default_fields,
     have_minmax,

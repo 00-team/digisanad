@@ -25,24 +25,19 @@ const Notifications: FC = () => {
     const [Open, setOpen] = useState(false)
 
     const seenMsg = async () => {
-        try {
-            messages?.forEach(({ message_id }) => {
-                const response = axios.patch(
-                    `/api/messages/${message_id}/`,
-                    {
-                        seened: true,
-                    },
-                    {
-                        headers: {
-                            Authorization: 'Bearer ' + token,
-                        },
-                    }
-                )
+        if (!messages) return
 
-                console.log(response)
-            })
-        } catch (err) {
-            console.log(err)
+        try {
+            for (let mdx = 0; mdx < messages.length; mdx++) {
+                let msg = messages[mdx]!
+                if (msg.seen) continue
+
+                await axios.patch(`/api/messages/${msg.message_id}/`, {
+                    headers: { Authorization: 'Bearer ' + token },
+                })
+            }
+        } catch (error) {
+            HandleError(error)
         }
     }
 

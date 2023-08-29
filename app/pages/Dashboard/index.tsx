@@ -55,7 +55,7 @@ const SIDEBAR_LINKS: SidebarLinkModel[] = [
         icon: <ContractIcon />,
     },
     {
-        link: 'transactins',
+        link: 'transactions',
         title: 'تراکنش های من',
         icon: <TransactionIcon />,
     },

@@ -5,6 +5,10 @@
 
     font-family: 'iranBold';
 
+    > div {
+        padding: 0.2rem 0;
+    }
+
     .field-wrapper {
         all: unset;
 
@@ -17,11 +21,53 @@
         input[type='number'] {
             text-align: center;
         }
+
+        input[type='radio'],
+        input[type='checkbox'] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            appearance: none;
+            background-color: white;
+            color: unset;
+
+            width: 25px;
+            aspect-ratio: 1/1;
+
+            cursor: pointer;
+
+            border: 0.15em solid black;
+            border-radius: 100vmax;
+
+            overflow: hidden;
+
+            &::before {
+                content: '';
+                transform: translateY(200%);
+
+                width: calc(25px - 12px);
+                height: calc(25px - 12px);
+                border-radius: 100vmax;
+                background-color: black;
+
+                transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+                    transform;
+            }
+
+            &:checked::before {
+                transform: translateY(0);
+            }
+        }
     }
 
     hr {
         border: 1px solid black;
         margin: 2vh 0;
+    }
+
+    select {
+        background: var(--accent-color);
     }
 
     a {
@@ -52,6 +98,22 @@
         th {
             text-align: center;
             border: 1px solid black;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            padding: 0.3rem;
+        }
+    }
+
+    .option-field {
+        li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
     }
 

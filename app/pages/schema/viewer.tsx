@@ -14,7 +14,13 @@ import { MapContainer, TileLayer } from 'react-leaflet'
 import { DatePicker } from 'components'
 
 import { CustomMap } from './map'
-import { FieldType, SchemaData, TextField, UserField } from './types'
+import {
+    FieldType,
+    SchemaData,
+    TextField,
+    UserField,
+    UserPublic,
+} from './types'
 import {
     GeoField,
     IntField,
@@ -41,9 +47,37 @@ type ViewerProps = {
     setSchema: (data: Partial<SchemaData>) => void
     setUID: (uid: string) => void
     page: number
+    users?: UserPublic[]
 }
 
-const Viewer: FC<ViewerProps> = ({ schema, page, setSchema, setUID }) => {
+const def_users: UserPublic[] = [
+    {
+        user_id: 1,
+        phone: '09000000001',
+        first_name: 'محمد',
+        last_name: 'محمدی',
+    },
+    {
+        user_id: 2,
+        phone: '09000000002',
+        first_name: 'خسرو',
+        last_name: 'رضایی',
+    },
+    {
+        user_id: 3,
+        phone: '09000000003',
+        first_name: 'اصغر',
+        last_name: 'محمدی',
+    },
+]
+
+const Viewer: FC<ViewerProps> = ({
+    schema,
+    page,
+    setSchema,
+    setUID,
+    users = def_users,
+}) => {
     const [result, setResult] = useState<ReactNode[]>([])
 
     useEffect(() => {
@@ -123,6 +157,7 @@ const Viewer: FC<ViewerProps> = ({ schema, page, setSchema, setUID }) => {
                             // @ts-ignore
                             field={field}
                             update={() => setSchema({})}
+                            users={users}
                         />
                     </span>
                 )
@@ -132,18 +167,19 @@ const Viewer: FC<ViewerProps> = ({ schema, page, setSchema, setUID }) => {
         }
 
         setResult(elements)
-    }, [schema, page])
+    }, [schema, page, users])
 
     return <div className='schema-viewer title_small'>{result}</div>
 }
 
 type FMF = {
-    [T in FieldType as T['type']]: FC<{ field: T; update: () => void }>
+    [T in FieldType as T['type']]: FieldProps<T>
 }
 
 type FieldProps<T> = FC<{
     field: T
     update: () => void
+    users: UserPublic[]
 }>
 
 const TextFC: FieldProps<TextField> = ({ field, update }) => {
@@ -229,18 +265,20 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
                         <td>{q.display}</td>
                         {field.answers.map((a, ai) => (
                             <td key={ai}>
-                                <input
-                                    type='radio'
-                                    name={field.uid + q.uid}
-                                    title={a.display}
-                                    checked={field.value[q.uid] == a.uid}
-                                    onChange={e => {
-                                        if (e.currentTarget.checked) {
-                                            field.value[q.uid] = a.uid
-                                            update()
-                                        }
-                                    }}
-                                />
+                                <div className='input-wrapper'>
+                                    <input
+                                        type='radio'
+                                        name={field.uid + '__' + q.uid}
+                                        title={a.display}
+                                        checked={field.value[q.uid] == a.uid}
+                                        onChange={e => {
+                                            if (e.currentTarget.checked) {
+                                                field.value[q.uid] = a.uid
+                                                update()
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </td>
                         ))}
                     </tr>
@@ -470,7 +508,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
 
 const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
     return (
-        <ul>
+        <ul className='option-field'>
             {field.options.map((o, i) => (
                 <li key={i}>
                     <input
@@ -506,11 +544,20 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
     )
 }
 
-const UserFC: FieldProps<UserField> = () => {
+const UserFC: FieldProps<UserField> = ({ field, update, users }) => {
     return (
-        <select>
-            <option>user 1</option>
-            <option>user 2</option>
+        <select
+            onChange={e => {
+                field.value = e.currentTarget.value
+                update()
+            }}
+            value={field.value}
+        >
+            {users.map((u, i) => (
+                <option value={u.user_id} key={i}>
+                    {u.first_name} {u.last_name}
+                </option>
+            ))}
         </select>
     )
 }

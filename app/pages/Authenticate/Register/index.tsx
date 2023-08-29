@@ -73,8 +73,6 @@ const Register: FC = () => {
                 action: 'register',
             })
 
-            console.log(response)
-
             if (typeof response.data.expires === 'number') {
                 ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
                 setLogin({
@@ -86,7 +84,6 @@ const Register: FC = () => {
                 ReactAlert.error('خطا! لطفا دوباره تلاش کنید.')
             }
         } catch (error) {
-            console.log(error)
             HandleError(error)
         }
     }
@@ -158,7 +155,6 @@ const Register: FC = () => {
                 })
                 ReactAlert.info('کد تایید برای شما ارسال شد.')
             } catch (error) {
-                console.log(error)
                 HandleError(error)
             }
         }
@@ -192,7 +188,6 @@ const Register: FC = () => {
                     ],
                     code: Data.code,
                 })
-                console.log(response.data.token)
                 // delete send_data.code
                 setUser({
                     user_id: response.data.user_id,
@@ -201,7 +196,6 @@ const Register: FC = () => {
                 setToken(response.data.token)
                 navigate(next)
             } catch (error) {
-                console.log(error)
                 HandleError(error)
             }
         }

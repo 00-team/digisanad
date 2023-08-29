@@ -25,10 +25,6 @@ const Withdraw: FC = () => {
         }
     }, [])
 
-    useEffect(() => {
-        console.log(wallet)
-    }, [wallet])
-
     if (wallet == null) {
         return (
             <section id='wallet' className='withdraw-container'>
