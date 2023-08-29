@@ -12,20 +12,24 @@ const CodeEnter: FC = () => {
     const [Login, setLogin] = useAtom(LoginAtom)
 
     const SendAgain = async () => {
-        const response = await axios.post('/api/auth/verify/', {
-            phone: Login.phone,
-            action: 'login',
-        })
-
-        if (typeof response.data.timer === 'number') {
-            ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
-            setLogin({
-                stage: 'code',
-                time: response.data.timer,
-                resend: !response.data.timer,
+        try {
+            const response = await axios.post('/api/auth/verify/', {
+                phone: Login.phone,
+                action: 'login',
             })
-        } else {
-            ReactAlert.error('خطا! لطفا دوباره تلاش کنید.')
+
+            if (typeof response.data.timer === 'number') {
+                ReactAlert.info('کد تایید مجددا برای شما پیامک شد.')
+                setLogin({
+                    stage: 'code',
+                    time: response.data.timer,
+                    resend: !response.data.timer,
+                })
+            } else {
+                ReactAlert.error('خطا! لطفا دوباره تلاش کنید.')
+            }
+        } catch (error) {
+            HandleError(error)
         }
     }
 

@@ -29,25 +29,50 @@ const Admin = loadable(() => import('pages/Admin'))
 const Schema = loadable(() => import('pages/schema'))
 const SchemaList = loadable(() => import('pages/Admin/schemas'))
 
+const ERROR_CODE_MESSAGE: { [k: number]: string } = {
+    40002: 'کد وارد شده صحیح نمی باشد',
+    40003: 'تغیری ایجاد نشد.',
+    40005: 'نیاز به ورود مجدد',
+    40007: 'نرخ بیش از حد. ۱۰ دقیقه دیگر تلاش کنید.',
+    40010: 'حساب کاربری با این شماره یافت نشد. ثبت نام کنید',
+    40011: 'حساب کاربری با این شماره وجود دارد. وارد شوید.',
+    50001: 'خطای سرور.',
+}
+
 const App: FC = () => {
     global.ReactAlert = useAlert()
     global.HandleError = error => {
-        let msg = 'Error'
-
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-                msg = error.response.data.detail
-                if (Array.isArray(msg)) {
-                    msg = msg[0].msg
-                }
-            } else {
-                msg = error.message
-            }
-        } else if (error instanceof Error) {
-            msg = error.message
+        if (!axios.isAxiosError(error)) {
+            ReactAlert.error('خطای نامشخص!')
+            return
+        }
+        if (!error.response || !error.response.data) {
+            ReactAlert.error(error.message)
+            return
         }
 
-        ReactAlert.error(msg)
+        let data = error.response.data
+        let code: number = data.code
+        if (code) {
+            if (code in ERROR_CODE_MESSAGE) {
+                ReactAlert.error(ERROR_CODE_MESSAGE[code])
+            } else {
+                ReactAlert.error(data.message)
+            }
+            return
+        }
+
+        let detail: string | any[] | undefined = data.detail
+        if (detail) {
+            if (Array.isArray(detail)) {
+                ReactAlert.error(detail[0].msg)
+            } else {
+                ReactAlert.error(detail)
+            }
+            return
+        }
+
+        ReactAlert.error('خطا در هنگام وصل شدن به سرور')
     }
 
     return (

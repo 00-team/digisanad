@@ -104,7 +104,6 @@ const Login: FC = () => {
                 ReactAlert.error('Invalid login!')
             }
         } catch (error) {
-            console.log(error)
             HandleError(error)
         }
     }
