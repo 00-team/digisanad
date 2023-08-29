@@ -10,13 +10,13 @@ import React, {
 import axios from 'axios'
 import { ArrowDownIcon, CheckIcon, CloseIcon } from 'icons'
 import { MapContainer, TileLayer } from 'react-leaflet'
+import { Marker, Popup, useMapEvents } from 'react-leaflet'
 
 import { useAtomValue } from 'jotai'
 import { TokenAtom } from 'state'
 
 import { DatePicker } from 'components'
 
-import { CustomMap } from './map'
 import {
     FieldType,
     SchemaData,
@@ -204,21 +204,60 @@ const TextFC: FieldProps<TextField> = ({ field, update }) => {
     )
 }
 
-const GeoFC: FieldProps<GeoField> = ({ field }) => {
+type GeoMarkerProps = {
+    field: GeoField
+    update: () => void
+}
+
+export const GeoMarker: FC<GeoMarkerProps> = ({ field, update }) => {
+    const map = useMapEvents({
+        click(e) {
+            field.value.latitude = e.latlng.lat
+            field.value.longitude = e.latlng.lng
+            update()
+        },
+        contextmenu() {
+            if (!field.optional) return
+
+            field.value.latitude = 0
+            field.value.longitude = 0
+            update()
+        },
+        locationfound(e) {
+            map.flyTo(e.latlng, map.getZoom())
+        },
+    })
+
+    if (!field.value.latitude || !field.value.longitude) {
+        return <></>
+    }
+
+    return (
+        <Marker position={[field.value.latitude, field.value.longitude]}>
+            <Popup className='title_smaller'>مکان انتخابی</Popup>
+        </Marker>
+    )
+}
+
+const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
     return (
         <div className='geo-container'>
             <MapContainer
                 style={{ width: '100%', height: '100%' }}
-                center={[35.698587185965124, 51.33724353174251]}
-                zoom={14}
-                scrollWheelZoom={false}
+                center={
+                    field.value.latitude
+                        ? [field.value.latitude, field.value.longitude]
+                        : [35.698587185965124, 51.33724353174251]
+                }
+                zoom={15}
+                // scrollWheelZoom={false}
                 attributionControl
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <CustomMap optional={field.optional} />
+                <GeoMarker field={field} update={update} />
             </MapContainer>
         </div>
     )
