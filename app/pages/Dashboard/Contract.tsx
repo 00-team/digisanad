@@ -145,14 +145,38 @@ const Contract: FC = () => {
 
     const save_contract = async (data: Partial<SaveData>) => {
         try {
-            await axios.patch(`/api/contracts/${contract_id}/`, data, {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-            })
+            const res = await axios.patch(
+                `/api/contracts/${contract_id}/`,
+                data,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }
+            )
+            if (res.data.ok) {
+                ReactAlert.success('قرارداد با موفقیت ذخیره شد.')
+                return
+            }
         } catch (error) {
             HandleError(error)
         }
+
+        ReactAlert.error('خطا درهنگام ذخیره قرارداد')
+    }
+
+    const delete_contract = async (): Promise<boolean> => {
+        try {
+            const response = await axios.delete(
+                `/api/contracts/${contract_id}/`,
+                { headers: { Authorization: 'Bearer ' + token } }
+            )
+            return !!response.data.ok
+        } catch (error) {
+            HandleError(error)
+        }
+
+        return false
     }
 
     useEffect(() => {
@@ -188,17 +212,27 @@ const Contract: FC = () => {
                         </button>
                     ))}
                     <button
-                        className='copy-btn cta-btn title_smaller'
+                        className='save-btn cta-btn title_smaller'
                         onClick={() => save_contract({ data: state.data })}
                     >
-                        <CopyIcon size={25} />
+                        <CopyIcon />
                         ذخیره
                     </button>
+                    {state.creator == me.user_id && (
+                        <button
+                            className='remove-btn cta-btn title_smaller'
+                            onClick={() => delete_contract()}
+                        >
+                            <RemoveIcon />
+                            حذف
+                        </button>
+                    )}
                 </div>
             </div>
             <div className='inner-wrapper'>
                 <div className='viewer-wrapper'>
                     <Viewer
+                        contract_id={state.contract_id}
                         users={state.parties}
                         page={state.page}
                         schema={state.data}

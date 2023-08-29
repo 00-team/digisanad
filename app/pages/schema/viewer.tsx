@@ -1,5 +1,4 @@
 import React, {
-    ChangeEvent,
     createElement,
     FC,
     ReactNode,
@@ -8,8 +7,12 @@ import React, {
     useState,
 } from 'react'
 
+import axios from 'axios'
 import { ArrowDownIcon, CheckIcon, CloseIcon } from 'icons'
 import { MapContainer, TileLayer } from 'react-leaflet'
+
+import { useAtomValue } from 'jotai'
+import { TokenAtom } from 'state'
 
 import { DatePicker } from 'components'
 
@@ -43,6 +46,7 @@ type TreeNode = {
 }
 
 type ViewerProps = {
+    contract_id?: number
     schema: SchemaData
     setSchema: (data: Partial<SchemaData>) => void
     setUID: (uid: string) => void
@@ -72,6 +76,7 @@ const def_users: UserPublic[] = [
 ]
 
 const Viewer: FC<ViewerProps> = ({
+    contract_id = null,
     schema,
     page,
     setSchema,
@@ -158,6 +163,7 @@ const Viewer: FC<ViewerProps> = ({
                             field={field}
                             update={() => setSchema({})}
                             users={users}
+                            contract_id={contract_id}
                         />
                     </span>
                 )
@@ -180,6 +186,7 @@ type FieldProps<T> = FC<{
     field: T
     update: () => void
     users: UserPublic[]
+    contract_id: number | null
 }>
 
 const TextFC: FieldProps<TextField> = ({ field, update }) => {
@@ -288,47 +295,78 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
     )
 }
 
-const RecordFC: FieldProps<RecordField> = ({ field }) => {
-    const [preview, setpreview] = useState<string[]>([''])
+const RecordFC: FieldProps<RecordField> = ({ field, update, contract_id }) => {
+    const [records, setRecords] = useState<RecordField['value']>(field.value)
+    const token = useAtomValue(TokenAtom)
+    const local_id = useRef(0)
 
-    const readURL = (input: ChangeEvent<HTMLInputElement>) => {
-        if (!field.plural && preview.length >= 2)
-            return ReactAlert.error('ورودی بیشتر از یک فایل مجاز نیست!')
+    pdfImg
 
-        if (!input.target.files) return
+    useEffect(() => {
+        if (!contract_id) return
 
-        if (input.target.files.length <= 1) {
-            if (!input.target.files[0]) return
+        field.value = [...records]
+        update()
+    }, [records, contract_id])
 
-            var reader = new FileReader()
-
-            reader.onload = function (e) {
-                return setpreview([...preview, e.target!.result!.toString()])
-            }
-            reader.readAsDataURL(input.target.files[0])
-        } else {
-            Array.from(input.target.files).map(file => {
-                var reader = new FileReader()
-
-                reader.onload = function (e) {
-                    setpreview(previews => [
-                        ...previews,
-                        e.target!.result!.toString(),
-                    ])
-                }
-                reader.readAsDataURL(file)
-
-                return
-            })
+    type UFRT = RecordField['value'][number]
+    const upload_file = async (file: File): Promise<UFRT | null> => {
+        if (!contract_id) {
+            let url = URL.createObjectURL(file)
+            local_id.current++
+            return [local_id.current, url]
         }
 
-        return
+        try {
+            let fd = new FormData()
+            fd.set('file', file)
+            fd.set('contract', contract_id.toString())
+
+            const response = await axios.post('/api/records/', fd, {
+                headers: { Authorization: 'Bearer ' + token },
+            })
+            if (!('record_id' in response.data) || !('url' in response.data))
+                return null
+
+            return [response.data.record_id, response.data.url]
+        } catch (error) {
+            HandleError(error)
+        }
+
+        return null
+    }
+
+    const update_records = async (files: FileList | null) => {
+        if (!files || !files.length) return
+
+        if (field.plural) {
+            let results: RecordField['value'] = []
+
+            for (let fdx = 0; fdx < files.length; fdx++) {
+                let result = await upload_file(files[fdx]!)
+                if (!result) {
+                    ReactAlert.error('خطا درهنگام اپلود فایل')
+                    return
+                }
+                results.push(result)
+            }
+
+            setRecords(s => s.concat(results))
+        } else {
+            let result = await upload_file(files[0]!)
+            if (!result) {
+                ReactAlert.error('خطا درهنگام اپلود فایل')
+                return
+            }
+
+            setRecords([result])
+        }
     }
 
     return (
         <div className='record-container'>
             <div className='record-field'>
-                {preview.length <= 1 ? (
+                {!records.length ? (
                     <div className='record-empty'>
                         <ArrowDownIcon size={40} />
                         <h4 className='title_smaller'>
@@ -337,41 +375,26 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
                     </div>
                 ) : (
                     <div className='files-container'>
-                        {preview.map((file, index) => {
-                            if (!file) return
-
-                            const acceptedTypes = ['png', 'jpg', 'jpeg', 'gif']
-
-                            const fileType = file.split('/')[1]!.split(';')[0]
-
-                            return (
-                                <div
-                                    key={index}
-                                    className='img-container'
-                                    onClick={() => {
-                                        setpreview(previews =>
-                                            previews.filter(preview => {
-                                                return preview !== file
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <img
-                                        src={
-                                            acceptedTypes.includes(fileType!)
-                                                ? file
-                                                : pdfImg
-                                        }
-                                        loading={'lazy'}
-                                        decoding={'async'}
-                                        alt=''
-                                    />
-                                    <div className='remove-img'>
-                                        <CloseIcon size={30} />
-                                    </div>
+                        {records.map((record, i) => (
+                            <div
+                                key={i}
+                                className='img-container'
+                                onClick={() => {
+                                    setRecords(s =>
+                                        s.filter(r => r[0] != record[0])
+                                    )
+                                }}
+                            >
+                                <img
+                                    src={record[1]}
+                                    loading={'lazy'}
+                                    decoding={'async'}
+                                />
+                                <div className='remove-img'>
+                                    <CloseIcon size={30} />
                                 </div>
-                            )
-                        })}
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
@@ -380,7 +403,7 @@ const RecordFC: FieldProps<RecordField> = ({ field }) => {
             </label>
             <input
                 id='record-input'
-                onChange={e => readURL(e)}
+                onChange={e => update_records(e.currentTarget.files)}
                 type='file'
                 multiple={field.plural}
                 accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
@@ -464,7 +487,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                     // if (!state.current.draw) return
 
                     state.current.move_count++
-                    if (!state.current.draw || state.current.move_count < 8)
+                    if (!state.current.draw || state.current.move_count < 4)
                         return
                     state.current.move_count = 0
 

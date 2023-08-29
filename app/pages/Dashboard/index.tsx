@@ -156,8 +156,9 @@ type SidebarLinkProps = SidebarLinkModel & {
 }
 
 const SidebarLink: FC<SidebarLinkProps> = ({ title, icon, link, idx = 0 }) => {
-    const active = !!useMatch(link)
-    // const active = false
+    let active = false
+    if (!['/', '/admin/'].includes(link))
+        active = !!useMatch('/dashboard/' + link)
 
     return (
         <Link

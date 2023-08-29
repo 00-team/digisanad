@@ -99,7 +99,7 @@ export type LinkField = BaseField & {
 export type RecordField = BaseField & {
     type: 'record'
     plural: boolean
-    value: string[]
+    value: [number, string][]
 }
 
 export type UIDD = {

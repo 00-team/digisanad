@@ -5,9 +5,9 @@ from typing import ClassVar
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 
-from db.contract import contract_add, contract_get, contract_update
-from db.contract import contract_user_add, contract_user_delete
-from db.contract import contract_user_get
+from db.contract import contract_add, contract_delete, contract_get
+from db.contract import contract_update, contract_user_add
+from db.contract import contract_user_delete, contract_user_get
 from db.models import ContractModel, ContractStage, ContractTable
 from db.models import ContractUserTable, UserModel, UserPublic
 from db.user import user_public
@@ -113,9 +113,11 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
     user: UserModel = request.state.user
     patch = body.model_dump(exclude_defaults=True)
 
+    if not (await contract_user_get(contract_id, user.user_id)):
+        raise bad_id('Contract', contract_id, id=contract_id)
+
     contract = await contract_get(
-        ContractTable.contract_id == contract_id,
-        ContractTable.creator == user.user_id
+        ContractTable.contract_id == contract_id
     )
     if contract is None:
         raise bad_id('Contract', contract_id, id=contract_id)
@@ -230,5 +232,30 @@ async def remove_user(request: Request, contract_id: int, user_id: int):
         'ok': bool(await contract_user_delete(
             ContractUserTable.contract == contract_id,
             ContractUserTable.user == user_id,
+        ))
+    }
+
+
+@router.delete(
+    '/{contract_id}/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, closed_contract]}
+)
+async def delete(request: Request, contract_id: int):
+    user: UserModel = request.state.user
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+        ContractTable.creator == user.user_id
+    )
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    if contract.stage != ContractStage.DRAFT:
+        raise closed_contract
+
+    return {
+        'ok': bool(await contract_delete(
+            ContractTable.contract_id == contract_id,
+            ContractTable.creator == user.user_id
         ))
     }
