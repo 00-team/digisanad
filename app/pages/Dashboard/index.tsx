@@ -14,7 +14,7 @@ import {
     TransactionIcon,
     WalletIcon,
 } from 'icons'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom'
 
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
@@ -23,30 +23,18 @@ import { LogoutButton } from 'components/common/LogoutButton'
 
 import { Notifications } from './Notifications'
 
-// import Transactions from './Transactions'
-// import Wallet from './Wallet'
-// import Withdraw from './Withdraw'
 import './style/dashboard.scss'
 
-export { Contracts } from './Contracts'
-export { Contract } from './Contract'
-export { Deposit } from './Deposit'
-export { MyInfo } from './MyInfo'
-export { Transactions } from './Transactions'
-export { Wallet } from './Wallet'
-export { Withdraw } from './Withdraw'
+export * from './Contracts'
+export * from './Contract'
+export * from './Deposit'
+export * from './MyInfo'
+export * from './Transactions'
+export * from './Wallet'
+export * from './Withdraw'
 
 const OPTIONS_BASE_DELAY = 1
 const ADDED_DELAY = 0.1
-
-// interface OptionsProps extends React.HTMLAttributes<HTMLAnchorElement> {
-//     title: string
-//     Icon: Icon
-//     Component: FC
-//     style?: React.CSSProperties
-//     active?: boolean
-//     id: string
-// }
 
 type SidebarLinkModel = {
     link: string
@@ -93,40 +81,6 @@ const SIDEBAR_LINKS: SidebarLinkModel[] = [
     },
 ]
 
-// const SIDEBAR_OPTIONS: OptionsProps[] = [
-//     { title: 'اطلاعات من', Icon: PersonIcon, Component: MyInfo, id: 'info' },
-//     {
-//         title: 'قرارداد های من',
-//         Icon: ContractIcon,
-//         Component: Contracts,
-//         id: 'contracts',
-//     },
-//     {
-//         title: 'تراکنش های من',
-//         Icon: TransactionIcon,
-//         Component: Transactions,
-//         id: 'transactins',
-//     },
-//     {
-//         title: 'کیف پول',
-//         Icon: WalletIcon,
-//         Component: Wallet,
-//         id: 'wallet',
-//     },
-//     {
-//         title: 'افزایش موجودی',
-//         Icon: ArrowUpIcon,
-//         Component: Deposit,
-//         id: 'deposit',
-//     },
-//     {
-//         title: 'برداشت موجودی',
-//         Icon: ArrowDownIcon,
-//         Component: Withdraw,
-//         id: 'withdraw',
-//     },
-// ]
-
 const Dashboard: FC = () => {
     const setUser = useSetAtom(UserAtom)
     const [token, setToken] = useAtom(TokenAtom)
@@ -142,7 +96,7 @@ const Dashboard: FC = () => {
         user_get_me(token).then(data => {
             if (data === null) {
                 setToken('')
-                navigate('/login/' + location.pathname)
+                navigate('/login/?next=' + location.pathname)
             } else {
                 setUser(data)
             }
@@ -154,11 +108,6 @@ const Dashboard: FC = () => {
             <Sidebar />
             <aside className='dashboard-wrapper'>
                 <Outlet />
-                {/*(() => {
-                    let so = SIDEBAR_OPTIONS[SectionActive]
-                    if (!so) return <></>
-                    return <so.Component />
-                })()*/}
                 <Notifications />
             </aside>
         </main>
@@ -207,8 +156,8 @@ type SidebarLinkProps = SidebarLinkModel & {
 }
 
 const SidebarLink: FC<SidebarLinkProps> = ({ title, icon, link, idx = 0 }) => {
-    // const active = !!useMatch(link)
-    const active = false
+    const active = !!useMatch(link)
+    // const active = false
 
     return (
         <Link

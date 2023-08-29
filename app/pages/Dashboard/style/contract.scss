@@ -234,3 +234,22 @@
         }
     }
 }
+
+.join-contract {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .inner {
+        border-radius: 10px;
+        display: grid;
+        place-content: center;
+        direction: rtl;
+        width: 40%;
+        height: 40%;
+        background: var(--accent-color);
+        font-size: 30px;
+    }
+}

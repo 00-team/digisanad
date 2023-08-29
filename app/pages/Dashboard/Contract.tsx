@@ -250,7 +250,7 @@ const Contract: FC = () => {
                         </button>
                         <div className='link'>
                             <input
-                                value={location.origin + '/jc/' + state.pepper}
+                                value={`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
                                 onChange={() => {}}
                             />
                             <button>
@@ -338,4 +338,46 @@ const SelectSchema: FC<CommonProps> = ({ setState }) => {
     )
 }
 
-export { Contract }
+const JoinContract = () => {
+    const { id_pepper } = useParams()
+    const token = useAtomValue(TokenAtom)
+    const navigate = useNavigate()
+
+    const join = async (cid: string, pepper: string) => {
+        try {
+            const response = await axios.get(
+                `/api/contracts/${cid}/join/${pepper}/`,
+                {
+                    headers: { Authorization: 'Bearer ' + token },
+                }
+            )
+
+            if (response.data.ok) {
+                navigate('/dashboard/contract/' + cid)
+            } else {
+                navigate('/dashboard/')
+            }
+        } catch {
+            navigate('/dashboard/')
+        }
+    }
+
+    useEffect(() => {
+        if (!id_pepper || id_pepper.indexOf(':') == -1)
+            return navigate('/dashboard/')
+
+        let [cid, pepper] = id_pepper.split(':') as [string, string]
+        if (!cid || !pepper || isNaN(parseInt(cid)))
+            return navigate('/dashboard/')
+
+        join(cid, pepper)
+    }, [id_pepper])
+
+    return (
+        <div className='join-contract'>
+            <div className='inner'>در حال ورود به قرارداد ...</div>
+        </div>
+    )
+}
+
+export { Contract, JoinContract }

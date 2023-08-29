@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import {
     Contract,
+    JoinContract,
     Contracts,
     Deposit,
     MyInfo,
@@ -94,6 +95,10 @@ const App: FC = () => {
                 <Route path='contracts' element={<Contracts />} />
                 <Route path='contracts/:pid' element={<Contracts />} />
                 <Route path='contract/:contract_id' element={<Contract />} />
+                <Route
+                    path='join_contract/:id_pepper'
+                    element={<JoinContract />}
+                />
 
                 <Route path='transactions' element={<Transactions />} />
                 <Route path='wallet' element={<Wallet />} />
