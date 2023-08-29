@@ -8,7 +8,9 @@ import magic
 from fastapi import APIRouter, Form, Request, UploadFile
 from pydantic import BaseModel
 
-from db.models import RecordModel, RecordTable, UserModel
+from db.contract import contract_get
+from db.models import ContractStage, ContractTable, RecordModel, RecordTable
+from db.models import UserModel
 from db.record import record_add, record_delete, record_get
 from deps import user_required
 from shared import settings, sqlx
@@ -100,6 +102,13 @@ async def delete_record(request: Request, record_id: int):
     )
     if record is None:
         raise bad_id('Record', record_id, id=record_id)
+
+    if record.contract:
+        contract = await contract_get(
+            ContractTable.contract_id == record.contract
+        )
+        if contract and contract.stage != ContractStage.DRAFT:
+            return {'ok': False}
 
     record.path.unlink(True)
 
