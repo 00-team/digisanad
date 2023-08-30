@@ -43,7 +43,6 @@ const Config: FC<ConfigProps> = ({ field, update, user_uids }) => {
                         value={field.uid}
                         onChange={() => {
                             // let new_uid = e.currentTarget.value
-                            // console.log(new_uid)
                         }}
                     />
                 </div>

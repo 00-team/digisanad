@@ -243,12 +243,17 @@ const Contract: FC = () => {
                         page={state.page}
                         schema={state.data}
                         setUID={() => {}}
-                        setSchema={data =>
-                            setState(s => ({
-                                ...s,
-                                data: { ...s.data, ...data },
-                            }))
-                        }
+                        setSchema={(data, save) => {
+                            setState(s => {
+                                let new_data = { ...s.data, ...data }
+                                if (save) save_contract({ data: new_data })
+
+                                return {
+                                    ...s,
+                                    data: new_data,
+                                }
+                            })
+                        }}
                     />
                 </div>
 

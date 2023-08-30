@@ -60,7 +60,7 @@ export type DateField = BaseField & {
 
 export type SignatureField = BaseField & {
     type: 'signature'
-    value: string
+    value: [number, string]
 }
 
 export type UserField = BaseField & {
@@ -240,7 +240,7 @@ const default_fields: X = {
         changers: [],
         uid: '',
         optional: false,
-        value: '',
+        value: [-1, ''],
     },
 }
 
@@ -301,7 +301,7 @@ const field_types = Object.keys(default_fields) as Array<
 
 type FieldProps<T> = FC<{
     field: T
-    update: () => void
+    update: (save?: true) => void
     users: UserPublic[]
     contract_id: number | null
     disabled: boolean

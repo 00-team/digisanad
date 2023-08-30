@@ -50,7 +50,7 @@ type ViewerProps = {
     render?: boolean
     contract_id?: number
     schema: SchemaData
-    setSchema: (data: Partial<SchemaData>) => void
+    setSchema: (data: Partial<SchemaData>, save: boolean) => void
     setUID: (uid: string) => void
     page: number
     users?: UserPublic[]
@@ -190,7 +190,7 @@ const Viewer: FC<ViewerProps> = ({
                     >
                         <FMFC
                             field={field as never}
-                            update={() => setSchema({})}
+                            update={save => setSchema({}, !!save)}
                             users={users}
                             contract_id={contract_id}
                             disabled={disabled}
@@ -419,8 +419,10 @@ const RecordFC: FieldProps<RecordField> = ({
     useEffect(() => {
         if (!contract_id) return
 
-        field.value = [...records]
-        update()
+        if (JSON.stringify(field.value) != JSON.stringify(records)) {
+            field.value = [...records]
+            update(true)
+        }
     }, [records, contract_id])
 
     type UFRT = RecordField['value'][number]
@@ -532,12 +534,19 @@ type SignatureState = {
     cx: number
     cy: number
     draw: boolean
+    canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
     move_count: number
     color: string
 }
 
-const SignatureDrawer: FieldProps<SignatureField> = () => {
+const SignatureDrawer: FieldProps<SignatureField> = ({
+    field,
+    update,
+    contract_id,
+    disabled,
+}) => {
+    const token = useAtomValue(TokenAtom)
     const state = useRef<SignatureState>({
         px: 0,
         py: 0,
@@ -545,81 +554,166 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
         cy: 0,
         draw: false,
         move_count: 0,
+        canvas: {} as HTMLCanvasElement,
         context: {} as CanvasRenderingContext2D,
         color: '#040404',
     })
 
+    if (disabled) {
+        return <img src={field.value[1]} />
+    }
+
+    const upload_signature = async (data: Blob) => {
+        if (!contract_id) {
+            let url = URL.createObjectURL(data)
+            field.value = [-1, url]
+            return
+        }
+
+        try {
+            let fd = new FormData()
+            fd.set('file', data)
+            fd.set('contract', contract_id.toString())
+
+            const response = await axios.post('/api/records/', fd, {
+                headers: { Authorization: 'Bearer ' + token },
+            })
+
+            let record_id: number = response.data.record_id
+            let url: string = response.data.url
+            if (!record_id || !url) {
+                ReactAlert.error('خطا در هنگام ثبت امضا')
+                return
+            }
+
+            field.value = [record_id, url]
+            update(true)
+        } catch (error) {
+            HandleError(error)
+        }
+    }
+
+    const delete_signature = async () => {
+        if (!contract_id) {
+            field.value = [-1, '']
+            update()
+            return
+        }
+
+        try {
+            const response = await axios.delete(
+                `/api/records/${field.value[0]}/`,
+                { headers: { Authorization: 'Bearer ' + token } }
+            )
+
+            if (response.data.ok) {
+                field.value = [-1, '']
+                update(true)
+                return
+            }
+
+            ReactAlert.error('خطا درهنگام حذف امضا')
+        } catch (error) {
+            HandleError(error)
+        }
+    }
+
     return (
         <div className='signature-container'>
-            <canvas
-                width={500}
-                height={450}
-                ref={e => {
-                    if (!e) return
-                    state.current.context = e.getContext('2d')!
-                }}
-                className='signature-wrapper'
-                onMouseDown={e => {
-                    state.current.px = state.current.cx
-                    state.current.py = state.current.cy
+            {field.value[0] > 0 ? (
+                <img src={field.value[1]} draggable={false} />
+            ) : (
+                <canvas
+                    width={500}
+                    height={450}
+                    ref={e => {
+                        if (!e) return
 
-                    state.current.cx = e.nativeEvent.offsetX
-                    state.current.cy = e.nativeEvent.offsetY
+                        state.current.canvas = e
+                        state.current.context = e.getContext('2d')!
+                    }}
+                    className='signature-wrapper'
+                    onMouseDown={e => {
+                        state.current.px = state.current.cx
+                        state.current.py = state.current.cy
 
-                    state.current.context.beginPath()
-                    state.current.context.fillStyle = state.current.color
-                    state.current.context.fillRect(
-                        state.current.cx,
-                        state.current.cy,
-                        2,
-                        2
-                    )
-                    state.current.context.closePath()
+                        state.current.cx = e.nativeEvent.offsetX
+                        state.current.cy = e.nativeEvent.offsetY
 
-                    state.current.draw = true
-                }}
-                onMouseUp={() => {
-                    state.current.draw = false
-                }}
-                onMouseOut={() => {
-                    state.current.draw = false
-                }}
-                onMouseMove={e => {
-                    if (!state.current.draw) return
+                        state.current.context.beginPath()
+                        state.current.context.fillStyle = state.current.color
+                        state.current.context.fillRect(
+                            state.current.cx,
+                            state.current.cy,
+                            2,
+                            2
+                        )
+                        state.current.context.closePath()
 
-                    state.current.px = state.current.cx
-                    state.current.py = state.current.cy
+                        state.current.draw = true
+                    }}
+                    onMouseUp={() => {
+                        state.current.draw = false
+                    }}
+                    onMouseOut={() => {
+                        state.current.draw = false
+                    }}
+                    onMouseMove={e => {
+                        if (!state.current.draw) return
 
-                    state.current.cx = e.nativeEvent.offsetX
-                    state.current.cy = e.nativeEvent.offsetY
+                        state.current.px = state.current.cx
+                        state.current.py = state.current.cy
 
-                    state.current.context.beginPath()
-                    state.current.context.moveTo(
-                        state.current.px,
-                        state.current.py
-                    )
-                    state.current.context.lineTo(
-                        state.current.cx,
-                        state.current.cy
-                    )
-                    state.current.context.strokeStyle = state.current.color
-                    state.current.context.lineWidth = 2
-                    state.current.context.stroke()
-                    state.current.context.closePath()
-                }}
-            ></canvas>
+                        state.current.cx = e.nativeEvent.offsetX
+                        state.current.cy = e.nativeEvent.offsetY
+
+                        state.current.context.beginPath()
+                        state.current.context.moveTo(
+                            state.current.px,
+                            state.current.py
+                        )
+                        state.current.context.lineTo(
+                            state.current.cx,
+                            state.current.cy
+                        )
+                        state.current.context.strokeStyle = state.current.color
+                        state.current.context.lineWidth = 2
+                        state.current.context.stroke()
+                        state.current.context.closePath()
+                    }}
+                ></canvas>
+            )}
             <div className='confirm-wrapper'>
                 <div
                     className='remove'
                     onClick={() => {
-                        state.current.context.clearRect(0, 0, 500, 450)
+                        if (field.value[0] > 0) {
+                            delete_signature()
+                        } else {
+                            state.current.context.clearRect(0, 0, 500, 450)
+                        }
                     }}
                 >
                     <CloseIcon size={25} />
                 </div>
-                <div className='confirm'>
-                    <CheckIcon size={25} />
-                </div>
+                {field.value[0] < 1 && (
+                    <div
+                        className='confirm'
+                        onClick={() => {
+                            state.current.canvas.toBlob(
+                                data => {
+                                    if (!data) return
+
+                                    upload_signature(data)
+                                },
+                                'image/png',
+                                512
+                            )
+                        }}
+                    >
+                        <CheckIcon size={25} />
+                    </div>
+                )}
             </div>
         </div>
     )

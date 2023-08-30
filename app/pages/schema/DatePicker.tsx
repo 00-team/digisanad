@@ -27,7 +27,6 @@ const DatePicker: FieldProps<DateField> = ({ field, update, disabled }) => {
                 onChange={e => {
                     let offset = new Date().getTimezoneOffset() * 60
                     field.value = Math.floor(e.getTime() / 1000 - offset)
-                    console.log(field.value)
                     update()
                 }}
                 className='datepicker-wrapper'

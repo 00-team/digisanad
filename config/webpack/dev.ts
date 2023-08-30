@@ -43,7 +43,7 @@ const DevConfig: Configuration = {
         },
         proxy: [
             {
-                context: ['/api', '/static', '/media'],
+                context: ['/api', '/static', '/media', '/records'],
                 target: host,
                 changeOrigin: true,
             },
