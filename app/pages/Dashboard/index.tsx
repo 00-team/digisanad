@@ -1,8 +1,7 @@
-import React, { FC, useEffect, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { user_get_me } from 'api'
 import {
     ArrowDownIcon,
     ArrowUpIcon,
@@ -14,10 +13,10 @@ import {
     TransactionIcon,
     WalletIcon,
 } from 'icons'
-import { Link, Outlet, useMatch, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useMatch, Navigate } from 'react-router-dom'
 
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { TokenAtom, UserAtom } from 'state'
+import { useAtomValue } from 'jotai'
+import { UserAtom } from 'state'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
@@ -82,26 +81,10 @@ const SIDEBAR_LINKS: SidebarLinkModel[] = [
 ]
 
 const Dashboard: FC = () => {
-    const setUser = useSetAtom(UserAtom)
-    const [token, setToken] = useAtom(TokenAtom)
+    const user = useAtomValue(UserAtom)
 
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!token) {
-            navigate('/login/?next=' + location.pathname)
-            return
-        }
-
-        user_get_me(token).then(data => {
-            if (data === null) {
-                setToken('')
-                navigate('/login/?next=' + location.pathname)
-            } else {
-                setUser(data)
-            }
-        })
-    }, [])
+    if (user.user_id == null)
+        return <Navigate to={'/login/?next=' + location.pathname} />
 
     return (
         <main className='dashboard-container'>

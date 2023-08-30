@@ -40,6 +40,7 @@ export type BaseField = {
     // title: string
     // description?: string | null
     optional?: boolean
+    changers: string[]
 }
 
 export type GeoField = BaseField & {
@@ -144,6 +145,7 @@ type X = {
 const default_fields: X = {
     link: {
         type: 'link',
+        changers: [],
         uid: '',
         text: '...',
         title: 'Lonk',
@@ -151,6 +153,7 @@ const default_fields: X = {
     },
     option: {
         type: 'option',
+        changers: [],
         title: '',
         uid: '',
         options: [],
@@ -160,6 +163,7 @@ const default_fields: X = {
     },
     int: {
         type: 'int',
+        changers: [],
         uid: '',
         optional: false,
         max: null,
@@ -168,6 +172,7 @@ const default_fields: X = {
     },
     str: {
         type: 'str',
+        changers: [],
         uid: '',
         optional: false,
         max: null,
@@ -177,6 +182,7 @@ const default_fields: X = {
     },
     text: {
         type: 'text',
+        changers: [],
         uid: '',
         optional: false,
         max: null,
@@ -185,6 +191,7 @@ const default_fields: X = {
     },
     geo: {
         type: 'geo',
+        changers: [],
         uid: '',
         optional: false,
         value: {
@@ -194,6 +201,7 @@ const default_fields: X = {
     },
     user: {
         type: 'user',
+        changers: [],
         uid: '',
         value: '',
 
@@ -201,6 +209,7 @@ const default_fields: X = {
     },
     record: {
         type: 'record',
+        changers: [],
         uid: '',
         optional: false,
         plural: false,
@@ -208,6 +217,7 @@ const default_fields: X = {
     },
     date: {
         type: 'date',
+        changers: [],
         uid: '',
 
         optional: false,
@@ -215,6 +225,7 @@ const default_fields: X = {
     },
     question: {
         type: 'question',
+        changers: [],
         uid: '',
         title: 'Qu?',
         optional: false,
@@ -224,6 +235,7 @@ const default_fields: X = {
     },
     signature: {
         type: 'signature',
+        changers: [],
         uid: '',
         optional: false,
         value: '',

@@ -1,9 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { useAlert } from '@00-team/react-alert'
 import loadable from '@loadable/component'
+import { user_get_me } from 'api'
 import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
+
+import { useAtom } from 'jotai'
+import { TokenAtom, UserAtom } from 'state'
 
 import {
     Contract,
@@ -75,6 +79,26 @@ const App: FC = () => {
 
         ReactAlert.error('خطا در هنگام وصل شدن به سرور')
     }
+
+    const [token, setToken] = useAtom(TokenAtom)
+    const [_, setUser] = useAtom(UserAtom)
+
+    useEffect(() => {
+        if (!token) {
+            // navigate('/login/?next=' + location.pathname)
+            return
+        }
+
+        user_get_me(token).then(data => {
+            if (data === null) {
+                setToken('')
+                // navigate('/login/?next=' + location.pathname)
+            } else {
+                setUser(data)
+                // setShow(true)
+            }
+        })
+    }, [])
 
     return (
         <Routes>

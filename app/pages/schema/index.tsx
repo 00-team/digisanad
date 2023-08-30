@@ -291,8 +291,12 @@ const Sidebar: FC<SidebarProps> = ({ inserter, state, setState }) => {
                     />
                     {state.uid in state.schema.fields && (
                         <Config
+                            schema={state.schema}
                             field={state.schema.fields[state.uid]!}
                             update={update}
+                            user_uids={Object.entries(state.schema.fields)
+                                .filter(([, v]) => v.type == 'user')
+                                .map(([k]) => k)}
                         />
                     )}
                 </div>

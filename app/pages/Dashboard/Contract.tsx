@@ -9,7 +9,7 @@ import React, {
 
 import { C } from '@00-team/utils'
 
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { CopyIcon, RemoveIcon } from 'icons'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
@@ -165,18 +165,25 @@ const Contract: FC = () => {
         ReactAlert.error('خطا درهنگام ذخیره قرارداد')
     }
 
-    const delete_contract = async (): Promise<boolean> => {
+    const delete_exit_contract = async () => {
+        let config = { headers: { Authorization: 'Bearer ' + token } }
+        let url = `/api/contracts/${contract_id}/`
+        let response: AxiosResponse
+
         try {
-            const response = await axios.delete(
-                `/api/contracts/${contract_id}/`,
-                { headers: { Authorization: 'Bearer ' + token } }
-            )
-            return !!response.data.ok
+            if (state.creator == me.user_id) {
+                response = await axios.delete(url, config)
+            } else {
+                response = await axios.get(url + 'exit/', config)
+            }
+
+            if (response.data.ok) {
+                navigate('/dashboard/contracts/')
+                return
+            }
         } catch (error) {
             HandleError(error)
         }
-
-        return false
     }
 
     useEffect(() => {
@@ -218,15 +225,14 @@ const Contract: FC = () => {
                         <CopyIcon />
                         ذخیره
                     </button>
-                    {state.creator == me.user_id && (
-                        <button
-                            className='remove-btn cta-btn title_smaller'
-                            onClick={() => delete_contract()}
-                        >
-                            <RemoveIcon />
-                            حذف
-                        </button>
-                    )}
+
+                    <button
+                        className='remove-btn cta-btn title_smaller'
+                        onClick={() => delete_exit_contract()}
+                    >
+                        <RemoveIcon />
+                        {state.creator == me.user_id ? 'حذف' : 'خروج'}
+                    </button>
                 </div>
             </div>
             <div className='inner-wrapper'>

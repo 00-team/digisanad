@@ -187,6 +187,7 @@ type FieldProps<T> = FC<{
     update: () => void
     users: UserPublic[]
     contract_id: number | null
+    disabled: boolean
 }>
 
 const TextFC: FieldProps<TextField> = ({ field, update }) => {
@@ -451,8 +452,6 @@ const RecordFC: FieldProps<RecordField> = ({ field, update, contract_id }) => {
     )
 }
 
-const COLORS = ['black', 'red', 'blue', 'green', 'yellow'] as const
-
 type SignatureState = {
     px: number
     py: number
@@ -461,7 +460,7 @@ type SignatureState = {
     draw: boolean
     context: CanvasRenderingContext2D
     move_count: number
-    color: typeof COLORS[number]
+    color: string
 }
 
 const SignatureDrawer: FieldProps<SignatureField> = () => {
@@ -473,7 +472,7 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
         draw: false,
         move_count: 0,
         context: {} as CanvasRenderingContext2D,
-        color: COLORS[0],
+        color: '#040404',
     })
 
     return (
@@ -511,24 +510,8 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
                 onMouseOut={() => {
                     state.current.draw = false
                 }}
-                onWheel={e => {
-                    let idx = COLORS.indexOf(state.current.color)
-
-                    if (e.deltaY > 0) idx++
-                    else idx--
-
-                    if (idx >= COLORS.length) idx = 0
-                    else if (idx < 0) idx = COLORS.length - 1
-
-                    state.current.color = COLORS[idx]!
-                }}
                 onMouseMove={e => {
-                    // if (!state.current.draw) return
-
-                    state.current.move_count++
-                    if (!state.current.draw || state.current.move_count < 4)
-                        return
-                    state.current.move_count = 0
+                    if (!state.current.draw) return
 
                     state.current.px = state.current.cx
                     state.current.py = state.current.cy

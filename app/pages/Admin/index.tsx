@@ -3,17 +3,23 @@ import React, { FC, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import { CloudIcon, ContractIcon, MenuIcon, SettingIcon } from 'icons'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
+
+import { useAtomValue } from 'jotai'
+import { AdminPerms } from 'state'
 
 import './style/admin.scss'
 
 const Admin: FC = () => {
+    const perms = useAtomValue(AdminPerms)
+
+    if (!perms.perms) return <Navigate to='/' />
+
     return (
         <main className='admin-container'>
             <Sidebar />
             <Outlet />
-            {/*<aside className='admin-wrapper'> </aside>*/}
         </main>
     )
 }

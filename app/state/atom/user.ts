@@ -13,7 +13,7 @@ const DEFUALT_USER: UserModel = {
     national_id: '',
     phone: null,
     postal_code: '',
-    user_id: 0,
+    user_id: null,
     admin: '0',
 }
 

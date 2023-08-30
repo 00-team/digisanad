@@ -10,14 +10,16 @@ import {
     TypeIcon,
 } from 'icons'
 
-import { FieldType, have_minmax } from './types'
+import { FieldType, have_minmax, SchemaData } from './types'
 
 type ConfigProps = {
+    schema: SchemaData
     field: FieldType
+    user_uids: string[]
     update: () => void
 }
 
-const Config: FC<ConfigProps> = ({ field, update }) => {
+const Config: FC<ConfigProps> = ({ field, update, user_uids }) => {
     return (
         <div className='field-config'>
             <div className='config-row title_smaller'>
@@ -32,7 +34,17 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                     <IdIcon size={25} />
                     شناسه :
                 </div>
-                <div className='data'>{field.uid}</div>
+
+                <div className='data'>
+                    <input
+                        type='text'
+                        value={field.uid}
+                        onChange={e => {
+                            let new_uid = e.currentTarget.value
+                            console.log(new_uid)
+                        }}
+                    />
+                </div>
             </div>
             <div className='config-row optional title_smaller'>
                 <label className='holder' htmlFor='fc_optinal'>
@@ -48,6 +60,15 @@ const Config: FC<ConfigProps> = ({ field, update }) => {
                         update()
                     }}
                 />
+            </div>
+            <div className='config-row'>
+                <select>
+                    {user_uids.map((u, i) => (
+                        <option key={i} value={u}>
+                            {u}
+                        </option>
+                    ))}
+                </select>
             </div>
             {'title' in field && (
                 <div className='input-wrapper'>
