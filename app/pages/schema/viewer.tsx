@@ -20,6 +20,7 @@ import { DatePicker } from './DatePicker'
 import {
     FieldProps,
     FieldType,
+    PriceField,
     SchemaData,
     TextField,
     UserField,
@@ -332,6 +333,22 @@ const IntFC: FieldProps<IntField> = ({ field, update, disabled }) => {
             }}
             max={field.max || undefined}
             min={field.min || undefined}
+        />
+    )
+}
+
+const PriceFC: FieldProps<PriceField> = ({ field, update, disabled }) => {
+    if (disabled) return <span>{field.value.toLocaleString()}</span>
+
+    return (
+        <input
+            type='number'
+            placeholder={'قیمت'}
+            value={field.value}
+            onInput={e => {
+                field.value = parseInt(e.currentTarget.value)
+                update()
+            }}
         />
     )
 }
@@ -803,6 +820,7 @@ const UserFC: FieldProps<UserField> = ({ field, update, users, disabled }) => {
 }
 
 const field_map: FMF = {
+    price: PriceFC,
     link: ({ field }) => (
         <a href={field.url} title={field.title}>
             {field.text}

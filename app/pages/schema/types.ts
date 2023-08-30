@@ -2,6 +2,7 @@ import { FC } from 'react'
 
 import {
     CallenderIcon,
+    DollarIcon,
     FileIcon,
     LinkIcon,
     MapIcon,
@@ -13,6 +14,8 @@ import {
     TextareaIcon,
     TextIcon,
 } from 'icons'
+
+type UID = string
 
 type Page = {
     content: string
@@ -28,7 +31,7 @@ type UserPublic = {
 type SchemaData = {
     pages: Page[]
     fields: {
-        [uid: string]: FieldType
+        [uid: UID]: FieldType
     }
 }
 
@@ -38,11 +41,11 @@ export type FieldViewProps = {
 }
 
 export type BaseField = {
-    uid: string
+    uid: UID
     // title: string
     // description?: string | null
     optional?: boolean
-    changers: string[]
+    changers: UID[]
 }
 
 export type GeoField = BaseField & {
@@ -56,6 +59,12 @@ export type GeoField = BaseField & {
 export type DateField = BaseField & {
     type: 'date'
     value: number
+}
+
+export type PriceField = BaseField & {
+    type: 'price'
+    value: number
+    payer: UID
 }
 
 export type SignatureField = BaseField & {
@@ -140,11 +149,19 @@ export type FieldType =
     | QuestionField
     | TextField
     | RecordField
+    | PriceField
 
 type X = {
     [T in FieldType as T['type']]: T
 }
 const default_fields: X = {
+    price: {
+        type: 'price',
+        changers: [],
+        uid: '',
+        payer: '',
+        value: 0,
+    },
     link: {
         type: 'link',
         changers: [],
@@ -249,6 +266,10 @@ type FMD = {
 }
 
 const default_view_props: FMD = {
+    price: {
+        display: 'قیمت',
+        Icon: DollarIcon,
+    },
     link: {
         display: 'لینک',
         Icon: LinkIcon,

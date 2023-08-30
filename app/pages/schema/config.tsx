@@ -99,6 +99,29 @@ const Config: FC<ConfigProps> = ({ field, update, user_uids }) => {
                 </div>
             )}
 
+            {field.type == 'price' && (
+                <div className='config-row'>
+                    <label className='holder' htmlFor='fc_optinal'>
+                        <PersonIcon size={25} />
+                        پرداخت کننده:
+                    </label>
+                    <select
+                        onChange={e => {
+                            let uid = e.currentTarget.value
+                            if (!uid) field.payer = ''
+                            else field.payer = uid
+                            update()
+                        }}
+                    >
+                        {user_uids.map((u, i) => (
+                            <option key={i} value={u}>
+                                {u}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
+
             {field.type == 'record' && (
                 <div className='config-row'>
                     <label htmlFor='fc_plural' className='holder title_smaller'>
