@@ -236,6 +236,33 @@ async def remove_user(request: Request, contract_id: int, user_id: int):
     }
 
 
+@router.get(
+    '/{contract_id}/exit/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, bad_args]}
+)
+async def exit(request: Request, contract_id: int):
+    user: UserModel = request.state.user
+
+    if not (await contract_user_get(contract_id, user.user_id)):
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id
+    )
+    if contract.creator == user.user_id:
+        raise bad_args
+
+    if contract.stage != ContractStage.DRAFT:
+        raise closed_contract
+
+    return {
+        'ok': bool(await contract_user_delete(
+            ContractUserTable.contract == contract_id,
+            ContractUserTable.user == user.user_id,
+        ))
+    }
+
+
 @router.delete(
     '/{contract_id}/', response_model=OkModel,
     openapi_extra={'errors': [bad_id, closed_contract]}
