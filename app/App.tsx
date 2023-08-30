@@ -125,6 +125,8 @@ const App: FC = () => {
                 />
 
                 <Route path='transactions' element={<Transactions />} />
+                <Route path='transactions/:pid' element={<Transactions />} />
+
                 <Route path='wallet' element={<Wallet />} />
                 <Route path='deposit' element={<Deposit />} />
                 <Route path='withdraw' element={<Withdraw />} />
