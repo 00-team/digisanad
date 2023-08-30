@@ -51,6 +51,7 @@ const CodeEnter: FC = () => {
                         autoFocus
                         id='code'
                         placeholder='12345'
+                        maxLength={5}
                     />
                 </div>
                 <div className='card-options'>

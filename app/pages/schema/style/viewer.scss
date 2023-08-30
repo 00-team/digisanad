@@ -12,6 +12,10 @@
     .field-wrapper {
         all: unset;
 
+        *:disabled {
+            opacity: 0.4;
+        }
+
         input {
             background-color: white;
             border-bottom: 1px solid black;

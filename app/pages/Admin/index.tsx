@@ -14,7 +14,9 @@ import './style/admin.scss'
 const Admin: FC = () => {
     const perms = useAtomValue(AdminPerms)
 
-    if (!perms.perms) return <Navigate to='/' />
+    Navigate
+    // if (!perms.perms) return <Navigate to='/' />
+    if (!perms.perms) return <></>
 
     return (
         <main className='admin-container'>

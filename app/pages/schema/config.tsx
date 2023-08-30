@@ -6,6 +6,7 @@ import {
     IdIcon,
     MaximumIcon,
     MinimunIcon,
+    PersonIcon,
     QuestionIcon,
     TypeIcon,
 } from 'icons'
@@ -37,11 +38,12 @@ const Config: FC<ConfigProps> = ({ field, update, user_uids }) => {
 
                 <div className='data'>
                     <input
+                        className='uid-input'
                         type='text'
                         value={field.uid}
-                        onChange={e => {
-                            let new_uid = e.currentTarget.value
-                            console.log(new_uid)
+                        onChange={() => {
+                            // let new_uid = e.currentTarget.value
+                            // console.log(new_uid)
                         }}
                     />
                 </div>
@@ -62,7 +64,19 @@ const Config: FC<ConfigProps> = ({ field, update, user_uids }) => {
                 />
             </div>
             <div className='config-row'>
-                <select>
+                <label className='holder' htmlFor='fc_optinal'>
+                    <PersonIcon size={25} />
+                    تغییر دهنده:
+                </label>
+                <select
+                    onChange={e => {
+                        let uid = e.currentTarget.value
+                        if (!uid) field.changers = []
+                        else field.changers = [uid]
+                        update()
+                    }}
+                >
+                    <option value=''>همه</option>
                     {user_uids.map((u, i) => (
                         <option key={i} value={u}>
                             {u}

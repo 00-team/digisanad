@@ -1,6 +1,7 @@
 import React, {
     createElement,
     FC,
+    Fragment,
     ReactNode,
     useEffect,
     useRef,
@@ -13,11 +14,11 @@ import { MapContainer, TileLayer } from 'react-leaflet'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
 
 import { useAtomValue } from 'jotai'
-import { TokenAtom } from 'state'
+import { TokenAtom, UserAtom } from 'state'
 
-import { DatePicker } from 'components'
-
+import { DatePicker } from './DatePicker'
 import {
+    FieldProps,
     FieldType,
     SchemaData,
     TextField,
@@ -38,7 +39,7 @@ import { parseFields } from './utils'
 
 import './style/viewer.scss'
 
-import pdfImg from 'static/Contract/pdf.png'
+// import pdfImg from 'static/Contract/pdf.png'
 
 type TreeNode = {
     name: string
@@ -46,6 +47,7 @@ type TreeNode = {
 }
 
 type ViewerProps = {
+    render?: boolean
     contract_id?: number
     schema: SchemaData
     setSchema: (data: Partial<SchemaData>) => void
@@ -77,12 +79,14 @@ const def_users: UserPublic[] = [
 
 const Viewer: FC<ViewerProps> = ({
     contract_id = null,
+    render = false,
     schema,
     page,
     setSchema,
     setUID,
     users = def_users,
 }) => {
+    const user = useAtomValue(UserAtom)
     const [result, setResult] = useState<ReactNode[]>([])
 
     useEffect(() => {
@@ -91,6 +95,15 @@ const Viewer: FC<ViewerProps> = ({
 
         if (!schema.pages.length) return
         if (page < 0 || page >= schema.pages.length) return
+
+        let user_uid_to_user_id: { [k: string]: number | null } = {}
+
+        Object.entries(schema.fields).forEach(([k, v]) => {
+            if (!v.changers) v.changers = []
+
+            if (v.type != 'user') return
+            user_uid_to_user_id[k] = v.value
+        })
 
         schema.pages[page]!.content.split('\n').forEach(line => {
             let node: TreeNode = { name: '', items: [] }
@@ -148,6 +161,23 @@ const Viewer: FC<ViewerProps> = ({
 
                 let field = schema.fields[value]!
                 let FMFC = field_map[field.type]
+                let disabled = false
+
+                if (render) {
+                    disabled = true
+                } else if (contract_id && field.changers.length) {
+                    disabled = true
+                    for (let cdx = 0; cdx < field.changers.length; cdx++) {
+                        let cuid = field.changers[cdx]!
+                        let changer_user_id = user_uid_to_user_id[cuid]
+                        if (!changer_user_id) continue
+
+                        if (changer_user_id == user.user_id) {
+                            disabled = false
+                            break
+                        }
+                    }
+                }
 
                 childern.push(
                     <span
@@ -159,11 +189,11 @@ const Viewer: FC<ViewerProps> = ({
                         }}
                     >
                         <FMFC
-                            // @ts-ignore
-                            field={field}
+                            field={field as never}
                             update={() => setSchema({})}
                             users={users}
                             contract_id={contract_id}
+                            disabled={disabled}
                         />
                     </span>
                 )
@@ -182,15 +212,20 @@ type FMF = {
     [T in FieldType as T['type']]: FieldProps<T>
 }
 
-type FieldProps<T> = FC<{
-    field: T
-    update: () => void
-    users: UserPublic[]
-    contract_id: number | null
-    disabled: boolean
-}>
+const TextFC: FieldProps<TextField> = ({ field, update, disabled }) => {
+    if (disabled) {
+        return (
+            <p>
+                {field.value.split('\n').map((v, i) => (
+                    <Fragment key={i}>
+                        {v}
+                        <br />
+                    </Fragment>
+                ))}
+            </p>
+        )
+    }
 
-const TextFC: FieldProps<TextField> = ({ field, update }) => {
     return (
         <textarea
             className='text-field title_smaller'
@@ -208,17 +243,19 @@ const TextFC: FieldProps<TextField> = ({ field, update }) => {
 type GeoMarkerProps = {
     field: GeoField
     update: () => void
+    disabled: boolean
 }
 
-export const GeoMarker: FC<GeoMarkerProps> = ({ field, update }) => {
+export const GeoMarker: FC<GeoMarkerProps> = ({ field, update, disabled }) => {
     const map = useMapEvents({
         click(e) {
+            if (disabled) return
             field.value.latitude = e.latlng.lat
             field.value.longitude = e.latlng.lng
             update()
         },
         contextmenu() {
-            if (!field.optional) return
+            if (disabled || !field.optional) return
 
             field.value.latitude = 0
             field.value.longitude = 0
@@ -240,7 +277,7 @@ export const GeoMarker: FC<GeoMarkerProps> = ({ field, update }) => {
     )
 }
 
-const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
+const GeoFC: FieldProps<GeoField> = ({ field, update, disabled }) => {
     return (
         <div className='geo-container'>
             <MapContainer
@@ -258,13 +295,15 @@ const GeoFC: FieldProps<GeoField> = ({ field, update }) => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <GeoMarker field={field} update={update} />
+                <GeoMarker field={field} update={update} disabled={disabled} />
             </MapContainer>
         </div>
     )
 }
 
-const StrFC: FieldProps<StrField> = ({ field, update }) => {
+const StrFC: FieldProps<StrField> = ({ field, update, disabled }) => {
+    if (disabled) return <span>{field.value}</span>
+
     return (
         <input
             placeholder={field.placeholder}
@@ -279,7 +318,9 @@ const StrFC: FieldProps<StrField> = ({ field, update }) => {
     )
 }
 
-const IntFC: FieldProps<IntField> = ({ field, update }) => {
+const IntFC: FieldProps<IntField> = ({ field, update, disabled }) => {
+    if (disabled) return <span>{field.value.toLocaleString()}</span>
+
     return (
         <input
             type='number'
@@ -295,7 +336,27 @@ const IntFC: FieldProps<IntField> = ({ field, update }) => {
     )
 }
 
-const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
+const QuestionFC: FieldProps<QuestionField> = ({ field, update, disabled }) => {
+    if (disabled) {
+        return (
+            <ul className='question-field-disabled'>
+                {field.questions.map(q => {
+                    let answer = field.answers.find(
+                        a => a.uid == field.value[q.uid]
+                    )
+                    let answer_text = 'نامشخص'
+                    if (answer) answer_text = answer.display
+
+                    return (
+                        <li>
+                            {q.display}: {answer_text}
+                        </li>
+                    )
+                })}
+            </ul>
+        )
+    }
+
     return (
         <table className='question-field'>
             <thead>
@@ -335,12 +396,25 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update }) => {
     )
 }
 
-const RecordFC: FieldProps<RecordField> = ({ field, update, contract_id }) => {
+const RecordFC: FieldProps<RecordField> = ({
+    field,
+    update,
+    contract_id,
+    disabled,
+}) => {
     const [records, setRecords] = useState<RecordField['value']>(field.value)
     const token = useAtomValue(TokenAtom)
     const local_id = useRef(0)
 
-    pdfImg
+    if (disabled) {
+        return (
+            <div className='record-disabled'>
+                {field.value.map(([, url]) => (
+                    <img src={url} />
+                ))}
+            </div>
+        )
+    }
 
     useEffect(() => {
         if (!contract_id) return
@@ -551,7 +625,21 @@ const SignatureDrawer: FieldProps<SignatureField> = () => {
     )
 }
 
-const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
+const OptionFC: FieldProps<OptionFeild> = ({ field, update, disabled }) => {
+    if (disabled) {
+        return (
+            <ul>
+                {field.value.map(uid => {
+                    let option = field.options.find(o => o.uid == uid)
+                    let text = '---'
+                    if (option) text = option.display
+
+                    return <li>{text}</li>
+                })}
+            </ul>
+        )
+    }
+
     return (
         <ul className='option-field'>
             {field.options.map((o, i) => (
@@ -589,15 +677,28 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update }) => {
     )
 }
 
-const UserFC: FieldProps<UserField> = ({ field, update, users }) => {
+const UserFC: FieldProps<UserField> = ({ field, update, users, disabled }) => {
+    if (disabled) {
+        let user = users.find(u => u.user_id == field.value)
+        return (
+            <span>
+                {user ? `${user.first_name} ${user.last_name}` : 'خالی'}
+            </span>
+        )
+    }
+
     return (
         <select
             onChange={e => {
-                field.value = e.currentTarget.value
+                let v = e.currentTarget.value
+                if (!v) field.value = null
+                else field.value = parseInt(v)
+
                 update()
             }}
-            value={field.value}
+            value={field.value ? field.value.toString() : ''}
         >
+            <option value=''>خالی</option>
             {users.map((u, i) => (
                 <option value={u.user_id} key={i}>
                     {u.first_name} {u.last_name}

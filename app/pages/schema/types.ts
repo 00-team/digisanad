@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 import {
     CallenderIcon,
     FileIcon,
@@ -63,7 +65,7 @@ export type SignatureField = BaseField & {
 
 export type UserField = BaseField & {
     type: 'user'
-    value: string
+    value: number | null
 }
 
 export type IntField = BaseField & {
@@ -203,7 +205,7 @@ const default_fields: X = {
         type: 'user',
         changers: [],
         uid: '',
-        value: '',
+        value: null,
 
         optional: false,
     },
@@ -297,6 +299,14 @@ const field_types = Object.keys(default_fields) as Array<
     keyof typeof default_fields
 >
 
+type FieldProps<T> = FC<{
+    field: T
+    update: () => void
+    users: UserPublic[]
+    contract_id: number | null
+    disabled: boolean
+}>
+
 export type FieldMinMax = StrField | IntField | TextField
 function have_minmax(f: FieldType): f is FieldMinMax {
     return ['str', 'int', 'text'].includes(f.type)
@@ -306,6 +316,7 @@ export {
     SchemaData,
     Page,
     UserPublic,
+    FieldProps,
     field_types,
     default_fields,
     have_minmax,
