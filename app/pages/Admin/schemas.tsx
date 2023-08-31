@@ -53,7 +53,23 @@ const SchemaList: FC = () => {
                                     وضعیت:
                                 </div>
                                 <div className='data'>
-                                    {s.draft ? 'در حال تکمیل' : 'تکمیل'}
+                                    {s.draft ? (
+                                        <span
+                                            style={{
+                                                color: 'var(--alert-error)',
+                                            }}
+                                        >
+                                            در حال تکمیل
+                                        </span>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color: '#008149',
+                                            }}
+                                        >
+                                            تکمیل شده
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             <div className='admin-schema-detail'>
