@@ -29,13 +29,41 @@
         .admin-schema {
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
 
             width: clamp(0px, 100%, 300px);
 
             padding: 1rem;
             background-color: white;
 
-            border-radius: 5px;
+            border-radius: 10px;
+
+            h2.admin-schema-title {
+                text-align: center;
+            }
+
+            .admin-schema-details {
+                display: flex;
+                flex-direction: column;
+                gap: 2vh;
+
+                width: 100%;
+
+                .admin-schema-detail {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    width: 100%;
+
+                    .holder {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 1rem;
+                    }
+                }
+            }
         }
     }
 
