@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
+import { ContractIcon, EditIcon } from 'icons'
 import { SchemaData } from 'pages/schema/types'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -44,9 +45,27 @@ const SchemaList: FC = () => {
             <div className='admin-schemas'>
                 {state.map(s => (
                     <div className='admin-schema' key={s.schema_id}>
-                        <h2 className='title'>{s.title}</h2>
-                        <span>وضعیت: {s.draft ? 'در حال تکمیل' : 'تکمیل'}</span>
+                        <h2 className='title admin-schema-title'>{s.title}</h2>
+                        <div className='admin-schema-details title_smaller'>
+                            <div className='admin-schema-detail'>
+                                <div className='holder'>
+                                    <ContractIcon />
+                                    وضعیت:
+                                </div>
+                                <div className='data'>
+                                    {s.draft ? 'در حال تکمیل' : 'تکمیل'}
+                                </div>
+                            </div>
+                            <div className='admin-schema-detail'>
+                                <div className='holder'>
+                                    <EditIcon size={20} />
+                                    شماره قرارداد:
+                                </div>
+                                <div className='data'>{s.schema_id}</div>
+                            </div>
+                        </div>
                         <button
+                            className='title_small'
                             onClick={() =>
                                 navigate('/admin/schema/' + s.schema_id)
                             }
