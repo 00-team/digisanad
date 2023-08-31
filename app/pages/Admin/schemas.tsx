@@ -40,10 +40,10 @@ const SchemaList: FC = () => {
     }, [page])
 
     return (
-        <div className='schema-list'>
-            <div className='schemas'>
+        <div className='admin-schema-list'>
+            <div className='admin-schemas'>
                 {state.map(s => (
-                    <div className='schema' key={s.schema_id}>
+                    <div className='admin-schema' key={s.schema_id}>
                         <h2 className='title'>{s.title}</h2>
                         <span>وضعیت: {s.draft ? 'در حال تکمیل' : 'تکمیل'}</span>
                         <button
