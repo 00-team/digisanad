@@ -71,7 +71,7 @@ const SchemaList: FC = () => {
                     </div>
                 ))}
             </div>
-            <div className='actions'>
+            <div className='actions title_smaller'>
                 <button style={{ '--color': 'green' }} onClick={add_schema}>
                     قالب جدید
                 </button>
