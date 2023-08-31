@@ -25,6 +25,8 @@ main.admin-container {
         padding: 3vh 0;
         padding-top: 6vh;
 
+        transition: width 0.5s cubic-bezier(0.45, 0.02, 0.09, 0.98);
+
         @media screen and (max-width: 1024px) {
             width: 100%;
         }
@@ -51,10 +53,26 @@ main.admin-container {
 
                 cursor: pointer;
 
-                &.setting {
-                    .icon svg {
-                        transition: transform 0.5s ease-in-out;
+                .holder {
+                    white-space: nowrap;
+                }
+
+                .icon {
+                    svg {
+                        transition: transform 0.7s
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98);
                     }
+                }
+
+                &:hover {
+                    &:hover {
+                        .icon svg {
+                            transform: translateY(-0.5rem);
+                        }
+                    }
+                }
+
+                &.setting {
                     &:hover {
                         .icon svg {
                             transform: rotate(-180deg);
@@ -62,6 +80,36 @@ main.admin-container {
                     }
                 }
             }
+        }
+
+        .buttons-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .close,
+            .open {
+                transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .close {
+                position: absolute;
+                inset: 0;
+
+                transform: translateY(-200px) rotate(0);
+            }
+
+            &.active {
+                .close {
+                    transform: translateY(0) rotate(360deg);
+                }
+                .open {
+                    transform: translateY(-200px);
+                }
+            }
+
+            position: relative;
+            isolation: isolate;
         }
 
         &.close {
