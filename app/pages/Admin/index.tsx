@@ -2,9 +2,14 @@ import React, { FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { CloudIcon, ContractIcon, MenuIcon, SettingIcon } from 'icons'
-import { Link, Navigate } from 'react-router-dom'
-import { Outlet } from 'react-router-dom'
+import {
+    CloseIcon,
+    ContractIcon,
+    DashboardIcon,
+    MenuIcon,
+    SettingIcon,
+} from 'icons'
+import { Link, Navigate, Outlet } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
 import { AdminPerms } from 'state'
@@ -31,9 +36,14 @@ const Sidebar: FC = () => {
 
     return (
         <aside className={'admin-sidebar' + C(close, 'close')}>
-            <button onClick={() => setClose(s => !s)}>
-                <MenuIcon size='24' />
-            </button>
+            <div className={`buttons-wrapper ${C(!close)}`}>
+                <button className={`close`} onClick={() => setClose(true)}>
+                    <CloseIcon size={24} />
+                </button>
+                <button className={`open `} onClick={() => setClose(false)}>
+                    <MenuIcon size='24' />
+                </button>
+            </div>
             <div className='sidebar-wrapper'>
                 <SidebarRow
                     title='تنظیمات'
@@ -51,7 +61,7 @@ const Sidebar: FC = () => {
                     title='داشبورد'
                     className='dashboard'
                     href='/dashboard/'
-                    Icon={CloudIcon}
+                    Icon={DashboardIcon}
                 />
             </div>
         </aside>
