@@ -6,6 +6,7 @@ import axios from 'axios'
 import {
     CloseIcon,
     ContractIcon,
+    DashboardIcon,
     MenuIcon,
     NewContractIcon,
     SettingIcon,
@@ -82,6 +83,12 @@ const Sidebar: FC = () => {
                     href=''
                     onclick={add_schema}
                     Icon={NewContractIcon}
+                />
+                <SidebarRow
+                    title='داشبورد'
+                    className='dashboard'
+                    href='/dashboard/'
+                    Icon={DashboardIcon}
                 />
             </div>
         </aside>
