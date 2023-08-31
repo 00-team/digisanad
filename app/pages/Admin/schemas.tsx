@@ -35,21 +35,6 @@ const SchemaList: FC = () => {
         setState(response.data)
     }
 
-    const add_schema = async () => {
-        const response = await axios.post(
-            '/api/admins/schemas/',
-            {
-                title: 'قرارداد جدید',
-                data: {
-                    pages: [{ content: '# قرارداد جدید' }],
-                    fields: {},
-                },
-            },
-            { headers: { Authorization: 'Bearer ' + token } }
-        )
-        navigate('/admin/schema/' + response.data.id)
-    }
-
     useEffect(() => {
         fetch_schemas()
     }, [page])
@@ -72,20 +57,17 @@ const SchemaList: FC = () => {
                 ))}
             </div>
             <div className='actions title_smaller'>
-                <button style={{ '--color': 'green' }} onClick={add_schema}>
-                    قالب جدید
-                </button>
                 <div className='pagination'>
-                    <button
-                        onClick={() => navigate('/admin/schemas/' + (page + 1))}
-                    >
-                        صفحه بعدی
-                    </button>
                     <button
                         disabled={page == 0}
                         onClick={() => navigate('/admin/schemas/' + (page - 1))}
                     >
                         صفحه قبلی
+                    </button>
+                    <button
+                        onClick={() => navigate('/admin/schemas/' + (page + 1))}
+                    >
+                        صفحه بعدی
                     </button>
                 </div>
             </div>
