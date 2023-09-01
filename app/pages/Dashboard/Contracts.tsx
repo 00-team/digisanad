@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
-import { EditIcon, InviteIcon } from 'icons'
+import { CallenderIcon, EditIcon, InviteIcon } from 'icons'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
@@ -41,6 +41,12 @@ const Contracts: FC = () => {
         setState(response.data)
     }
 
+    const getTime = (timestamp: number) => {
+        let offset = Math.abs(new Date().getTimezoneOffset()) * 60
+
+        return (timestamp + offset) * 1000
+    }
+
     useEffect(() => {
         fetch_contracts()
     }, [page])
@@ -58,6 +64,17 @@ const Contracts: FC = () => {
                                     شماره قرارداد:
                                 </div>
                                 <div className='data'>{s.contract_id}</div>
+                            </div>
+                            <div className='contract-detail'>
+                                <div className='holder'>
+                                    <CallenderIcon size={20} />
+                                    تاریخ ساخت:
+                                </div>
+                                <div className='data'>
+                                    {new Date(
+                                        getTime(s.start_date)
+                                    ).toLocaleDateString('fa-IR')}
+                                </div>
                             </div>
                             <div className='contract-detail'>
                                 <div className='holder'>
