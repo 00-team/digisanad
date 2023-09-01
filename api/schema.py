@@ -25,7 +25,7 @@ async def get_schemas(request: Request, page: int = 0, mine: bool = False):
 
     rows = await sqlx.fetch_all(
         f'''
-        SELECT * FROM schemas WHERE creator = :creator AND draft is false
+        SELECT * FROM schemas WHERE creator = :creator AND draft = false
         ORDER BY schema_id DESC
         LIMIT {settings.page_size} OFFSET :skip
         ''',
