@@ -96,7 +96,7 @@ const Contracts: FC = () => {
                 ))}
             </div>
 
-            <div className='actions'>
+            <div className='actions title_smaller'>
                 <div className='pagination'>
                     <button
                         disabled={page == 0}
