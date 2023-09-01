@@ -46,6 +46,7 @@ export type BaseField = {
     // description?: string | null
     optional?: boolean
     changers: UID[]
+    lock: boolean
 }
 
 export type GeoField = BaseField & {
@@ -161,6 +162,7 @@ const default_fields: X = {
         uid: '',
         payer: '',
         value: 0,
+        lock: false,
     },
     link: {
         type: 'link',
@@ -169,6 +171,7 @@ const default_fields: X = {
         text: '...',
         title: 'Lonk',
         url: 'https://example.com',
+        lock: false,
     },
     option: {
         type: 'option',
@@ -179,6 +182,7 @@ const default_fields: X = {
         optional: false,
         singleton: false,
         value: [],
+        lock: false,
     },
     int: {
         type: 'int',
@@ -188,6 +192,7 @@ const default_fields: X = {
         max: null,
         min: null,
         value: 0,
+        lock: false,
     },
     str: {
         type: 'str',
@@ -198,6 +203,7 @@ const default_fields: X = {
         min: null,
         value: '',
         placeholder: 'string',
+        lock: false,
     },
     text: {
         type: 'text',
@@ -207,6 +213,7 @@ const default_fields: X = {
         max: null,
         min: null,
         value: '',
+        lock: false,
     },
     geo: {
         type: 'geo',
@@ -217,6 +224,7 @@ const default_fields: X = {
             latitude: 0,
             longitude: 0,
         },
+        lock: false,
     },
     user: {
         type: 'user',
@@ -225,6 +233,7 @@ const default_fields: X = {
         value: null,
 
         optional: false,
+        lock: false,
     },
     record: {
         type: 'record',
@@ -233,6 +242,7 @@ const default_fields: X = {
         optional: false,
         plural: false,
         value: [],
+        lock: false,
     },
     date: {
         type: 'date',
@@ -241,6 +251,7 @@ const default_fields: X = {
 
         optional: false,
         value: 0,
+        lock: false,
     },
     question: {
         type: 'question',
@@ -251,6 +262,7 @@ const default_fields: X = {
         questions: [],
         answers: [],
         value: {},
+        lock: false,
     },
     signature: {
         type: 'signature',
@@ -258,6 +270,7 @@ const default_fields: X = {
         uid: '',
         optional: false,
         value: [-1, ''],
+        lock: false,
     },
 }
 
