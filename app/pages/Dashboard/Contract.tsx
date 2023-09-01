@@ -421,7 +421,7 @@ const SelectSchema: FC<CommonProps> = ({ setState }) => {
                     </div>
                 ))}
             </div>
-            <div className='actions'>
+            <div className='actions title_smaller'>
                 <div className='pagination'>
                     <button
                         disabled={max_page == page}
