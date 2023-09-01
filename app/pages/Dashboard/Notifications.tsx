@@ -89,9 +89,15 @@ const Notifications: FC = () => {
                 <NotificationIcon size={innerWidth >= 1024 ? 40 : 30} />
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
-                {messages?.map((message, index) => {
-                    return <NotifMessage {...message} key={index} />
-                })}
+                {messages && messages.length >= 1 ? (
+                    messages?.map((message, index) => {
+                        return <NotifMessage {...message} key={index} />
+                    })
+                ) : (
+                    <h4 className='title_small empty'>
+                        پیامی برای نمایش وجود ندارد!
+                    </h4>
+                )}
             </div>
         </div>
     )

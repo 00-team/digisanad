@@ -110,6 +110,12 @@
             z-index: 1;
         }
 
+        .empty {
+            direction: rtl;
+            text-align: center;
+            padding: 3vh 2rem;
+        }
+
         .notif-container {
             display: flex;
             flex-direction: column;
