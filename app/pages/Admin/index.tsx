@@ -2,12 +2,19 @@ import React, { FC, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { CloudIcon, ContractIcon, MenuIcon, SettingIcon } from 'icons'
-import { Link, Navigate } from 'react-router-dom'
-import { Outlet } from 'react-router-dom'
+import axios from 'axios'
+import {
+    CloseIcon,
+    ContractIcon,
+    DashboardIcon,
+    MenuIcon,
+    NewContractIcon,
+    SettingIcon,
+} from 'icons'
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
-import { AdminPerms } from 'state'
+import { AdminPerms, TokenAtom } from 'state'
 
 import './style/admin.scss'
 
@@ -29,11 +36,34 @@ const Admin: FC = () => {
 const Sidebar: FC = () => {
     const [close, setClose] = useState(true)
 
+    const navigate = useNavigate()
+    const token = useAtomValue(TokenAtom)
+
+    const add_schema = async () => {
+        const response = await axios.post(
+            '/api/admins/schemas/',
+            {
+                title: 'قرارداد جدید',
+                data: {
+                    pages: [{ content: '# قرارداد جدید' }],
+                    fields: {},
+                },
+            },
+            { headers: { Authorization: 'Bearer ' + token } }
+        )
+        navigate('/admin/schema/' + response.data.id)
+    }
+
     return (
         <aside className={'admin-sidebar' + C(close, 'close')}>
-            <button onClick={() => setClose(s => !s)}>
-                <MenuIcon size='24' />
-            </button>
+            <div className={`buttons-wrapper ${C(!close)}`}>
+                <button className={`close`} onClick={() => setClose(true)}>
+                    <CloseIcon size={24} />
+                </button>
+                <button className={`open `} onClick={() => setClose(false)}>
+                    <MenuIcon size='24' />
+                </button>
+            </div>
             <div className='sidebar-wrapper'>
                 <SidebarRow
                     title='تنظیمات'
@@ -48,10 +78,17 @@ const Sidebar: FC = () => {
                     Icon={ContractIcon}
                 />
                 <SidebarRow
+                    title='قرارداد جدید'
+                    className='dashboard'
+                    href=''
+                    onclick={add_schema}
+                    Icon={NewContractIcon}
+                />
+                <SidebarRow
                     title='داشبورد'
                     className='dashboard'
                     href='/dashboard/'
-                    Icon={CloudIcon}
+                    Icon={DashboardIcon}
                 />
             </div>
         </aside>
@@ -63,6 +100,7 @@ type SidebarRowProps = {
     Icon: Icon
     href: string
     className?: string
+    onclick?: () => void
 }
 
 const SidebarRow: FC<SidebarRowProps> = ({
@@ -70,15 +108,34 @@ const SidebarRow: FC<SidebarRowProps> = ({
     title,
     href,
     className = '',
+    onclick,
 }) => {
     return (
-        <Link to={href} className={`sidebar-row title_small ${className}`}>
-            <div className='icon'>
-                <Icon size={25} />
-            </div>
-            <div className='holder'>{title}</div>
-            <div></div>
-        </Link>
+        <>
+            {onclick ? (
+                <button
+                    onClick={onclick}
+                    className={`sidebar-row title_small ${className}`}
+                >
+                    <div className='icon'>
+                        <Icon size={25} />
+                    </div>
+                    <div className='holder'>{title}</div>
+                    <div></div>
+                </button>
+            ) : (
+                <Link
+                    to={href}
+                    className={`sidebar-row title_small ${className}`}
+                >
+                    <div className='icon'>
+                        <Icon size={25} />
+                    </div>
+                    <div className='holder'>{title}</div>
+                    <div></div>
+                </Link>
+            )}
+        </>
     )
 }
 
