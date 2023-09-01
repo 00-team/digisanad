@@ -406,6 +406,7 @@ const SelectSchema: FC<CommonProps> = ({ setState }) => {
                             </div>
                         </div>
                         <button
+                            className='title_smaller'
                             onClick={() =>
                                 setState(ss => ({
                                     ...ss,
