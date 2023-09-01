@@ -379,6 +379,14 @@ main.contract-container {
                         label {
                             width: 100%;
                         }
+
+                        select {
+                            background: white;
+                            color: black;
+                            border: 1px solid;
+
+                            cursor: pointer;
+                        }
                     }
 
                     .add-option {
