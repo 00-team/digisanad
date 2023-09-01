@@ -2,21 +2,23 @@ import React, { FC, ReactNode } from 'react'
 
 import { C } from '@00-team/utils'
 
+import axios from 'axios'
 import {
     ArrowDownIcon,
     ArrowUpIcon,
     ContractIcon,
-    GlobeIcon, // PersonIcon,
+    GlobeIcon,
+    NewContractIcon,
     ProfileIcon,
     SendIcon,
     ToolIcon,
     TransactionIcon,
     WalletIcon,
 } from 'icons'
-import { Link, Outlet, useMatch, Navigate } from 'react-router-dom'
+import { Link, Navigate, Outlet, useMatch, useNavigate } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
-import { UserAtom } from 'state'
+import { TokenAtom, UserAtom } from 'state'
 
 import { LogoutButton } from 'components/common/LogoutButton'
 
@@ -24,8 +26,8 @@ import { Notifications } from './Notifications'
 
 import './style/dashboard.scss'
 
-export * from './Contracts'
 export * from './Contract'
+export * from './Contracts'
 export * from './Deposit'
 export * from './MyInfo'
 export * from './Transactions'
@@ -36,49 +38,11 @@ const OPTIONS_BASE_DELAY = 1
 const ADDED_DELAY = 0.1
 
 type SidebarLinkModel = {
+    onclick?: () => void
     link: string
     title: string
     icon: ReactNode
 }
-
-const SIDEBAR_LINKS: SidebarLinkModel[] = [
-    {
-        link: '',
-        title: 'اطلاعات من',
-        // icon: <PersonIcon />,
-        icon: <ProfileIcon />,
-    },
-    {
-        link: 'contracts',
-        title: 'قرارداد های من',
-        icon: <ContractIcon />,
-    },
-    {
-        link: 'transactions',
-        title: 'تراکنش های من',
-        icon: <TransactionIcon />,
-    },
-    {
-        link: 'wallet',
-        title: 'کیف پول',
-        icon: <WalletIcon />,
-    },
-    {
-        link: 'deposit',
-        title: 'افزایش موجودی',
-        icon: <ArrowUpIcon />,
-    },
-    {
-        link: 'withdraw',
-        title: 'برداشت موجودی',
-        icon: <ArrowDownIcon />,
-    },
-    {
-        link: '/',
-        title: 'رفتن به سایت',
-        icon: <GlobeIcon />,
-    },
-]
 
 const Dashboard: FC = () => {
     const user = useAtomValue(UserAtom)
@@ -99,6 +63,65 @@ const Dashboard: FC = () => {
 
 const Sidebar: FC = ({}) => {
     const user = useAtomValue(UserAtom)
+    const token = useAtomValue(TokenAtom)
+    const navigate = useNavigate()
+
+    const add_contract = async () => {
+        const response = await axios.post(
+            '/api/contracts/',
+            {
+                title: 'قرار داد جدید',
+                data: {},
+            },
+            { headers: { Authorization: 'Bearer ' + token } }
+        )
+        navigate('/dashboard/contract/' + response.data.id)
+    }
+
+    const SIDEBAR_LINKS: SidebarLinkModel[] = [
+        {
+            link: '',
+            title: 'اطلاعات من',
+            // icon: <PersonIcon />,
+            icon: <ProfileIcon />,
+        },
+        {
+            link: 'contracts',
+            title: 'قرارداد های من',
+            icon: <ContractIcon />,
+        },
+        {
+            onclick: add_contract,
+            link: 'contract',
+            title: 'قرارداد جدید',
+            icon: <NewContractIcon />,
+        },
+        {
+            link: 'transactions',
+            title: 'تراکنش های من',
+            icon: <TransactionIcon />,
+        },
+        {
+            link: 'wallet',
+            title: 'کیف پول',
+            icon: <WalletIcon />,
+        },
+        {
+            link: 'deposit',
+            title: 'افزایش موجودی',
+            icon: <ArrowUpIcon />,
+        },
+        {
+            link: 'withdraw',
+            title: 'برداشت موجودی',
+            icon: <ArrowDownIcon />,
+        },
+        {
+            link: '/',
+            title: 'رفتن به سایت',
+            icon: <GlobeIcon />,
+        },
+    ]
 
     return (
         <aside className='sidebar'>
@@ -138,25 +161,49 @@ type SidebarLinkProps = SidebarLinkModel & {
     idx?: number
 }
 
-const SidebarLink: FC<SidebarLinkProps> = ({ title, icon, link, idx = 0 }) => {
+const SidebarLink: FC<SidebarLinkProps> = ({
+    title,
+    icon,
+    link,
+    onclick,
+    idx = 0,
+}) => {
     let active = false
     if (!['/', '/admin/'].includes(link))
         active = !!useMatch('/dashboard/' + link)
 
     return (
-        <Link
-            to={link}
-            className={`column-wrapper ${C(active)}`}
-            style={{ '--idx': idx }}
-        >
-            <div className='column'>
-                <div className='holder-icon icon'>{icon}</div>
-                <div className='holder-text '>{title}</div>
-            </div>
-            <div className='send-icon icon'>
-                <SendIcon size={25} />
-            </div>
-        </Link>
+        <>
+            {onclick ? (
+                <button
+                    onClick={onclick}
+                    className={`column-wrapper ${C(active)}`}
+                    style={{ '--idx': idx }}
+                >
+                    <div className='column'>
+                        <div className='holder-icon icon'>{icon}</div>
+                        <div className='holder-text '>{title}</div>
+                    </div>
+                    <div className='send-icon icon'>
+                        <SendIcon size={25} />
+                    </div>
+                </button>
+            ) : (
+                <Link
+                    to={link}
+                    className={`column-wrapper ${C(active)}`}
+                    style={{ '--idx': idx }}
+                >
+                    <div className='column'>
+                        <div className='holder-icon icon'>{icon}</div>
+                        <div className='holder-text '>{title}</div>
+                    </div>
+                    <div className='send-icon icon'>
+                        <SendIcon size={25} />
+                    </div>
+                </Link>
+            )}
+        </>
     )
 }
 
