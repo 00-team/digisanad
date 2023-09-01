@@ -148,6 +148,14 @@
 
                 &.active {
                     color: var(--ten-percent);
+
+                    svg {
+                        fill: var(--ten-percent);
+
+                        path {
+                            stroke: var(--ten-percent);
+                        }
+                    }
                 }
 
                 .column {
@@ -225,13 +233,9 @@
             width: 100%;
             // height: auto;
 
-            padding: 7vh 5vw;
+            padding: 3vh 1vw;
 
             direction: ltr;
-
-            @media screen and (max-width: 1024px) {
-                padding: 5vh 3vw;
-            }
         }
     }
 }
