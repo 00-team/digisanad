@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
+import { EditIcon, InviteIcon } from 'icons'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
@@ -40,18 +41,6 @@ const Contracts: FC = () => {
         setState(response.data)
     }
 
-    const add_contract = async () => {
-        const response = await axios.post(
-            '/api/contracts/',
-            {
-                title: 'قرار داد جدید',
-                data: {},
-            },
-            { headers: { Authorization: 'Bearer ' + token } }
-        )
-        navigate('/dashboard/contract/' + response.data.id)
-    }
-
     useEffect(() => {
         fetch_contracts()
     }, [page])
@@ -60,9 +49,42 @@ const Contracts: FC = () => {
         <section className='contract-list'>
             <div className='contracts'>
                 {state.map(s => (
-                    <div className='contract' key={s.contract_id}>
+                    <div className='contract title_smaller' key={s.contract_id}>
                         <h2 className='title'>{s.title}</h2>
-                        <span>وضعیت: {CSMAP[s.stage]} </span>
+                        <div className='contract-details title_smaller'>
+                            <div className='contract-detail'>
+                                <div className='holder'>
+                                    <EditIcon size={20} />
+                                    شماره قرارداد:
+                                </div>
+                                <div className='data'>{s.contract_id}</div>
+                            </div>
+                            <div className='contract-detail'>
+                                <div className='holder'>
+                                    <InviteIcon size={20} />
+                                    قابلیت دعوت:
+                                </div>
+                                <div className='data'>
+                                    {s.disable_invites ? (
+                                        <span
+                                            style={{
+                                                color: '#008149',
+                                            }}
+                                        >
+                                            دارد
+                                        </span>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color: 'var(--alert-error)',
+                                            }}
+                                        >
+                                            ندارد
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                         <button
                             onClick={() =>
                                 navigate('/dashboard/contract/' + s.contract_id)
@@ -75,17 +97,7 @@ const Contracts: FC = () => {
             </div>
 
             <div className='actions'>
-                <button style={{ '--color': 'green' }} onClick={add_contract}>
-                    قرارداد جدید
-                </button>
                 <div className='pagination'>
-                    <button
-                        onClick={() =>
-                            navigate('/dashboard/contracts/' + (page + 1))
-                        }
-                    >
-                        صفحه بعدی
-                    </button>
                     <button
                         disabled={page == 0}
                         onClick={() =>
@@ -93,6 +105,13 @@ const Contracts: FC = () => {
                         }
                     >
                         صفحه قبلی
+                    </button>
+                    <button
+                        onClick={() =>
+                            navigate('/dashboard/contracts/' + (page + 1))
+                        }
+                    >
+                        صفحه بعدی
                     </button>
                 </div>
             </div>
