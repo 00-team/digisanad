@@ -1,16 +1,16 @@
 import React, {
     Dispatch,
-    SetStateAction,
     FC,
+    SetStateAction,
     useEffect,
-    useState,
     useRef,
+    useState,
 } from 'react'
 
 import { C } from '@00-team/utils'
 
 import axios, { AxiosResponse } from 'axios'
-import { CopyIcon, RemoveIcon } from 'icons'
+import { ContractIcon, CopyIcon, EditIcon, RemoveIcon } from 'icons'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -371,7 +371,40 @@ const SelectSchema: FC<CommonProps> = ({ setState }) => {
                 {schemas.map(s => (
                     <div className='schema' key={s.schema_id}>
                         <h2 className='title'>{s.title}</h2>
-                        <p>{s.description}</p>
+                        <div className='schema-details title_smaller'>
+                            <div className='schema-detail'>
+                                <div className='holder'>
+                                    <ContractIcon />
+                                    وضعیت:
+                                </div>
+                                <div className='data'>
+                                    {s.draft ? (
+                                        <span
+                                            style={{
+                                                color: 'var(--alert-error)',
+                                            }}
+                                        >
+                                            در حال تکمیل
+                                        </span>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color: '#008149',
+                                            }}
+                                        >
+                                            تکمیل شده
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div className='schema-detail'>
+                                <div className='holder'>
+                                    <EditIcon size={20} />
+                                    شماره قرارداد:
+                                </div>
+                                <div className='data'>{s.schema_id}</div>
+                            </div>
+                        </div>
                         <button
                             onClick={() =>
                                 setState(ss => ({
