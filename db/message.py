@@ -28,6 +28,6 @@ async def message_add(**values: dict) -> int:
 async def message_unseen_count(user_id: int) -> int:
     query = '''
         SELECT COUNT(0) FROM messages
-        WHERE seen IS false AND receiver = :user_id
+        WHERE seen = false AND receiver = :user_id
     '''
     return (await sqlx.fetch_one(query, {'user_id': user_id}))[0]
