@@ -260,7 +260,11 @@ const Contract: FC = () => {
                 <div className='parties'>
                     <div className='users'>
                         {state.parties.map((user, i) => (
-                            <div className='user' key={i}>
+                            <div
+                                className='user'
+                                key={i}
+                                style={{ animationDelay: `${i * 100}ms` }}
+                            >
                                 <div className='user-wrapper'>
                                     <PersonIcon
                                         className={`${
