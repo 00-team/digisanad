@@ -3,7 +3,14 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { C } from '@00-team/utils'
 
 import axios, { AxiosResponse } from 'axios'
-import { ContractIcon, CopyIcon, EditIcon, PersonIcon, RemoveIcon } from 'icons'
+import {
+    CheckIcon,
+    ContractIcon,
+    CopyIcon,
+    EditIcon,
+    PersonIcon,
+    RemoveIcon,
+} from 'icons'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -214,7 +221,7 @@ const Contract: FC = () => {
                         className='save-btn cta-btn title_smaller'
                         onClick={() => save_contract({ data: state.data })}
                     >
-                        <CopyIcon />
+                        <CheckIcon />
                         ذخیره
                     </button>
 
