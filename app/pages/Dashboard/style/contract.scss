@@ -197,31 +197,39 @@
         }
 
         .parties {
-            width: 300px;
-            flex-shrink: 0;
-            background: var(--accent-color);
-            color: var(--primary-color);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            flex-shrink: 0;
+
             height: 100%;
+            width: clamp(0px, 100%, 300px);
+
+            background: var(--accent-color);
+            color: var(--primary-color);
+
+            overflow: hidden;
 
             .users {
                 display: flex;
                 flex-direction: column;
-                overflow-y: auto;
-                height: 100%;
-                padding: 0.2rem 1rem;
+                gap: 1vh;
 
+                height: 100%;
+                padding: 0.5rem 1rem;
+
+                overflow-y: auto;
                 .user {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     padding: 0.3rem;
-                    border-bottom: 1px solid var(--sixty-percent);
+                    border-bottom: 2px solid var(--sixty-percent);
 
                     .fullname {
-                        font-size: 18px;
+                        font-family: 'yekan';
+                        &.bold {
+                            font-family: 'iranBold';
+                        }
                     }
 
                     .remove {
