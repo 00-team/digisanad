@@ -342,7 +342,7 @@ const Contract: FC = () => {
 
                                 navigator.clipboard.writeText(link)
 
-                                ReactAlert.show('لینک با موفقیت کپی شد')
+                                ReactAlert.show('لینک با موفقیت کپی شد.')
                             }}
                         >
                             <CopyIcon />
