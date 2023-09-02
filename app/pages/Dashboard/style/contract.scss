@@ -225,8 +225,25 @@
                     padding: 0.3rem;
                     border-bottom: 2px solid var(--sixty-percent);
 
+                    transform: translateY(200%);
+                    opacity: 0;
+
                     position: relative;
                     isolation: isolate;
+
+                    animation: user-slidein 1s
+                        cubic-bezier(0.45, 0.02, 0.09, 0.98) forwards;
+
+                    @keyframes user-slidein {
+                        from {
+                            transform: translateY(200%);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateY(0%);
+                            opacity: 1;
+                        }
+                    }
 
                     .user-wrapper {
                         display: flex;
