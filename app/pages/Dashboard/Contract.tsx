@@ -305,7 +305,7 @@ const Contract: FC = () => {
                     </div>
                     <div className='config'>
                         <button
-                            className='toggle-invites'
+                            className='toggle-invites title_smaller'
                             style={{
                                 '--color': state.disable_invites
                                     ? 'red'
@@ -324,7 +324,15 @@ const Contract: FC = () => {
                                 })
                             }}
                         >
-                            دعوت: {state.disable_invites ? 'غیرفعال' : 'فعال'}
+                            دعوت:{' '}
+                            <div
+                                className={`options-wrapper ${C(
+                                    state.disable_invites
+                                )}`}
+                            >
+                                <div className={`enable`}>فعال</div>
+                                <div className={`disable`}>غیرفعال</div>
+                            </div>
                         </button>
                         <div className='link'>
                             <input
