@@ -139,7 +139,7 @@
                 padding: 0.5rem 1rem;
 
                 color: black;
-                border: 1px solid black;
+                border: 2px solid black;
                 border-radius: 5px;
 
                 cursor: pointer;
@@ -156,12 +156,23 @@
                 }
 
                 &.remove-btn {
-                    border-color: red;
+                    border-color: var(--alert-error);
+                    &:hover {
+                        color: white;
+                        background-color: var(--alert-error);
+                    }
+                }
+
+                &.save-btn {
+                    border-color: green;
+                    &:hover {
+                        color: white;
+                        background-color: green;
+                    }
                 }
             }
 
             .pager {
-                font-family: monospace;
                 display: grid;
                 place-items: center;
 
