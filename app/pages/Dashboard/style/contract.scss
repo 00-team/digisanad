@@ -282,6 +282,7 @@
                 flex-shrink: 0;
                 display: flex;
                 flex-direction: column;
+                gap: 1vh;
 
                 button {
                     border: 2px solid red;
@@ -339,24 +340,24 @@
                     }
                 }
 
-                .link {
-                    padding: 0.3rem 0;
+                button.link-copy {
                     display: flex;
                     align-items: center;
-                    gap: 0.3rem;
+                    justify-content: center;
+                    gap: 0.5rem;
 
-                    button {
-                        color: green;
-                        border-color: limegreen;
-                    }
+                    padding: 0.5rem 0.7rem;
 
-                    input {
-                        border-radius: 5px;
-                        border: 2px solid var(--primary-color);
-                        background: transparent;
-                        width: 100%;
-                        padding: 0.1rem 0.3rem;
-                        direction: ltr;
+                    border-color: var(--ten-percent);
+
+                    width: 100%;
+
+                    direction: ltr;
+
+                    span {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
             }
