@@ -1,11 +1,4 @@
-import React, {
-    Dispatch,
-    FC,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-} from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
@@ -65,7 +58,6 @@ const Contract: FC = () => {
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
     const me = useAtomValue(UserAtom)
-    const join_link = useRef<HTMLInputElement>(null)
 
     const [state, setState] = useState<State>({
         title: '',
@@ -334,27 +326,23 @@ const Contract: FC = () => {
                                 <div className={`disable`}>غیرفعال</div>
                             </div>
                         </button>
-                        <div className='link'>
-                            <input
-                                ref={join_link}
-                                value={`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
-                                onChange={() => {}}
-                            />
-                            <button
-                                onClick={() => {
-                                    if (!join_link.current) return
+                        <button
+                            className='link-copy title_smaller'
+                            onClick={() => {
+                                console.log('slm')
+                                const link = `${location.origin}/jc/${state.contract_id}:${state.pepper}`
+                                if (!link) return
 
-                                    join_link.current.select()
-                                    join_link.current.setSelectionRange(0, 9999)
+                                navigator.clipboard.writeText(link)
 
-                                    navigator.clipboard.writeText(
-                                        join_link.current.value
-                                    )
-                                }}
-                            >
-                                <CopyIcon />
-                            </button>
-                        </div>
+                                ReactAlert.show('لینک با موفقیت کپی شد')
+                            }}
+                        >
+                            <CopyIcon />
+                            <span>
+                                {`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
