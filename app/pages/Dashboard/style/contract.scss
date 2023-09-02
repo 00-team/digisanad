@@ -290,12 +290,53 @@
                 }
 
                 .toggle-invites {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    overflow: hidden;
+
                     --color: green;
                     &.active {
                         --color: red;
                     }
 
                     border-color: var(--color);
+
+                    .options-wrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        position: relative;
+                        isolation: isolate;
+
+                        .enable {
+                            transform: translateY(0);
+                        }
+                        .disable {
+                            position: absolute;
+                            inset: 0;
+
+                            transform: translateY(-200%);
+                        }
+
+                        .enable,
+                        .disable {
+                            font-family: 'yekanBold';
+                            transition: transform 0.5s
+                                cubic-bezier(0.45, 0.02, 0.09, 0.98);
+                        }
+
+                        &.active {
+                            .enable {
+                                transform: translateY(-200%);
+                            }
+                            .disable {
+                                transform: translateY(0);
+                            }
+                        }
+                    }
                 }
 
                 .link {
