@@ -225,14 +225,35 @@
                     padding: 0.3rem;
                     border-bottom: 2px solid var(--sixty-percent);
 
-                    .fullname {
-                        font-family: 'yekan';
-                        &.bold {
-                            font-family: 'iranBold';
+                    position: relative;
+                    isolation: isolate;
+
+                    .user-wrapper {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+
+                        transition: 0.3s color
+                            cubic-bezier(0.45, 0.02, 0.09, 0.98);
+                        svg {
+                            &.active {
+                                color: var(--ten-percent);
+                            }
+                        }
+                        .fullname {
+                            font-family: 'yekan';
+
+                            &.bold {
+                                font-family: 'iranBold';
+                            }
                         }
                     }
 
                     .remove {
+                        color: var(--alert-error);
+                    }
+
+                    &:has(.remove:hover) .user-wrapper {
                         color: var(--alert-error);
                     }
                 }
