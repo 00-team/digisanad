@@ -10,7 +10,7 @@ import React, {
 import { C } from '@00-team/utils'
 
 import axios, { AxiosResponse } from 'axios'
-import { ContractIcon, CopyIcon, EditIcon, RemoveIcon } from 'icons'
+import { ContractIcon, CopyIcon, EditIcon, PersonIcon, RemoveIcon } from 'icons'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -261,16 +261,26 @@ const Contract: FC = () => {
                     <div className='users'>
                         {state.parties.map((user, i) => (
                             <div className='user' key={i}>
-                                <span
-                                    className={`fullname title_small ${
-                                        state.creator == me.user_id &&
-                                        user.user_id != me.user_id
-                                            ? ''
-                                            : 'bold'
-                                    }`}
-                                >
-                                    {user.first_name} {user.last_name}
-                                </span>
+                                <div className='user-wrapper'>
+                                    <PersonIcon
+                                        className={`${
+                                            state.creator == me.user_id &&
+                                            user.user_id != me.user_id
+                                                ? ''
+                                                : 'active'
+                                        }`}
+                                    />
+                                    <span
+                                        className={`fullname title_small ${
+                                            state.creator == me.user_id &&
+                                            user.user_id != me.user_id
+                                                ? ''
+                                                : 'bold'
+                                        }`}
+                                    >
+                                        {user.first_name} {user.last_name}
+                                    </span>
+                                </div>
                                 {state.creator == me.user_id &&
                                     user.user_id != me.user_id && (
                                         <button
