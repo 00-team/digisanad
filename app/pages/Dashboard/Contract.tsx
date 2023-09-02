@@ -261,7 +261,14 @@ const Contract: FC = () => {
                     <div className='users'>
                         {state.parties.map((user, i) => (
                             <div className='user' key={i}>
-                                <span className='fullname'>
+                                <span
+                                    className={`fullname title_small ${
+                                        state.creator == me.user_id &&
+                                        user.user_id != me.user_id
+                                            ? ''
+                                            : 'bold'
+                                    }`}
+                                >
                                     {user.first_name} {user.last_name}
                                 </span>
                                 {state.creator == me.user_id &&
