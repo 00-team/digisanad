@@ -36,7 +36,7 @@ export const DashboardIcon: Icon = ({ size = '24', ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 24 24'
         height={size}
         width={size}
@@ -51,7 +51,7 @@ export const NewContractIcon: Icon = ({ size = '24', ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 1024 1024'
         height={size}
         width={size}
