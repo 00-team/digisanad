@@ -5,7 +5,7 @@ import React, {
     ReactNode,
     useEffect,
     useRef,
-    useState
+    useState,
 } from 'react'
 
 import axios from 'axios'
@@ -14,14 +14,14 @@ import {
     CheckIcon,
     CloseIcon,
     LockColoredIcon,
-    WarningIcon
+    WarningIcon,
 } from 'icons'
 import {
     MapContainer,
     Marker,
     Popup,
     TileLayer,
-    useMapEvents
+    useMapEvents,
 } from 'react-leaflet'
 
 import { useAtomValue } from 'jotai'
@@ -42,7 +42,7 @@ import {
     StrField,
     TextField,
     UserField,
-    UserPublic
+    UserPublic,
 } from './types'
 import { ParsedField, parseFields } from './utils'
 
@@ -247,8 +247,13 @@ const LockInput: FC = () => {
                             </p>
                         </div>
                         <div className='cta-container title_small'>
+                            <button
+                                className='cancel'
+                                onClick={() => setclicked(false)}
+                            >
+                                منصرف
+                            </button>
                             <button className='submit'>تایید</button>
-                            <button className='cancel' onClick={()=> setclicked(false)}>منصرف</button>
                         </div>
                     </div>
                 </div>
@@ -887,4 +892,3 @@ const field_map: FMF = {
 }
 
 export { Viewer }
-
