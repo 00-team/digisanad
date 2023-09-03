@@ -122,7 +122,7 @@ export const InviteIcon: Icon = ({ size = '24', ...attr }) => (
     <svg
         stroke='currentColor'
         fill='currentColor'
-        stroke-width='0'
+        strokeWidth='0'
         viewBox='0 0 16 16'
         height={size}
         width={size}
