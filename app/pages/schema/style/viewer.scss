@@ -7,6 +7,7 @@
 
     > div {
         padding: 0.2rem 0;
+        margin-top: 2vh;
     }
 
     .field-wrapper {
@@ -61,6 +62,25 @@
 
             &:checked::before {
                 transform: translateY(0);
+            }
+        }
+
+        .lock-container {
+            display: block;
+            padding: 0.5rem 0;
+
+            .lock {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+
+                padding: 1rem 2rem;
+
+                background: white;
+                border-radius: 10px;
+
+                font-family: 'iranBold';
             }
         }
     }
