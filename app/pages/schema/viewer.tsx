@@ -10,8 +10,13 @@ import React, {
 
 import axios from 'axios'
 import { ArrowDownIcon, CheckIcon, CloseIcon } from 'icons'
-import { MapContainer, TileLayer } from 'react-leaflet'
-import { Marker, Popup, useMapEvents } from 'react-leaflet'
+import {
+    MapContainer,
+    Marker,
+    Popup,
+    TileLayer,
+    useMapEvents,
+} from 'react-leaflet'
 
 import { useAtomValue } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
@@ -20,23 +25,20 @@ import { DatePicker } from './DatePicker'
 import {
     FieldProps,
     FieldType,
+    GeoField,
+    IntField,
+    OptionFeild,
     PriceField,
+    QuestionField,
+    RecordField,
     SchemaData,
+    SignatureField,
+    StrField,
     TextField,
     UserField,
     UserPublic,
 } from './types'
-import {
-    GeoField,
-    IntField,
-    OptionFeild,
-    QuestionField,
-    RecordField,
-    SignatureField,
-    StrField,
-} from './types'
-import { ParsedField } from './utils'
-import { parseFields } from './utils'
+import { ParsedField, parseFields } from './utils'
 
 import './style/viewer.scss'
 
@@ -196,6 +198,7 @@ const Viewer: FC<ViewerProps> = ({
                             contract_id={contract_id}
                             disabled={disabled}
                         />
+                        <LockInput />
                     </span>
                 )
             }
@@ -207,6 +210,44 @@ const Viewer: FC<ViewerProps> = ({
     }, [schema, page, users])
 
     return <div className='schema-viewer title_small'>{result}</div>
+}
+
+const LockInput: FC = () => {
+    const [clicked, setclicked] = useState(false)
+    return (
+        <>
+            <div className='lock-container'>
+                <button
+                    className='lock title_smaller'
+                    onClick={() => setclicked(true)}
+                >
+                    <svg
+                        stroke='currentColor'
+                        fill='currentColor'
+                        strokeWidth='0'
+                        version='1'
+                        viewBox='0 0 48 48'
+                        enableBackground='new 0 0 48 48'
+                        height='25'
+                        width='25'
+                        xmlns='http://www.w3.org/2000/svg'
+                    >
+                        <path
+                            fill='#424242'
+                            d='M24,4c-5.5,0-10,4.5-10,10v4h4v-4c0-3.3,2.7-6,6-6s6,2.7,6,6v4h4v-4C34,8.5,29.5,4,24,4z'
+                        ></path>
+                        <path
+                            fill='#FB8C00'
+                            d='M36,44H12c-2.2,0-4-1.8-4-4V22c0-2.2,1.8-4,4-4h24c2.2,0,4,1.8,4,4v18C40,42.2,38.2,44,36,44z'
+                        ></path>
+                        <circle fill='#C76E00' cx='24' cy='31' r='3'></circle>
+                    </svg>
+                    قفل نهایی؟
+                </button>
+            </div>
+            {clicked && <div className='lock-popup'></div>}
+        </>
+    )
 }
 
 type FMF = {
