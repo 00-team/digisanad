@@ -85,18 +85,18 @@ const Contracts: FC = () => {
                                     {s.disable_invites ? (
                                         <span
                                             style={{
-                                                color: '#008149',
-                                            }}
-                                        >
-                                            دارد
-                                        </span>
-                                    ) : (
-                                        <span
-                                            style={{
                                                 color: 'var(--alert-error)',
                                             }}
                                         >
                                             ندارد
+                                        </span>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color: '#008149',
+                                            }}
+                                        >
+                                            دارد
                                         </span>
                                     )}
                                 </div>
