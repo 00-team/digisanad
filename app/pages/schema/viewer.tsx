@@ -172,7 +172,7 @@ const Viewer: FC<ViewerProps> = ({
                 let FMFC = field_map[field.type]
                 let disabled = false
 
-                if (render) {
+                if (render || field.lock) {
                     disabled = true
                 } else if (contract_id && field.changers.length) {
                     disabled = true
@@ -204,7 +204,14 @@ const Viewer: FC<ViewerProps> = ({
                             contract_id={contract_id}
                             disabled={disabled}
                         />
-                        <LockInput />
+                        {!field.lock && (
+                            <LockInput
+                                cb={() => {
+                                    field.lock = true
+                                    setSchema({}, false)
+                                }}
+                            />
+                        )}
                     </span>
                 )
             }
@@ -218,7 +225,11 @@ const Viewer: FC<ViewerProps> = ({
     return <div className='schema-viewer title_small'>{result}</div>
 }
 
-const LockInput: FC = () => {
+interface LockInputProps {
+    cb: () => void
+}
+
+const LockInput: FC<LockInputProps> = ({ cb }) => {
     const [clicked, setclicked] = useState(false)
     return (
         <>
@@ -236,7 +247,7 @@ const LockInput: FC = () => {
                     <div className='popup-details'>
                         <WarningIcon
                             style={{ color: 'white' }}
-                            size={75}
+                            size={100}
                             className='warning-icon'
                         />
                         <div className='detail'>
@@ -251,9 +262,17 @@ const LockInput: FC = () => {
                                 className='cancel'
                                 onClick={() => setclicked(false)}
                             >
-                                منصرف
+                                انصراف
                             </button>
-                            <button className='submit'>تایید</button>
+                            <button
+                                className='submit'
+                                onClick={() => {
+                                    cb()
+                                    return setclicked(false)
+                                }}
+                            >
+                                تایید
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -360,6 +379,7 @@ const StrFC: FieldProps<StrField> = ({ field, update, disabled }) => {
 
     return (
         <input
+            className='title_smaller'
             placeholder={field.placeholder}
             value={field.value}
             onInput={e => {
