@@ -22,6 +22,9 @@
             border-bottom: 1px solid black;
             color: black;
         }
+        input:not([type='number'], [type='radio'], [type='checkbox']) {
+            padding: 0.5rem 1.5rem;
+        }
 
         input[type='number'] {
             text-align: center;
@@ -125,7 +128,7 @@
                     justify-content: center;
                     gap: 2vh;
 
-                    margin-top: -10vh;
+                    margin-top: -5vh;
 
                     padding: 1rem 2rem;
 
