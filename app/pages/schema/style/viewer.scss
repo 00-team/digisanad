@@ -105,12 +105,13 @@
                 align-items: center;
                 gap: 2vh;
 
-                padding: 1rem;
-
                 width: clamp(0px, 100%, 700px);
 
                 border-radius: 10px;
-                background-color: white;
+
+                padding-top: 5vh;
+
+                background: var(--alert-error);
 
                 // debug
                 height: 50vh;
@@ -124,10 +125,40 @@
                     justify-content: center;
                     gap: 2vh;
 
-                    margin-top: -4vh;
+                    margin-top: -10vh;
+
+                    padding: 1rem 2rem;
+
+                    color: white;
 
                     span {
                         font-family: 'iranBold';
+                    }
+                }
+
+                .cta-container {
+                    padding: 3vh 0;
+                    background-color: white;
+                    width: 100%;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 2rem;
+
+                    button {
+                        padding: 1rem 3rem;
+
+                        color: white;
+
+                        border-radius: 5px;
+
+                        &.submit {
+                            background-color: var(--alert-error);
+                        }
+                        &.cancel {
+                            background-color: grey;
+                        }
                     }
                 }
 
