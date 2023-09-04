@@ -1,7 +1,8 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { C } from '@00-team/utils'
 
+import { user_get_me } from 'api'
 import axios from 'axios'
 import {
     ArrowDownIcon,
@@ -17,7 +18,7 @@ import {
 } from 'icons'
 import { Link, Navigate, Outlet, useMatch, useNavigate } from 'react-router-dom'
 
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
 
 import { LogoutButton } from 'components/common/LogoutButton'
@@ -45,10 +46,25 @@ type SidebarLinkModel = {
 }
 
 const Dashboard: FC = () => {
-    const user = useAtomValue(UserAtom)
+    const [user, setUser] = useAtom(UserAtom)
+    const [token, setToken] = useAtom(TokenAtom)
+    const navigate = useNavigate()
 
-    if (user.user_id == null)
-        return <Navigate to={'/login/?next=' + location.pathname} />
+    useEffect(() => {
+        if (!token) return
+        if (user.user_id) return
+
+        user_get_me(token).then(data => {
+            if (data === null) {
+                setToken('')
+                navigate('/login/?next=' + location.pathname)
+            } else {
+                setUser(data)
+            }
+        })
+    }, [token])
+
+    if (!token) return <Navigate to={'/login/?next=' + location.pathname} />
 
     return (
         <main className='dashboard-container'>
@@ -136,14 +152,14 @@ const Sidebar: FC = ({}) => {
                 {SIDEBAR_LINKS.map((args, i) => (
                     <SidebarLink {...args} key={i} idx={i} />
                 ))}
-                {user.admin && (
+                {BigInt(user.admin) ? (
                     <SidebarLink
                         link='/admin/'
                         title='پنل مدریت'
                         icon={<ToolIcon />}
                         idx={SIDEBAR_LINKS.length}
                     />
-                )}
+                ) : null}
                 <LogoutButton
                     style={{
                         animationDelay: `${
