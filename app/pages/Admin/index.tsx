@@ -41,7 +41,7 @@ const Sidebar: FC = () => {
 
     const add_schema = async () => {
         const response = await axios.post(
-            '/api/admins/schemas/',
+            '/api/admin/schemas/',
             {
                 title: 'قرارداد جدید',
                 data: {

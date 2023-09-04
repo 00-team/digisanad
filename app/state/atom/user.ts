@@ -81,6 +81,43 @@ const AP = {
     D_SCHEMA: 1n << 23n,
 } as const
 
+type PL = {
+    [K in keyof typeof AP]: {
+        display: string
+    }
+}
+export const PermList: PL = {
+    MASTER: { display: 'تمام دسترسی ها' },
+
+    V_USER: { display: 'نمایش کابران' },
+    A_USER: { display: 'اضافه کردن کابران' },
+    C_USER: { display: 'تغییر کابران' },
+    D_USER: { display: 'حذف کابران' },
+
+    V_TRANSACTION: { display: 'نمایش تراکنش' },
+    A_TRANSACTION: { display: 'اضافه کردن تراکنش' },
+    C_TRANSACTION: { display: 'تغییر تراکنش' },
+    D_TRANSACTION: { display: 'حذف تراکنش' },
+
+    V_WALLET: { display: 'نمایش کیف پول' },
+    A_WALLET: { display: 'اضافه کردن کیف پول' },
+    C_WALLET: { display: 'تغییر کیف پول' },
+    D_WALLET: { display: 'حذف کیف پول' },
+
+    V_GENERAL: { display: 'نمایش تنظیمات' },
+    C_GENERAL: { display: 'تغییر تنظیمات' },
+
+    V_MESSAGE: { display: 'نمایش پیام' },
+    A_MESSAGE: { display: 'اضافه کردن پیام' },
+    C_MESSAGE: { display: 'تغییر پیام' },
+    D_MESSAGE: { display: 'حذف پیام' },
+
+    V_SCHEMA: { display: 'نمایش قالب' },
+    A_SCHEMA: { display: 'اضافه کردن قالب' },
+    C_SCHEMA: { display: 'تغییر قالب' },
+    D_SCHEMA: { display: 'حذف قالب' },
+}
+
 type AdminPermsModel = {
     perms: bigint
     check: (perms: bigint) => boolean

@@ -67,7 +67,7 @@ const Schema: FC = () => {
     const insert = useRef<Inserter>()
 
     const fetch_schema = async () => {
-        const response = await axios.get(`/api/admins/schemas/${schema_id}/`, {
+        const response = await axios.get(`/api/admin/schemas/${schema_id}/`, {
             headers: { Authorization: 'Bearer ' + token },
         })
 
@@ -119,7 +119,7 @@ const Schema: FC = () => {
                         className='copy-btn cta-btn title_smaller'
                         onClick={async () => {
                             const response = await axios.patch(
-                                `/api/admins/schemas/${schema_id}/`,
+                                `/api/admin/schemas/${schema_id}/`,
                                 {
                                     data: state.schema,
                                     draft: state.draft,

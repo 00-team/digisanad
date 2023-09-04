@@ -4,22 +4,24 @@ from typing import ClassVar
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
+from sqlalchemy import select
 
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
 from db.models import GeneralModel, MessageLevel, SchemaData, SchemaModel
-from db.models import SchemaTable, UserModel
+from db.models import SchemaTable, UserModel, UserTable
 from db.schema import schema_add, schema_delete, schema_get, schema_update
+from db.user import user_get, user_update
 from deps import admin_required
 from shared import settings, sqlx
-from shared.errors import bad_id, no_change
+from shared.errors import bad_id, forbidden, no_change
 from shared.models import IDModel, OkModel
-from shared.tools import utc_now
+from shared.tools import isallnum, utc_now
 
 router = APIRouter(
-    prefix='/admins',
-    tags=['admins'],
+    prefix='/admin',
+    tags=['admin'],
     dependencies=[admin_required()]
 )
 
@@ -178,3 +180,79 @@ async def delete_schema(request: Request, schema_id: int):
     user.admin_assert(AP.D_SCHEMA)
 
     return {'ok': await schema_delete(schema_id)}
+
+
+class GetUsersBody(BaseModel):
+    page: int = 0
+    perms: str = None
+    phone: constr(max_length=11, min_length=1, strip_whitespace=True) = None
+
+
+@router.post('/users/', response_model=list[UserModel])
+async def get_users(request: Request, body: GetUsersBody):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_USER)
+
+    query = select(UserTable)
+
+    if body.perms is not None:
+        query = query.where(UserTable.admin == body.perms)
+
+    if body.phone is not None:
+        query = query.where(UserTable.phone.like(f'%{body.phone}%'))
+
+    query = (
+        query.order_by(UserTable.user_id.desc())
+        .limit(settings.page_size)
+        .offset(body.page * settings.page_size)
+    )
+
+    rows = await sqlx.fetch_all(query)
+
+    return [UserModel(**r) for r in rows]
+
+
+@router.get(
+    '/users/{user_id}/', response_model=UserModel,
+    openapi_extra={'errors': [bad_id]}
+)
+async def get_user(request: Request, user_id: int):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_USER)
+
+    target = await user_get(UserTable.user_id == user_id)
+    if target is None:
+        raise bad_id('User', user_id, id=user_id)
+
+    return UserModel(**target)
+
+
+@router.patch(
+    '/users/{user_id}/perms/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, no_change]}
+)
+async def update_user_perms(request: Request, user_id: int, perms: str):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.MASTER)
+
+    if not isallnum(perms):
+        raise ValueError('invalid perms')
+
+    target = await user_get(UserTable.user_id == user_id)
+    if target is None:
+        raise bad_id('User', user_id, id=user_id)
+
+    if target.admin_check(AP.MASTER):
+        raise forbidden
+
+    perms = int(perms or '0')
+
+    if (perms & AP.MASTER):
+        raise forbidden
+
+    if target.perms == perms:
+        raise no_change
+
+    await user_update(UserTable.user_id == user_id, admin=str(perms))
+
+    return {'ok': True}
