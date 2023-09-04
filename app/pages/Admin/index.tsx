@@ -46,8 +46,6 @@ const Admin: FC = () => {
 
     if (!token) return <Navigate to={'/login/?next=' + location.pathname} />
 
-    // if (!perms.perms) return <Navigate to='/' />
-
     return (
         <main className='admin-container'>
             <Sidebar />

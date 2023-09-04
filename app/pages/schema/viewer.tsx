@@ -204,7 +204,7 @@ const Viewer: FC<ViewerProps> = ({
                             contract_id={contract_id}
                             disabled={disabled}
                         />
-                        {!field.lock && (
+                        {!field.lock && contract_id && (
                             <LockInput
                                 cb={() => {
                                     field.lock = true

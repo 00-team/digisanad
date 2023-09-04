@@ -11,7 +11,7 @@ import React, {
 import { C } from '@00-team/utils'
 
 import axios from 'axios'
-import { CopyIcon, PlusIcon, SettingIcon, FileIcon } from 'icons'
+import { CopyIcon, PlusIcon, SettingIcon, FileIcon, RemoveIcon } from 'icons'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { SetStateAction, useAtomValue } from 'jotai'
@@ -85,6 +85,26 @@ const Schema: FC = () => {
         })
     }
 
+    const delete_schema = async () => {
+        try {
+            const response = await axios.delete(
+                `/api/admin/schemas/${schema_id}/`,
+                {
+                    headers: { Authorization: 'Bearer ' + token },
+                }
+            )
+            if (response.data.ok) {
+                navigate('/admin/contracts/')
+                return
+            }
+        } catch (error) {
+            HandleError(error)
+            return
+        }
+
+        ReactAlert.error('خطا در هنگام حذف قالب')
+    }
+
     useEffect(() => {
         if (!schema_id) return navigate('/admin/schemas/')
         let sid = parseInt(schema_id)
@@ -141,6 +161,13 @@ const Schema: FC = () => {
                     >
                         <CopyIcon size={25} />
                         ذخیره
+                    </button>
+                    <button
+                        className='remove-btn cta-btn title_smaller'
+                        onClick={() => delete_schema()}
+                    >
+                        <RemoveIcon />
+                        حذف
                     </button>
                     <button
                         className='add-btn cta-btn title_smaller'
