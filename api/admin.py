@@ -224,7 +224,7 @@ async def get_user(request: Request, user_id: int):
     if target is None:
         raise bad_id('User', user_id, id=user_id)
 
-    return UserModel(**target)
+    return target
 
 
 @router.patch(
