@@ -235,7 +235,7 @@ const LockInput: FC = () => {
                 <div className='lock-popup-wrapper'>
                     <div className='popup-details'>
                         <WarningIcon
-                            style={{ color: 'var(--alert-error)' }}
+                            style={{ color: 'white' }}
                             size={75}
                             className='warning-icon'
                         />
