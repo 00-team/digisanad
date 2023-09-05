@@ -1,5 +1,6 @@
 
 import logging
+from typing import ClassVar
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, conint, constr
@@ -22,7 +23,11 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=UserModel)
+class UserModelNoPK(UserModel):
+    w_eth_pk: ClassVar
+
+
+@router.get('/', response_model=UserModelNoPK)
 async def get(request: Request):
     user: UserModel = request.state.user
     user.token = user.token[:32]

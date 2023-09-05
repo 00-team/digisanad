@@ -1,4 +1,6 @@
 
+from typing import ClassVar
+
 from fastapi import APIRouter, Response
 from pydantic import BaseModel, EmailStr, conlist, constr, validator
 
@@ -113,8 +115,12 @@ class LoginBody(BaseModel):
     code: VerificationCode
 
 
+class UserModelNoPK(UserModel):
+    w_eth_pk: ClassVar
+
+
 class LoginResponse(BaseModel):
-    user: UserModel
+    user: UserModelNoPK
     token: str
 
 
