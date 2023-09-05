@@ -28,7 +28,7 @@ class CompanyTable(BaseTable):
     address = Column(String, nullable=False)
 
 
-class CompanyKind(str, Enum):
+class CompanyKind(int, Enum):
     PUBLIC_STOCK = auto()
     PRIVATE_STOCK = auto()
     LIMITED_RESPONSIBILITY = auto()

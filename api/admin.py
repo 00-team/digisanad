@@ -6,11 +6,13 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel, constr
 from sqlalchemy import select
 
+from db.company import company_add, company_delete, company_get, company_update
 from db.general import general_get
 from db.message import message_add
 from db.models import AdminPerms as AP
-from db.models import GeneralModel, MessageLevel, SchemaData, SchemaModel
-from db.models import SchemaTable, UserModel, UserTable
+from db.models import CompanyKind, CompanyModel, CompanyTable, GeneralModel
+from db.models import MessageLevel, SchemaData, SchemaModel, SchemaTable
+from db.models import UserModel, UserTable
 from db.schema import schema_add, schema_delete, schema_get, schema_update
 from db.user import user_get, user_update
 from deps import admin_required
@@ -256,3 +258,112 @@ async def update_user_perms(request: Request, user_id: int, perms: str):
     await user_update(UserTable.user_id == user_id, admin=str(perms))
 
     return {'ok': True}
+
+
+@router.get('/companies/', response_model=list[CompanyModel])
+async def get_companies(request: Request, page: int = 0):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_COMPANY)
+
+    query = (
+        select(CompanyTable).order_by(CompanyTable.company_id.desc())
+        .limit(settings.page_size)
+        .offset(page * settings.page_size)
+    )
+
+    rows = await sqlx.fetch_all(query)
+
+    return [CompanyModel(**r) for r in rows]
+
+
+@router.get(
+    '/companies/{company_id}/', response_model=CompanyModel,
+    openapi_extra={'errors': [bad_id]}
+)
+async def get_company(request: Request, company_id: int):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.V_COMPANY)
+
+    company = await company_get(CompanyTable.company_id == company_id)
+    if company is None:
+        raise bad_id('Company', company_id, id=company_id)
+
+    return company
+
+
+class AddCompanyBody(CompanyModel):
+    company_id: ClassVar
+
+
+@router.post('/companies/', response_model=IDModel)
+async def add_company(request: Request, body: AddCompanyBody):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.A_COMPANY)
+
+    values = body.model_dump(exclude_defaults=True)
+
+    if body.formation_date >= body.expiration_date:
+        raise ValueError('invalid formation date')
+
+    return {'id': await company_add(**values)}
+
+
+class UpdateCompanyBody(BaseModel):
+    name: str = None
+    kind: CompanyKind = None
+    ceo_name: str = None
+    cob_name: str = None
+    formation_date: int = None
+    expiration_date: int = None
+    cash_capital: int = None
+    asset_capital: str = None
+    shares: int = None
+    activity: str = None
+    net_profit: int = None
+    legal_reserve: int = None
+    address: str = None
+
+
+@router.patch(
+    'companies/{company_id}/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, no_change]}
+)
+async def update_company(
+    request: Request, company_id: int, body: UpdateCompanyBody
+):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.C_COMPANY)
+
+    patch = body.model_dump(exclude_defaults=True)
+
+    company = await company_get(
+        CompanyTable.company_id == company_id
+    )
+    if company is None:
+        raise bad_id('Company', company_id, id=company_id)
+
+    if not patch:
+        raise no_change
+
+    fdate = body.formation_date or company.formation_date
+    edate = body.expiration_date or company.expiration_date
+
+    if fdate >= edate:
+        raise ValueError('invalid formation date')
+
+    await company_update(
+        CompanyTable.company_id == company_id,
+        **patch
+    )
+
+    return {'ok': True}
+
+
+@router.delete('/companies/{company_id}/', response_model=OkModel)
+async def delete_company(request: Request, company_id: int):
+    user: UserModel = request.state.user
+    user.admin_assert(AP.D_COMPANY)
+
+    return {'ok': bool(
+        await company_delete(CompanyTable.company_id == company_id)
+    )}

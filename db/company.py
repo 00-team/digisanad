@@ -25,5 +25,5 @@ async def company_add(**values: dict) -> int:
     return await sqlx.execute(insert(CompanyTable), values)
 
 
-async def contract_delete(*where) -> int:
+async def company_delete(*where) -> int:
     return await sqlx.execute(delete(CompanyTable).where(*where))
