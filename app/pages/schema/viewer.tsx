@@ -208,7 +208,7 @@ const Viewer: FC<ViewerProps> = ({
                             <LockInput
                                 cb={() => {
                                     field.lock = true
-                                    setSchema({}, false)
+                                    setSchema({}, true)
                                 }}
                             />
                         )}
@@ -354,7 +354,7 @@ const GeoFC: FieldProps<GeoField> = ({ field, update, disabled }) => {
     return (
         <div className='geo-container'>
             <MapContainer
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '100%', zIndex: 1 }}
                 center={
                     field.value.latitude
                         ? [field.value.latitude, field.value.longitude]
@@ -430,7 +430,7 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update, disabled }) => {
     if (disabled) {
         return (
             <ul className='question-field-disabled'>
-                {field.questions.map(q => {
+                {field.questions.map((q, index) => {
                     let answer = field.answers.find(
                         a => a.uid == field.value[q.uid]
                     )
@@ -438,7 +438,7 @@ const QuestionFC: FieldProps<QuestionField> = ({ field, update, disabled }) => {
                     if (answer) answer_text = answer.display
 
                     return (
-                        <li>
+                        <li key={index}>
                             {q.display}: {answer_text}
                         </li>
                     )
@@ -496,16 +496,6 @@ const RecordFC: FieldProps<RecordField> = ({
     const token = useAtomValue(TokenAtom)
     const local_id = useRef(0)
 
-    if (disabled) {
-        return (
-            <div className='record-disabled'>
-                {field.value.map(([, url]) => (
-                    <img src={url} />
-                ))}
-            </div>
-        )
-    }
-
     useEffect(() => {
         if (!contract_id) return
 
@@ -545,6 +535,20 @@ const RecordFC: FieldProps<RecordField> = ({
     const update_records = async (files: FileList | null) => {
         if (!files || !files.length) return
 
+        const IMAGE_MIMETYPE = [
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+            'image/gif',
+            'image/webm',
+        ]
+
+        for (let fdx = 0; fdx < files.length; fdx++) {
+            if (!IMAGE_MIMETYPE.includes(files[fdx]!.type)) {
+                return ReactAlert.error('فورمت فایل عکس نیست!')
+            }
+        }
+
         if (field.plural) {
             let results: RecordField['value'] = []
 
@@ -567,6 +571,17 @@ const RecordFC: FieldProps<RecordField> = ({
 
             setRecords([result])
         }
+        return
+    }
+
+    if (disabled) {
+        return (
+            <div className='record-disabled'>
+                {field.value.map(([, url], index) => (
+                    <img className='fixed-img' src={url} key={index} />
+                ))}
+            </div>
+        )
     }
 
     return (
@@ -612,7 +627,7 @@ const RecordFC: FieldProps<RecordField> = ({
                 onChange={e => update_records(e.currentTarget.files)}
                 type='file'
                 multiple={field.plural}
-                accept='.pdf, .jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
+                accept='.jpg, .jpeg, .png, image/jpg, image/jpeg, image/png'
             />
         </div>
     )
