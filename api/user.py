@@ -2,6 +2,7 @@
 import logging
 from typing import ClassVar
 
+import httpx
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, conint, constr
 
@@ -119,6 +120,52 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     }
 
 
-@router.get('/ether_price/')
-async def ether_price(request: Request):
-    pass
+class PriceResponse(BaseModel):
+    last_update: int
+    usd_irr: int
+    eth_usd: int
+
+
+@router.get('/price/', response_model=PriceResponse)
+async def price(request: Request):
+    general = await general_get()
+
+    if general.next_update < 1:
+        try:
+            response = httpx.get(
+                'https://api.etherscan.io/api',
+                params={
+                    'module': 'stats',
+                    'action': 'ethprice',
+                    'apikey': settings.etherscan_token
+                }
+            ).json()
+
+            general.eth_usd = int(float(response['result']['ethusd']))
+            general.last_update = utc_now()
+            await general_update(
+                eth_usd=general.eth_usd,
+                last_update=general.last_update
+            )
+
+            response = httpx.get(
+                'https://alanchand.com/api/price-free?type=currencies'
+            ).json()
+
+            for c in response:
+                if c['slug'] == 'usd':
+                    general.usd_irr = int(c['buy'] * 10)
+                    await general_update(
+                        usd_irr=general.usd_irr,
+                        last_update=general.last_update
+                    )
+                    break
+
+        except Exception as e:
+            logging.exception(e)
+
+    return {
+        'last_update': general.last_update,
+        'usd_irr': general.usd_irr,
+        'eth_usd': int(general.eth_usd),
+    }

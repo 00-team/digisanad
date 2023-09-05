@@ -14,7 +14,14 @@ async def general_get() -> GeneralModel:
 
     if row is None:
         await sqlx.execute(insert(GeneralTable), {'general_id': 0})
-        return GeneralModel(general_id=0, coins={})
+        return GeneralModel(
+            general_id=0,
+            usd_irr=0,
+            eth_usd=0,
+            last_update=0,
+            eth_total=0,
+            eth_available=0,
+        )
 
     return GeneralModel(**row)
 
