@@ -63,6 +63,11 @@ class AdminPerms(int, Enum):
     C_SCHEMA = auto()
     D_SCHEMA = auto()
 
+    V_COMPANY = auto()
+    A_COMPANY = auto()
+    C_COMPANY = auto()
+    D_COMPANY = auto()
+
 
 class UserPublic(BaseModel):
     user_id: int
