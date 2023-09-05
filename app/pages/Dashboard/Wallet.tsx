@@ -23,7 +23,7 @@ const Wallet: FC = () => {
     // }
 
     const utc_to_irtime = (timestamp: number) => {
-        let offset = Math.abs(new Date().getTimezoneOffset()) * 60
+        let offset = new Date().getTimezoneOffset() * 60
 
         return new Date((timestamp + offset) * 1000).toLocaleTimeString('fa-IR')
     }
@@ -35,12 +35,12 @@ const Wallet: FC = () => {
                 <div className='rows'>
                     <Row
                         Icon={EthereumIcon}
-                        data={user.w_eth_in_sys.toLocaleString()}
+                        data={(user.w_eth_in_sys / 1e18).toLocaleString()}
                         holder='موجودی'
                     />
                     <Row
                         Icon={CoinIcon}
-                        data={user.w_eth_in_acc.toLocaleString()}
+                        data={(user.w_eth_in_acc / 1e18).toLocaleString()}
                         holder='موجودی غیرقابل دسترسی'
                     />
                     <Row
