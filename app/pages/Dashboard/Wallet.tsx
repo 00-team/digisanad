@@ -25,7 +25,7 @@ const Wallet: FC = () => {
     const utc_to_irtime = (timestamp: number) => {
         let offset = new Date().getTimezoneOffset() * 60
 
-        return new Date((timestamp + offset) * 1000).toLocaleTimeString('fa-IR')
+        return new Date((timestamp - offset) * 1000).toLocaleTimeString('fa-IR')
     }
 
     return (
