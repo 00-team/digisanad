@@ -28,7 +28,7 @@ const SchemaList: FC = () => {
     const [state, setState] = useState<Schema[]>([])
 
     const fetch_schemas = async () => {
-        const response = await axios.get('/api/admins/schemas/?page=' + page, {
+        const response = await axios.get('/api/admin/schemas/?page=' + page, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },

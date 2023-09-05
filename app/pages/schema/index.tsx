@@ -11,7 +11,7 @@ import React, {
 import { C } from '@00-team/utils'
 
 import axios from 'axios'
-import { CopyIcon, PlusIcon, SettingIcon, FileIcon } from 'icons'
+import { CopyIcon, PlusIcon, SettingIcon, FileIcon, RemoveIcon } from 'icons'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { SetStateAction, useAtomValue } from 'jotai'
@@ -67,7 +67,7 @@ const Schema: FC = () => {
     const insert = useRef<Inserter>()
 
     const fetch_schema = async () => {
-        const response = await axios.get(`/api/admins/schemas/${schema_id}/`, {
+        const response = await axios.get(`/api/admin/schemas/${schema_id}/`, {
             headers: { Authorization: 'Bearer ' + token },
         })
 
@@ -83,6 +83,26 @@ const Schema: FC = () => {
             page: 0,
             uid: '',
         })
+    }
+
+    const delete_schema = async () => {
+        try {
+            const response = await axios.delete(
+                `/api/admin/schemas/${schema_id}/`,
+                {
+                    headers: { Authorization: 'Bearer ' + token },
+                }
+            )
+            if (response.data.ok) {
+                navigate('/admin/contracts/')
+                return
+            }
+        } catch (error) {
+            HandleError(error)
+            return
+        }
+
+        ReactAlert.error('خطا در هنگام حذف قالب')
     }
 
     useEffect(() => {
@@ -119,7 +139,7 @@ const Schema: FC = () => {
                         className='copy-btn cta-btn title_smaller'
                         onClick={async () => {
                             const response = await axios.patch(
-                                `/api/admins/schemas/${schema_id}/`,
+                                `/api/admin/schemas/${schema_id}/`,
                                 {
                                     data: state.schema,
                                     draft: state.draft,
@@ -141,6 +161,13 @@ const Schema: FC = () => {
                     >
                         <CopyIcon size={25} />
                         ذخیره
+                    </button>
+                    <button
+                        className='remove-btn cta-btn title_smaller'
+                        onClick={() => delete_schema()}
+                    >
+                        <RemoveIcon />
+                        حذف
                     </button>
                     <button
                         className='add-btn cta-btn title_smaller'

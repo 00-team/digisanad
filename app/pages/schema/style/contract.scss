@@ -60,6 +60,14 @@ main.contract-container {
                     color: white;
                     background-color: black;
                 }
+
+                &.remove-btn {
+                    border-color: var(--alert-error);
+                    &:hover {
+                        color: white;
+                        background-color: var(--alert-error);
+                    }
+                }
             }
 
             .pager {

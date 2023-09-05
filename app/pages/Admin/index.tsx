@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
+import { user_get_me } from 'api'
 import axios from 'axios'
 import {
     CloseIcon,
@@ -13,17 +14,37 @@ import {
 } from 'icons'
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
 
-import { useAtomValue } from 'jotai'
-import { AdminPerms, TokenAtom } from 'state'
+import { useAtom, useAtomValue } from 'jotai'
+import { AdminPerms, TokenAtom, UserAtom } from 'state'
 
 import './style/admin.scss'
 
 const Admin: FC = () => {
     const perms = useAtomValue(AdminPerms)
+    const [user, setUser] = useAtom(UserAtom)
+    const [token, setToken] = useAtom(TokenAtom)
+    const navigate = useNavigate()
 
-    Navigate
-    // if (!perms.perms) return <Navigate to='/' />
-    if (!perms.perms) return <></>
+    useEffect(() => {
+        if (!token) return
+        if (user.user_id) {
+            if (!perms.perms) {
+                navigate('/')
+            }
+            return
+        }
+
+        user_get_me(token).then(data => {
+            if (data === null) {
+                setToken('')
+                navigate('/login/?next=' + location.pathname)
+            } else {
+                setUser(data)
+            }
+        })
+    }, [token, perms, user])
+
+    if (!token) return <Navigate to={'/login/?next=' + location.pathname} />
 
     return (
         <main className='admin-container'>
@@ -41,7 +62,7 @@ const Sidebar: FC = () => {
 
     const add_schema = async () => {
         const response = await axios.post(
-            '/api/admins/schemas/',
+            '/api/admin/schemas/',
             {
                 title: 'قرارداد جدید',
                 data: {
