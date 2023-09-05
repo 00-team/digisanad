@@ -51,6 +51,7 @@ type State = ContractModel & {
     parties: UserPublic[]
     page: number
     need_schema: boolean
+    can_change_schema: boolean
 }
 
 type SaveData = {
@@ -81,7 +82,8 @@ const Contract: FC = () => {
         start_date: 0,
         finish_date: 0,
         disable_invites: true,
-        need_schema: true,
+        need_schema: false,
+        can_change_schema: false,
     })
     // const update = () => setState(s => ({ ...s }))
     const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))
@@ -102,6 +104,8 @@ const Contract: FC = () => {
                     !Object.keys(cdata).length ||
                     ('fields' in cdata && !Object.keys(cdata).length) ||
                     ('pages' in cdata && !cdata.pages.length)
+
+                response.data.can_change_schema = response.data.need_schema
             } catch {}
 
             updateState(response.data)
@@ -154,6 +158,7 @@ const Contract: FC = () => {
                 }
             )
             if (res.data.ok) {
+                setState(s => ({ ...s, can_change_schema: false }))
                 ReactAlert.success('قرارداد با موفقیت ذخیره شد.')
                 return
             }
@@ -217,6 +222,19 @@ const Contract: FC = () => {
                             {i + 1}
                         </button>
                     ))}
+
+                    {state.can_change_schema && (
+                        <button
+                            className='cta-btn title_smaller'
+                            onClick={() =>
+                                setState(s => ({ ...s, need_schema: true }))
+                            }
+                        >
+                            <ContractIcon />
+                            تغییر قالب
+                        </button>
+                    )}
+
                     <button
                         className='save-btn cta-btn title_smaller'
                         onClick={() => save_contract({ data: state.data })}
