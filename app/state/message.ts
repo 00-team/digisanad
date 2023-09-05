@@ -8,6 +8,12 @@ enum MessageLevel {
     URGENT = 'urgent',
 }
 
+const LEVEL_TITLE: { [k in MessageLevel]: string } = {
+    info: 'اطلاعیه',
+    notification: '',
+    urgent: 'مهم',
+} as const
+
 type MessageModel = {
     message_id: number
     text: string
@@ -20,4 +26,4 @@ type MessageModel = {
 
 const MessagesAtom = atom<MessageModel[]>([])
 
-export { MessagesAtom, MessageModel, MessageLevel }
+export { MessagesAtom, MessageModel, MessageLevel, LEVEL_TITLE }

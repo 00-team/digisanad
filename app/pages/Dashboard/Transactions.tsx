@@ -12,19 +12,13 @@ import './style/transactions.scss'
 
 type TransactionModel = {
     transaction_id: number
-
     transaction_hash: string | null
-
-    network: 'eth' | 'btc' | 'xtz'
-    coin_name: string
-
     sender: UserPublic | 'system' | null
     receiver: UserPublic | 'system' | null
     amount: number
     fee: number
     status: 'unknown' | 'success' | 'failure'
     next_update: number
-
     timestamp: number
 }
 

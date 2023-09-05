@@ -1,39 +1,31 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, ReactNode } from 'react'
 
-import { get_wallet } from 'api'
-import { CoinIcon } from 'icons'
+import { CoinIcon, EthereumIcon, WalletIcon, CallenderIcon } from 'icons'
 
-import { useAtom, useAtomValue } from 'jotai'
-import { Networks_List, TokenAtom, WalletAtom } from 'state'
-
-import { Loading } from 'components'
+import { useAtomValue } from 'jotai'
+import { UserAtom } from 'state'
 
 import './style/wallet.scss'
 
 const Wallet: FC = () => {
-    const [wallet, setWallet] = useAtom(WalletAtom)
-    const token = useAtomValue(TokenAtom)
+    const user = useAtomValue(UserAtom)
+    // const token = useAtomValue(TokenAtom)
 
-    useEffect(() => {
-        // this should never be reached
-        // but anyway
-        if (!token) return
+    // if (wallet == null) {
+    //     return (
+    //         <section id='wallet' className='wallet-container'>
+    //             <h2 className='section-header section_title'>کیف پول</h2>
+    //             <div className='wallet-wrapper'>
+    //                 <Loading style={{ height: '50vh' }} />
+    //             </div>
+    //         </section>
+    //     )
+    // }
 
-        if (wallet == null || wallet.next_update < Date.now()) {
-            get_wallet(token).then(data => setWallet(data))
-            return
-        }
-    }, [])
+    const utc_to_irtime = (timestamp: number) => {
+        let offset = Math.abs(new Date().getTimezoneOffset()) * 60
 
-    if (wallet == null) {
-        return (
-            <section id='wallet' className='wallet-container'>
-                <h2 className='section-header section_title'>کیف پول</h2>
-                <div className='wallet-wrapper'>
-                    <Loading style={{ height: '50vh' }} />
-                </div>
-            </section>
-        )
+        return new Date((timestamp + offset) * 1000).toLocaleTimeString('fa-IR')
     }
 
     return (
@@ -41,54 +33,48 @@ const Wallet: FC = () => {
             <h2 className='section-header section_title'>کیف پول</h2>
             <div className='wallet-wrapper'>
                 <div className='rows'>
-                    {/* <Row
+                    <Row
+                        Icon={EthereumIcon}
+                        data={user.w_eth_in_sys.toLocaleString()}
+                        holder='موجودی'
+                    />
+                    <Row
                         Icon={CoinIcon}
-                        data={wallet.coins.in_wallet.toLocaleString()}
-                        holder={'مقدار اتریوم'}
-                    /> */}
-                    {wallet.addrs.map((addr, index) => {
-                        const coinAddr = Networks_List[addr.network]
-                        return (
-                            <Row
-                                key={index}
-                                Icon={coinAddr.logo}
-                                data={
-                                    <input
-                                        className='addr'
-                                        value={addr.addr}
-                                        onChange={() => {}}
-                                    />
-                                }
-                                holder={coinAddr.name}
+                        data={user.w_eth_in_acc.toLocaleString()}
+                        holder='موجودی غیرقابل دسترسی'
+                    />
+                    <Row
+                        Icon={CallenderIcon}
+                        data={utc_to_irtime(user.w_last_update)}
+                        holder='آخرین بروزرسانی'
+                    />
+                    <Row
+                        Icon={WalletIcon}
+                        data={
+                            <input
+                                className='addr'
+                                value={user.w_eth_addr}
+                                onChange={() => {}}
                             />
-                        )
-                    })}
-                    {wallet.coins.map((coin, index) => {
-                        return (
-                            <Row
-                                key={index}
-                                holder={coin.name}
-                                Icon={CoinIcon}
-                                data={coin.in_wallet}
-                            />
-                        )
-                    })}
+                        }
+                        holder='آدرس کیف پول اتریوم شما'
+                    />
                 </div>
             </div>
         </section>
     )
 }
 
-interface RowProps {
+type RowProps = {
     Icon: Icon
     holder: string
-    data: React.ReactNode
+    data: ReactNode
     className?: string
 }
 
-const Row: FC<RowProps> = ({ data, holder, Icon, className }) => {
+const Row: FC<RowProps> = ({ data, holder, Icon, className = '' }) => {
     return (
-        <div className={`row title ${className && className}`}>
+        <div className={`row title ${className}`}>
             <div className='nickname-title title  row-title'>
                 <div className='icon'>
                     <Icon size={25} />

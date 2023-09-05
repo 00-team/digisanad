@@ -1,40 +1,27 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import { get_wallet } from 'api'
-import { CoinIcon, UnknownIcon, WalletIcon } from 'icons'
+import { CoinIcon, WalletIcon } from 'icons'
 
-import { useAtom, useAtomValue } from 'jotai'
-import { TokenAtom, WalletAtom } from 'state'
+import { useAtomValue } from 'jotai'
+import { UserAtom } from 'state'
 
-import { Loading, Option, Select, Submit } from 'components'
+import { Submit } from 'components'
 
 import './style/withdraw.scss'
 
 const Withdraw: FC = () => {
-    const [wallet, setWallet] = useAtom(WalletAtom)
-    const token = useAtomValue(TokenAtom)
+    const user = useAtomValue(UserAtom)
 
-    useEffect(() => {
-        // this should never be reached
-        // but anyway
-        if (!token) return
-
-        if (wallet == null || wallet.next_update < Date.now()) {
-            get_wallet(token).then(data => setWallet(data))
-            return
-        }
-    }, [])
-
-    if (wallet == null) {
-        return (
-            <section id='wallet' className='withdraw-container'>
-                <h2 className='section-header section_title'>برداشت موجودی </h2>
-                <div className='withdraw-wrapper'>
-                    <Loading style={{ height: '50vh' }} />
-                </div>
-            </section>
-        )
-    }
+    // if (wallet == null) {
+    //     return (
+    //         <section id='wallet' className='withdraw-container'>
+    //             <h2 className='section-header section_title'>برداشت موجودی </h2>
+    //             <div className='withdraw-wrapper'>
+    //                 <Loading style={{ height: '50vh' }} />
+    //             </div>
+    //         </section>
+    //     )
+    // }
     return (
         <section className='withdraw-container'>
             <h2 className='section-header section_title'>برداشت موجودی </h2>
@@ -45,7 +32,7 @@ const Withdraw: FC = () => {
                     </div>
                     <div className='wallet-data title'>
                         <div className='holder'>موجودی شما:</div>
-                        <div className='data'>{wallet.coins[0]?.in_wallet}</div>
+                        <div className='data'>{user.w_eth_in_sys}</div>
                     </div>
                 </div>
                 <div className='wallet-options'>
@@ -60,7 +47,7 @@ const Withdraw: FC = () => {
                             maxLength={1024}
                         />
                     </div>
-                    <div className='wallet-option coin-options title_smaller'>
+                    {/*<div className='wallet-option coin-options title_smaller'>
                         <h3 className=' option-title'>
                             <UnknownIcon size={25} />
                             <div className='holder'>کوین برداشتی</div>
@@ -96,6 +83,8 @@ const Withdraw: FC = () => {
                             )}
                         />
                     </div>
+
+*/}
                     <div className='wallet-option title_smaller'>
                         <h3 className=' option-title'>
                             <CoinIcon size={25} />
@@ -105,7 +94,7 @@ const Withdraw: FC = () => {
                             className='option-input'
                             type='text'
                             maxLength={1024}
-                            placeholder={`حداکثر: ${wallet.coins[0]?.in_wallet}`}
+                            placeholder={`حداکثر: ${user.w_eth_in_sys}`}
                         />
                     </div>
                 </div>

@@ -152,7 +152,7 @@ const Sidebar: FC = ({}) => {
                 {SIDEBAR_LINKS.map((args, i) => (
                     <SidebarLink {...args} key={i} idx={i} />
                 ))}
-                {BigInt(user.admin) ? (
+                {user.admin && BigInt(user.admin) ? (
                     <SidebarLink
                         link='/admin/'
                         title='پنل مدریت'

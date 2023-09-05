@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { MessageModel, unseenCountModel, UserModel, WalletModel } from 'state'
+import { UserModel } from 'state'
 
 const user_get_me = async (token: string): Promise<UserModel | null> => {
     try {
@@ -17,58 +17,4 @@ const user_get_me = async (token: string): Promise<UserModel | null> => {
     return null
 }
 
-const get_wallet = async (token: string): Promise<WalletModel | null> => {
-    try {
-        const response = await axios.get('/api/user/wallet/', {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        })
-        const wallet: WalletModel = response.data
-        wallet.next_update = Date.now() + wallet.next_update * 1000
-        return wallet
-    } catch (error) {
-        HandleError(error)
-    }
-
-    return null
-}
-
-const get_messages = async (token: string): Promise<MessageModel[] | null> => {
-    try {
-        const response = await axios.get('/api/messages/', {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        })
-
-        const messages: MessageModel[] = response.data
-
-        return messages
-    } catch (error) {
-        HandleError(error)
-    }
-
-    return null
-}
-const get_unseen_count = async (
-    token: string
-): Promise<unseenCountModel | null> => {
-    try {
-        const response = await axios.get('/api/messages/unseen_count/', {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        })
-
-        const unseen_count: unseenCountModel | null = response.data
-
-        return unseen_count
-    } catch (error) {
-        HandleError(error)
-    }
-
-    return null
-}
-
-export { user_get_me, get_wallet, get_messages, get_unseen_count }
+export { user_get_me }

@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
-import { get_messages, get_unseen_count } from 'api'
 import axios from 'axios'
 import {
     CallenderIcon,
@@ -13,14 +12,14 @@ import {
 } from 'icons'
 
 import { useAtom, useAtomValue } from 'jotai'
-import { MessageModel, MessagesAtom, TokenAtom, UnseenCountAtom } from 'state'
+import { LEVEL_TITLE, MessageModel, MessagesAtom, TokenAtom } from 'state'
 
 import './style/notifications.scss'
 
 const Notifications: FC = () => {
     const token = useAtomValue(TokenAtom)
     const [messages, setMessages] = useAtom(MessagesAtom)
-    const [UnseenCount, setUnseenCount] = useAtom(UnseenCountAtom)
+    const [unseen, setUnseen] = useState(0)
 
     const [Open, setOpen] = useState(false)
 
@@ -41,35 +40,45 @@ const Notifications: FC = () => {
         }
     }
 
+    const get_messages = async () => {
+        try {
+            const response = await axios.get('/api/messages/', {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
+
+            setMessages(response.data)
+            return
+        } catch (error) {
+            HandleError(error)
+        }
+
+        setMessages([])
+    }
+    const get_unseen_count = async () => {
+        try {
+            const response = await axios.get('/api/messages/unseen_count/', {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
+
+            setUnseen(response.data.count)
+            return
+        } catch (error) {
+            HandleError(error)
+        }
+
+        setUnseen(0)
+    }
+
     useEffect(() => {
         if (!token) return
 
-        if (messages == null) {
-            get_messages(token).then(data => setMessages(data))
-
-            return
-        }
-    }, [])
-
-    useEffect(() => {
-        if (!token) return
-
-        if (UnseenCount == null) {
-            get_unseen_count(token).then(data => setUnseenCount(data))
-
-            return
-        }
-    }, [])
-
-    useEffect(() => {
-        if (!token) return
-
-        if (messages == null) {
-            get_messages(token).then(data => setMessages(data))
-
-            return
-        }
-    }, [])
+        get_messages()
+        get_unseen_count()
+    }, [token])
 
     useEffect(() => {
         Open && seenMsg()
@@ -81,16 +90,14 @@ const Notifications: FC = () => {
                 className='notification-icon'
                 onClick={() => setOpen(!Open)}
             >
-                {UnseenCount && UnseenCount.count >= 1 && (
-                    <span className='unseen-count description'>
-                        {UnseenCount?.count}
-                    </span>
+                {unseen >= 1 && (
+                    <span className='unseen-count description'>{unseen}</span>
                 )}
                 <NotificationIcon size={innerWidth >= 1024 ? 40 : 30} />
             </button>
             <div className={`notifications-wrapper ${C(Open)}`}>
-                {messages && messages.length >= 1 ? (
-                    messages?.map((message, index) => {
+                {messages.length >= 1 ? (
+                    messages.map((message, index) => {
                         return <NotifMessage {...message} key={index} />
                     })
                 ) : (
@@ -103,24 +110,8 @@ const Notifications: FC = () => {
     )
 }
 
-interface NotifMessageProps extends MessageModel {}
-
-const NotifMessage: FC<NotifMessageProps> = ({
-    seen,
-    sender,
-    text,
-    level,
-    timestamp,
-}) => {
-    type levels = {
-        [k in typeof level]: string
-    }
-
-    const levels_title: levels = {
-        info: 'اطلاعیه',
-        notification: '',
-        urgent: 'مهم',
-    } as const
+const NotifMessage: FC<MessageModel> = props => {
+    const { seen, sender, text, level, timestamp } = props
 
     const getSender = (): string => {
         if (sender === 'system') return 'سیستم'
@@ -144,7 +135,7 @@ const NotifMessage: FC<NotifMessageProps> = ({
                     {level === 'urgent' && (
                         <WarningIcon fill='#e20338' size={30} />
                     )}
-                    <p className='title_small'>{levels_title[level]}</p>
+                    <p className='title_small'>{LEVEL_TITLE[level]}</p>
                 </div>
             )}
 
