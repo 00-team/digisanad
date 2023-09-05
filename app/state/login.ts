@@ -1,5 +1,11 @@
 import { atom } from 'jotai'
-import { LoginType } from 'state/models/Login'
+
+type LoginType = {
+    phone: string
+    stage: 'phone' | 'code'
+    resend: boolean
+    time: number
+}
 
 const DEFUALT_LOGIN: LoginType = {
     phone: '',
@@ -21,4 +27,4 @@ const LoginAtom = atom(
     }
 )
 
-export { LoginAtom }
+export { LoginAtom, LoginType }

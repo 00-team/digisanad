@@ -2,19 +2,39 @@ import axios from 'axios'
 
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { UserModel } from 'state'
+
+type UserModel = {
+    user_id: number
+    phone: string
+    first_name: string
+    last_name: string
+    birth_date: string
+    national_id: string
+    postal_code: string
+    address: string
+    email: string
+    admin: string | null
+    w_last_update: number
+    w_eth_in_acc: number
+    w_eth_in_sys: number
+    w_eth_addr: string
+}
 
 const DEFUALT_USER: UserModel = {
     address: '',
-    birth_date: [],
+    birth_date: '',
     email: '',
     first_name: '',
     last_name: '',
     national_id: '',
-    phone: null,
+    phone: '',
     postal_code: '',
-    user_id: null,
-    admin: '0',
+    user_id: 0,
+    admin: null,
+    w_eth_in_sys: 0,
+    w_eth_in_acc: 0,
+    w_last_update: 0,
+    w_eth_addr: '',
 }
 
 const User = atom<UserModel>(DEFUALT_USER)
@@ -125,9 +145,13 @@ type AdminPermsModel = {
 
 const AdminPerms = atom<AdminPermsModel>(get => {
     let perms = 0n
-    try {
-        perms = BigInt(get(User).admin)
-    } catch {}
+    let user = get(User)
+
+    if (user.admin) {
+        try {
+            perms = BigInt(user.admin)
+        } catch {}
+    }
 
     return {
         perms,
@@ -141,4 +165,11 @@ const AdminPerms = atom<AdminPermsModel>(get => {
     }
 })
 
-export { UserAtom, TokenAtom, AdminPerms, AP }
+type UserPublic = {
+    user_id: number
+    phone: string
+    first_name: string
+    last_name: string
+}
+
+export { UserAtom, TokenAtom, AdminPerms, AP, UserModel, UserPublic }
