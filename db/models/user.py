@@ -5,9 +5,11 @@ from enum import Enum, auto
 from functools import cached_property
 
 from pydantic import BaseModel
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, text
 
+from shared import settings
 from shared.errors import forbidden
+from shared.tools import utc_now
 
 from .common import BaseTable
 
@@ -27,6 +29,12 @@ class UserTable(BaseTable):
     email = Column(String, nullable=False)
     token = Column(String, unique=True)  # hashed token
     admin = Column(String)
+
+    w_last_update = Column(Integer, nullable=False, server_default=text('0'))
+    w_eth_in_acc = Column(Integer, nullable=False, server_default=text('0'))
+    w_eth_in_sys = Column(Integer, nullable=False, server_default=text('0'))
+    w_eth_pk = Column(String, nullable=False, server_default='')
+    w_eth_addr = Column(String, nullable=False, server_default='')
 
 
 class AdminPerms(int, Enum):
@@ -84,6 +92,11 @@ class UserModel(UserPublic):
     email: str
     admin: str | None = None
     token: str | None
+    w_last_update: int
+    w_eth_in_acc: int
+    w_eth_in_sys: int
+    w_eth_pk: str
+    w_eth_addr: str
 
     @property
     def birth_jdate(self):
@@ -121,7 +134,8 @@ class UserModel(UserPublic):
         if not self.admin_check(required_perms, log=True):
             raise forbidden
 
-    # def __init__(self, birth_date, **data) -> None:
-    #     if isinstance(birth_date, str):
-    #         birth_date = tuple(map(lambda d: int(d), birth_date.split('-')))
-    #     super().__init__(birth_date=birth_date, **data)
+    @property
+    def w_next_update(self) -> int:
+        return (
+            self.w_last_update + settings.update_wallet_timeout
+        ) - utc_now()

@@ -4,13 +4,13 @@ from typing import Literal
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
+from sqlalchemy import or_, select
 
 from db.general import general_get, general_update
-from db.models import NetworkType, TransactionModel, TransactionStatus
-from db.models import TransactionTable, UserModel, UserPublic, WalletTable
+from db.models import TransactionModel, TransactionStatus, TransactionTable
+from db.models import UserModel, UserPublic, UserTable
 from db.transaction import transaction_get, transaction_update
-from db.user import user_public
-from db.wallet import wallet_get, wallet_update
+from db.user import user_get, user_public, user_update
 from deps import rate_limit, user_required
 from shared import settings, sqlx
 from shared.crypto import transaction_status
@@ -27,8 +27,6 @@ router = APIRouter(
 class TransactionResponse(BaseModel):
     transaction_id: int
     transaction_hash: str | None = None
-    network: NetworkType
-    coin_name: str
     sender: UserPublic | Literal['system'] | None
     receiver: UserPublic | Literal['system'] | None
     amount: int
@@ -61,41 +59,49 @@ async def check_transaction(ta: TransactionModel) -> TransactionModel:
     if ta.status != TransactionStatus.FAILURE:
         return ta
 
-    coinkey = f'{ta.network.value}_{ta.coin_name}'
     general = await general_get()
 
     if ta.sender == -1:
         # from system to user
-        wallet = await wallet_get(WalletTable.user_id == ta.sender)
+        # withdraw
+        receiver = await user_get(UserTable.user_id == ta.receiver)
+        receiver.w_eth_in_sys += ta.amount + ta.fee
 
-        wallet.coins[coinkey].in_system += ta.amount
+        general.eth_available -= ta.fee
+        general.eth_total += ta.amount
 
-        general.coins[coinkey].available -= ta.fee
-        general.coins[coinkey].total += ta.amount - ta.fee
+        await general_update(
+            eth_available=general.eth_available,
+            eth_total=general.eth_total
+        )
 
-        await general_update(coins=general.coins)
-        await wallet_update(
-            WalletTable.wallet_id == wallet.wallet_id,
-            coins=wallet.coins
+        await user_update(
+            UserTable.user_id == receiver.user_id,
+            w_eth_in_sys=receiver.w_eth_in_sys
         )
 
     elif ta.receiver == -1:
         # from user to system
-        wallet = await wallet_get(WalletTable.user_id == ta.sender)
 
-        wallet.coins[coinkey].in_system -= ta.amount - ta.fee
-        wallet.coins[coinkey].in_wallet += ta.amount
+        sender = await user_get(UserTable.user_id == ta.sender)
+        sender.w_eth_in_sys -= ta.amount - ta.fee
+        sender.w_eth_in_acc += ta.amount
 
-        general.coins[coinkey].total -= ta.amount
-        general.coins[coinkey].available -= ta.fee
+        general.eth_total -= ta.amount
+        general.eth_available -= ta.fee
 
-        await general_update(coins=general.coins)
-        await wallet_update(
-            WalletTable.wallet_id == wallet.wallet_id,
-            coins=wallet.coins
+        await general_update(
+            eth_available=general.eth_available,
+            eth_total=general.eth_total
+        )
+        await user_update(
+            UserTable.user_id == receiver.user_id,
+            w_eth_in_sys=receiver.w_eth_in_sys,
+            w_eth_in_acc=receiver.w_eth_in_acc
         )
     else:
         # from user to another user
+        # user to user transactions dont have any tx hash
         logging.warn(
             f'invalid state of transaction: {ta.transaction_id}'
         )
@@ -124,8 +130,6 @@ async def transaction_to_response(
         result.append(TransactionResponse(
             transaction_id=ta.transaction_id,
             transaction_hash=ta.transaction_hash,
-            network=ta.network,
-            coin_name=ta.coin_name,
             sender=users.get(ta.sender),
             receiver=users.get(ta.receiver),
             amount=ta.amount,
@@ -140,29 +144,37 @@ async def transaction_to_response(
 
 @router.get('/global/', response_model=list[TransactionResponse])
 async def global_transactions(request: Request, page: int = 0):
-    rows = await sqlx.fetch_all(
-        f'''
-        SELECT * FROM {TransactionTable.__tablename__}
-        ORDER BY transaction_id DESC
-        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
-        ''',
+    query = (
+        select(TransactionTable)
+        .order_by(TransactionTable.transaction_id.desc())
+        .limit(settings.page_size)
+        .offset(page * settings.page_size)
     )
-    return await transaction_to_response([TransactionModel(**r) for r in rows])
+    rows = await sqlx.fetch_all(query)
+    return await transaction_to_response(
+        [TransactionModel(**r) for r in rows]
+    )
 
 
 @router.get('/', response_model=list[TransactionResponse])
 async def get_transactions(request: Request, page: int = 0):
     user: UserModel = request.state.user
-    rows = await sqlx.fetch_all(
-        f'''
-        SELECT * FROM {TransactionTable.__tablename__}
-        WHERE (sender == :user_id OR receiver == :user_id)
-        ORDER BY transaction_id DESC
-        LIMIT {settings.page_size} OFFSET {page * settings.page_size}
-        ''',
-        {'user_id': user.user_id}
+    query = (
+        select(TransactionTable)
+        .where(or_(
+            TransactionTable.sender == user.user_id,
+            TransactionTable.receiver == user.user_id
+        ))
+        .order_by(TransactionTable.transaction_id.desc())
+        .limit(settings.page_size)
+        .offset(page * settings.page_size)
     )
-    return await transaction_to_response([TransactionModel(**r) for r in rows])
+
+    rows = await sqlx.fetch_all(query)
+
+    return await transaction_to_response(
+        [TransactionModel(**r) for r in rows]
+    )
 
 
 @router.get(

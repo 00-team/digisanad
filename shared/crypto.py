@@ -8,9 +8,9 @@ from web3.exceptions import TransactionNotFound
 from web3.types import HexBytes
 
 from db.general import general_get, general_update
-from db.models import GeneralCoin, NetworkType, TransactionStatus
-from db.models import WalletAccount, WalletCoin, WalletModel
+from db.models import TransactionStatus, UserModel, UserTable
 from db.transaction import transaction_add
+from db.user import user_update
 from shared import ETH_ACC, settings, w3
 from shared.tools import utc_now
 
@@ -79,72 +79,18 @@ async def transaction_status(tx: str | HexBytes) -> TransactionStatus:
         return TransactionStatus.UNKNOWN
 
 
-RT = tuple[
-    dict[str, WalletCoin],
-    dict[NetworkType, WalletAccount]
-]
-
-
-def update_wallet_data(wallet: WalletModel = None) -> RT:
-    ethkey = f'{NetworkType.ethereum.value}_eth'
-
-    coins = {}
-    accounts = {}
-
-    if wallet:
-        coins = wallet.coins
-        accounts = wallet.accounts
-
-    if NetworkType.ethereum not in accounts:
-        eth_acc = w3.eth.account.create()
-        accounts[NetworkType.ethereum] = WalletAccount(
-            network=NetworkType.ethereum,
-            pk=eth_acc.key.hex(),
-            addr=eth_acc.address
-        ).dict()
-
-    if ethkey not in coins:
-        coins[ethkey] = WalletCoin(
-            name='eth',
-            display='Ether',
-            network=NetworkType.ethereum,
-            in_wallet=0,
-            in_system=0,
-        ).dict()
-
-    return coins, accounts
-
-
-async def update_wallet(wallet: WalletModel = None) -> WalletModel:
-    eck = f'{NetworkType.ethereum.value}_eth'
-
+async def update_wallet(user: UserModel) -> UserModel:
     general = await general_get()
-    if eck not in general.coins:
-        general.coins[eck] = GeneralCoin(
-            name='eth',
-            display='Ether',
-            network=NetworkType.ethereum,
-            available=0,
-            total=0
-        ).dict()
-        # general.coins.update(ETH_GENERAL_COINS)
-        await general_update(coins=general.coins)
 
-    coins, accounts = update_wallet_data(wallet)
+    if not user.w_eth_pk:
+        eth_acc = w3.eth.account.create()
+        user.w_eth_pk = eth_acc.key.hex()
+        user.w_eth_addr = eth_acc.address
+    else:
+        eth_acc = w3.eth.account.from_key(user.w_eth_pk)
 
-    if wallet is None:
-        return WalletModel(
-            wallet_id=0,
-            user_id=0,
-            last_update=utc_now(),
-            coins=coins,
-            accounts=accounts,
-        )
-
-    wallet.coins = coins
-    wallet.accounts = accounts
-
-    eth_acc = w3.eth.account.from_key(accounts[NetworkType.ethereum].pk)
+    if not user.w_eth_addr:
+        user.w_eth_addr = eth_acc.address
 
     try:
         eth_balance = await w3.eth.get_balance(eth_acc.address)
@@ -167,17 +113,15 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
             st = eth_acc.sign_transaction(td)
             tx = await w3.eth.send_raw_transaction(st.rawTransaction)
 
-            wallet.coins[eck].in_system += td['value'] - settings.eth_fee
-            wallet.coins[eck].in_wallet = 0
+            user.w_eth_in_sys += td['value'] - settings.eth_fee
+            user.w_eth_in_acc = 0
 
-            general.coins[eck].total += td['value']
-            general.coins[eck].available += settings.eth_fee
+            general.eth_total += td['value']
+            general.eth_available += settings.eth_fee
 
             await transaction_add(
                 transaction_hash=tx.hex(),
-                network=NetworkType.ethereum,
-                coin_name='eth',
-                sender=wallet.user_id,
+                sender=user.user_id,
                 receiver=-1,
                 status=TransactionStatus.UNKNOWN,
                 amount=td['value'],
@@ -186,7 +130,10 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
                 timestamp=utc_now(),
             )
 
-            await general_update(coins=general.coins)
+            await general_update(
+                eth_total=general.eth_total,
+                eth_available=general.eth_available
+            )
     except TimeoutError:
         logging.warn('timeout error')
     except ClientResponseError as e:
@@ -205,11 +152,19 @@ async def update_wallet(wallet: WalletModel = None) -> WalletModel:
     #             network='eth',
     #             contract=t['contract'].address,
     #         ))
-    #
-    wallet.last_update = utc_now()
-    # wallet.coin = coin
 
-    return wallet
+    user.w_last_update = utc_now()
+
+    await user_update(
+        UserTable.user_id == user.user_id,
+        w_last_update=user.w_last_update,
+        w_eth_in_sys=user.w_eth_in_sys,
+        w_eth_in_acc=user.w_eth_in_acc,
+        w_eth_pk=user.w_eth_pk,
+        w_eth_addr=user.w_eth_addr
+    )
+
+    return user
 
 
 __all__ = [
