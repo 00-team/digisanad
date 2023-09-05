@@ -54,63 +54,74 @@ const Contracts: FC = () => {
     return (
         <section className='contract-list'>
             <div className='contracts'>
-                {state.map(s => (
-                    <div className='contract title_smaller' key={s.contract_id}>
-                        <h2 className='title'>{s.title}</h2>
-                        <div className='contract-details title_smaller'>
-                            <div className='contract-detail'>
-                                <div className='holder'>
-                                    <EditIcon size={20} />
-                                    شماره قرارداد:
-                                </div>
-                                <div className='data'>{s.contract_id}</div>
-                            </div>
-                            <div className='contract-detail'>
-                                <div className='holder'>
-                                    <CallenderIcon size={20} />
-                                    تاریخ ساخت:
-                                </div>
-                                <div className='data'>
-                                    {new Date(
-                                        getTime(s.start_date)
-                                    ).toLocaleDateString('fa-IR')}
-                                </div>
-                            </div>
-                            <div className='contract-detail'>
-                                <div className='holder'>
-                                    <InviteIcon size={20} />
-                                    قابلیت دعوت:
-                                </div>
-                                <div className='data'>
-                                    {s.disable_invites ? (
-                                        <span
-                                            style={{
-                                                color: 'var(--alert-error)',
-                                            }}
-                                        >
-                                            ندارد
-                                        </span>
-                                    ) : (
-                                        <span
-                                            style={{
-                                                color: '#008149',
-                                            }}
-                                        >
-                                            دارد
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() =>
-                                navigate('/dashboard/contract/' + s.contract_id)
-                            }
+                {state.length >= 1 ? (
+                    state.map(s => (
+                        <div
+                            className='contract title_smaller'
+                            key={s.contract_id}
                         >
-                            نمایش
-                        </button>
-                    </div>
-                ))}
+                            <h2 className='title'>{s.title}</h2>
+                            <div className='contract-details title_smaller'>
+                                <div className='contract-detail'>
+                                    <div className='holder'>
+                                        <EditIcon size={20} />
+                                        شماره قرارداد:
+                                    </div>
+                                    <div className='data'>{s.contract_id}</div>
+                                </div>
+                                <div className='contract-detail'>
+                                    <div className='holder'>
+                                        <CallenderIcon size={20} />
+                                        تاریخ ساخت:
+                                    </div>
+                                    <div className='data'>
+                                        {new Date(
+                                            getTime(s.start_date)
+                                        ).toLocaleDateString('fa-IR')}
+                                    </div>
+                                </div>
+                                <div className='contract-detail'>
+                                    <div className='holder'>
+                                        <InviteIcon size={20} />
+                                        قابلیت دعوت:
+                                    </div>
+                                    <div className='data'>
+                                        {s.disable_invites ? (
+                                            <span
+                                                style={{
+                                                    color: 'var(--alert-error)',
+                                                }}
+                                            >
+                                                ندارد
+                                            </span>
+                                        ) : (
+                                            <span
+                                                style={{
+                                                    color: '#008149',
+                                                }}
+                                            >
+                                                دارد
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() =>
+                                    navigate(
+                                        '/dashboard/contract/' + s.contract_id
+                                    )
+                                }
+                            >
+                                نمایش
+                            </button>
+                        </div>
+                    ))
+                ) : (
+                    <h3 className='section_title contracts-empty'>
+                        قراردادی برای نمایش وجود ندارد!
+                    </h3>
+                )}
             </div>
 
             <div className='actions title_smaller'>
