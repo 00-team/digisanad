@@ -37,6 +37,7 @@ class Settings(BaseSettings):
 
     update_wallet_timeout: int = 5 * 60
     update_transaction_timeout: int = 1 * 60
+    update_price_timeout: int = 10 * 60
 
     eth_fee: int = 4000
     eth_pk: str
