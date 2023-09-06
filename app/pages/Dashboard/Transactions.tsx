@@ -92,7 +92,9 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, amount }) => {
                         </div>
                         <div className='holder '>مقدار</div>
                     </div>
-                    <div className='data'>{amount}</div>
+                    <div className='data'>
+                        {(amount / 1e18).toLocaleString()}
+                    </div>
                 </div>
                 <div className='row title_small'>
                     <div className='holder-wrapper'>
