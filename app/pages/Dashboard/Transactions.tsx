@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 
+import { fetch_price } from 'api'
 import axios from 'axios'
 import { CallenderIcon, CoinIcon, UnknownIcon } from 'icons'
 import { UserPublic } from 'pages/schema/types'
 import { useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
-import { TokenAtom } from 'state'
+import { PriceModel, TokenAtom, UserAtom, UserModel } from 'state'
 
 import './style/transactions.scss'
 
@@ -26,7 +27,14 @@ const Transactions: FC = () => {
     const { pid } = useParams()
     let page = parseInt(pid || '0') || 0
     const token = useAtomValue(TokenAtom)
+    const user = useAtomValue(UserAtom)
     const [data, setData] = useState<TransactionModel[]>([])
+
+    const [price, setPrice] = useState<PriceModel>({
+        next_update: 0,
+        usd_irr: 0,
+        eth_usd: 0,
+    })
 
     const fetch_transactions = async () => {
         try {
@@ -44,37 +52,52 @@ const Transactions: FC = () => {
     }
 
     useEffect(() => {
+        if (!token) return
+
         fetch_transactions()
-    }, [])
+        fetch_price(token).then(res => {
+            if (res) setPrice(res)
+        })
+    }, [token])
 
     return (
         <section className='transactions-container'>
             <h2 className='section-header section_title'>تراکنش های من </h2>
             <div className='transactions-wrapper'>
                 {data.map(t => (
-                    <TransactionCard {...t} type={'deposit'} />
+                    <TransactionCard {...t} price={price} user={user} />
                 ))}
             </div>
         </section>
     )
 }
 
-type TransactionCardProps = TransactionModel & {
-    type: 'deposit' | 'withdraw'
+type CardProps = TransactionModel & {
+    price: PriceModel
+    user: UserModel
 }
 
-const TransactionCard: FC<TransactionCardProps> = ({ type, amount }) => {
-    type titleTypes = {
-        [k in typeof type]: string
-    }
-    const titles: titleTypes = {
-        deposit: 'واریز',
-        withdraw: 'برداشت',
-    }
+const TransactionCard: FC<CardProps> = props => {
+    const { amount, sender, receiver, price } = props
+
+    const [state, setState] = useState({ title: '', type: '' })
+
+    useEffect(() => {
+        if (!sender || !receiver) return
+
+        if (sender == 'system') {
+            setState({ title: 'برداشت', type: 'withdraw' })
+        } else if (receiver == 'system') {
+            setState({ title: 'واریز', type: 'deposit' })
+        } else {
+            // from user to another user
+            setState({ title: 'انتقال', type: 'move' })
+        }
+    }, [])
 
     return (
-        <div className={`transaction-card ${type}`}>
-            <h3 className='card-title title'>{titles[type]}</h3>
+        <div className={`transaction-card ${state.type}`}>
+            <h3 className='card-title title'>{state.title}</h3>
             <div className='datas'>
                 <div className='row title_small'>
                     <div className='holder-wrapper'>
@@ -104,7 +127,11 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, amount }) => {
                         <div className='holder '>مقدار به ریال</div>
                     </div>
                     <div className='data'>
-                        {(amount / 1e18).toLocaleString()}
+                        {(
+                            (amount / 1e18) *
+                            price.eth_usd *
+                            price.usd_irr
+                        ).toLocaleString()}
                     </div>
                 </div>
                 <div className='row title_small'>

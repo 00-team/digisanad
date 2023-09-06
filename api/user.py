@@ -121,7 +121,7 @@ async def withdrawal(request: Request, body: WithdrawalBody):
 
 
 class PriceResponse(BaseModel):
-    last_update: int
+    next_update: int
     usd_irr: int
     eth_usd: int
 
@@ -165,7 +165,7 @@ async def price(request: Request):
             logging.exception(e)
 
     return {
-        'last_update': general.last_update,
+        'next_update': general.next_update,
         'usd_irr': general.usd_irr,
         'eth_usd': int(general.eth_usd),
     }
