@@ -665,7 +665,7 @@ const SignatureDrawer: FieldProps<SignatureField> = ({
     })
 
     if (disabled) {
-        return <img src={field.value[1]} />
+        return <img style={{ background: 'white' }} src={field.value[1]} />
     }
 
     const upload_signature = async (data: Blob) => {
@@ -726,7 +726,11 @@ const SignatureDrawer: FieldProps<SignatureField> = ({
     return (
         <div className='signature-container'>
             {field.value[0] > 0 ? (
-                <img src={field.value[1]} draggable={false} />
+                <img
+                    style={{ background: 'white' }}
+                    src={field.value[1]}
+                    draggable={false}
+                />
             ) : (
                 <canvas
                     width={500}
