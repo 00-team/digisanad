@@ -11,9 +11,9 @@ import { TokenAtom, UserAtom } from 'state'
 
 import {
     Contract,
-    JoinContract,
     Contracts,
     Deposit,
+    JoinContract,
     MyInfo,
     Transactions,
     Wallet,
@@ -33,6 +33,7 @@ const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
 const Schema = loadable(() => import('pages/schema'))
 const SchemaList = loadable(() => import('pages/Admin/schemas'))
+const UsersList = loadable(() => import('pages/Admin/usersList'))
 
 const ERROR_CODE_MESSAGE: { [k: number]: string } = {
     40002: 'کد وارد شده صحیح نمی باشد',
@@ -138,6 +139,7 @@ const App: FC = () => {
                 <Route path='schema/:schema_id' element={<Schema />} />
                 <Route path='schemas/' element={<SchemaList />} />
                 <Route path='schemas/:pid' element={<SchemaList />} />
+                <Route path='users/' element={<UsersList />} />
                 <Route path='*' element={<SchemaList />} />
             </Route>
         </Routes>
