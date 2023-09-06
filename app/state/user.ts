@@ -3,6 +3,12 @@ import axios from 'axios'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
+type PriceModel = {
+    last_update: number
+    usd_irr: number
+    eth_usd: number
+}
+
 type UserModel = {
     user_id: number
     phone: string
@@ -172,4 +178,12 @@ type UserPublic = {
     last_name: string
 }
 
-export { UserAtom, TokenAtom, AdminPerms, AP, UserModel, UserPublic }
+export {
+    UserAtom,
+    TokenAtom,
+    AdminPerms,
+    AP,
+    UserModel,
+    UserPublic,
+    PriceModel,
+}
