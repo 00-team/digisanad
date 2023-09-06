@@ -14,7 +14,7 @@
         "@react-shamsi/datepicker": "^0.1.0",
         "@types/ol": "^5.3.8",
         "axios": "^1.2.2",
-        "jotai": "^1.12.1",
+        "jotai": "^2.4.1",
         "leaflet": "^1.9.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
