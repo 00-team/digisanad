@@ -10,6 +10,7 @@ import {
     DashboardIcon,
     MenuIcon,
     NewContractIcon,
+    PersonIcon,
     SettingIcon,
 } from 'icons'
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
@@ -98,12 +99,20 @@ const Sidebar: FC = () => {
                     href='schemas/'
                     Icon={ContractIcon}
                 />
+
                 <SidebarRow
                     title='قرارداد جدید'
                     className='dashboard'
                     href=''
                     onclick={add_schema}
                     Icon={NewContractIcon}
+                />
+
+                <SidebarRow
+                    title='کاربران سایت'
+                    className='users'
+                    href='users/'
+                    Icon={PersonIcon}
                 />
                 <SidebarRow
                     title='داشبورد'
