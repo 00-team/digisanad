@@ -42,7 +42,7 @@ export type FieldViewProps = {
 
 export type BaseField = {
     uid: UID
-    // title: string
+    title?: string
     // description?: string | null
     optional?: boolean
     changers: UID[]
@@ -65,7 +65,8 @@ export type DateField = BaseField & {
 export type PriceField = BaseField & {
     type: 'price'
     value: number
-    payer: UID
+    senders: [UID, number][]
+    receivers: [UID, number][]
 }
 
 export type SignatureField = BaseField & {
@@ -160,7 +161,8 @@ const default_fields: X = {
         type: 'price',
         changers: [],
         uid: '',
-        payer: '',
+        senders: [],
+        receivers: [],
         value: 0,
         lock: false,
     },
