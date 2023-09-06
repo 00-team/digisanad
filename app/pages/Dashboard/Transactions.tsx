@@ -90,7 +90,18 @@ const TransactionCard: FC<TransactionCardProps> = ({ type, amount }) => {
                         <div className='icon'>
                             <CoinIcon size={25} />
                         </div>
-                        <div className='holder '>مقدار</div>
+                        <div className='holder '>مقدار به اتر</div>
+                    </div>
+                    <div className='data'>
+                        {(amount / 1e18).toLocaleString()}
+                    </div>
+                </div>
+                <div className='row title_small'>
+                    <div className='holder-wrapper'>
+                        <div className='icon'>
+                            <CoinIcon size={25} />
+                        </div>
+                        <div className='holder '>مقدار به ریال</div>
                     </div>
                     <div className='data'>
                         {(amount / 1e18).toLocaleString()}
