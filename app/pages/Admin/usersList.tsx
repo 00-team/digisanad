@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
+import { EditIcon } from 'icons'
 
 import { useAtomValue } from 'jotai'
 import { TokenAtom, UserModel } from 'state'
@@ -42,6 +43,7 @@ const UsersList: FC = () => {
                         <th className='name'>نام</th>
                         <th className='lname'>نام خانوادگی</th>
                         <th className='phone'>شماره تلفن</th>
+                        <th className='edit'>تنظیم</th>
                     </thead>
                     <tbody className='title_smaller'>
                         {users &&
@@ -53,6 +55,10 @@ const UsersList: FC = () => {
                                             <td>{first_name}</td>
                                             <td>{last_name}</td>
                                             <td>{phone}</td>
+                                            <td className='edit'>
+                                                <EditIcon size={25} />
+                                                تنظیم
+                                            </td>
                                         </tr>
                                     )
                                 }
