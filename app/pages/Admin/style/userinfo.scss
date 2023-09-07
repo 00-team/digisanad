@@ -13,6 +13,9 @@ section.user-container {
     overflow-y: auto;
     scrollbar-gutter: stable;
 
+    position: relative;
+    isolation: isolate;
+
     &.empty {
         display: grid;
         place-items: center;
@@ -28,9 +31,20 @@ section.user-container {
         height: auto;
         background-color: white;
 
-        border-radius: 5px;
+        border-radius: 10px;
 
         padding: 2rem;
+
+        .perms-btn {
+            width: 100%;
+
+            padding: 0.5rem 1rem;
+
+            color: white;
+
+            border-radius: 5px;
+            background-color: var(--ten-percent);
+        }
 
         .row {
             display: flex;
@@ -66,6 +80,103 @@ section.user-container {
                     to {
                         width: 90%;
                     }
+                }
+            }
+        }
+    }
+    .perms-container {
+        position: absolute;
+        inset: 0;
+
+        display: grid;
+        place-items: center;
+
+        width: 100%;
+        height: 100%;
+
+        backdrop-filter: blur(5px);
+
+        z-index: 1;
+
+        .perms-wrapper {
+            width: clamp(0px, 100%, 1200px);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4vh;
+
+            padding: 1rem 1.5rem;
+
+            // debug
+            height: 75vh;
+
+            border-radius: 10px;
+
+            background-color: white;
+
+            position: relative;
+            isolation: isolate;
+
+            .close {
+                position: absolute;
+                top: 1rem;
+                right: 1.5rem;
+
+                color: var(--alert-error);
+
+                cursor: pointer;
+
+                padding: 10px;
+            }
+
+            .perms {
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+                align-content: center;
+                justify-content: space-between;
+
+                &::before {
+                    content: '';
+
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    background-color: black;
+
+                    height: 70%;
+                    width: 1px;
+                }
+
+                .perms-have,
+                .perms-havent {
+                    width: 40%;
+
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                    column-gap: calc(1vw + 2.5px);
+                    row-gap: calc(1vh + 2.5px);
+
+                    .perm {
+                        padding: 0.75rem 1.5rem;
+
+                        background-color: var(--ten-percent);
+                        color: white;
+
+                        border-radius: 5px;
+
+                        text-align: center;
+                        cursor: pointer;
+                    }
+                }
+
+                .perms-have {
                 }
             }
         }
