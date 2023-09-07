@@ -182,6 +182,7 @@ export {
     UserAtom,
     TokenAtom,
     AdminPerms,
+    AdminPermsModel,
     AP,
     UserModel,
     UserPublic,
