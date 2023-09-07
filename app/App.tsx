@@ -33,8 +33,8 @@ const Dashboard = loadable(() => import('pages/Dashboard'))
 const Admin = loadable(() => import('pages/Admin'))
 const Schema = loadable(() => import('pages/schema'))
 const SchemaList = loadable(() => import('pages/Admin/schemas'))
-const UsersList = loadable(() => import('pages/Admin/usersList'))
-const UserInfo = loadable(() => import('pages/Admin/userInfo'))
+const AdminUsers = loadable(() => import('pages/Admin/users'))
+const AdminUser = loadable(() => import('pages/Admin/user'))
 
 const ERROR_CODE_MESSAGE: { [k: number]: string } = {
     40002: 'کد وارد شده صحیح نمی باشد',
@@ -140,8 +140,9 @@ const App: FC = () => {
                 <Route path='schema/:schema_id' element={<Schema />} />
                 <Route path='schemas/' element={<SchemaList />} />
                 <Route path='schemas/:pid' element={<SchemaList />} />
-                <Route path='users/' element={<UsersList />} />
-                <Route path='user/:user_id' element={<UserInfo />} />
+                <Route path='users/' element={<AdminUsers />} />
+                <Route path='users/:pid' element={<AdminUsers />} />
+                <Route path='user/:user_id' element={<AdminUser />} />
                 <Route path='*' element={<SchemaList />} />
             </Route>
         </Routes>

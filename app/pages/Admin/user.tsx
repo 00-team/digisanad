@@ -14,7 +14,7 @@ import {
     PostalCodeIcon,
     WalletIcon,
 } from 'icons'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
 import { AP, PermList, TokenAtom, UserModel } from 'state'
@@ -24,45 +24,47 @@ import './style/userinfo.scss'
 const UserInfo: FC = () => {
     const token = useAtomValue(TokenAtom)
 
-    const [activePerms, setactivePerms] = useState([''])
-    const [showPerms, setshowPerms] = useState(false)
-    const [Data, setData] = useState<UserModel>()
+    const [activePerms, setActivePerms] = useState([''])
+    const [showPerms, setShowPerms] = useState(false)
+    const [data, setData] = useState<UserModel>()
 
+    const navigate = useNavigate()
     const { user_id } = useParams()
 
-    const fetch_user = async () => {
+    const fetch_data = async () => {
         const response = await axios.get(`/api/admin/users/${user_id}/`, {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
+            headers: { Authorization: 'Bearer ' + token },
         })
         setData(response.data)
     }
 
     useEffect(() => {
-        if (!Data) return
+        if (!data) return
 
-        const perms = BigInt(Data.admin || 0)
+        const perms = BigInt(data.admin || 0)
 
         Object.entries(PermList).map(([key, value]) => {
             // @ts-ignore
             if (perms & AP[key]) {
-                setactivePerms([...activePerms, value.display])
+                setActivePerms([...activePerms, value.display])
             }
         })
-    }, [Data])
+    }, [data])
 
     useEffect(() => {
-        fetch_user()
-    }, [])
+        if (!user_id) {
+            navigate('/admin/users/')
+            return
+        }
 
-    console.log(Data)
+        fetch_data()
+    }, [user_id])
 
-    if (!Data)
+    if (!data)
         return (
             <section className='user-container empty'>
                 <h3 className='section_title'>
-                    کاربری با همچین مشخصاتی وجود ندارد!{' '}
+                    کاربری با همچین مشخصاتی وجود ندارد!
                 </h3>
             </section>
         )
@@ -70,72 +72,72 @@ const UserInfo: FC = () => {
     return (
         <section className='user-container'>
             <h3 className='section_title'>
-                {Data.first_name} {Data.last_name}
+                {data.first_name} {data.last_name}
             </h3>
             <div className='user-wrapper title'>
                 <button
-                    onClick={() => setshowPerms(true)}
+                    onClick={() => setShowPerms(true)}
                     className='perms-btn title'
                 >
                     دسترسی ها
                 </button>
                 <Row
                     Icon={PersonIcon}
-                    data={Data.first_name + ' ' + Data.last_name}
+                    data={data.first_name + ' ' + data.last_name}
                     className={'nickname'}
                     holder={'نام کاربری'}
                 />
                 <Row
                     Icon={AdminIcon}
-                    data={Data.admin ? 'هست' : 'نیست'}
+                    data={BigInt(data.admin || 0) ? 'هست' : 'نیست'}
                     className={'admin'}
                     holder={'ناظر'}
                 />
                 <Row
                     Icon={PhoneIcon2}
-                    data={Data.phone}
+                    data={data.phone}
                     className={'phone'}
                     holder={'تلفن همراه'}
                 />
                 <Row
                     Icon={NationalIdIcon}
-                    data={Data.national_id}
+                    data={data.national_id}
                     className={'national-id'}
                     holder={'کد ملی'}
                 />
                 <Row
                     Icon={CallenderIcon}
-                    data={Data.birth_date}
+                    data={data.birth_date}
                     className={'birth-date'}
                     holder={'تاریخ تولد '}
                 />
                 <Row
                     Icon={EmailIcon}
-                    data={Data.email}
+                    data={data.email}
                     className={'email'}
                     holder={'پست الکترونیکی'}
                 />
                 <Row
                     Icon={AddressIcon}
-                    data={Data.address}
+                    data={data.address}
                     className={'address title_small'}
                     holder={'نشانی محل سکونت '}
                 />
                 <Row
                     Icon={PostalCodeIcon}
-                    data={Data.postal_code}
+                    data={data.postal_code}
                     className={'postal-code '}
                     holder={'کد پستی'}
                 />
                 <Row
                     Icon={WalletIcon}
-                    data={Data.w_eth_in_acc}
+                    data={data.w_eth_in_acc}
                     className={'wallet-acc '}
                     holder={'موجودی حساب'}
                 />
                 <Row
                     Icon={WalletIcon}
-                    data={Data.w_eth_in_sys}
+                    data={data.w_eth_in_sys}
                     className={'wallet-sys '}
                     holder={'موجودی سیستم'}
                 />
@@ -144,7 +146,7 @@ const UserInfo: FC = () => {
                 <div className='perms-container'>
                     <div className='perms-wrapper'>
                         <div
-                            onClick={() => setshowPerms(false)}
+                            onClick={() => setShowPerms(false)}
                             className='close'
                         >
                             <CloseIcon size={25} />
@@ -166,7 +168,7 @@ const UserInfo: FC = () => {
                                     return (
                                         <button
                                             onClick={() =>
-                                                setactivePerms(perms => {
+                                                setActivePerms(perms => {
                                                     return perms.filter(
                                                         activeperm =>
                                                             activeperm !== perm
@@ -191,7 +193,7 @@ const UserInfo: FC = () => {
 
                                 {Object.entries(PermList).map(
                                     ([key, value], idx1) => {
-                                        const perms = BigInt(Data.admin || 0)
+                                        const perms = BigInt(data.admin || 0)
 
                                         if (activePerms.includes(value.display))
                                             return
@@ -205,7 +207,7 @@ const UserInfo: FC = () => {
                                                     className='perm'
                                                     key={idx1}
                                                     onClick={() =>
-                                                        setactivePerms([
+                                                        setActivePerms([
                                                             ...activePerms,
                                                             value.display,
                                                         ])

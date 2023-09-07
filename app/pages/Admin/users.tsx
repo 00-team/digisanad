@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 
 import axios from 'axios'
 import { EditIcon } from 'icons'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
 import { TokenAtom, UserModel } from 'state'
@@ -11,19 +12,31 @@ import './style/userlist.scss'
 const UsersList: FC = () => {
     const token = useAtomValue(TokenAtom)
     const [users, setUsers] = useState<UserModel[]>([])
+    const { pid } = useParams()
+    const navigate = useNavigate()
+    let page = parseInt(pid || '0') || 0
 
     const fetch_users = async () => {
-        const response = await axios.post(
-            '/api/admin/users/',
-            {},
-            { headers: { Authorization: 'Bearer ' + token } }
-        )
-        setUsers(response.data)
+        try {
+            const response = await axios.post(
+                '/api/admin/users/',
+                { page },
+                { headers: { Authorization: 'Bearer ' + token } }
+            )
+            if (!response.data.length && page) {
+                navigate('/admin/users/' + (page - 1))
+                return
+            }
+            setUsers(response.data)
+        } catch (error) {
+            HandleError(error)
+            setUsers([])
+        }
     }
 
     useEffect(() => {
         fetch_users()
-    }, [token])
+    }, [token, page])
 
     return (
         <section className='users-container'>
@@ -60,6 +73,21 @@ const UsersList: FC = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+            <div className='actions title_smaller'>
+                <div className='pagination'>
+                    <button
+                        disabled={page == 0}
+                        onClick={() => navigate('/admin/users/' + (page - 1))}
+                    >
+                        صفحه قبلی
+                    </button>
+                    <button
+                        onClick={() => navigate('/admin/users/' + (page + 1))}
+                    >
+                        صفحه بعدی
+                    </button>
+                </div>
             </div>
         </section>
     )

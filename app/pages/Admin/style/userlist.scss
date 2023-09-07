@@ -57,4 +57,42 @@ section.users-container {
             }
         }
     }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+        width: 100%;
+
+        direction: rtl;
+
+        margin-top: auto;
+
+        padding: 0 1rem;
+
+        .pagination {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+
+    button {
+        --color: var(--ten-percent);
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--color);
+        border-radius: 5px;
+        transition: 200ms ease-in-out;
+        transition-property: background-color, color;
+
+        &:hover:enabled {
+            background-color: var(--color);
+            color: white;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+        }
+    }
 }

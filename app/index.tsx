@@ -4,6 +4,8 @@ import { createRoot } from 'react-dom/client'
 import { Options, Provider as AlertProvider } from '@00-team/react-alert'
 import { BrowserRouter as Router } from 'react-router-dom'
 
+import { Provider as JotaiProvider, createStore } from 'jotai'
+
 import { Alert } from 'components'
 
 import App from './App'
@@ -15,13 +17,17 @@ const AlertOptions: Options = {
     inner: () => ({ className: 'inner' }),
 }
 
+const jotai_store = createStore()
+
 const Root: FC = () => {
     return (
-        <AlertProvider template={Alert} options={AlertOptions}>
-            <Router>
-                <App />
-            </Router>
-        </AlertProvider>
+        <JotaiProvider store={jotai_store}>
+            <AlertProvider template={Alert} options={AlertOptions}>
+                <Router>
+                    <App />
+                </Router>
+            </AlertProvider>
+        </JotaiProvider>
     )
 }
 
