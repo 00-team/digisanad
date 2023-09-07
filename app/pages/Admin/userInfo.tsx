@@ -5,6 +5,7 @@ import {
     AddressIcon,
     AdminIcon,
     CallenderIcon,
+    CheckIcon,
     CloseIcon,
     EmailIcon,
     NationalIdIcon,
@@ -136,11 +137,26 @@ const UserInfo: FC = () => {
                         <h4 className='section_title'>دسترسی ها</h4>
                         <div className='perms title_smaller'>
                             <div className='perms-have'>
+                                <h5 className='title'>
+                                    <CheckIcon
+                                        style={{
+                                            color: 'rgb(0, 129, 73)',
+                                        }}
+                                    />
+                                    داشته ها
+                                </h5>
+
                                 <div className='perm'>لورم</div>
                                 <div className='perm'>ایپسوم</div>
                                 <div className='perm'>لورم ایپسوم</div>
                             </div>
                             <div className='perms-havent'>
+                                <h5 className='title'>
+                                    <CloseIcon
+                                        style={{ color: 'var(--alert-error)' }}
+                                    />
+                                    نداشته ها
+                                </h5>
                                 <div className='perm'>لورم</div>
                                 <div className='perm'>لورم ایپسوم</div>
                                 <div className='perm'>ایپسوم</div>
