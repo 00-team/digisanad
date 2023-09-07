@@ -164,9 +164,20 @@ const UserInfo: FC = () => {
                                 {activePerms.map((perm, index) => {
                                     if (!perm) return
                                     return (
-                                        <div className='perm' key={index}>
+                                        <button
+                                            onClick={() =>
+                                                setactivePerms(perms => {
+                                                    return perms.filter(
+                                                        activeperm =>
+                                                            activeperm !== perm
+                                                    )
+                                                })
+                                            }
+                                            className='perm'
+                                            key={index}
+                                        >
                                             {perm}
-                                        </div>
+                                        </button>
                                     )
                                 })}
                             </div>
@@ -181,17 +192,27 @@ const UserInfo: FC = () => {
                                 {Object.entries(PermList).map(
                                     ([key, value], idx1) => {
                                         const perms = BigInt(Data.admin || 0)
+
+                                        if (activePerms.includes(value.display))
+                                            return
+
                                         // @ts-ignore
                                         if (perms & AP[key]) {
                                             return
                                         } else {
                                             return (
-                                                <div
+                                                <button
                                                     className='perm'
                                                     key={idx1}
+                                                    onClick={() =>
+                                                        setactivePerms([
+                                                            ...activePerms,
+                                                            value.display,
+                                                        ])
+                                                    }
                                                 >
                                                     {value.display}
-                                                </div>
+                                                </button>
                                             )
                                         }
                                     }
