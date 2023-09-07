@@ -5,6 +5,7 @@ import {
     AddressIcon,
     AdminIcon,
     CallenderIcon,
+    CloseIcon,
     EmailIcon,
     NationalIdIcon,
     PersonIcon,
@@ -21,6 +22,7 @@ import './style/userinfo.scss'
 const UserInfo: FC = () => {
     const token = useAtomValue(TokenAtom)
 
+    const [showPerms, setshowPerms] = useState(false)
     const [Data, setData] = useState<UserModel>()
 
     const userId = location.pathname.split('/')[3]
@@ -55,6 +57,12 @@ const UserInfo: FC = () => {
                 {Data.first_name} {Data.last_name}
             </h3>
             <div className='user-wrapper title'>
+                <button
+                    onClick={() => setshowPerms(true)}
+                    className='perms-btn title'
+                >
+                    دسترسی ها
+                </button>
                 <Row
                     Icon={PersonIcon}
                     data={Data.first_name + ' ' + Data.last_name}
@@ -116,6 +124,31 @@ const UserInfo: FC = () => {
                     holder={'موجودی سیستم'}
                 />
             </div>
+            {showPerms && (
+                <div className='perms-container'>
+                    <div className='perms-wrapper'>
+                        <div
+                            onClick={() => setshowPerms(false)}
+                            className='close'
+                        >
+                            <CloseIcon size={25} />
+                        </div>
+                        <h4 className='section_title'>دسترسی ها</h4>
+                        <div className='perms title_smaller'>
+                            <div className='perms-have'>
+                                <div className='perm'>لورم</div>
+                                <div className='perm'>ایپسوم</div>
+                                <div className='perm'>لورم ایپسوم</div>
+                            </div>
+                            <div className='perms-havent'>
+                                <div className='perm'>لورم</div>
+                                <div className='perm'>لورم ایپسوم</div>
+                                <div className='perm'>ایپسوم</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }
