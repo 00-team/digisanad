@@ -32,9 +32,28 @@ section.users-container {
 
                 padding: 0.5rem 0.25rem;
             }
+            tr {
+                position: relative;
+                isolation: isolate;
+            }
+
+            td:nth-child(-1) {
+                width: auto;
+                border: none;
+                margin: 1px;
+            }
 
             .id {
                 width: clamp(0px, 50px, 100px);
+            }
+            td.edit {
+                cursor: pointer;
+
+                svg {
+                    display: inline-block;
+
+                    margin: 0 0.5rem;
+                }
             }
         }
     }
