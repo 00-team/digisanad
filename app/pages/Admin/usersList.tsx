@@ -56,8 +56,12 @@ const UsersList: FC = () => {
                                             <td>{last_name}</td>
                                             <td>{phone}</td>
                                             <td className='edit'>
-                                                <EditIcon size={25} />
-                                                تنظیم
+                                                <a
+                                                    href={`/admin/user/${user_id}/`}
+                                                >
+                                                    <EditIcon size={25} />
+                                                    تنظیم
+                                                </a>
                                             </td>
                                         </tr>
                                     )
