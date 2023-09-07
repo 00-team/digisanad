@@ -167,6 +167,9 @@ async def sign(request: Request, contract_id: int):
 
     for uid, field in contract.data.fields.items():
         if field.type == FieldType.PRICE:
+            if not field.senders and not field.receivers:
+                continue
+
             price = field.value
             xprice = (100 / price)
             senders = await get_usr_pct(field.senders, uid_user_id)

@@ -59,7 +59,7 @@ const Schema: FC = () => {
         draft: true,
         schema: default_schema,
         page: -1,
-        uid: 'question_0',
+        uid: 'price_0',
     })
     const update = () => setState(s => ({ ...s }))
     const updateState = (v: Partial<State>) => setState(s => ({ ...s, ...v }))
@@ -81,7 +81,7 @@ const Schema: FC = () => {
             draft: response.data.draft,
             schema: response.data.data,
             page: 0,
-            uid: '',
+            uid: 'price_0',
         })
     }
 

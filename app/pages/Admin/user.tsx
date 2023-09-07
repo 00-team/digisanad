@@ -32,7 +32,7 @@ const UserInfo: FC = () => {
     const token = useAtomValue(TokenAtom)
     const self_perms = useAtomValue(AdminPerms)
 
-    const [showPerms, setShowPerms] = useState(true)
+    const [showPerms, setShowPerms] = useState(false)
     const [data, setData] = useState<UserModel>()
 
     const navigate = useNavigate()

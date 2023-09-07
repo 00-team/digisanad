@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useRef } from 'react'
 
 import {
     CloseIcon,
@@ -7,7 +7,9 @@ import {
     MaximumIcon,
     MinimunIcon,
     PersonIcon,
+    PlusIcon,
     QuestionIcon,
+    RemoveIcon,
     TypeIcon,
 } from 'icons'
 
@@ -93,25 +95,29 @@ const Config: FC<ConfigProps> = ({ field, update, schema }) => {
             </div>
 
             <div className='config-row'>
-                <label className='holder' htmlFor='fc_optinal'>
+                <label className='holder'>
                     <PersonIcon size={25} />
                     تغییر دهنده:
                 </label>
-                <select
-                    onChange={e => {
-                        let uid = e.currentTarget.value
-                        if (!uid) field.changers = []
-                        else field.changers = [uid]
-                        update()
-                    }}
-                >
-                    <option value=''>همه</option>
-                    {user_uids.map(([uid, title], i) => (
-                        <option key={i} value={uid}>
-                            {title || uid}
-                        </option>
-                    ))}
-                </select>
+                {field.type == 'user' ? (
+                    <span style={{ flexShrink: 0 }}>سازنده قرارداد</span>
+                ) : (
+                    <select
+                        onChange={e => {
+                            let uid = e.currentTarget.value
+                            if (!uid) field.changers = []
+                            else field.changers = [uid]
+                            update()
+                        }}
+                    >
+                        <option value=''>همه</option>
+                        {user_uids.map(([uid, title], i) => (
+                            <option key={i} value={uid}>
+                                {title || uid}
+                            </option>
+                        ))}
+                    </select>
+                )}
             </div>
 
             {field.type in config_fields &&
@@ -127,34 +133,142 @@ type FieldProps<T> = FC<{
     update: (save?: true) => void
 }>
 
+type X = PriceField['senders']
+function update_pct(input: X): X {
+    if (!input.length) return []
+
+    let sum = 0
+    let output: X = input.map((u, _, a) => {
+        let pct = Math.floor(100 / a.length)
+        sum += pct
+        return [u[0], pct]
+    })
+    output[output.length - 1]![1] += 100 - sum
+    return output
+}
+
 const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
-    let user_uids: user_uid_titles = Object.entries(schema.fields)
-        .filter(([, v]) => v.type == 'user')
-        .map(([k, v]) => [k, v.title])
+    let user_fields = Object.entries(schema.fields).filter(
+        uf => uf[1].type == 'user'
+    )
+    let uid_user: Map<string, string> = new Map(
+        user_fields.map(([uid, f]) => {
+            return [uid, f.title || f.uid]
+        })
+    )
+
+    const senders = useRef<HTMLSelectElement>(null)
+    const receivers = useRef<HTMLSelectElement>(null)
+
+    let both = field.receivers.concat(field.senders).map(x => x[0])
 
     return (
-        <div className='config-row'>
-            <label className='holder' htmlFor='fc_optinal'>
-                <PersonIcon size={25} />
-                پرداخت کننده:
-            </label>
-            <select
-                onChange={e => {
-                    let uid = e.currentTarget.value
-                    console.log(uid)
-                    // if (!uid) field.payer = ''
-                    // else field.payer = uid
-                    update
-                    field
-                }}
-            >
-                {user_uids.map(([uid, title], i) => (
-                    <option key={i} value={uid}>
-                        {title || uid}
-                    </option>
-                ))}
-            </select>
-        </div>
+        <>
+            <div className='config-row price'>
+                <label className='holder'>
+                    <PersonIcon size={25} />
+                    پرداخت کنندگان
+                </label>
+                <ul className='usr-pct-list'>
+                    {!field.senders.length && <li className='empty'>هیچکس</li>}
+                    {field.senders.map(([uid, pct], i) => (
+                        <li key={i}>
+                            <span className='name'>{uid_user.get(uid)}</span>
+                            <span className='pct'>{pct}%</span>
+                            <span
+                                className='remove'
+                                onClick={() => {
+                                    field.senders.splice(i, 1)
+                                    field.senders = update_pct(field.senders)
+                                    update()
+                                }}
+                            >
+                                <RemoveIcon />
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+                <div className='add-user'>
+                    <select ref={senders}>
+                        {user_fields
+                            .filter(uf => !both.includes(uf[0]))
+                            .map(([uid, field], i) => (
+                                <option key={i} value={uid}>
+                                    {field.title || uid}
+                                </option>
+                            ))}
+                    </select>
+                    <button
+                        onClick={() => {
+                            if (!senders.current) return
+
+                            field.senders = update_pct(
+                                field.senders.concat([
+                                    [senders.current.value, 0],
+                                ])
+                            )
+                            update()
+                        }}
+                    >
+                        <PlusIcon />
+                    </button>
+                </div>
+            </div>
+            <div className='config-row price'>
+                <label className='holder'>
+                    <PersonIcon size={25} />
+                    دریافت کنندگان
+                </label>
+                <ul className='usr-pct-list'>
+                    {!field.receivers.length && (
+                        <li className='empty'>هیچکس</li>
+                    )}
+                    {field.receivers.map(([uid, pct], i) => (
+                        <li key={i}>
+                            <span className='name'>{uid_user.get(uid)}</span>
+                            <span className='pct'>{pct}%</span>
+                            <span
+                                className='remove'
+                                onClick={() => {
+                                    field.receivers.splice(i, 1)
+                                    field.receivers = update_pct(
+                                        field.receivers
+                                    )
+                                    update()
+                                }}
+                            >
+                                <RemoveIcon />
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+                <div className='add-user'>
+                    <select ref={receivers}>
+                        {user_fields
+                            .filter(uf => !both.includes(uf[0]))
+                            .map(([uid, field], i) => (
+                                <option key={i} value={uid}>
+                                    {field.title || uid}
+                                </option>
+                            ))}
+                    </select>
+                    <button
+                        onClick={() => {
+                            if (!receivers.current) return
+
+                            field.receivers = update_pct(
+                                field.receivers.concat([
+                                    [receivers.current.value, 0],
+                                ])
+                            )
+                            update()
+                        }}
+                    >
+                        <PlusIcon />
+                    </button>
+                </div>
+            </div>
+        </>
     )
 }
 

@@ -1,3 +1,5 @@
+@use 'config' as g;
+
 .schema-viewer {
     direction: rtl;
     padding: 1rem;
@@ -8,6 +10,16 @@
     > div {
         padding: 0.2rem 0;
         margin-top: 2vh;
+    }
+
+    h1 {
+        font-size: clamp(1.6rem, 2.9vw + 1.3rem, 2.8rem);
+        font-family: 'iranBold';
+    }
+
+    h2 {
+        font-size: clamp(1rem, 2.2vw + 1rem, 2.5rem);
+        font-family: 'iranBold';
     }
 
     .field-wrapper {
