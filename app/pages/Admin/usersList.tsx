@@ -10,28 +10,20 @@ import './style/userlist.scss'
 
 const UsersList: FC = () => {
     const token = useAtomValue(TokenAtom)
-
-    const [users, setusers] = useState<UserModel[] | null>(null)
+    const [users, setUsers] = useState<UserModel[]>([])
 
     const fetch_users = async () => {
         const response = await axios.post(
             '/api/admin/users/',
             {},
-            {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-            }
+            { headers: { Authorization: 'Bearer ' + token } }
         )
-        setusers(response.data)
+        setUsers(response.data)
     }
 
     useEffect(() => {
         fetch_users()
-    }, [])
-    useEffect(() => {
-        console.log(users)
-    }, [users])
+    }, [token])
 
     return (
         <section className='users-container'>
@@ -39,34 +31,33 @@ const UsersList: FC = () => {
             <div className='users-wrapper'>
                 <table>
                     <thead className='title_small'>
-                        <th className='id'>شماره</th>
-                        <th className='name'>نام</th>
-                        <th className='lname'>نام خانوادگی</th>
-                        <th className='phone'>شماره تلفن</th>
-                        <th className='edit'>تنظیم</th>
+                        <tr>
+                            <th className='id'>شماره</th>
+                            <th className='name'>نام</th>
+                            <th className='lname'>نام خانوادگی</th>
+                            <th className='phone'>شماره تلفن</th>
+                            <th className='edit'>تنظیم</th>
+                        </tr>
                     </thead>
                     <tbody className='title_smaller'>
-                        {users &&
-                            users.map(
-                                ({ first_name, last_name, user_id, phone }) => {
-                                    return (
-                                        <tr>
-                                            <td>{user_id}</td>
-                                            <td>{first_name}</td>
-                                            <td>{last_name}</td>
-                                            <td>{phone}</td>
-                                            <td className='edit'>
-                                                <a
-                                                    href={`/admin/user/${user_id}/`}
-                                                >
-                                                    <EditIcon size={25} />
-                                                    تنظیم
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    )
-                                }
-                            )}
+                        {users.map(
+                            ({ first_name, last_name, user_id, phone }) => {
+                                return (
+                                    <tr key={user_id}>
+                                        <td>{user_id}</td>
+                                        <td>{first_name}</td>
+                                        <td>{last_name}</td>
+                                        <td>{phone}</td>
+                                        <td className='edit'>
+                                            <a href={`/admin/user/${user_id}/`}>
+                                                <EditIcon size={25} />
+                                                تنظیم
+                                            </a>
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                        )}
                     </tbody>
                 </table>
             </div>
