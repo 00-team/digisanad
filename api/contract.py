@@ -1,4 +1,5 @@
 
+import json
 from sqlite3 import IntegrityError
 from typing import ClassVar
 
@@ -8,12 +9,17 @@ from pydantic import BaseModel, constr
 from db.contract import contract_add, contract_delete, contract_get
 from db.contract import contract_update, contract_user_add
 from db.contract import contract_user_delete, contract_user_get
+from db.general import general_get, general_update
 from db.models import ContractModel, ContractStage, ContractTable
-from db.models import ContractUserTable, UserModel, UserPublic
-from db.user import user_public
+from db.models import ContractUserTable, FieldType, SchemaData
+from db.models import TransactionStatus, UserModel, UserPublic, UserTable
+from db.transaction import transaction_add
+from db.user import user_get, user_public, user_update
 from deps import user_required
 from shared import settings, sqlx
-from shared.errors import bad_args, bad_id, closed_contract, no_change
+from shared.errors import bad_args, bad_balance, bad_id, closed_contract
+from shared.errors import contract_invalid_changer, contract_invalid_price
+from shared.errors import contract_lock_field, contract_new_field, no_change
 from shared.models import IDModel, OkModel
 from shared.tools import random_string, utc_now
 
@@ -98,16 +104,207 @@ async def create(request: Request, body: CreateBody):
     return {'id': contract_id}
 
 
+async def get_usr_pct(items, user_uids) -> list[tuple[UserModel, int]]:
+    if not items:
+        raise contract_invalid_price
+
+    output = []
+
+    for item in items:
+        if not isinstance(item, list) or len(item) != 2:
+            raise contract_invalid_price
+
+        uid, pct = item
+        if uid not in user_uids or not isinstance(pct, int):
+            raise contract_invalid_price
+
+        user = await user_get(UserTable.user_id == user_uids[uid])
+        if user is None:
+            raise contract_invalid_price
+
+        output.append([user, pct])
+
+    if sum(p for _, p in output) != 100:
+        raise contract_invalid_price
+
+    return output
+
+
+@router.patch(
+    '/{contract_id}/sign/', response_model=OkModel,
+    openapi_extra={'errors': [bad_id, closed_contract]}
+)
+async def sign(request: Request, contract_id: int):
+    user: UserModel = request.state.user
+
+    contract = await contract_get(
+        ContractTable.contract_id == contract_id,
+        ContractTable.creator == user.user_id
+    )
+    if contract is None:
+        raise bad_id('Contract', contract_id, id=contract_id)
+
+    if contract.stage != ContractStage.DRAFT:
+        raise closed_contract
+
+    if not contract.data:
+        await contract_update(
+            ContractTable.contract_id == contract_id,
+            stage=ContractStage.DONE,
+            finish_date=utc_now(),
+            disable_invites=True
+        )
+        return {'ok': True}
+
+    uid_user_id = {}
+
+    for uid, field in contract.data.fields.items():
+        if field.type == FieldType.USER:
+            uid_user_id[uid] = field.value
+
+    general = await general_get()
+    movements = []
+
+    for uid, field in contract.data.fields.items():
+        if field.type == FieldType.PRICE:
+            price = field.value
+            xprice = (100 / price)
+            senders = await get_usr_pct(field.senders, uid_user_id)
+            receivers = await get_usr_pct(field.receivers, uid_user_id)
+
+            for sender, pct in senders:
+                amount = xprice * pct
+                if sender.w_eth_in_sys < amount + settings.eth_fee:
+                    raise bad_balance
+
+            movements.append((xprice, senders, receivers))
+
+    for xprice, senders, receivers in movements:
+        for sender, pct in senders:
+            amount = xprice * pct
+
+            general.eth_available += settings.eth_fee
+            sender.w_eth_in_sys -= amount + settings.eth_fee
+
+            await user_update(
+                UserTable.user_id == sender.user_id,
+                w_eth_in_sys=sender.w_eth_in_sys
+            )
+            await general_update(eth_available=general.eth_available)
+            await transaction_add(
+                sender=sender.user_id,
+                receiver=-2,
+                contract=contract_id,
+                status=TransactionStatus.SUCCESS,
+                amount=amount,
+                fee=settings.eth_fee,
+                last_update=utc_now(),
+                timestamp=utc_now(),
+            )
+
+        for receiver, pct in receivers:
+            amount = xprice * pct
+            receiver.w_eth_in_sys += amount
+
+            await user_update(
+                UserTable.user_id == receiver.user_id,
+                w_eth_in_sys=receiver.w_eth_in_sys
+            )
+            await transaction_add(
+                sender=-2,
+                receiver=receiver.user_id,
+                contract=contract_id,
+                status=TransactionStatus.SUCCESS,
+                amount=amount,
+                fee=0,
+                last_update=utc_now(),
+                timestamp=utc_now(),
+            )
+
+    await contract_update(
+        ContractTable.contract_id == contract_id,
+        stage=ContractStage.DONE,
+        finish_date=utc_now(),
+        disable_invites=True
+    )
+    return {'ok': True}
+
+
 class UpdateBody(BaseModel):
     title: str = None
-    data: dict = None
+    data: SchemaData = None
     disable_invites: bool = None
-    stage: ContractStage = None
+
+
+def get_user_uids(
+    before: SchemaData, after: SchemaData,
+    changer: int, creator: int
+) -> dict[str, int]:
+    uid_user_id = {}
+
+    for uid, new in before.fields.items():
+        old = before.fields.get(uid)
+        if old is None:
+            raise contract_new_field
+
+        if old.type != new.type:
+            raise contract_new_field
+
+        if old.type != FieldType.USER:
+            continue
+
+        if old.value != new.value:
+            if old.lock:
+                raise contract_lock_field
+
+            if changer != creator:
+                raise contract_invalid_changer
+
+        uid_user_id[uid] = new.value
+
+    return uid_user_id
+
+
+def check_schema(
+    before: SchemaData, after: SchemaData,
+    changer: int, creator: int
+):
+    uid_user_id = get_user_uids(before, after, changer, creator)
+
+    for uid, new in after.fields.items():
+        old = before.fields.get(uid)
+
+        if old.lock and not new.lock:
+            raise contract_lock_field
+
+        if len(old.changers) != len(new.changers):
+            raise contract_invalid_changer
+
+        for c in old.changers:
+            if c not in new.changers:
+                raise contract_invalid_changer
+
+        if old.type == FieldType.USER:
+            continue
+
+        if json.dumps(old['value']) != json.dumps(new['value']):
+            if old.lock:
+                raise contract_lock_field
+
+            if old.changers:
+                for cuid in old.changers:
+                    if uid_user_id[cuid] == changer:
+                        break
+                else:
+                    raise contract_invalid_changer
 
 
 @router.patch(
     '/{contract_id}/', response_model=OkModel,
-    openapi_extra={'errors': [bad_id, no_change]}
+    openapi_extra={'errors': [
+        bad_id, no_change, contract_new_field,
+        contract_lock_field, contract_invalid_changer,
+    ]}
 )
 async def update(request: Request, contract_id: int, body: UpdateBody):
     user: UserModel = request.state.user
@@ -125,11 +322,8 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
     if contract.stage != ContractStage.DRAFT:
         raise closed_contract
 
-    if body.stage and body.stage != contract.stage:
-        patch['disable_invites'] = True
-
-        if body.stage == ContractStage.DONE:
-            patch['finish_date'] = utc_now()
+    if body.data:
+        check_schema(contract.data, body.data, user, contract.creator)
 
     if not patch:
         raise no_change

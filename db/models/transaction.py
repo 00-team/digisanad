@@ -18,15 +18,13 @@ class TransactionTable(BaseTable):
         index=True, autoincrement=True
     )
     transaction_hash = Column(String)
-
     sender = Column(
-        'sender', Integer,
-        nullable=False, index=True, server_default=text('-1')
+        Integer, nullable=False, index=True, server_default=text('-1')
     )
     receiver = Column(
-        'receiver', Integer,
-        nullable=False, index=True, server_default=text('-1')
+        Integer, nullable=False, index=True, server_default=text('-1')
     )
+    contract = Column(Integer)
     status = Column(String, nullable=False, server_default='unknown')
     amount = Column(Integer, nullable=False)
     fee = Column(Integer, nullable=False)
@@ -45,6 +43,7 @@ class TransactionModel(BaseModel):
     transaction_hash: str | None = None
     sender: int
     receiver: int
+    contract: int | None = None
     amount: int
     fee: int
     status: TransactionStatus

@@ -131,6 +131,23 @@ closed_contract = Error(
     400
 )
 
+contract_new_field = Error(
+    41001, 'Contract New Field',
+    "contract can't have new fields after stage change", 400
+)
+contract_lock_field = Error(
+    41002, 'Contract Lock Field',
+    "contract field is locked", 400
+)
+contract_invalid_changer = Error(
+    41003, 'Contract Invalid Changer',
+    "contract changers are invalid", 400
+)
+contract_invalid_price = Error(
+    41004, 'Contract Invalid Price',
+    "contract price is invalid", 400
+)
+
 database_error = Error(50001, 'Database Error', 'Database Error', 500)
 
 
@@ -139,6 +156,9 @@ all_errors = [
     no_change, bad_id, bad_auth, rate_limited,
     bad_args, register_required, account_exists,
     bad_balance, bad_file, closed_contract,
+
+    contract_new_field, contract_invalid_changer,
+    contract_lock_field, contract_invalid_price,
 
     database_error
 ]

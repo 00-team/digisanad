@@ -6,6 +6,7 @@ from sqlalchemy import JSON, Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy import UniqueConstraint, text
 
 from .common import BaseTable
+from .schema import SchemaData
 from .user import UserTable
 
 
@@ -70,7 +71,7 @@ class ContractModel(BaseModel):
     creator: int
     title: str
     stage: ContractStage
-    data: dict
+    data: SchemaData
     start_date: int
     finish_date: int
     pepper: str

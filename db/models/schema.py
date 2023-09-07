@@ -1,5 +1,7 @@
 
 
+from enum import Enum
+
 from pydantic import BaseModel, Extra
 from sqlalchemy import JSON, Boolean, Column, Integer, String, text
 
@@ -24,9 +26,27 @@ class SchemaPage(BaseModel, extra=Extra.allow):
     content: str
 
 
+class FieldType(str, Enum):
+    GEO = 'geo'
+    INT = 'int'
+    STR = 'str'
+    DATE = 'date'
+    USER = 'user'
+    TEXT = 'text'
+    LINK = 'link'
+    PRICE = 'price'
+    RECORD = 'record'
+    OPTION = 'option'
+    QUESTION = 'question'
+    SIGNATURE = 'signature'
+
+
 class SchemaField(BaseModel, extra=Extra.allow):
     uid: str
+    type: FieldType
     optional: bool = False
+    lock: bool = False
+    changers: list[str]
 
 
 class SchemaData(BaseModel, extra=Extra.allow):
