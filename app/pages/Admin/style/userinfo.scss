@@ -160,6 +160,7 @@ section.user-container {
                     display: flex;
                     flex-wrap: wrap;
                     align-items: flex-start;
+                    align-content: flex-start;
                     column-gap: calc(1vw + 2.5px);
                     row-gap: calc(1vh + 2.5px);
 
