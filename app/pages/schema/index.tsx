@@ -10,12 +10,13 @@ import React, {
 
 import { C } from '@00-team/utils'
 
+import { fetch_price } from 'api'
 import axios from 'axios'
 import { CopyIcon, PlusIcon, SettingIcon, FileIcon, RemoveIcon } from 'icons'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { SetStateAction, useAtomValue } from 'jotai'
-import { TokenAtom } from 'state'
+import { SetStateAction, useAtomValue, useSetAtom } from 'jotai'
+import { PriceAtom, TokenAtom } from 'state'
 
 import { Config } from './config'
 import {
@@ -52,6 +53,16 @@ const Schema: FC = () => {
     const { schema_id } = useParams()
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
+
+    const setPrice = useSetAtom(PriceAtom)
+
+    useEffect(() => {
+        if (!token) return
+
+        fetch_price(token).then(res => {
+            if (res) setPrice(res)
+        })
+    }, [token])
 
     const [state, setState] = useState<State>({
         title: '',
@@ -115,7 +126,8 @@ const Schema: FC = () => {
 
     useEffect(() => {
         if (!state.schema.pages.length) {
-            if (state.page != -1) updateState({ page: -1 })
+            if (state.page != -1)
+                updateState({ page: -1, schema: { pages: [], fields: {} } })
             return
         }
 
@@ -233,25 +245,22 @@ const Sidebar: FC<SidebarProps> = ({ inserter, state, setState }) => {
 
     const insert_field = (field: FieldType) => {
         if (!inserter) return
-        // Object.keys(
-        //     state.schema.fields
-        // ).forEach(u => {
-        //     let exists =
-        //         state.schema.pages.find(p => {
-        //             return (
-        //                 p.content.indexOf(
-        //                     `({${u}})`
-        //                 ) != -1
-        //             )
-        //         })
-        //
-        //     if (!exists) {
-        //         console.info(
-        //             u + ' was not found'
-        //         )
-        //         delete state.schema.fields[u]
-        //     }
-        // })
+
+        const keys = Object.keys(state.schema.fields)
+        for (let i = 0; i < keys.length; ++i) {
+            let k = keys[i]!
+            let found = false
+            let s = '({' + k + '})'
+
+            for (let j = 0; j < state.schema.pages.length; ++j) {
+                if (state.schema.pages[j]!.content.indexOf(s) != -1) {
+                    found = true
+                    break
+                }
+            }
+
+            if (!found) delete state.schema.fields[k]
+        }
 
         let n = 0
         let uid = field.type + '_' + n

@@ -25,7 +25,7 @@ import {
 } from 'react-leaflet'
 
 import { useAtomValue } from 'jotai'
-import { TokenAtom, UserAtom } from 'state'
+import { TokenAtom, UserAtom, PriceAtom } from 'state'
 
 import { DatePicker } from './DatePicker'
 import {
@@ -225,7 +225,7 @@ const Viewer: FC<ViewerProps> = ({
     return <div className='schema-viewer title_small'>{result}</div>
 }
 
-interface LockInputProps {
+type LockInputProps = {
     cb: () => void
 }
 
@@ -411,18 +411,49 @@ const IntFC: FieldProps<IntField> = ({ field, update, disabled }) => {
 }
 
 const PriceFC: FieldProps<PriceField> = ({ field, update, disabled }) => {
+    const price = useAtomValue(PriceAtom)
+    console.log(price)
+
     if (disabled) return <span>{field.value.toLocaleString()}</span>
 
     return (
-        <input
-            type='number'
-            placeholder={'قیمت'}
-            value={field.value}
-            onInput={e => {
-                field.value = parseInt(e.currentTarget.value)
-                update()
-            }}
-        />
+        <div className='price-field'>
+            <div className='value'>
+                <div>
+                    <input
+                        type='number'
+                        placeholder={'قیمت'}
+                        value={field.value}
+                        onInput={e => {
+                            field.value = parseInt(e.currentTarget.value)
+                            update()
+                        }}
+                    />
+                    <span>GWEI</span>
+                </div>
+                <div></div>
+            </div>
+            <div className='pctz'>
+                <ul>
+                    {field.senders.map(([uid, pct], i) => (
+                        <li key={i}>
+                            <span>{uid}</span>
+                            <input type='number' defaultValue={pct} />
+                            <button>X</button>
+                        </li>
+                    ))}
+                </ul>
+                <ul>
+                    {field.receivers.map(([uid, pct], i) => (
+                        <li key={i}>
+                            <span>{uid}</span>
+                            <input type='number' defaultValue={pct} />
+                            <button>X</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     )
 }
 

@@ -178,7 +178,10 @@ type PriceModel = {
     eth_usd: number
 }
 
+const PriceAtom = atom<PriceModel>({ next_update: 0, usd_irr: 0, eth_usd: 0 })
+
 export {
+    PriceAtom,
     UserAtom,
     TokenAtom,
     AdminPerms,

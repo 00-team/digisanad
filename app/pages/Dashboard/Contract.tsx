@@ -2,6 +2,7 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 
 import { C } from '@00-team/utils'
 
+import { fetch_price } from 'api'
 import axios, { AxiosResponse } from 'axios'
 import {
     CheckIcon,
@@ -15,8 +16,8 @@ import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { useAtomValue } from 'jotai'
-import { TokenAtom, UserAtom } from 'state'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { PriceAtom, TokenAtom, UserAtom } from 'state'
 
 import './style/contract.scss'
 
@@ -66,6 +67,16 @@ const Contract: FC = () => {
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
     const me = useAtomValue(UserAtom)
+
+    const setPrice = useSetAtom(PriceAtom)
+
+    useEffect(() => {
+        if (!token) return
+
+        fetch_price(token).then(res => {
+            if (res) setPrice(res)
+        })
+    }, [token])
 
     const [state, setState] = useState<State>({
         title: '',

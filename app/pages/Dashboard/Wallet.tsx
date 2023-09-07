@@ -1,21 +1,17 @@
-import React, { FC, ReactNode, Suspense, useEffect, useState } from 'react'
+import React, { FC, ReactNode, Suspense, useEffect } from 'react'
 
 import { fetch_price } from 'api'
 import { CoinIcon, EthereumIcon, WalletIcon, CallenderIcon } from 'icons'
 
-import { useAtomValue } from 'jotai'
-import { PriceModel, TokenAtom, UserAtom } from 'state'
+import { useAtomValue, useAtom } from 'jotai'
+import { PriceAtom, TokenAtom, UserAtom } from 'state'
 
 import './style/wallet.scss'
 
 const Wallet: FC = () => {
     const user = useAtomValue(UserAtom)
     const token = useAtomValue(TokenAtom)
-    const [price, setPrice] = useState<PriceModel>({
-        next_update: 0,
-        usd_irr: 0,
-        eth_usd: 0,
-    })
+    const [price, setPrice] = useAtom(PriceAtom)
 
     useEffect(() => {
         if (!token) return
