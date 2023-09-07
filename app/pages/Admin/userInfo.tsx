@@ -14,28 +14,43 @@ import {
     PostalCodeIcon,
     WalletIcon,
 } from 'icons'
+import { useParams } from 'react-router-dom'
 
 import { useAtomValue } from 'jotai'
-import { TokenAtom, UserModel } from 'state'
+import { AP, PermList, TokenAtom, UserModel } from 'state'
 
 import './style/userinfo.scss'
 
 const UserInfo: FC = () => {
     const token = useAtomValue(TokenAtom)
 
+    const [activePerms, setactivePerms] = useState([''])
     const [showPerms, setshowPerms] = useState(false)
     const [Data, setData] = useState<UserModel>()
 
-    const userId = location.pathname.split('/')[3]
+    const { user_id } = useParams()
 
     const fetch_user = async () => {
-        const response = await axios.get(`/api/admin/users/${userId}/`, {
+        const response = await axios.get(`/api/admin/users/${user_id}/`, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
         })
         setData(response.data)
     }
+
+    useEffect(() => {
+        if (!Data) return
+
+        const perms = BigInt(Data.admin || 0)
+
+        Object.entries(PermList).map(([key, value]) => {
+            // @ts-ignore
+            if (perms & AP[key]) {
+                setactivePerms([...activePerms, value.display])
+            }
+        })
+    }, [Data])
 
     useEffect(() => {
         fetch_user()
@@ -146,9 +161,14 @@ const UserInfo: FC = () => {
                                     داشته ها
                                 </h5>
 
-                                <div className='perm'>لورم</div>
-                                <div className='perm'>ایپسوم</div>
-                                <div className='perm'>لورم ایپسوم</div>
+                                {activePerms.map((perm, index) => {
+                                    if (!perm) return
+                                    return (
+                                        <div className='perm' key={index}>
+                                            {perm}
+                                        </div>
+                                    )
+                                })}
                             </div>
                             <div className='perms-havent'>
                                 <h5 className='title'>
@@ -157,9 +177,25 @@ const UserInfo: FC = () => {
                                     />
                                     نداشته ها
                                 </h5>
-                                <div className='perm'>لورم</div>
-                                <div className='perm'>لورم ایپسوم</div>
-                                <div className='perm'>ایپسوم</div>
+
+                                {Object.entries(PermList).map(
+                                    ([key, value], idx1) => {
+                                        const perms = BigInt(Data.admin || 0)
+                                        // @ts-ignore
+                                        if (perms & AP[key]) {
+                                            return
+                                        } else {
+                                            return (
+                                                <div
+                                                    className='perm'
+                                                    key={idx1}
+                                                >
+                                                    {value.display}
+                                                </div>
+                                            )
+                                        }
+                                    }
+                                )}
                             </div>
                         </div>
                     </div>
