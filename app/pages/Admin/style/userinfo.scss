@@ -1,0 +1,12 @@
+section.user-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8vh;
+
+    background-color: var(--sixty-percent);
+    padding: 5vh 3vw;
+}
