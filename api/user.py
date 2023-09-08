@@ -123,8 +123,9 @@ async def withdrawal(request: Request, body: WithdrawalBody):
 
 class PriceResponse(BaseModel):
     next_update: int
-    usd_irr: int
-    eth_usd: int
+    usd_irr: float
+    eth_usd: float
+    gwei_usd: float
 
 
 @router.get('/price/', response_model=PriceResponse)
