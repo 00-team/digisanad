@@ -251,47 +251,57 @@ const Contract: FC = () => {
                         </button>
                     ))}
 
-                    {state.can_change_schema && (
-                        <button
-                            className='cta-btn title_smaller'
-                            onClick={() =>
-                                setState(s => ({ ...s, need_schema: true }))
-                            }
-                        >
-                            <ContractIcon />
-                            تغییر قالب
-                        </button>
-                    )}
+                    {state.stage == 'draft' && (
+                        <>
+                            {state.can_change_schema && (
+                                <button
+                                    className='cta-btn title_smaller'
+                                    onClick={() =>
+                                        setState(s => ({
+                                            ...s,
+                                            need_schema: true,
+                                        }))
+                                    }
+                                >
+                                    <ContractIcon />
+                                    تغییر قالب
+                                </button>
+                            )}
 
-                    <button
-                        className='save-btn cta-btn title_smaller'
-                        onClick={() => save_contract({ data: state.data })}
-                    >
-                        <CheckIcon />
-                        ذخیره
-                    </button>
+                            <button
+                                className='save-btn cta-btn title_smaller'
+                                onClick={() =>
+                                    save_contract({ data: state.data })
+                                }
+                            >
+                                <CheckIcon />
+                                ذخیره
+                            </button>
 
-                    <button
-                        className='remove-btn cta-btn title_smaller'
-                        onClick={() => delete_exit_contract()}
-                    >
-                        <RemoveIcon />
-                        {state.creator == me.user_id ? 'حذف' : 'خروج'}
-                    </button>
-                    {state.creator == me.user_id && (
-                        <button
-                            className='sign-btn cta-btn title_smaller'
-                            onClick={() => sign_contract()}
-                        >
-                            <SignatureIcon />
-                            امضا
-                        </button>
+                            <button
+                                className='remove-btn cta-btn title_smaller'
+                                onClick={() => delete_exit_contract()}
+                            >
+                                <RemoveIcon />
+                                {state.creator == me.user_id ? 'حذف' : 'خروج'}
+                            </button>
+                            {state.creator == me.user_id && (
+                                <button
+                                    className='sign-btn cta-btn title_smaller'
+                                    onClick={() => sign_contract()}
+                                >
+                                    <SignatureIcon />
+                                    امضا
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
             <div className='inner-wrapper'>
                 <div className='viewer-wrapper'>
                     <Viewer
+                        render={state.stage != 'draft'}
                         contract_id={state.contract_id}
                         creator={state.creator}
                         users={state.parties}
@@ -340,7 +350,8 @@ const Contract: FC = () => {
                                         {user.first_name} {user.last_name}
                                     </span>
                                 </div>
-                                {state.creator == me.user_id &&
+                                {state.stage == 'draft' &&
+                                    state.creator == me.user_id &&
                                     user.user_id != me.user_id && (
                                         <button
                                             className='remove'
@@ -358,55 +369,57 @@ const Contract: FC = () => {
                             </div>
                         ))}
                     </div>
-                    <div className='config'>
-                        <button
-                            className='toggle-invites title_smaller'
-                            style={{
-                                '--color': state.disable_invites
-                                    ? 'red'
-                                    : 'green',
-                            }}
-                            disabled={state.creator != me.user_id}
-                            onClick={() => {
-                                setState(s => {
-                                    save_contract({
-                                        disable_invites: !s.disable_invites,
-                                    }).then(() => fetch_contract())
-                                    return {
-                                        ...s,
-                                        disable_invites: !s.disable_invites,
-                                    }
-                                })
-                            }}
-                        >
-                            دعوت:{' '}
-                            <div
-                                className={`options-wrapper ${C(
-                                    state.disable_invites
-                                )}`}
+                    {state.stage == 'draft' && (
+                        <div className='config'>
+                            <button
+                                className='toggle-invites title_smaller'
+                                style={{
+                                    '--color': state.disable_invites
+                                        ? 'red'
+                                        : 'green',
+                                }}
+                                disabled={state.creator != me.user_id}
+                                onClick={() => {
+                                    setState(s => {
+                                        save_contract({
+                                            disable_invites: !s.disable_invites,
+                                        }).then(() => fetch_contract())
+                                        return {
+                                            ...s,
+                                            disable_invites: !s.disable_invites,
+                                        }
+                                    })
+                                }}
                             >
-                                <div className={`enable`}>فعال</div>
-                                <div className={`disable`}>غیرفعال</div>
-                            </div>
-                        </button>
-                        <button
-                            className='link-copy title_smaller'
-                            onClick={() => {
-                                console.log('slm')
-                                const link = `${location.origin}/jc/${state.contract_id}:${state.pepper}`
-                                if (!link) return
+                                دعوت:{' '}
+                                <div
+                                    className={`options-wrapper ${C(
+                                        state.disable_invites
+                                    )}`}
+                                >
+                                    <div className={`enable`}>فعال</div>
+                                    <div className={`disable`}>غیرفعال</div>
+                                </div>
+                            </button>
+                            <button
+                                className='link-copy title_smaller'
+                                onClick={() => {
+                                    console.log('slm')
+                                    const link = `${location.origin}/jc/${state.contract_id}:${state.pepper}`
+                                    if (!link) return
 
-                                navigator.clipboard.writeText(link)
+                                    navigator.clipboard.writeText(link)
 
-                                ReactAlert.show('لینک با موفقیت کپی شد.')
-                            }}
-                        >
-                            <CopyIcon />
-                            <span>
-                                {`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
-                            </span>
-                        </button>
-                    </div>
+                                    ReactAlert.show('لینک با موفقیت کپی شد.')
+                                }}
+                            >
+                                <CopyIcon />
+                                <span>
+                                    {`${location.origin}/jc/${state.contract_id}:${state.pepper}`}
+                                </span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

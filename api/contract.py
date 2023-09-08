@@ -171,7 +171,7 @@ async def sign(request: Request, contract_id: int):
                 continue
 
             price = field.value
-            xprice = (100 / price)
+            xprice = price / 100
             senders = await get_usr_pct(field.senders, uid_user_id)
             receivers = await get_usr_pct(field.receivers, uid_user_id)
 
