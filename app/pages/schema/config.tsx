@@ -22,6 +22,7 @@ import {
     QuestionField,
     RecordField,
     SchemaData,
+    UserField,
 } from './types'
 
 type ConfigProps = {
@@ -150,7 +151,7 @@ function update_pct(input: X): X {
 const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
     let user_fields = Object.entries(schema.fields).filter(
         uf => uf[1].type == 'user'
-    )
+    ) as [string, UserField][]
     let uid_user: Map<string, string> = new Map(
         user_fields.map(([uid, f]) => {
             return [uid, f.title || f.uid]
@@ -161,6 +162,7 @@ const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
     const receivers = useRef<HTMLSelectElement>(null)
 
     let both = field.receivers.concat(field.senders).map(x => x[0])
+    let aval_users = user_fields.filter(uf => !both.includes(uf[0]))
 
     return (
         <>
@@ -188,31 +190,31 @@ const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
                         </li>
                     ))}
                 </ul>
-                <div className='add-user'>
-                    <select ref={senders}>
-                        {user_fields
-                            .filter(uf => !both.includes(uf[0]))
-                            .map(([uid, field], i) => (
+                {aval_users.length && (
+                    <div className='add-user'>
+                        <select ref={senders}>
+                            {aval_users.map(([uid, field], i) => (
                                 <option key={i} value={uid}>
                                     {field.title || uid}
                                 </option>
                             ))}
-                    </select>
-                    <button
-                        onClick={() => {
-                            if (!senders.current) return
+                        </select>
+                        <button
+                            onClick={() => {
+                                if (!senders.current) return
 
-                            field.senders = update_pct(
-                                field.senders.concat([
-                                    [senders.current.value, 0],
-                                ])
-                            )
-                            update()
-                        }}
-                    >
-                        <PlusIcon />
-                    </button>
-                </div>
+                                field.senders = update_pct(
+                                    field.senders.concat([
+                                        [senders.current.value, 0],
+                                    ])
+                                )
+                                update()
+                            }}
+                        >
+                            <PlusIcon />
+                        </button>
+                    </div>
+                )}
             </div>
             <div className='config-row price'>
                 <label className='holder'>
@@ -242,31 +244,31 @@ const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
                         </li>
                     ))}
                 </ul>
-                <div className='add-user'>
-                    <select ref={receivers}>
-                        {user_fields
-                            .filter(uf => !both.includes(uf[0]))
-                            .map(([uid, field], i) => (
+                {aval_users.length && (
+                    <div className='add-user'>
+                        <select ref={receivers}>
+                            {aval_users.map(([uid, field], i) => (
                                 <option key={i} value={uid}>
                                     {field.title || uid}
                                 </option>
                             ))}
-                    </select>
-                    <button
-                        onClick={() => {
-                            if (!receivers.current) return
+                        </select>
+                        <button
+                            onClick={() => {
+                                if (!receivers.current) return
 
-                            field.receivers = update_pct(
-                                field.receivers.concat([
-                                    [receivers.current.value, 0],
-                                ])
-                            )
-                            update()
-                        }}
-                    >
-                        <PlusIcon />
-                    </button>
-                </div>
+                                field.receivers = update_pct(
+                                    field.receivers.concat([
+                                        [receivers.current.value, 0],
+                                    ])
+                                )
+                                update()
+                            }}
+                        >
+                            <PlusIcon />
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     )

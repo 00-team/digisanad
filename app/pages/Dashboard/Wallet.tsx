@@ -13,8 +13,6 @@ const Wallet: FC = () => {
     const token = useAtomValue(TokenAtom)
     const [price, setPrice] = useAtom(PriceAtom)
 
-    console.log(price)
-
     useEffect(() => {
         if (!token) return
 
@@ -68,7 +66,7 @@ const Wallet: FC = () => {
                     <Row
                         Icon={EthereumIcon}
                         data={(user.w_eth_in_sys / 1e9).toLocaleString()}
-                        holder='موجودی'
+                        holder='موجودی به اتر'
                     />
                     <Row
                         Icon={CoinIcon}
