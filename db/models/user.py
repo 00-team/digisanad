@@ -93,8 +93,8 @@ class UserModel(UserPublic):
     admin: str | None = None
     token: str | None
     w_last_update: int
-    w_eth_in_acc: int
-    w_eth_in_sys: int
+    w_eth_in_acc: int | float
+    w_eth_in_sys: int | float
     w_eth_pk: str
     w_eth_addr: str
 

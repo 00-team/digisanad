@@ -512,13 +512,14 @@ const PriceFC: FieldProps<PriceField> = ({
         update()
     }
 
-    if (disabled) return <span>{field.value.toLocaleString()}</span>
+    // if (disabled) return <span>{field.value.toLocaleString()}</span>
 
     return (
         <div className='price-field'>
             <div className='value'>
                 <div>
                     <input
+                        disabled={disabled}
                         type='number'
                         placeholder={'قیمت'}
                         value={Math.round(values.gwei * 1e2) / 1e2}
@@ -535,6 +536,7 @@ const PriceFC: FieldProps<PriceField> = ({
                 </div>
                 <div>
                     <input
+                        disabled={disabled}
                         type='number'
                         placeholder={'قیمت'}
                         value={Math.round((values.irr / 1e4) * 1e2) / 1e2}
@@ -551,6 +553,7 @@ const PriceFC: FieldProps<PriceField> = ({
                 </div>
                 <div>
                     <input
+                        disabled={disabled}
                         type='number'
                         placeholder={'قیمت'}
                         value={Math.round(values.usd * 1e2) / 1e2}
@@ -574,6 +577,7 @@ const PriceFC: FieldProps<PriceField> = ({
                             <span>{uid_user.get(uid)}</span>
                             <input
                                 disabled={
+                                    disabled ||
                                     pct_lock.s.includes(uid) ||
                                     pct_lock.s.length + 1 >=
                                         field.senders.length
@@ -618,6 +622,7 @@ const PriceFC: FieldProps<PriceField> = ({
                             <span>{uid_user.get(uid)}</span>
                             <input
                                 disabled={
+                                    disabled ||
                                     pct_lock.r.includes(uid) ||
                                     pct_lock.r.length + 1 >=
                                         field.receivers.length

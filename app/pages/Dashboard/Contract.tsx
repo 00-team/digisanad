@@ -11,6 +11,7 @@ import {
     EditIcon,
     PersonIcon,
     RemoveIcon,
+    SignatureIcon,
 } from 'icons'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
@@ -201,6 +202,22 @@ const Contract: FC = () => {
         }
     }
 
+    const sign_contract = async () => {
+        let config = { headers: { Authorization: 'Bearer ' + token } }
+        let url = `/api/contracts/${contract_id}/sign/`
+
+        try {
+            let response = await axios.patch(url, {}, config)
+
+            if (response.data.ok) {
+                fetch_contract()
+                return
+            }
+        } catch (error) {
+            HandleError(error)
+        }
+    }
+
     useEffect(() => {
         if (!contract_id) return navigate('/dashboard/contracts/')
         let cid = parseInt(contract_id)
@@ -261,6 +278,15 @@ const Contract: FC = () => {
                         <RemoveIcon />
                         {state.creator == me.user_id ? 'حذف' : 'خروج'}
                     </button>
+                    {state.creator == me.user_id && (
+                        <button
+                            className='sign-btn cta-btn title_smaller'
+                            onClick={() => sign_contract()}
+                        >
+                            <SignatureIcon />
+                            امضا
+                        </button>
+                    )}
                 </div>
             </div>
             <div className='inner-wrapper'>
