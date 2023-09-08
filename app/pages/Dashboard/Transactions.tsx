@@ -6,8 +6,8 @@ import { CallenderIcon, CoinIcon, UnknownIcon } from 'icons'
 import { UserPublic } from 'pages/schema/types'
 import { useParams } from 'react-router-dom'
 
-import { useAtomValue } from 'jotai'
-import { PriceModel, TokenAtom, UserAtom, UserModel } from 'state'
+import { useAtom, useAtomValue } from 'jotai'
+import { PriceAtom, PriceModel, TokenAtom, UserAtom, UserModel } from 'state'
 
 import './style/transactions.scss'
 
@@ -30,11 +30,7 @@ const Transactions: FC = () => {
     const user = useAtomValue(UserAtom)
     const [data, setData] = useState<TransactionModel[]>([])
 
-    const [price, setPrice] = useState<PriceModel>({
-        next_update: 0,
-        usd_irr: 0,
-        eth_usd: 0,
-    })
+    const [price, setPrice] = useAtom(PriceAtom)
 
     const fetch_transactions = async () => {
         try {
@@ -116,7 +112,7 @@ const TransactionCard: FC<CardProps> = props => {
                         <div className='holder '>مقدار به اتر</div>
                     </div>
                     <div className='data'>
-                        {(amount / 1e18).toLocaleString()}
+                        {(amount / 1e9).toLocaleString()}
                     </div>
                 </div>
                 <div className='row title_small'>
@@ -127,11 +123,13 @@ const TransactionCard: FC<CardProps> = props => {
                         <div className='holder '>مقدار به ریال</div>
                     </div>
                     <div className='data'>
-                        {(
-                            (amount / 1e18) *
-                            price.eth_usd *
-                            price.usd_irr
-                        ).toLocaleString()}
+                        {amount
+                            ? (
+                                  (amount / 1e9) *
+                                  price.eth_usd *
+                                  price.usd_irr
+                              ).toLocaleString()
+                            : 0}
                     </div>
                 </div>
                 <div className='row title_small'>

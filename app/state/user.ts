@@ -176,9 +176,15 @@ type PriceModel = {
     next_update: number
     usd_irr: number
     eth_usd: number
+    gwei_usd: number
 }
 
-const PriceAtom = atom<PriceModel>({ next_update: 0, usd_irr: 0, eth_usd: 0 })
+const PriceAtom = atom<PriceModel>({
+    next_update: 0,
+    usd_irr: 0,
+    eth_usd: 0,
+    gwei_usd: 0,
+})
 
 export {
     PriceAtom,

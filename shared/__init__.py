@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     update_transaction_timeout: int = 1 * 60
     update_price_timeout: int = 10 * 60
 
-    eth_fee: int = 4000
+    eth_fee: int = 4000  # eth Gwei
     eth_pk: str
 
     debug: bool = True

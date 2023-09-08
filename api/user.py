@@ -54,23 +54,24 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     if not user.w_eth_pk or body.amount > user.w_eth_in_sys:
         raise bad_balance
 
-    balance = user.w_eth_in_sys
-    sys_fee = settings.eth_fee
+    amount = body.amount * 1e9
+    balance = user.w_eth_in_sys * 1e9
+    sys_fee = settings.eth_fee * 1e9
     gas = 21000
     gas_price = await w3.eth.gas_price
     gas_fee = gas * gas_price
 
     total_fee = gas_fee + sys_fee
 
-    if body.amount + total_fee <= balance:
-        value = body.amount
+    if amount + total_fee <= balance:
+        value = amount
     else:
-        value = body.amount - total_fee
+        value = amount - total_fee
 
     general = await general_get()
 
     eth_balance = await w3.eth.get_balance(ETH_ACC.address)
-    general.eth_total = eth_balance
+    general.eth_total = eth_balance / 1e9
 
     if eth_balance < value + total_fee:
         logging.error('not enough money in the system')
@@ -90,10 +91,10 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     except TypeError:
         raise bad_args
 
-    user.w_eth_in_sys -= value + total_fee
+    user.w_eth_in_sys -= (value + total_fee) / 1e9
 
-    general.eth_total -= value + gas_fee
-    general.eth_available += sys_fee
+    general.eth_total -= (value + gas_fee) / 1e9
+    general.eth_available += sys_fee / 1e9
 
     await general_update(
         eth_total=general.eth_total,
@@ -109,8 +110,8 @@ async def withdrawal(request: Request, body: WithdrawalBody):
         sender=-1,
         receiver=user.user_id,
         status=TransactionStatus.UNKNOWN,
-        amount=value,
-        fee=sys_fee,
+        amount=value / 1e9,
+        fee=sys_fee / 1e9,
         last_update=utc_now(),
         timestamp=utc_now(),
     )
@@ -171,5 +172,6 @@ async def price(request: Request):
     return {
         'next_update': general.next_update,
         'usd_irr': general.usd_irr,
-        'eth_usd': int(general.eth_usd),
+        'eth_usd': general.eth_usd,
+        'gwei_usd': 1e-9 * general.eth_usd
     }

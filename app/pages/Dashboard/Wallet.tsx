@@ -34,27 +34,43 @@ const Wallet: FC = () => {
                 <div className='rows'>
                     <Row
                         Icon={EthereumIcon}
-                        data={price.eth_usd}
-                        holder='eth_usd'
+                        data={
+                            user.w_eth_in_sys
+                                ? (
+                                      Math.round(
+                                          user.w_eth_in_sys *
+                                              price.gwei_usd *
+                                              1e2
+                                      ) / 1e2
+                                  ).toLocaleString('en-US')
+                                : 0
+                        }
+                        holder='موجودی به دلار'
                     />
                     <Row
                         Icon={EthereumIcon}
-                        data={price.usd_irr}
-                        holder='usd_irr'
+                        data={
+                            user.w_eth_in_sys
+                                ? Math.round(
+                                      (((user.w_eth_in_sys *
+                                          price.gwei_usd *
+                                          price.usd_irr) /
+                                          1e4) *
+                                          1e2) /
+                                          1e2
+                                  ).toLocaleString('fa-IR')
+                                : 0
+                        }
+                        holder='موجودی به هزار تومان'
                     />
                     <Row
                         Icon={EthereumIcon}
-                        data={price.next_update}
-                        holder='next updat'
-                    />
-                    <Row
-                        Icon={EthereumIcon}
-                        data={(user.w_eth_in_sys / 1e18).toLocaleString()}
+                        data={(user.w_eth_in_sys / 1e9).toLocaleString()}
                         holder='موجودی'
                     />
                     <Row
                         Icon={CoinIcon}
-                        data={(user.w_eth_in_acc / 1e18).toLocaleString()}
+                        data={(user.w_eth_in_acc / 1e9).toLocaleString()}
                         holder='موجودی غیرقابل دسترسی'
                     />
                     <Row

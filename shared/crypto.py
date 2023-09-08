@@ -113,10 +113,11 @@ async def update_wallet(user: UserModel) -> UserModel:
             st = eth_acc.sign_transaction(td)
             tx = await w3.eth.send_raw_transaction(st.rawTransaction)
 
-            user.w_eth_in_sys += td['value'] - settings.eth_fee
+            v = td['value'] / 1e9
+            user.w_eth_in_sys += v - settings.eth_fee
             user.w_eth_in_acc = 0
 
-            general.eth_total += td['value']
+            general.eth_total += v
             general.eth_available += settings.eth_fee
 
             await transaction_add(
@@ -124,7 +125,7 @@ async def update_wallet(user: UserModel) -> UserModel:
                 sender=user.user_id,
                 receiver=-1,
                 status=TransactionStatus.UNKNOWN,
-                amount=td['value'],
+                amount=v,
                 fee=settings.eth_fee,
                 last_update=utc_now(),
                 timestamp=utc_now(),
