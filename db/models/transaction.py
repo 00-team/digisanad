@@ -44,8 +44,8 @@ class TransactionModel(BaseModel):
     sender: int
     receiver: int
     contract: int | None = None
-    amount: int
-    fee: int
+    amount: int | float
+    fee: int | float
     status: TransactionStatus
     last_update: int
     timestamp: int

@@ -24,12 +24,12 @@ class GeneralTable(BaseTable):
 class GeneralModel(BaseModel):
     general_id: int
 
-    usd_irr: int
-    eth_usd: int
+    usd_irr: int | float
+    eth_usd: int | float
     last_update: int
 
-    eth_total: int
-    eth_available: int
+    eth_total: int | float
+    eth_available: int | float
 
     @property
     def next_update(self) -> int:
