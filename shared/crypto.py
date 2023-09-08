@@ -113,7 +113,7 @@ async def update_wallet(user: UserModel) -> UserModel:
             st = eth_acc.sign_transaction(td)
             tx = await w3.eth.send_raw_transaction(st.rawTransaction)
 
-            v = td['value'] / 1e9
+            v = int(td['value'] / 1e9)
             user.w_eth_in_sys += v - settings.eth_fee
             user.w_eth_in_acc = 0
 

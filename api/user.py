@@ -71,7 +71,7 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     general = await general_get()
 
     eth_balance = await w3.eth.get_balance(ETH_ACC.address)
-    general.eth_total = eth_balance / 1e9
+    general.eth_total = int(eth_balance / 1e9)
 
     if eth_balance < value + total_fee:
         logging.error('not enough money in the system')
@@ -91,10 +91,10 @@ async def withdrawal(request: Request, body: WithdrawalBody):
     except TypeError:
         raise bad_args
 
-    user.w_eth_in_sys -= (value + total_fee) / 1e9
+    user.w_eth_in_sys -= int((value + total_fee) / 1e9)
 
-    general.eth_total -= (value + gas_fee) / 1e9
-    general.eth_available += sys_fee / 1e9
+    general.eth_total -= int((value + gas_fee) / 1e9)
+    general.eth_available += int(sys_fee / 1e9)
 
     await general_update(
         eth_total=general.eth_total,
@@ -110,8 +110,8 @@ async def withdrawal(request: Request, body: WithdrawalBody):
         sender=-1,
         receiver=user.user_id,
         status=TransactionStatus.UNKNOWN,
-        amount=value / 1e9,
-        fee=sys_fee / 1e9,
+        amount=int(value / 1e9),
+        fee=int(sys_fee / 1e9),
         last_update=utc_now(),
         timestamp=utc_now(),
     )
