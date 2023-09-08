@@ -150,7 +150,11 @@ async def price(request: Request):
 
             response = httpx.get(
                 'https://alanchand.com/api/price-free?type=currencies'
-            ).json()
+            )
+            if response.status_code != 200:
+                raise ValueError('error getting dollar price')
+
+            response = response.json()
 
             for c in response:
                 if c['slug'] == 'usd':

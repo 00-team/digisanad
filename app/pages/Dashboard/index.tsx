@@ -21,6 +21,7 @@ import { Link, Navigate, Outlet, useMatch, useNavigate } from 'react-router-dom'
 import { useAtom, useAtomValue } from 'jotai'
 import { TokenAtom, UserAtom } from 'state'
 
+import { Loading } from 'components'
 import { LogoutButton } from 'components/common/LogoutButton'
 
 import { Notifications } from './Notifications'
@@ -69,10 +70,23 @@ const Dashboard: FC = () => {
     return (
         <main className='dashboard-container'>
             <Sidebar />
-            <aside className='dashboard-wrapper'>
-                <Outlet />
-                <Notifications />
-            </aside>
+            {user.user_id ? (
+                <aside className='dashboard-wrapper'>
+                    <Outlet />
+                    <Notifications />
+                </aside>
+            ) : (
+                <aside className='dashboard-wrapper'>
+                    <section id='wallet' className='wallet-container'>
+                        <h2 className='section-header section_title'>
+                            درحال بارگزاری
+                        </h2>
+                        <div className='wallet-wrapper'>
+                            <Loading style={{ height: '50vh' }} />
+                        </div>
+                    </section>
+                </aside>
+            )}
         </main>
     )
 }
@@ -83,15 +97,19 @@ const Sidebar: FC = ({}) => {
     const navigate = useNavigate()
 
     const add_contract = async () => {
-        const response = await axios.post(
-            '/api/contracts/',
-            {
-                title: 'قرار داد جدید',
-                data: {},
-            },
-            { headers: { Authorization: 'Bearer ' + token } }
-        )
-        navigate('/dashboard/contract/' + response.data.id)
+        try {
+            const response = await axios.post(
+                '/api/contracts/',
+                {
+                    title: 'قرار داد جدید',
+                    data: { pages: [], fields: {} },
+                },
+                { headers: { Authorization: 'Bearer ' + token } }
+            )
+            navigate('/dashboard/contract/' + response.data.id)
+        } catch (error) {
+            HandleError(error)
+        }
     }
 
     const SIDEBAR_LINKS: SidebarLinkModel[] = [

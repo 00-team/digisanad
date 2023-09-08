@@ -15,6 +15,8 @@ import {
     CloseIcon,
     LockColoredIcon,
     WarningIcon,
+    LockIcon,
+    UnLockIcon,
 } from 'icons'
 import {
     MapContainer,
@@ -58,6 +60,7 @@ type TreeNode = {
 type ViewerProps = {
     render?: boolean
     contract_id?: number
+    creator?: number
     schema: SchemaData
     setSchema: (data: Partial<SchemaData>, save: boolean) => void
     setUID: (uid: string) => void
@@ -88,6 +91,7 @@ const def_users: UserPublic[] = [
 
 const Viewer: FC<ViewerProps> = ({
     contract_id = null,
+    creator = null,
     render = false,
     schema,
     page,
@@ -174,6 +178,8 @@ const Viewer: FC<ViewerProps> = ({
 
                 if (render || field.lock) {
                     disabled = true
+                } else if (contract_id && field.type == 'user') {
+                    if (user.user_id != creator) disabled = true
                 } else if (contract_id && field.changers.length) {
                     disabled = true
                     for (let cdx = 0; cdx < field.changers.length; cdx++) {
@@ -198,13 +204,14 @@ const Viewer: FC<ViewerProps> = ({
                         }}
                     >
                         <FMFC
+                            schema={schema}
                             field={field as never}
                             update={save => setSchema({}, !!save)}
                             users={users}
                             contract_id={contract_id}
                             disabled={disabled}
                         />
-                        {!field.lock && contract_id && (
+                        {!disabled && contract_id && (
                             <LockInput
                                 cb={() => {
                                     field.lock = true
@@ -220,7 +227,7 @@ const Viewer: FC<ViewerProps> = ({
         }
 
         setResult(elements)
-    }, [schema, page, users])
+    }, [schema, page, users, user, contract_id, creator])
 
     return <div className='schema-viewer title_small'>{result}</div>
 }
@@ -410,9 +417,100 @@ const IntFC: FieldProps<IntField> = ({ field, update, disabled }) => {
     )
 }
 
-const PriceFC: FieldProps<PriceField> = ({ field, update, disabled }) => {
+type UIDPCT = [string, number]
+type PctLockState = {
+    s: string[]
+    r: string[]
+}
+
+const PriceFC: FieldProps<PriceField> = ({
+    field,
+    update,
+    disabled,
+    users,
+    schema,
+}) => {
     const price = useAtomValue(PriceAtom)
-    console.log(price)
+
+    const [values, setValues] = useState({
+        irr: (field.value / 1e9) * price.eth_usd * price.usd_irr,
+        usd: (field.value / 1e9) * price.eth_usd,
+        gwei: field.value,
+    })
+
+    const [pct_lock, setPctLock] = useState<PctLockState>({
+        s: [],
+        r: [],
+    })
+
+    let user_fields = Object.entries(schema.fields).filter(
+        uf => uf[1].type == 'user'
+    ) as [string, UserField][]
+    let uid_user: Map<string, string> = new Map(
+        user_fields.map(([uid, f]) => {
+            let display = f.title || f.uid
+
+            if (f.value) {
+                let user = users.find(u => u.user_id == f.value)
+                if (user) display = user.first_name + ' ' + user.last_name
+            }
+            return [uid, display]
+        })
+    )
+
+    function update_pctz(t: 'S' | 'R', change: UIDPCT) {
+        let locks: string[] = []
+        let list: UIDPCT[] = []
+        let [u, p] = change
+        let min = 0,
+            max = 100,
+            n = 0
+
+        if (t == 'S') {
+            list = field.senders
+            locks = pct_lock.s
+        } else {
+            list = field.receivers
+            locks = pct_lock.r
+        }
+
+        if (locks.length + 1 >= list.length) return
+
+        list.forEach(([iu, ip]) => {
+            if (locks.includes(iu)) {
+                n++
+                max -= ip
+            }
+        })
+
+        if (p > max) p = max
+        if (p < min) p = min
+
+        let sum = 0
+        let output: UIDPCT[] = list.map(([iu, ip]) => {
+            if (iu == u) {
+                sum += p
+                return [iu, p]
+            }
+
+            if (locks.includes(iu)) {
+                sum += ip
+                return [iu, ip]
+            }
+
+            let np = (max - p) / (list.length - n - 1)
+            sum += np
+            return [iu, np]
+        })
+
+        output[output.length - 1]![1] += 100 - sum
+        if (t == 'S') {
+            field.senders = output
+        } else {
+            field.receivers = output
+        }
+        update()
+    }
 
     if (disabled) return <span>{field.value.toLocaleString()}</span>
 
@@ -423,32 +521,137 @@ const PriceFC: FieldProps<PriceField> = ({ field, update, disabled }) => {
                     <input
                         type='number'
                         placeholder={'قیمت'}
-                        value={field.value}
+                        value={Math.round(values.gwei * 1e2) / 1e2}
                         onInput={e => {
-                            field.value = parseInt(e.currentTarget.value)
+                            let gwei = parseFloat(e.currentTarget.value)
+                            let usd = (gwei / 1e9) * price.eth_usd
+                            let irr = usd * price.usd_irr
+                            setValues({ gwei, irr, usd })
+                            field.value = gwei
                             update()
                         }}
                     />
                     <span>GWEI</span>
                 </div>
-                <div></div>
+                <div>
+                    <input
+                        type='number'
+                        placeholder={'قیمت'}
+                        value={Math.round((values.irr / 1e4) * 1e2) / 1e2}
+                        onInput={e => {
+                            let irr = parseFloat(e.currentTarget.value) * 1e4
+                            let usd = irr / price.usd_irr
+                            let gwei = (usd / price.eth_usd) * 1e9
+                            setValues({ gwei, irr, usd })
+                            field.value = gwei
+                            update()
+                        }}
+                    />
+                    <span>هزار تومان</span>
+                </div>
+                <div>
+                    <input
+                        type='number'
+                        placeholder={'قیمت'}
+                        value={Math.round(values.usd * 1e2) / 1e2}
+                        onInput={e => {
+                            let usd = parseFloat(e.currentTarget.value)
+                            let gwei = (usd / price.eth_usd) * 1e9
+                            let irr = usd * price.usd_irr
+                            setValues({ gwei, irr, usd })
+                            field.value = gwei
+                            update()
+                        }}
+                    />
+                    <span>دلار</span>
+                </div>
             </div>
             <div className='pctz'>
                 <ul>
+                    <li className='title'>پرداخت کنندگان</li>
                     {field.senders.map(([uid, pct], i) => (
                         <li key={i}>
-                            <span>{uid}</span>
-                            <input type='number' defaultValue={pct} />
-                            <button>X</button>
+                            <span>{uid_user.get(uid)}</span>
+                            <input
+                                disabled={
+                                    pct_lock.s.includes(uid) ||
+                                    pct_lock.s.length + 1 >=
+                                        field.senders.length
+                                }
+                                min={0}
+                                max={100}
+                                type='number'
+                                value={Math.round(pct * 1e2) / 1e2}
+                                onChange={e => {
+                                    let new_pct = parseFloat(
+                                        e.currentTarget.value
+                                    )
+                                    update_pctz('S', [uid, new_pct])
+                                }}
+                            />
+                            {field.senders.length > 1 && (
+                                <button
+                                    onClick={() => {
+                                        setPctLock(s => {
+                                            let ns = s.s.filter(k => k != uid)
+                                            if (ns.length != s.s.length)
+                                                return { s: ns, r: s.r }
+
+                                            return { s: ns.concat(uid), r: s.r }
+                                        })
+                                    }}
+                                >
+                                    {pct_lock.s.includes(uid) ? (
+                                        <LockIcon />
+                                    ) : (
+                                        <UnLockIcon />
+                                    )}
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>
                 <ul>
+                    <li className='title'>دریافت کنندگان</li>
                     {field.receivers.map(([uid, pct], i) => (
                         <li key={i}>
-                            <span>{uid}</span>
-                            <input type='number' defaultValue={pct} />
-                            <button>X</button>
+                            <span>{uid_user.get(uid)}</span>
+                            <input
+                                disabled={
+                                    pct_lock.r.includes(uid) ||
+                                    pct_lock.r.length + 1 >=
+                                        field.receivers.length
+                                }
+                                min={0}
+                                max={100}
+                                type='number'
+                                value={Math.round(pct * 1e2) / 1e2}
+                                onChange={e => {
+                                    let new_pct = parseFloat(
+                                        e.currentTarget.value
+                                    )
+                                    update_pctz('R', [uid, new_pct])
+                                }}
+                            />
+                            {field.receivers.length > 1 && (
+                                <button
+                                    onClick={() => {
+                                        setPctLock(s => {
+                                            let ns = s.r.filter(k => k != uid)
+                                            if (ns.length != s.r.length)
+                                                return { r: ns, s: s.s }
+
+                                            return { r: ns.concat(uid), s: s.s }
+                                        })
+                                    }}
+                                >
+                                    {pct_lock.r.includes(uid) ? (
+                                        <LockIcon />
+                                    ) : (
+                                        <UnLockIcon />
+                                    )}
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>

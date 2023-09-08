@@ -336,6 +336,7 @@ const field_types = Object.keys(default_fields) as Array<
 >
 
 type FieldProps<T> = FC<{
+    schema: SchemaData
     field: T
     update: (save?: true) => void
     users: UserPublic[]

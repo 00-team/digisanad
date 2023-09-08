@@ -42,12 +42,12 @@ class ContractUserTable(BaseTable):
     contract = Column(
         Integer,
         ForeignKey(ContractTable.contract_id, ondelete='CASCADE'),
-        nullable=False, index=True
+        nullable=False
     )
     user = Column(
         Integer,
         ForeignKey(UserTable.user_id, ondelete='CASCADE'),
-        nullable=False, index=True
+        nullable=False
     )
     __table_args__ = (
         UniqueConstraint('contract', 'user'),

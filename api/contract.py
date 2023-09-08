@@ -82,7 +82,7 @@ async def get(request: Request, contract_id: int):
 
 class CreateBody(BaseModel):
     title: constr(max_length=256)
-    data: dict
+    data: SchemaData
 
 
 @router.post('/', response_model=IDModel)
@@ -93,7 +93,7 @@ async def create(request: Request, body: CreateBody):
         creator=user.user_id,
         stage=ContractStage.DRAFT,
         title=body.title,
-        data=body.data,
+        data=dict(body.data),
         start_date=utc_now(),
         finish_date=0,
         pepper=random_string()
@@ -239,60 +239,39 @@ class UpdateBody(BaseModel):
     disable_invites: bool = None
 
 
-def get_user_uids(
-    before: SchemaData, after: SchemaData,
-    changer: int, creator: int
-) -> dict[str, int]:
-    uid_user_id = {}
-
-    for uid, new in before.fields.items():
-        old = before.fields.get(uid)
-        if old is None:
-            raise contract_new_field
-
-        if old.type != new.type:
-            raise contract_new_field
-
-        if old.type != FieldType.USER:
-            continue
-
-        if old.value != new.value:
-            if old.lock:
-                raise contract_lock_field
-
-            if changer != creator:
-                raise contract_invalid_changer
-
-        uid_user_id[uid] = new.value
-
-    return uid_user_id
+def jdump(data):
+    if isinstance(data, BaseModel):
+        data = dict(data)
+    return json.dumps(data)
 
 
 def check_schema(
     before: SchemaData, after: SchemaData,
     changer: int, creator: int
 ):
-    uid_user_id = get_user_uids(before, after, changer, creator)
+    if not before.fields or not before.pages:
+        return
+
+    uid_user_id = {}
+
+    for uid, new in after.fields.items():
+        if new.type == FieldType.USER:
+            uid_user_id[uid] = new.value
 
     for uid, new in after.fields.items():
         old = before.fields.get(uid)
+        if old is None or old.type != new.type:
+            raise contract_new_field
 
-        if old.lock and not new.lock:
-            raise contract_lock_field
-
-        if len(old.changers) != len(new.changers):
+        if jdump(old.changers) != jdump(new.changers):
             raise contract_invalid_changer
 
-        for c in old.changers:
-            if c not in new.changers:
-                raise contract_invalid_changer
-
-        if old.type == FieldType.USER:
-            continue
-
-        if json.dumps(old['value']) != json.dumps(new['value']):
+        if jdump(old) != jdump(new):
             if old.lock:
                 raise contract_lock_field
+
+            if old.type == FieldType.USER and changer != creator:
+                raise contract_invalid_changer
 
             if old.changers:
                 for cuid in old.changers:
@@ -326,7 +305,10 @@ async def update(request: Request, contract_id: int, body: UpdateBody):
         raise closed_contract
 
     if body.data:
-        check_schema(contract.data, body.data, user, contract.creator)
+        check_schema(
+            contract.data, body.data,
+            user.user_id, contract.creator
+        )
 
     if not patch:
         raise no_change

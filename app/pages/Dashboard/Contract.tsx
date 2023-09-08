@@ -267,6 +267,7 @@ const Contract: FC = () => {
                 <div className='viewer-wrapper'>
                     <Viewer
                         contract_id={state.contract_id}
+                        creator={state.creator}
                         users={state.parties}
                         page={state.page}
                         schema={state.data}

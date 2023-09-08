@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, Suspense, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { fetch_price } from 'api'
 import { CoinIcon, EthereumIcon, WalletIcon, CallenderIcon } from 'icons'
@@ -21,17 +21,6 @@ const Wallet: FC = () => {
         })
     }, [token])
 
-    // if (wallet == null) {
-    //     return (
-    //         <section id='wallet' className='wallet-container'>
-    //             <h2 className='section-header section_title'>کیف پول</h2>
-    //             <div className='wallet-wrapper'>
-    //                 <Loading style={{ height: '50vh' }} />
-    //             </div>
-    //         </section>
-    //     )
-    // }
-
     const utc_to_irtime = (timestamp: number) => {
         let offset = new Date().getTimezoneOffset() * 60
 
@@ -39,56 +28,54 @@ const Wallet: FC = () => {
     }
 
     return (
-        <Suspense fallback={'fallback'}>
-            <section id='wallet' className='wallet-container'>
-                <h2 className='section-header section_title'>کیف پول</h2>
-                <div className='wallet-wrapper'>
-                    <div className='rows'>
-                        <Row
-                            Icon={EthereumIcon}
-                            data={price.eth_usd}
-                            holder='eth_usd'
-                        />
-                        <Row
-                            Icon={EthereumIcon}
-                            data={price.usd_irr}
-                            holder='usd_irr'
-                        />
-                        <Row
-                            Icon={EthereumIcon}
-                            data={price.next_update}
-                            holder='next updat'
-                        />
-                        <Row
-                            Icon={EthereumIcon}
-                            data={(user.w_eth_in_sys / 1e18).toLocaleString()}
-                            holder='موجودی'
-                        />
-                        <Row
-                            Icon={CoinIcon}
-                            data={(user.w_eth_in_acc / 1e18).toLocaleString()}
-                            holder='موجودی غیرقابل دسترسی'
-                        />
-                        <Row
-                            Icon={CallenderIcon}
-                            data={utc_to_irtime(user.w_last_update)}
-                            holder='آخرین بروزرسانی'
-                        />
-                        <Row
-                            Icon={WalletIcon}
-                            data={
-                                <input
-                                    className='addr'
-                                    value={user.w_eth_addr}
-                                    onChange={() => {}}
-                                />
-                            }
-                            holder='آدرس کیف پول اتریوم شما'
-                        />
-                    </div>
+        <section id='wallet' className='wallet-container'>
+            <h2 className='section-header section_title'>کیف پول</h2>
+            <div className='wallet-wrapper'>
+                <div className='rows'>
+                    <Row
+                        Icon={EthereumIcon}
+                        data={price.eth_usd}
+                        holder='eth_usd'
+                    />
+                    <Row
+                        Icon={EthereumIcon}
+                        data={price.usd_irr}
+                        holder='usd_irr'
+                    />
+                    <Row
+                        Icon={EthereumIcon}
+                        data={price.next_update}
+                        holder='next updat'
+                    />
+                    <Row
+                        Icon={EthereumIcon}
+                        data={(user.w_eth_in_sys / 1e18).toLocaleString()}
+                        holder='موجودی'
+                    />
+                    <Row
+                        Icon={CoinIcon}
+                        data={(user.w_eth_in_acc / 1e18).toLocaleString()}
+                        holder='موجودی غیرقابل دسترسی'
+                    />
+                    <Row
+                        Icon={CallenderIcon}
+                        data={utc_to_irtime(user.w_last_update)}
+                        holder='آخرین بروزرسانی'
+                    />
+                    <Row
+                        Icon={WalletIcon}
+                        data={
+                            <input
+                                className='addr'
+                                value={user.w_eth_addr}
+                                onChange={() => {}}
+                            />
+                        }
+                        holder='آدرس کیف پول اتریوم شما'
+                    />
                 </div>
-            </section>
-        </Suspense>
+            </div>
+        </section>
     )
 }
 

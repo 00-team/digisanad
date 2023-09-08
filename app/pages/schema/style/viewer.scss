@@ -224,6 +224,49 @@
         resize: none;
     }
 
+    .price-field {
+        .value {
+            > div {
+                display: flex;
+                gap: 1rem;
+                padding: 0.3rem 0;
+            }
+        }
+
+        .pctz {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+
+            ul {
+                border: 2px solid black;
+                border-radius: 5px;
+                padding: 0.5rem;
+                width: calc(50% - 2rem);
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+
+                    span {
+                        width: 100%;
+                    }
+
+                    button {
+                        width: 30px;
+                        aspect-ratio: 1;
+                    }
+
+                    input {
+                        width: 10em;
+                    }
+                }
+            }
+        }
+    }
+
     .question-field {
         width: 100%;
         border: 1px solid black;

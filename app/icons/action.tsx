@@ -132,3 +132,37 @@ export const InviteIcon: Icon = ({ size = '24', ...attr }) => (
         <path d='M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z'></path>
     </svg>
 )
+
+export const LockIcon: Icon = ({ size = '24', ...attr }) => (
+    <svg
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 20 20'
+        fill='currentColor'
+        height={size}
+        width={size}
+        {...attr}
+    >
+        <path
+            fillRule='evenodd'
+            d='M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z'
+            clipRule='evenodd'
+        />
+    </svg>
+)
+
+export const UnLockIcon: Icon = ({ size = '24', ...attr }) => (
+    <svg
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 20 20'
+        fill='currentColor'
+        height={size}
+        width={size}
+        {...attr}
+    >
+        <path
+            fillRule='evenodd'
+            d='M14.5 1A4.5 4.5 0 0010 5.5V9H3a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1.5V5.5a3 3 0 116 0v2.75a.75.75 0 001.5 0V5.5A4.5 4.5 0 0014.5 1z'
+            clipRule='evenodd'
+        />
+    </svg>
+)

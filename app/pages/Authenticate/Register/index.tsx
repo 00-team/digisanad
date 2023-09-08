@@ -528,7 +528,13 @@ const Register: FC = () => {
                     </div>
                 )}
 
-                <Link to={'/login'} className='goto-login title_small'>
+                <Link
+                    to={
+                        '/login/?next=' + searchParams.get('next') ||
+                        'dashboard'
+                    }
+                    className='goto-login title_small'
+                >
                     حساب کابری دارید؟
                 </Link>
 
