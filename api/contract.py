@@ -346,6 +346,7 @@ async def contract_parties(request: Request, contract_id: int):
 
     users = await user_public(user_ids)
     users.pop(-1, None)
+    users.pop(-2, None)
 
     return list(users.values())
 
