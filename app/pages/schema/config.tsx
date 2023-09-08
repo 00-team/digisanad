@@ -190,7 +190,7 @@ const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
                         </li>
                     ))}
                 </ul>
-                {aval_users.length && (
+                {!!aval_users.length && (
                     <div className='add-user'>
                         <select ref={senders}>
                             {aval_users.map(([uid, field], i) => (
@@ -244,7 +244,7 @@ const PriceConfig: FieldProps<PriceField> = ({ field, update, schema }) => {
                         </li>
                     ))}
                 </ul>
-                {aval_users.length && (
+                {!!aval_users.length && (
                     <div className='add-user'>
                         <select ref={receivers}>
                             {aval_users.map(([uid, field], i) => (
