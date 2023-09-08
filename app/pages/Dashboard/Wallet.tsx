@@ -13,6 +13,8 @@ const Wallet: FC = () => {
     const token = useAtomValue(TokenAtom)
     const [price, setPrice] = useAtom(PriceAtom)
 
+    console.log(price)
+
     useEffect(() => {
         if (!token) return
 
