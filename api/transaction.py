@@ -29,8 +29,8 @@ class TransactionResponse(BaseModel):
     transaction_hash: str | None = None
     sender: UserPublic | Literal['system'] | None
     receiver: UserPublic | Literal['system'] | None
-    amount: int
-    fee: int
+    amount: int | float
+    fee: int | float
     status: TransactionStatus
     next_update: int
     timestamp: int
