@@ -11,11 +11,12 @@ import { PriceAtom, PriceModel, TokenAtom, UserAtom, UserModel } from 'state'
 
 import './style/transactions.scss'
 
+type SR = UserPublic | 'system' | 'contract' | null
 type TransactionModel = {
     transaction_id: number
     transaction_hash: string | null
-    sender: UserPublic | 'system' | null
-    receiver: UserPublic | 'system' | null
+    sender: SR
+    receiver: SR
     amount: number
     fee: number
     status: 'unknown' | 'success' | 'failure'
@@ -60,8 +61,8 @@ const Transactions: FC = () => {
         <section className='transactions-container'>
             <h2 className='section-header section_title'>تراکنش های من </h2>
             <div className='transactions-wrapper'>
-                {data.map(t => (
-                    <TransactionCard {...t} price={price} user={user} />
+                {data.map((t, i) => (
+                    <TransactionCard key={i} {...t} price={price} user={user} />
                 ))}
             </div>
         </section>
@@ -79,6 +80,7 @@ const TransactionCard: FC<CardProps> = props => {
     const [state, setState] = useState({ title: '', type: '' })
 
     useEffect(() => {
+        console.log(amount, sender, receiver, price)
         if (!sender || !receiver) return
 
         if (sender == 'system') {

@@ -49,6 +49,16 @@ section.transactions-container {
                 );
             }
 
+            // --sixty-percent: #87ceeb;
+            // --ten-percent: #6a287e;
+            &.move {
+                background: linear-gradient(
+                    to top,
+                    var(--ten-percent) -10%,
+                    rgb(255, 255, 255) 100%
+                );
+            }
+
             .datas {
                 display: flex;
                 flex-direction: column;

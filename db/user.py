@@ -34,7 +34,7 @@ async def user_public(user_ids: list[int]) -> dict[int, UserPublic]:
         '''
     )
 
-    result = {-1: 'system'}
+    result = {-1: 'system', -2: 'contract'}
 
     for u in users:
         result[u[0]] = UserPublic(**u)

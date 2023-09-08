@@ -24,11 +24,14 @@ router = APIRouter(
 )
 
 
+SR = UserPublic | Literal['system'] | Literal['contract'] | None
+
+
 class TransactionResponse(BaseModel):
     transaction_id: int
     transaction_hash: str | None = None
-    sender: UserPublic | Literal['system'] | None
-    receiver: UserPublic | Literal['system'] | None
+    sender: SR
+    receiver: SR
     amount: int | float
     fee: int | float
     status: TransactionStatus
