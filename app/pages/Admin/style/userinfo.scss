@@ -133,8 +133,10 @@ section.user-container {
                 border-radius: 5px;
                 border: 2px solid var(--alert-success);
 
+                transition: 0.2s ease-in-out;
                 &:hover {
                     background-color: var(--alert-success);
+                    color: white;
                 }
             }
 
