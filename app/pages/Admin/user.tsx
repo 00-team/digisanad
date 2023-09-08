@@ -218,7 +218,10 @@ const Perms: FC<BaseProps> = ({ user, setShowPerms, update }) => {
                         ))}
                     </div>
                 </div>
-                <button className='save-btn' onClick={() => update(true)}>
+                <button
+                    className='save-btn title_smaller'
+                    onClick={() => update(true)}
+                >
                     ذخیره
                 </button>
             </div>
