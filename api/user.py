@@ -153,7 +153,9 @@ async def price(request: Request):
                 'https://alanchand.com/api/price-free?type=currencies'
             )
             if response.status_code != 200:
-                raise ValueError('error getting dollar price')
+                raise ValueError(
+                    f'error {response.status_code} getting dollar price'
+                )
 
             response = response.json()
 
