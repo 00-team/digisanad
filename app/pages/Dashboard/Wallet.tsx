@@ -35,37 +35,29 @@ const Wallet: FC = () => {
                     <Row
                         Icon={EthereumIcon}
                         data={
-                            user.w_eth_in_sys
-                                ? (
-                                      Math.round(
-                                          user.w_eth_in_sys *
-                                              price.gwei_usd *
-                                              1e2
-                                      ) / 1e2
-                                  ).toLocaleString('en-US')
-                                : 0
+                            Math.round(
+                                user.w_eth_in_sys * price.gwei_usd * 1e2
+                            ) / 1e2
                         }
                         holder='موجودی به دلار'
                     />
                     <Row
                         Icon={EthereumIcon}
-                        data={
-                            user.w_eth_in_sys
-                                ? Math.round(
-                                      (((user.w_eth_in_sys *
-                                          price.gwei_usd *
-                                          price.usd_irr) /
-                                          1e4) *
-                                          1e2) /
-                                          1e2
-                                  ).toLocaleString('fa-IR')
-                                : 0
-                        }
+                        data={(
+                            Math.round(
+                                (user.w_eth_in_sys *
+                                    price.gwei_usd *
+                                    price.usd_irr) /
+                                    1e2
+                            ) / 1e2
+                        ).toLocaleString('fa-IR')}
                         holder='موجودی به هزار تومان'
                     />
                     <Row
                         Icon={EthereumIcon}
-                        data={(user.w_eth_in_sys / 1e9).toLocaleString()}
+                        data={(
+                            Math.round(user.w_eth_in_sys / 1e5) / 1e4
+                        ).toLocaleString()}
                         holder='موجودی به اتر'
                     />
                     <Row

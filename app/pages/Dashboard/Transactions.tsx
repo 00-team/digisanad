@@ -80,7 +80,6 @@ const TransactionCard: FC<CardProps> = props => {
     const [state, setState] = useState({ title: '', type: '' })
 
     useEffect(() => {
-        console.log(amount, sender, receiver, price)
         if (!sender || !receiver) return
 
         if (sender == 'system') {
@@ -114,7 +113,7 @@ const TransactionCard: FC<CardProps> = props => {
                         <div className='holder '>مقدار به اتر</div>
                     </div>
                     <div className='data'>
-                        {(amount / 1e9).toLocaleString()}
+                        {(Math.round(amount / 1e5) / 1e4).toLocaleString()}
                     </div>
                 </div>
                 <div className='row title_small'>
@@ -122,16 +121,14 @@ const TransactionCard: FC<CardProps> = props => {
                         <div className='icon'>
                             <CoinIcon size={25} />
                         </div>
-                        <div className='holder '>مقدار به ریال</div>
+                        <div className='holder '>مقدار به هزار تومان</div>
                     </div>
                     <div className='data'>
-                        {amount
-                            ? (
-                                  (amount / 1e9) *
-                                  price.eth_usd *
-                                  price.usd_irr
-                              ).toLocaleString()
-                            : 0}
+                        {(
+                            Math.round(
+                                (amount * price.gwei_usd * price.usd_irr) / 1e2
+                            ) / 1e2
+                        ).toLocaleString('fa-IR')}
                     </div>
                 </div>
                 <div className='row title_small'>
