@@ -25,7 +25,6 @@ import Footer from 'components/layout/Footer'
 
 import './style/base.scss'
 import './style/font/imports.scss'
-import './style/print.scss'
 
 const Home = loadable(() => import('pages/Home'))
 const Login = loadable(() => import('pages/Authenticate/Login'))

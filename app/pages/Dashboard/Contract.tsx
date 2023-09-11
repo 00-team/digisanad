@@ -1,24 +1,31 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import React, {
+    Dispatch,
+    FC,
+    SetStateAction,
+    useEffect, // useRef,
+    useState,
+} from 'react'
 
+// import { renderToString } from 'react-dom/server'
 import { C } from '@00-team/utils'
 
 import { fetch_price } from 'api'
 import axios, { AxiosResponse } from 'axios'
 import {
     CheckIcon,
-    ContractIcon,
+    ContractIcon, // PrintIcon,
     CopyIcon,
     EditIcon,
     PersonIcon,
-    PrintIcon,
     RemoveIcon,
     SignatureIcon,
 } from 'icons'
+// import { PrintRender } from 'pages/schema'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { PriceAtom, TokenAtom, UserAtom } from 'state'
 
 import './style/contract.scss'
@@ -69,8 +76,10 @@ const Contract: FC = () => {
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
     const me = useAtomValue(UserAtom)
+    // const myframe = useRef<HTMLIFrameElement>(null)
 
-    const setPrice = useSetAtom(PriceAtom)
+    const [price, setPrice] = useAtom(PriceAtom)
+    price
 
     useEffect(() => {
         if (!token) return
@@ -235,6 +244,23 @@ const Contract: FC = () => {
 
     return (
         <div className='contract-container'>
+            {/*<iframe
+                ref={myframe}
+                style={{
+                    // display: 'none'
+                    width: '100%',
+                    height: '100vh',
+                }}
+                srcDoc={renderToString(
+                    <PrintRender
+                        contract_id={state.contract_id}
+                        creator={state.creator}
+                        users={state.parties}
+                        schema={state.data}
+                        price={price}
+                    />
+                )}
+            ></iframe>*/}
             <div className='head'>
                 <h1 className='title'>{state.title}</h1>
                 <div className='actions'>
@@ -297,15 +323,19 @@ const Contract: FC = () => {
                             )}
                         </>
                     )}
+                    {/*
                     <button
                         className='cta-btn title_smaller'
                         onClick={() => {
-                            window.print()
+                            if (!myframe.current) return
+                            let win = myframe.current.contentWindow
+                            if (!win) return
+                            win.print()
                         }}
                     >
                         <PrintIcon />
                         چاپ
-                    </button>
+                    </button>*/}
                 </div>
             </div>
             <div className='inner-wrapper'>

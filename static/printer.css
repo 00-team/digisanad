@@ -1,0 +1,433 @@
+.schema-viewer {
+    direction: rtl;
+    padding: 1rem;
+    overflow-y: auto;
+    font-family: 'iranBold';
+}
+
+.schema-viewer > div {
+    padding: 0.2rem 0;
+    margin-top: 2vh;
+}
+
+.schema-viewer .field-wrapper {
+    all: unset;
+}
+
+.schema-viewer .field-wrapper *:disabled {
+    opacity: 0.4;
+}
+
+.schema-viewer .field-wrapper p {
+    overflow-wrap: anywhere;
+}
+.schema-viewer .field-wrapper input {
+    background-color: white;
+    border-bottom: 1px solid black;
+    color: black;
+}
+.schema-viewer
+    .field-wrapper
+    input:not([type='number'], [type='radio'], [type='checkbox']) {
+    padding: 0.5rem 1.5rem;
+}
+.schema-viewer .field-wrapper input[type='number'] {
+    text-align: center;
+}
+.schema-viewer .field-wrapper input[type='radio'],
+.schema-viewer .field-wrapper input[type='checkbox'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    background-color: white;
+    color: unset;
+    width: 25px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    border: 0.15em solid black;
+    border-radius: 100vmax;
+    overflow: hidden;
+}
+.schema-viewer .field-wrapper input[type='radio']::before,
+.schema-viewer .field-wrapper input[type='checkbox']::before {
+    content: '';
+    transform: translateY(200%);
+    width: calc(25px - 12px);
+    height: calc(25px - 12px);
+    border-radius: 100vmax;
+    background-color: black;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) transform;
+}
+.schema-viewer .field-wrapper input[type='radio']:checked::before,
+.schema-viewer .field-wrapper input[type='checkbox']:checked::before {
+    transform: translateY(0);
+}
+.schema-viewer .field-wrapper .lock-container {
+    display: block;
+    padding: 0.5rem 0;
+}
+.schema-viewer .field-wrapper .lock-container .lock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: white;
+    border-radius: 10px;
+    font-family: 'iranBold';
+}
+.schema-viewer .field-wrapper .lock-popup-wrapper {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 400;
+}
+.schema-viewer .field-wrapper .lock-popup-wrapper .popup-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2vh;
+    width: clamp(0px, 100%, 700px);
+    border-radius: 10px;
+    padding-top: 5vh;
+    background: var(--alert-error);
+    height: 50vh;
+    overflow: hidden;
+}
+.schema-viewer .field-wrapper .lock-popup-wrapper .popup-details .detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    margin-top: -5vh;
+    padding: 1rem 2rem;
+    color: white;
+}
+.schema-viewer .field-wrapper .lock-popup-wrapper .popup-details .detail span {
+    font-family: 'iranBold';
+}
+.schema-viewer
+    .field-wrapper
+    .lock-popup-wrapper
+    .popup-details
+    .cta-container {
+    padding: 3vh 0;
+    background-color: white;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.schema-viewer
+    .field-wrapper
+    .lock-popup-wrapper
+    .popup-details
+    .cta-container
+    button {
+    padding: 1rem 3rem;
+    color: white;
+    border-radius: 5px;
+}
+.schema-viewer
+    .field-wrapper
+    .lock-popup-wrapper
+    .popup-details
+    .cta-container
+    button.submit {
+    background-color: var(--alert-error);
+}
+.schema-viewer
+    .field-wrapper
+    .lock-popup-wrapper
+    .popup-details
+    .cta-container
+    button.cancel {
+    background-color: grey;
+}
+.schema-viewer .field-wrapper .lock-popup-wrapper .popup-details .warning-icon {
+    transform: translateY(-100px);
+    animation: warning-drop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+        forwards;
+}
+
+@keyframes warning-drop {
+    from {
+        transform: translateY(-200px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+.schema-viewer hr {
+    border: 1px solid black;
+    margin: 2vh 0;
+}
+.schema-viewer select {
+    background: var(--accent-color);
+}
+.schema-viewer a {
+    text-decoration: underline blue;
+    color: blue;
+}
+.schema-viewer textarea {
+    padding: 0.5rem;
+    border: 0;
+    direction: rtl;
+    background-color: white;
+    color: black;
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+.schema-viewer .price-field .value > div {
+    display: flex;
+    gap: 1rem;
+    padding: 0.3rem 0;
+}
+.schema-viewer .price-field .pctz {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.schema-viewer .price-field .pctz ul {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: calc(50% - 2rem);
+}
+.schema-viewer .price-field .pctz ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.schema-viewer .price-field .pctz ul li span {
+    width: 100%;
+}
+.schema-viewer .price-field .pctz ul li button {
+    width: 30px;
+    aspect-ratio: 1;
+}
+.schema-viewer .price-field .pctz ul li input {
+    width: 10em;
+}
+.schema-viewer .question-field {
+    width: 100%;
+    border: 1px solid black;
+    border-spacing: 0;
+}
+.schema-viewer .question-field td,
+.schema-viewer .question-field th {
+    text-align: center;
+    border: 1px solid black;
+}
+.schema-viewer .question-field .input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0.3rem;
+}
+.schema-viewer .option-field li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.schema-viewer .signature-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    aspect-ratio: 1/1;
+    background-color: white;
+    border-radius: 5px;
+    margin: 1vh 0;
+    overflow: hidden;
+}
+.schema-viewer .signature-container .signature-wrapper {
+    width: 100%;
+    flex: 1 0 0;
+    background-color: inherit;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>✍️</text></svg>")
+            5 25,
+        auto;
+    position: relative;
+    isolation: isolate;
+}
+.schema-viewer .signature-container .signature-wrapper div {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: black;
+}
+.schema-viewer .signature-container .confirm-wrapper {
+    display: flex;
+    width: 100%;
+}
+.schema-viewer .signature-container .confirm-wrapper .confirm,
+.schema-viewer .signature-container .confirm-wrapper .remove {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    cursor: pointer;
+}
+.schema-viewer .signature-container .confirm-wrapper .confirm {
+    background-color: var(--alert-success);
+}
+.schema-viewer .signature-container .confirm-wrapper .remove {
+    background-color: var(--alert-error);
+}
+.schema-viewer .geo-container {
+    width: 700px;
+    height: 500px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.schema-viewer .record-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    width: 100%;
+    min-height: 300px;
+    overflow: hidden;
+}
+.schema-viewer .record-container .record-field {
+    width: 100%;
+    height: 100%;
+    flex: 1 0 0;
+    direction: ltr;
+    position: relative;
+    isolation: isolate;
+}
+.schema-viewer .record-container .record-field .record-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+}
+.schema-viewer .record-container .record-field .record-empty svg {
+    animation: svg-flow 3s ease-in-out infinite;
+}
+
+@keyframes svg-flow {
+    0% {
+        transform: translateY(0%);
+    }
+    50% {
+        transform: translateY(50%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
+.schema-viewer .record-container .files-container {
+    width: 100%;
+    height: 100%;
+    max-height: 250px;
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+    padding: 1rem;
+    overflow-x: auto;
+}
+.schema-viewer .record-container .files-container::-webkit-scrollbar {
+    width: 1px;
+    background: var(--sixty-percent);
+}
+.schema-viewer .record-container .files-container::-webkit-scrollbar-thumb {
+    background-color: var(--ten-percent);
+    border: 5px solid var(--sixty-percent);
+    border-radius: 20px;
+}
+.schema-viewer .record-container .files-container .img-container {
+    height: 100%;
+    flex-shrink: 0;
+    position: relative;
+    isolation: isolate;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.schema-viewer .record-container .files-container .img-container img {
+    height: 100%;
+    object-fit: contain;
+}
+.schema-viewer .record-container .files-container .img-container .remove-img {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+.schema-viewer
+    .record-container
+    .files-container
+    .img-container
+    .remove-img
+    svg {
+    color: var(--alert-error);
+    transform: translateY(100%) rotate(0);
+    transition: all 0.3s ease-in-out;
+}
+.schema-viewer
+    .record-container
+    .files-container
+    .img-container:hover
+    .remove-img {
+    opacity: 1;
+}
+.schema-viewer
+    .record-container
+    .files-container
+    .img-container:hover
+    .remove-img
+    svg {
+    transform: translateY(0) rotate(180deg);
+}
+.schema-viewer .record-container .add-file {
+    width: 100%;
+    padding: 1rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--ten-percent);
+    color: white;
+}
+.schema-viewer .record-container input {
+    display: none;
+}
+.schema-viewer .record-disabled {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: calc(2.5vw + 10px);
+    row-gap: calc(5vh + 10px);
+    width: 100%;
+    direction: rtl;
+}
+.schema-viewer .record-disabled .fixed-img {
+    width: 300px;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+}

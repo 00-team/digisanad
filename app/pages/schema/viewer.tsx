@@ -1089,9 +1089,10 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update, disabled }) => {
                     <input
                         type={field.singleton ? 'radio' : 'checkbox'}
                         name={field.uid}
-                        id={field.uid + o.uid}
+                        id={field.uid + '__' + o.uid}
                         checked={field.value.includes(o.uid)}
-                        onChange={e => {
+                        onChange={() => {}}
+                        onInput={e => {
                             let checked = e.currentTarget.checked
 
                             if (field.singleton) {
@@ -1110,6 +1111,7 @@ const OptionFC: FieldProps<OptionFeild> = ({ field, update, disabled }) => {
 
                                 update()
                             }
+                            console.log(field.value)
                         }}
                     />
                     <label htmlFor={field.uid + o.uid}>{o.display}</label>

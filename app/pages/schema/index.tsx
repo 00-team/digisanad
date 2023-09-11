@@ -30,6 +30,8 @@ import { Viewer } from './viewer'
 
 import './style/contract.scss'
 
+export * from './printer'
+
 const MODES = ['edit', 'view', 'schema'] as const
 type Mode = typeof MODES[number]
 
