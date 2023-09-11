@@ -29,6 +29,10 @@
             opacity: 0.4;
         }
 
+        p {
+            overflow-wrap: anywhere;
+        }
+
         input {
             background-color: white;
             border-bottom: 1px solid black;
