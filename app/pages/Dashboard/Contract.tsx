@@ -10,6 +10,7 @@ import {
     CopyIcon,
     EditIcon,
     PersonIcon,
+    PrintIcon,
     RemoveIcon,
     SignatureIcon,
 } from 'icons'
@@ -296,6 +297,15 @@ const Contract: FC = () => {
                             )}
                         </>
                     )}
+                    <button
+                        className='cta-btn title_smaller'
+                        onClick={() => {
+                            window.print()
+                        }}
+                    >
+                        <PrintIcon />
+                        چاپ
+                    </button>
                 </div>
             </div>
             <div className='inner-wrapper'>
