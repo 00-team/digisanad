@@ -332,6 +332,7 @@ const Contract: FC = () => {
                             >
                                 <div className='user-wrapper'>
                                     <PersonIcon
+                                        size={30}
                                         className={`${
                                             state.creator == me.user_id &&
                                             user.user_id != me.user_id
@@ -339,16 +340,23 @@ const Contract: FC = () => {
                                                 : 'active'
                                         }`}
                                     />
-                                    <span
-                                        className={`fullname title_small ${
-                                            state.creator == me.user_id &&
-                                            user.user_id != me.user_id
-                                                ? ''
-                                                : 'bold'
-                                        }`}
-                                    >
-                                        {user.first_name} {user.last_name}
-                                    </span>
+                                    <div className='name-phone'>
+                                        <span
+                                            className={`fullname title_small ${
+                                                state.creator == me.user_id &&
+                                                user.user_id != me.user_id
+                                                    ? ''
+                                                    : 'bold'
+                                            }`}
+                                        >
+                                            {user.first_name} {user.last_name}
+                                        </span>
+                                        <a
+                                            href={`tel:${user.phone} title_smaller`}
+                                        >
+                                            {user.phone}
+                                        </a>
+                                    </div>
                                 </div>
                                 {state.stage == 'draft' &&
                                     state.creator == me.user_id &&
