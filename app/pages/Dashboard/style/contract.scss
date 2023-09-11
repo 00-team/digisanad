@@ -268,11 +268,22 @@
                                 color: var(--ten-percent);
                             }
                         }
-                        .fullname {
-                            font-family: 'yekan';
 
-                            &.bold {
-                                font-family: 'iranBold';
+                        .name-phone {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.5rem;
+
+                            width: 100%;
+                            .fullname {
+                                font-family: 'yekan';
+
+                                &.bold {
+                                    font-family: 'iranBold';
+                                }
+                            }
+                            a {
+                                color: blue;
                             }
                         }
                     }
