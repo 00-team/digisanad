@@ -2,6 +2,10 @@ body{
     direction: rtl;
 }
 
+*{
+    font-family: 'iranBold';
+}
+
 .schema-viewer {
     direction: rtl;
     padding: 1rem;
