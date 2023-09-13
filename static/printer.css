@@ -1,3 +1,7 @@
+body{
+    direction: rtl;
+}
+
 .schema-viewer {
     direction: rtl;
     padding: 1rem;
