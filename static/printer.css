@@ -3,14 +3,13 @@ body{
 }
 
 *{
-    font-family: 'iranBold';
+    font-family: system-ui;
 }
 
 .schema-viewer {
     direction: rtl;
     padding: 1rem;
     overflow-y: auto;
-    font-family: 'iranBold';
 }
 
 .schema-viewer > div {
