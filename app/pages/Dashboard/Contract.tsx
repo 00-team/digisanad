@@ -2,24 +2,27 @@ import React, {
     Dispatch,
     FC,
     SetStateAction,
-    useEffect, // useRef,
+    useEffect,
+    useRef,
     useState,
 } from 'react'
+import { renderToString } from 'react-dom/server'
 
-// import { renderToString } from 'react-dom/server'
 import { C } from '@00-team/utils'
 
 import { fetch_price } from 'api'
 import axios, { AxiosResponse } from 'axios'
 import {
     CheckIcon,
-    ContractIcon, // PrintIcon,
+    ContractIcon,
     CopyIcon,
     EditIcon,
     PersonIcon,
+    PrintIcon,
     RemoveIcon,
     SignatureIcon,
 } from 'icons'
+import { PrintRender } from 'pages/schema'
 // import { PrintRender } from 'pages/schema'
 import { SchemaData, UserPublic } from 'pages/schema/types'
 import { Viewer } from 'pages/schema/viewer'
@@ -76,10 +79,9 @@ const Contract: FC = () => {
     const navigate = useNavigate()
     const token = useAtomValue(TokenAtom)
     const me = useAtomValue(UserAtom)
-    // const myframe = useRef<HTMLIFrameElement>(null)
+    const myframe = useRef<HTMLIFrameElement>(null)
 
     const [price, setPrice] = useAtom(PriceAtom)
-    price
 
     useEffect(() => {
         if (!token) return
@@ -244,10 +246,10 @@ const Contract: FC = () => {
 
     return (
         <div className='contract-container'>
-            {/*<iframe
+            <iframe
                 ref={myframe}
                 style={{
-                    // display: 'none'
+                    display: 'none',
                     width: '100%',
                     height: '100vh',
                 }}
@@ -260,7 +262,7 @@ const Contract: FC = () => {
                         price={price}
                     />
                 )}
-            ></iframe>*/}
+            ></iframe>
             <div className='head'>
                 <h1 className='title'>{state.title}</h1>
                 <div className='actions'>
@@ -323,10 +325,10 @@ const Contract: FC = () => {
                             )}
                         </>
                     )}
-                    {/*
+
                     <button
                         className='cta-btn title_smaller'
-                        onClick={() => {
+                        onDoubleClick={() => {
                             if (!myframe.current) return
                             let win = myframe.current.contentWindow
                             if (!win) return
@@ -335,7 +337,7 @@ const Contract: FC = () => {
                     >
                         <PrintIcon />
                         چاپ
-                    </button>*/}
+                    </button>
                 </div>
             </div>
             <div className='inner-wrapper'>
